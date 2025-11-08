@@ -1,0 +1,25 @@
+export const color={
+    base:{
+        blue:"#1E5598",
+        red:"#EE3124",
+        white:"#ffffff",
+        navy:"#0A1C32",
+        lime:"#D5ECE3",
+        cyan:"#9FD5E2",
+        yellow:"#FDB515",
+        green:"#167C4F",
+        grey:"#ADADAD",
+        gradient:{
+            first:"#1E5598",
+            second:"#9FD5E2"
+        },
+    },
+    primary:"#9FD5E2",
+    secondary:"#1E5598",
+    tertiary:"#D5ECE3",
+    success:"#167C4F",
+    warning:"#EE3124",
+    info:"#FDB515",
+    disabled:"#ABABAB",
+    accent:"#0A1C32",
+}
