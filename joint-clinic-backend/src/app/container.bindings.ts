@@ -11,7 +11,7 @@ import { UserRepoPort } from 'modules/auth/application/ports/UserRepoPort.js';
 import { UserRepoMongo } from 'modules/auth/infrastructure/repos/UserRepoMongo.js';
 import { MailPort } from 'infra/mail/mail.port.js';
 import { SMSPort } from 'infra/sms/sms.port.js';
-import { mailAdapter } from 'infra/mail/mail.adapter.js';
+import { twilioMailAdapter } from 'infra/mail/twilio.mail.adapter.js';
 import { smsAdapter } from 'infra/sms/sms.adapter.js';
 
 export const OTP_REPO = token<OTPRepoPort>('OTP_REPO');
@@ -28,6 +28,6 @@ export function bindAll() {
   register(REPORT_REPO, ReportRepoMongo);
   register(BLOB_PORT, blobAzureAdapter);
   register(USER_AUTH_REPO, UserRepoMongo);
-  register(MAIL_REPO, mailAdapter);
+  register(MAIL_REPO, twilioMailAdapter);
   register(SMS_REPO, smsAdapter);
 }
