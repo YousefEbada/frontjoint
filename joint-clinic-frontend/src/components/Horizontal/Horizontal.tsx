@@ -13,7 +13,7 @@ export default function HorizontalScroll() {
         const wrapper = wrapperRef.current;
         const track = trackRef.current;
 
-        const totalWidth = track?.scrollWidth;
+        const totalWidth = track?.scrollWidth ?? 0;
         const scrollAmount = totalWidth - window.innerWidth;
 
         gsap.to(track, {
