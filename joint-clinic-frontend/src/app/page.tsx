@@ -5,7 +5,7 @@ import Button2 from "@components/atoms/button2";
 import { IBM_Plex_Sans } from "next/font/google";
 import Profile from "@/components/icons/Profile";
 import FeatureCard from "@/components/molecules/featureCard";
-import Pagination from "@/pages/pagination";
+// import Pagination from "@/pages/pagination";
 
 const ibmPlex = IBM_Plex_Sans({
   subsets: ["latin"],
@@ -150,7 +150,7 @@ export default function Home() {
         </div>
       </section>
 
-      <Pagination total={5} />
+      {/* {<Pagination total={5} />} */}
       
     </div>
   );
