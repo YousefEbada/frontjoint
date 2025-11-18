@@ -25,8 +25,8 @@ const ChooseUs = () => {
                 Why Choose Us?
             </h2>
             <div className="cards w-full mx-auto grid grid-cols-2 md:grid-cols-4 gap-2">
-                {cards.map(card => {
-                    return <FeatureCard title={card.title} description={card.desc} />
+                {cards.map((card, index) => {
+                    return <FeatureCard key={index} title={card.title} description={card.desc} />
                 })}
             </div>
         </>

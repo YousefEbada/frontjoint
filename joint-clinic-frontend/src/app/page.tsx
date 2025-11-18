@@ -4,6 +4,8 @@ import WhoWeAre from "@/components/WhoWeAre/WhoWeAre";
 import MeetOurTeam from "@/components/MeetOurTeam/MeetOurTeam";
 import Hero from "@/components/Hero/Hero";
 import ChooseUs from "@/components/ChooseUs/ChooseUs";
+import HorizontalScroll from "@/components/Horizontal/Horizontal";
+import YourSafety from "@/components/YourSafety/YourSafety";
 // import Pagination from "@/pages/pagination";
 
 const ibmPlex = IBM_Plex_Sans({
@@ -26,8 +28,16 @@ export default function Home() {
         <MeetOurTeam />
       </section>
 
-      <section className="chooseUs h-screen flex flex-col justify-center items-center  md:mt-0 gap-8">
+      <section className="chooseUs h-screen flex flex-col justify-center items-center md:mt-0 gap-8">
         <ChooseUs />
+      </section>
+
+      <section className="features_section bg-[#0d7b93] overflow-hidden py-10">
+        <HorizontalScroll />
+      </section>
+
+      <section className="h-screen flex items-center justify-center">
+        <YourSafety />
       </section>
       {/* {<Pagination total={5} />} */}
     </div>
