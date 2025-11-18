@@ -6,7 +6,7 @@ import {router} from "next/client";
 const BookNowButton=()=>{
     return (
         <button
-            className={"px-[34.5px] py-[6.5px] text-2xl text-white rounded-[48px]"}
+            className={"px-8 py-2 text-xl text-white rounded-[48px]"}
             onClick={()=>{router.push("/")}}
             style={{
                 backgroundColor: color.warning,

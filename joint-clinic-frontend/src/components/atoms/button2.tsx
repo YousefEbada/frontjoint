@@ -14,8 +14,8 @@ const Button2: React.FC<ButtonProps> = ({ text }) => {
 
   return (
     <button
-      className={`${ibm.className} m-[30px] font-bold w-[228] h-[60px] rounded-[40px] 
-      text-center text-[24px] border-2 py-[9px] px-[42px] cursor-pointer transition
+      className={`${ibm.className} m-[30px] font-bold w-[200] h-[60px] rounded-[40px] 
+      text-center text-[24px] border-2 py-[9px] px-[25px] cursor-pointer transition
       border-none bg-[#fff] text-[#ee3124]`}
     >
       {text}
