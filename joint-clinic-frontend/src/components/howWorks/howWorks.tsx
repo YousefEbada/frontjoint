@@ -1,7 +1,9 @@
-import FeatureCard from '../molecules/featureCard';
+"use client";
+import Pagination from '@/pages/pagination'
+import React from 'react'
 
-const ChooseUs = () => {
-    const cards = [
+const howWorks = () => {
+    const pages = [
         {
             title: "HOLIDAY HOURS UPDATE",
             desc: "Our clinic will be closed on Friday, Sept 25, for maintenance. Online services remain available.",
@@ -19,18 +21,16 @@ const ChooseUs = () => {
             desc: "Book physiotherapy sessions, access your medical reports, and follow your personalized exercise plan – all in one secure platform."
         }
     ];
-    return (
-        <>
-            <h2 className={`text-[40px] md:text-[64px] font-bold font-['IBM_Plex_Sans'] text-[#fff]`} >
-                Why Choose Us?
-            </h2>
-            <div className="cards mx-auto grid grid-cols-2 md:grid-cols-4">
-                {cards.map((card, index) => {
-                    return <FeatureCard key={index} title={card.title} description={card.desc} />
-                })}
-            </div>
-        </>
-    )
+  return (
+    <div className='flex flex-col justify-center items-center'>
+        <img src="./circle.png" className='w-[240x] h-[240px]'/>
+        <div className="content">
+            <h1 className='text-[128px] font-bold text-center text-[#0a1c32]'>HOW IT WORKS?</h1>
+            <p className='text-center text-[20px] font-medium text-[#167c4f]'>Your Recovery Journey Made Simple</p>
+        </div>
+        <Pagination total={5} />
+    </div>
+  )
 }
 
-export default ChooseUs
+export default howWorks

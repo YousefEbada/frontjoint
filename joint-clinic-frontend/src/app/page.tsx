@@ -1,3 +1,4 @@
+"use client";
 import { IBM_Plex_Sans } from "next/font/google";
 import FeatureCard from "@/components/molecules/featureCard";
 import WhoWeAre from "@/components/WhoWeAre/WhoWeAre";
@@ -6,6 +7,8 @@ import Hero from "@/components/Hero/Hero";
 import ChooseUs from "@/components/ChooseUs/ChooseUs";
 import HorizontalScroll from "@/components/Horizontal/Horizontal";
 import YourSafety from "@/components/YourSafety/YourSafety";
+import HowWorks from "@/components/howWorks/howWorks";
+import Pagination from "@/pages/pagination";
 // import Pagination from "@/pages/pagination";
 
 const ibmPlex = IBM_Plex_Sans({
@@ -40,6 +43,9 @@ export default function Home() {
         <YourSafety />
       </section>
       {/* {<Pagination total={5} />} */}
+      <section className="h-screen flex items-center bg-[#fff] justify-center">
+        <HowWorks />
+      </section>
     </div>
   );
 }

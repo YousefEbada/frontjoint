@@ -9,7 +9,7 @@ export default function Pagination({ total }: PaginationProps) {
   const [current, setCurrent] = useState(1);
 
   return (
-    <div className="flex items-center gap-3 p-4 bg-gray-300 rounded-lg">
+    <div className="flex items-center gap-3 p-4">
       {Array.from({ length: total }).map((_, index) => {
         const isActive = current === index + 1;
 
