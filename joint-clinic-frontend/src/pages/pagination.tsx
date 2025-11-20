@@ -1,35 +1,31 @@
 "use client";
-import { useState } from "react";
+import React from "react";
 
 interface PaginationProps {
-  total: number; // عدد الصفحات
+  total: number;
+  current: number; // zero-based index
+  onChange?: (index: number) => void;
 }
 
-export default function Pagination({ total }: PaginationProps) {
-  const [current, setCurrent] = useState(1);
-
+export default function Pagination({ total, current, onChange }: PaginationProps) {
   return (
     <div className="flex items-center gap-3 p-4">
       {Array.from({ length: total }).map((_, index) => {
-        const isActive = current === index + 1;
+        const isActive = current === index;
 
         return (
           <button
             key={index}
-            onClick={() => setCurrent(index + 1)}
-            className={`
-              w-8 h-8 rounded-full border border-red-500
-              flex items-center justify-center
-              transition-all duration-300
-            `}
+            onClick={() => onChange?.(index)}
+            aria-pressed={isActive}
+            className={`relative overflow-hidden rounded-full border border-red-500 flex items-center justify-center transition-all duration-300`}
+            style={{
+              width: isActive ? 96 : 48,
+              height: 32,
+              padding: 0,
+              backgroundColor: isActive ? "red" : "transparent",
+            }}
           >
-            {/* الخط الأحمر */}
-            <div
-              className={`
-                w-8 h-8 rounded-full bg-red-500 transition-all duration-300
-                ${isActive ? "w-6 opacity-100" : "w-0 opacity-0"}
-              `}
-            ></div>
           </button>
         );
       })}
