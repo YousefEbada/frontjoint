@@ -9,7 +9,7 @@ const ibm = IBM_Plex_Sans({
 type ButtonProps = {
   text: string;
   variant: "primary" | "secondary" | "third";
-  onClick?: () => void; // <-- added
+  onClick?: () => void;
 };
 
 const Button: React.FC<ButtonProps> = ({ text, variant, onClick }) => {
@@ -30,10 +30,26 @@ const Button: React.FC<ButtonProps> = ({ text, variant, onClick }) => {
 
   return (
     <button
-      onClick={onClick}   // <-- added
-      className={`${ibm.className} m-[30px] font-bold w-[248px] h-[51px] rounded-[48px] 
-      text-center text-[24px] border-2 py-[9px] px-[42px] cursor-pointer transition
-      leading-[115%] ${variants[variant]}`}
+      onClick={onClick}
+      className={`
+        ${ibm.className}
+        font-bold
+        w-[200px] sm:w-[220px] md:w-[248px]
+        h-[45px] sm:h-[48px] md:h-[51px]
+        rounded-[48px]
+        text-center 
+        text-[18px] sm:text-[20px] md:text-[24px]
+        border-2
+        py-[8px] px-[32px]
+        cursor-pointer
+        transition
+        leading-[115%]
+
+        /* RESPONSIVE MARGINS */
+        m-0 sm:m-[20px] md:m-[30px]
+
+        ${variants[variant]}
+      `}
     >
       {text}
     </button>

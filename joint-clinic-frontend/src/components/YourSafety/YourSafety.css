@@ -8,3 +8,27 @@
   flex-shrink: 0;
   transform: translateY(60%);
 }
+
+/* Small screens (phones) */
+@media (max-width: 640px) {
+  .feature-item:before {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* Medium screens (tablets) */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .feature-item:before {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* Large screens (desktops) */
+@media (min-width: 1025px) {
+  .feature-item:before {
+    width: 25px;
+    height: 25px;
+  }
+}

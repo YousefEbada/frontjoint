@@ -18,7 +18,7 @@ const ibmPlex = IBM_Plex_Sans({
 export default function Home() {
   return (
     <div className="con bg-[#9fd5e2]">
-      <div className={"h-screen w-full flex flex-col justify-center items-center"}>
+      {/* <div className={"h-screen w-full flex flex-col justify-center items-center"}>
         <Hero font={ibmPlex} />
       </div>
 
@@ -33,23 +33,21 @@ export default function Home() {
       <section className="features_section bg-[#0d7b93] overflow-hidden py-10">
         <HorizontalScroll />
       </section>
-
+      */}
       <section className="h-screen flex items-center justify-center">
         <YourSafety />
-      </section>
+      </section> 
       {/* {<Pagination total={5} />} */}
       <section className=" pb-10 flex items-center bg-[#ebf6f8] justify-center">
         <HowWorks />
       </section>
-        <section className="h-screen flex items-center bg-[#edf7f9] justify-center">
+      <section className="h-screen flex items-center bg-[#edf7f9] justify-center">
         <Book />
       </section>
-      <section>
-        <WhatOurPatientsSay />
-      </section>
+      <WhatOurPatientsSay />
       <section className="min-h-screen bg-[#edf7f9] flex items-end justify-center overflow-x-hidden">
         <Footer />
-      </section>
+      </section> 
     </div>
   );
 }

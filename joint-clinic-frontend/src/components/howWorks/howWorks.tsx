@@ -28,66 +28,62 @@ const pages = [
 
 export default function HowWorks() {
   const wrapperRef = useRef<HTMLDivElement | null>(null);
-  const circleRef = useRef<HTMLDivElement | null>(null); // wrapper div for transforms
+  const circleRef = useRef<HTMLDivElement | null>(null);
   const tl = useRef<gsap.core.Timeline | null>(null);
   const [current, setCurrent] = useState(0);
 
   useEffect(() => {
-    const steps = Math.max(0, pages.length - 1); // number of increments
+    const steps = pages.length - 1;
 
     const ctx = gsap.context(() => {
-      // timeline: each step increases rotation by 90deg
       tl.current = gsap.timeline({ paused: true });
+
+      // rotate 90deg per step
       for (let i = 0; i < steps; i++) {
-        // increment rotation by +90 for each step
-        tl.current.to(circleRef.current, {
+        tl.current!.to(circleRef.current, {
           rotate: "+=90",
           duration: 0.6,
           ease: "power2.inOut",
         });
       }
 
-      // ScrollTrigger: pin for exactly `steps` viewports
       ScrollTrigger.create({
         trigger: wrapperRef.current,
         start: "top top",
-        end: () => `+=${pages.length * window.innerHeight}`,
-        scrub: 0.6,
+        end: `+=${steps * 80}vh`, // much safer, prevents overflowing
+        scrub: 0.5,
         pin: true,
         pinSpacing: true,
         animation: tl.current,
-        // snap to discrete steps (0..1 mapped across steps)
-        snap: steps > 0 ? {
-          snapTo: 1 / steps,
-          duration: { min: 0.15, max: 0.6 },
-          ease: "power2.inOut",
-        } : undefined,
+        snap:
+          steps > 0
+            ? {
+                snapTo: 1 / steps,
+                duration: { min: 0.2, max: 0.6 },
+                ease: "power2.inOut",
+              }
+            : undefined,
         onUpdate: (self) => {
-          // map progress to index 0..steps
-          const idx = steps === 0 ? 0 : Math.round(self.progress * steps);
+          const idx = Math.round(self.progress * steps);
           setCurrent(idx);
         },
         invalidateOnRefresh: true,
-        // markers: true, // enable for debugging
       });
 
-      // make sure timeline starts at 0
       tl.current.pause(0);
     }, wrapperRef);
 
     return () => {
       ctx.revert();
-      ScrollTrigger.getAll().forEach((s) => s.kill());
+      ScrollTrigger.killAll();
       tl.current?.kill();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // goTo specific page index (0-based). animate timeline progress to exact step.
   const goTo = (index: number) => {
-    const steps = Math.max(1, pages.length - 1); // avoid div by zero
+    const steps = pages.length - 1;
     const targetProgress = index / steps;
-    // animate the timeline progress (this will rotate by 90deg per step)
+
     gsap.to(tl.current!, {
       progress: targetProgress,
       duration: 0.6,
@@ -99,30 +95,69 @@ export default function HowWorks() {
   return (
     <section
       ref={wrapperRef}
-      className="relative flex flex-col items-center justify-center w-full bg-[f8fcfd] overflow-hidden"
+      className="
+        relative flex flex-col items-center justify-start 
+        w-full 
+        bg-[#f8fcfd] 
+        overflow-hidden
+        pt-16 md:pt-24
+        pb-24 md:pb-32
+      "
       style={{ minHeight: "100vh" }}
     >
-      {/* Circle wrapper (we transform this div) */}
+      {/* Circle */}
       <div
         ref={circleRef}
-        className="w-60 h-60 md:w-64 md:h-64 flex items-center justify-center will-change-transform"
-        style={{ transform: "rotate(0deg)" }}
+        className="
+          flex items-center justify-center 
+          w-[180px] h-[180px]
+          sm:w-[220px] sm:h-[220px]
+          md:w-[260px] md:h-[260px]
+          lg:w-[300px] lg:h-[300px]
+          will-change-transform
+        "
       >
-        <Image src="/circle.png" width={240} height={240} alt="Circle" />
+        <Image
+          src="/circle.png"
+          width={260}
+          height={260}
+          alt="Circle"
+          className="w-full h-full object-contain"
+        />
       </div>
 
-      {/* Content area — text updates according to `current` */}
-      <div className="content mt-8 max-w-4xl text-center px-6" aria-live="polite">
-        <h2 className="text-[48px] md:text-[72px] font-bold text-[#0a1c32] leading-tight">
+      {/* TEXT CONTENT */}
+      <div className="mt-8 max-w-3xl text-center px-6 md:px-10" aria-live="polite">
+        <h2
+          className="
+            text-[#0a1c32]
+            font-bold
+            leading-tight
+            text-[32px]
+            sm:text-[42px]
+            md:text-[60px]
+            lg:text-[72px]
+          "
+        >
           {pages[current].title}
         </h2>
-        <p className="mt-4 text-[18px] md:text-[20px] font-medium text-[#167c4f]">
+
+        <p
+          className="
+            mt-4 text-[#167c4f]
+            font-medium
+            text-[16px]
+            sm:text-[18px]
+            md:text-[20px]
+            leading-relaxed
+          "
+        >
           {pages[current].desc}
         </p>
       </div>
 
-      {/* Pagination */}
-      <div className="mt-12">
+      {/* PAGINATION */}
+      <div className="mt-10 md:mt-12">
         <Pagination total={pages.length} current={current} onChange={goTo} />
       </div>
     </section>

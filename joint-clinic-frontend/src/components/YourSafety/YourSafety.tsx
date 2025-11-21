@@ -5,31 +5,86 @@ import "./YourSafety.css";
 const YourSafety = () => {
   return (
     <div className="w-full px-4 sm:px-6 md:px-12 lg:px-20 py-12">
-      <div className="mx-auto flex flex-col md:flex-row w-[90%] gap-8 md:gap-12">
-        <div className="flex-1 text-center md:text-left translate-y-[40px]">
-          <h1 className="text-[#0A1C32] text-[64px] font-bold font-bold w-[40%]">
-            Your Safety, Our Priority
+
+      {/* FLEX CONTAINER */}
+      <div className="mx-auto w-full flex flex-col md:flex-row items-center md:items-start max-w-[1400px] gap-10 md:gap-16">
+
+        {/* LEFT TEXT SECTION */}
+        <div className="flex-1 text-center md:text-left translate-y-[20px] md:translate-y-[40px]">
+
+          {/* MAIN TITLE */}
+          <h1
+            className="
+              text-[#0A1C32] 
+              font-bold 
+              leading-tight
+              text-[8vw] 
+              sm:text-[48px] 
+              md:text-[56px] 
+              lg:text-[64px]
+              w-full
+              mx-auto md:mx-0
+            "
+          >
+            Your Safety,
+            {/* BR only on large screens */}
+            <span className="hidden lg:inline"><br /></span>
+            <span className="lg:hidden"> </span>
+            Our Priority
           </h1>
 
-          <div className="mt-6 space-y-4 w-full">
-            <div className="w-full flex items-start gap-4 feature-item">
+          {/* FEATURES LIST */}
+          <div className="mt-6 space-y-6 w-full max-w-[600px] mx-auto md:mx-0">
+
+            {/* FEATURE ITEM */}
+            <div className="flex items-start gap-4 feature-item">
               <div className="text">
-                <h2 className="text-lg text-[#fff] text-[32px] font-bold">
+
+                <h2
+                  className="
+                    text-white
+                    font-bold
+                    text-[6vw]
+                    sm:text-[28px]
+                    md:text-[32px]
+                    leading-tight
+                  "
+                >
                   HIPAA-Compliant Platform
                 </h2>
-                <p className="text-[#fff] text-[20px] font-medium mt-1">
+
+                <p
+                  className="
+                    text-white 
+                    font-medium 
+                    mt-1
+                    text-[4vw]
+                    sm:text-[18px]
+                    md:text-[20px]
+                  "
+                >
                   Full compliance with healthcare data standards.
                 </p>
+
               </div>
             </div>
+
           </div>
         </div>
 
-        <img
-          src="/swimmer.png"
-          alt="safety image"
-          className="w-[40%] object-contain"
-        />
+        {/* RIGHT SIDE IMAGE */}
+        <div className="flex-1 flex justify-center md:justify-center w-full">
+          <img
+            src="/swimmer.png"
+            alt="Safety Image"
+            className="
+              w-full
+              max-w-[750px]
+              object-contain
+            "
+          />
+        </div>
+
       </div>
     </div>
   );

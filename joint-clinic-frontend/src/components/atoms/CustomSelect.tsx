@@ -4,11 +4,18 @@ import { useState, useRef, useEffect } from "react";
 type CustomSelectProps = {
   items: string[];
   onChange?: (value: string) => void;
-  width?: string;   // example: "800px" | "400px" | "100%"
-  height?: string;  // example: "100px" | "80px"
+  width?: string;
+  height?: string;
+  className?: string;   // ← تمت إضافتها
 };
 
-export default function CustomSelect({ items, onChange, width, height }: CustomSelectProps) {
+export default function CustomSelect({
+  items,
+  onChange,
+  width,
+  height,
+  className,   // ← استخدمناها
+}: CustomSelectProps) {
   const [selected, setSelected] = useState(items[0]);
   const [open, setOpen] = useState(false);
 
@@ -30,49 +37,51 @@ export default function CustomSelect({ items, onChange, width, height }: CustomS
     setOpen(false);
   };
 
-  const finalWidth = width ?? "800px";
-  const finalHeight = height ?? "100px";
+  // Default sizes (desktop)
+  const finalWidth = width ?? "600px";
+  const finalHeight = height ?? "85px";
 
   return (
     <div
       ref={menuRef}
-      style={{
-        width: finalWidth,
-        height: finalHeight,
-      }}
-      className="relative"
+      className={`relative w-full max-w-[600px] md:w-auto ${className ?? ""}`}
+      style={{ width: finalWidth }}
     >
       {/* BUTTON */}
       <button
         onClick={() => setOpen(!open)}
-        style={{
-          width: finalWidth,
-          height: finalHeight,
-        }}
         className="
           bg-white 
-          rounded-[50px]
-          px-[40px]
-          text-center
+          rounded-[30px] sm:rounded-[40px] md:rounded-[50px]
           text-[#1e5598]
-          text-[32px]
-          font-medium
-          shadow-[0px_20px_60px_rgba(30,85,152,0.15)]
-          outline-none
-          border-none
-          flex items-center justify-center
-          relative
-          hover:shadow-[0px_25px_75px_rgba(30,85,152,0.25)]
+          w-full
+          shadow-[0px_15px_45px_rgba(30,85,152,0.15)]
+          outline-none border-none
           transition-all duration-300
+
+          flex items-center justify-center
+
+          px-4 sm:px-6 md:px-10
+          text-[14px] sm:text-[16px] md:text-[28px] lg:text-[32px]
+          font-medium
+          relative
+
+          h-[48px] sm:h-[55px] md:h-[85px]
         "
+        style={{ height: finalHeight }}
       >
-        {selected}
+        <span className="block text-center w-full pointer-events-none">
+          {selected}
+        </span>
 
         {/* ARROW */}
         <span
           className={`
-            absolute right-12 top-1/2 -translate-y-1/2
-            border-solid border-t-[12px] border-l-[8px] border-r-[8px]
+            absolute right-4 sm:right-6 md:right-10
+            border-solid 
+            border-t-[6px] sm:border-t-[7px] md:border-t-[12px]
+            border-l-[5px] sm:border-l-[6px] md:border-l-[8px]
+            border-r-[5px] sm:border-r-[6px] md:border-r-[8px]
             border-t-[#1e5598] border-l-transparent border-r-transparent
             transition-transform duration-300
             ${open ? "rotate-180" : ""}
@@ -83,35 +92,30 @@ export default function CustomSelect({ items, onChange, width, height }: CustomS
       {/* DROPDOWN */}
       {open && (
         <div
-          style={{
-            width: finalWidth, // <<< IMPORTANT
-          }}
           className="
-            absolute left-0 top-[110%]
+            absolute left-0 top-[105%]
+            w-full
             bg-white
-            rounded-[32px]
-            shadow-[0px_15px_60px_rgba(30,85,152,0.18)]
+            rounded-[20px] sm:rounded-[24px] md:rounded-[32px]
+            shadow-[0px_12px_45px_rgba(30,85,152,0.18)]
             overflow-hidden
             z-50
           "
+          style={{ width: finalWidth }}
         >
           {items.map((item, i) => (
             <button
               key={i}
-              style={{
-                width: finalWidth, // <<< EACH OPTION SAME WIDTH
-              }}
               onClick={() => handleSelect(item)}
               className="
-                text-[28px]
-                py-6
+                block w-full
+                text-[14px] sm:text-[16px] md:text-[26px] lg:text-[28px]
+                py-3 sm:py-4 md:py-6
                 text-[#1e5598]
                 font-medium
                 text-center
                 hover:bg-[#eaf2ff]
-                transition-all
-                duration-200
-                block
+                transition-all duration-200
               "
             >
               {item}

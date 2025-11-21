@@ -10,148 +10,144 @@ import { color } from "@/lib/constants/colors";
 export default function WhatOurPatientsSay() {
   const wrapperRef = useRef(null);
   const trackRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
-        gsap.registerPlugin(ScrollTrigger);
+    gsap.registerPlugin(ScrollTrigger);
 
-        const wrapper = wrapperRef.current;
-        const track = trackRef.current;
+    const wrapper = wrapperRef.current;
+    const track = trackRef.current;
 
-        const totalWidth = track?.scrollWidth ?? 0;
-        const scrollAmount = totalWidth - window.innerWidth + 560 ;
+    const totalWidth = track?.scrollWidth ?? 0;
+    const scrollAmount = totalWidth - window.innerWidth + 560;
 
-        gsap.to(track, {
-            x: -scrollAmount,
-            ease: "none",
+    gsap.to(track, {
+      x: -scrollAmount,
+      ease: "none",
+      scrollTrigger: {
+        trigger: wrapper,
+        start: "top top",
+        end: `+=${totalWidth + 560}`,
+        scrub: true,
+        pin: true,
+      },
+    });
 
-            scrollTrigger: {
-                trigger: wrapper,
-                start: "top top",
-                end: `+=${totalWidth + 560}`, // scroll length equals total width of horizontal items
-                scrub: true,
-                pin: true, // freeze section → convert scroll to horizontal
-            }
-        });
-
-        return () => ScrollTrigger.getAll().forEach(st => st.kill());
-    }, []);
+    return () => ScrollTrigger.getAll().forEach((s) => s.kill());
+  }, []);
 
   const testimonials = [
-  {
-    text: "The exercise videos are clear and easy to follow. Having them available at home really helped me recover faster after my knee injury.",
-    author: "Ahmed K.",
-    role: "Patient"
-  },
-  {
-    text: "I felt supported throughout my recovery. The guided routines made it easier to stick to my schedule and improve steadily.",
-    author: "Mona R.",
-    role: "Patient"
-  },
-  {
-    text: "Being able to repeat exercises at home boosted my confidence. The instructions were simple and effective.",
-    author: "Hassan T.",
-    role: "Patient"
-  },
-  {
-    text: "The platform helped me stay consistent with my rehabilitation plan. I noticed improvements much faster than expected.",
-    author: "Sara L.",
-    role: "Patient"
-  },
-  {
-    text: "I loved how every exercise was broken down step by step. It made my recovery journey smooth and stress-free.",
-    author: "Omar A.",
-    role: "Patient"
-  },
-  {
-    text: "The videos made complex movements feel easy. I could finally follow my physio plan without worrying about doing things wrong.",
-    author: "Nour M.",
-    role: "Patient"
-  },
-  {
-    text: "Having everything accessible at home saved me a lot of time and helped me stay disciplined with my routine.",
-    author: "Ali F.",
-    role: "Patient"
-  },
-  {
-    text: "The clarity of the videos and instructions made such a difference. I felt progress from the very first week.",
-    author: "Yasmin H.",
-    role: "Patient"
-  },
-  {
-    text: "I appreciated how the program kept things simple. It made recovering from my shoulder injury much less overwhelming.",
-    author: "Khaled S.",
-    role: "Patient"
-  },
-  {
-    text: "The exercises were exactly what I needed. Easy to follow and effective—my mobility improved way faster.",
-    author: "Reem A.",
-    role: "Patient"
-  },
-  {
-    text: "This helped me stay committed to my therapy. The guided videos made it feel like my physio was right there with me.",
-    author: "Youssef M.",
-    role: "Patient"
-  },
-  {
-    text: "The platform made recovery so much easier. The step-by-step exercises helped reduce my pain and strengthen my knee again.",
-    author: "Laila G.",
-    role: "Patient"
-  }
-];
-
+    { text: "The exercise videos are clear and easy to follow..." },
+    { text: "I felt supported throughout my recovery..." },
+    { text: "Being able to repeat exercises at home..." },
+    { text: "The platform helped me stay consistent..." },
+    { text: "I loved how every exercise was broken down..." },
+    { text: "The videos made complex movements feel easy..." },
+    { text: "Having everything accessible at home saved me..." },
+    { text: "The clarity of the videos and instructions..." },
+    { text: "I appreciated how the program kept things simple..." },
+    { text: "The exercises were exactly what I needed..." },
+    { text: "This helped me stay committed to my therapy..." },
+    { text: "The platform made recovery so much easier..." },
+  ];
 
   return (
     <section
-      className="relative h-screen w-full overflow-hidden bg-[#cae8ef]"
       ref={wrapperRef}
+      className="relative w-full h-screen overflow-hidden bg-[#cae8ef] flex items-center justify-start"
     >
-        <div className="absolute inset-0  h-[48vh] aspect-square object-cover z-0 top-[40vh] ml-2 flex items-center">
-                <OutlinedCircle
-                />
-                <h1 className="absolute left-10  right-[-40px] text-6xl font-bold" style={{color:color.success}}>What Our Patients Say</h1>
-        </div>
-    <div
-  ref={trackRef}
-  className="
-    grid 
-    grid-rows-3 
-    grid-flow-col 
-    auto-cols-[36vw] 
-    gap-6 
-    h-full 
-    w-max 
-    relative 
-    z-10 
-    mt-30 
-    pl-120 
-    pr-140 
-    overflow-hidden
-  "
->
-  {testimonials.map((testimonial, index) => {
-    // Determine which row the item belongs to (0,1,2)
-    const row = index % 3;
-
-    // Apply staggered effect based on row number
-    const stagger =
-      row === 1
-        ? "" // middle row shifted left
-        : row === 2
-        ? "translate-x-[6%]" // bottom row shifted right
-        : "translate-x-[12%]"; // top row normal
-
-    return (
-      <CorneredBoxes
-        type="section"
-        key={index}
-        className={`w-full h-full ${stagger}`}
+      {/* Circle + Title */}
+      <div
+        className="
+          absolute 
+          top-1/2 -translate-y-1/2 
+          left-6 md:left-12 lg:left-20 
+          flex flex-col items-start 
+          z-0
+        "
       >
-        <h1 style={{ color: color.success }}>{testimonial.text}</h1>
-        <p className="text-black">{testimonial.text}</p>
-      </CorneredBoxes>
-    );
-  })}
-</div>
+        <OutlinedCircle className="w-[160px] md:w-[260px] lg:w-[300px]" />
 
+        <h1
+          className="
+            absolute 
+            text-[7vw] sm:text-[32px] md:text-[48px] lg:text-[60px]
+            font-bold
+            mt-2
+          "
+          style={{ color: color.success }}
+        >
+          What Our Patients Say
+        </h1>
+      </div>
+
+      {/* Cards Track */}
+      {/* center cards in page in small screens */}
+      <div
+        ref={trackRef}
+        className="
+          grid 
+          grid-flow-col 
+          md:grid-rows-3 
+          auto-cols-[85vw] 
+          sm:auto-cols-[60vw]
+          md:auto-cols-[33vw]
+          lg:auto-cols-[28vw]
+          gap-6 
+          w-max 
+          h-full 
+          px-10 md:px-20           
+          justify-items-center
+          items-center
+          py-24          
+        "
+      >
+        {testimonials.map((t, i) => {
+          // تحديد الصف 0 أو 1 أو 2
+          const row = i % 3;
+
+          // *** التعديل المطلوب فقط ***
+          let desktopOffset = "";
+          if (row === 1) desktopOffset = "md:-translate-x-[-300px]"; // middle row shifted LEFT ONLY
+
+          return (
+            // fixed width and height for each tistememonial card
+            <CorneredBoxes
+              key={i}
+              type="section"
+              className={`
+                ${desktopOffset}
+                mx-auto 
+                p-4 sm:p-6 md:p-7 lg:p-8
+                rounded-[14px] sm:rounded-[18px] md:rounded-[20px]
+                bg-white shadow-[0px_8px_24px_rgba(0,0,0,0.08)]                
+                flex flex-col justify-between items-center
+                w-full transform translate-x-[500px]
+                h-[220px] h-[120px] sm:h-[140px] md:h-[160px] lg:h-[180px]                
+              `}
+            >
+              <h1
+                className="
+                  text-[14px] sm:text-[16px] md:text-[18px] lg:text-[20px]
+                  font-bold leading-snug mb-2
+                "
+                style={{ color: color.success }}
+              >
+                {t.text}
+              </h1>
+
+              <p
+                className="
+                  text-black
+                  text-[12px] sm:text-[14px] md:text-[16px]
+                  leading-relaxed
+                "
+              >
+                {t.text}
+              </p>
+            </CorneredBoxes>
+          );
+        })}
+      </div>
     </section>
   );
 }
