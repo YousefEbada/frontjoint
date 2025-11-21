@@ -7,7 +7,7 @@ export default function PatientLayout({
 }) {
     return (
         <section>
-            {/* Patient Shell /// Sidebar / Header */}
+            {/* Patient Shell //// Sidebar / Header */}
             {children}
         </section>
     );
