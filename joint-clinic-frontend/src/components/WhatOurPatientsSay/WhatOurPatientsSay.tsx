@@ -122,7 +122,7 @@ export default function WhatOurPatientsSay() {
                 bg-white shadow-[0px_8px_24px_rgba(0,0,0,0.08)]                
                 flex flex-col justify-between items-center
                 w-full transform translate-x-[500px]
-                h-[220px] h-[120px] sm:h-[140px] md:h-[160px] lg:h-[180px]                
+                h-[120px] sm:h-[140px] md:h-[160px] lg:h-[180px]                
               `}
             >
               <h1
