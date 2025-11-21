@@ -18,18 +18,14 @@ const Hero = ({ font }: HeroProps) => {
           w-[98%] h-[96%] 
           flex flex-col justify-center items-center
           overflow-hidden
+
+          /* BACKGROUND GIF */
+          bg-[url('/Project2.gif')]
+          bg-cover bg-center
         "
       >
-        {/* Background Video */}
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover"
-        >
-          <source src="/Project2.mp4" type="video/mp4" />
-        </video>
+        {/* Dark overlay (optional… keeps text readable) */}
+        <div className="absolute inset-0 bg-black/30 pointer-events-none"></div>
 
         <NavBar />
 
@@ -38,7 +34,8 @@ const Hero = ({ font }: HeroProps) => {
           className={`
             content ${font.className} 
             absolute bottom-[60px] md:bottom-[10px] md:mt-[250px] 
-            text-white flex flex-col justify-center items-center z-[1]
+            text-white flex flex-col justify-center items-center 
+            z-[1]
           `}
         >
           <h1 className="text-[50px] leading-[100%] font-bold font-['IBM_Plex_Sans'] text-center">
@@ -47,8 +44,7 @@ const Hero = ({ font }: HeroProps) => {
 
           <p className="mt-4 leading-[150%] text-[15px] font-medium max-w-[350px] md:max-w-[650px] text-center">
             Book physiotherapy sessions, access your medical reports, and
-            follow your personalized exercise plan – all in one secure
-            platform.
+            follow your personalized exercise plan – all in one secure platform.
           </p>
 
           <Button2 text="Get Started" />

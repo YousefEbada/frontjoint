@@ -18,22 +18,22 @@ const ibmPlex = IBM_Plex_Sans({
 export default function Home() {
   return (
     <div className="con bg-[#9fd5e2]">
-      {/* <div className={"h-screen w-full flex flex-col justify-center items-center"}>
+      <div className={"h-screen w-full flex flex-col justify-center items-center"}>
         <Hero font={ibmPlex} />
       </div>
-
+    
       <section className=" flex justify-center items-center bg-[9fd5e2] flex-col">
         <WhoWeAre />
       </section>
-
+      {/*
       <section className="chooseUs h-screen flex flex-col justify-center items-center md:mt-0 gap-8">
         <ChooseUs />
       </section>
-
+      */}
       <section className="features_section bg-[#0d7b93] overflow-hidden py-10">
         <HorizontalScroll />
-      </section>
-      */}
+      </section> 
+     
       <section className="h-screen flex items-center justify-center">
         <YourSafety />
       </section> 
