@@ -26,11 +26,11 @@ export default function Home() {
       <section className=" flex justify-center items-center bg-[9fd5e2] flex-col">
         <WhoWeAre />
       </section>
-      {/*
+      
       <section className="chooseUs h-screen flex flex-col justify-center items-center md:mt-0 gap-8">
         <ChooseUs />
       </section>
-      */}
+      
       <section className="features_section bg-[#0d7b93] overflow-hidden py-10">
         <HorizontalScroll />
       </section> 
@@ -51,7 +51,7 @@ export default function Home() {
         <Footer />
       </section> 
 
-      <Typography variant="subheader" className="text-center mt-4" text="Book Now" />
+      {/* <Typography variant="subheader" className="text-center mt-4" text="Book Now" /> */}
     </div>
   );
 }

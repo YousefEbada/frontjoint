@@ -36,18 +36,18 @@ export default function WhatOurPatientsSay() {
   }, []);
 
   const testimonials = [
-    { text: "The exercise videos are clear and easy to follow..." },
-    { text: "I felt supported throughout my recovery..." },
-    { text: "Being able to repeat exercises at home..." },
-    { text: "The platform helped me stay consistent..." },
-    { text: "I loved how every exercise was broken down..." },
-    { text: "The videos made complex movements feel easy..." },
-    { text: "Having everything accessible at home saved me..." },
-    { text: "The clarity of the videos and instructions..." },
-    { text: "I appreciated how the program kept things simple..." },
-    { text: "The exercises were exactly what I needed..." },
-    { text: "This helped me stay committed to my therapy..." },
-    { text: "The platform made recovery so much easier..." },
+    { name: "Sarah Johnson", role: "Patient", comment: "The exercise videos are clear and easy to follow..." },
+    { name: "Michael Brown", role: "Patient", comment: "I felt supported throughout my recovery..." },
+    { name: "Emma Williams", role: "Patient", comment: "Being able to repeat exercises at home..." },
+    { name: "James Miller", role: "Patient", comment: "The platform helped me stay consistent..." },
+    { name: "Olivia Davis", role: "Patient", comment: "I loved how every exercise was broken down..." },
+    { name: "Daniel Harris", role: "Patient", comment: "The videos made complex movements feel easy..." },
+    { name: "Noah Wilson", role: "Patient", comment: "Having everything accessible at home saved me..." },
+    { name: "Ava Thompson", role: "Patient", comment: "The clarity of the videos and instructions..." },
+    { name: "Liam Anderson", role: "Patient", comment: "I appreciated how the program kept things simple..." },
+    { name: "Sophia Martinez", role: "Patient", comment: "The exercises were exactly what I needed..." },
+    { name: "Benjamin Clark", role: "Patient", comment: "This helped me stay committed to my therapy..." },
+    { name: "Mia Robinson", role: "Patient", comment: "The platform made recovery so much easier..." },
   ];
 
   return (
@@ -61,18 +61,18 @@ export default function WhatOurPatientsSay() {
           absolute 
           top-1/2 -translate-y-1/2 
           left-6 md:left-12 lg:left-20 
-          flex flex-col items-start 
+          flex flex-col items-start justify-center
           z-0
         "
       >
-        <OutlinedCircle className="w-[160px] md:w-[260px] lg:w-[300px]" />
+        <OutlinedCircle className="w-[300px] md:w-[400px]" />
 
         <h1
           className="
-            absolute 
-            text-[7vw] sm:text-[32px] md:text-[48px] lg:text-[60px]
+            absolute w-[200px] md:w-[400px]
+            sm:text-[30px] md:text-[50px] lg:text-[70px] text-[30px]
             font-bold
-            mt-2
+            mt-2 text-center
           "
           style={{ color: color.success }}
         >
@@ -81,13 +81,12 @@ export default function WhatOurPatientsSay() {
       </div>
 
       {/* Cards Track */}
-      {/* center cards in page in small screens */}
       <div
         ref={trackRef}
         className="
           grid 
           grid-flow-col 
-          md:grid-rows-3 
+          grid-rows-3        /* <-- الآن 3 صفوف لكل الشاشات */
           auto-cols-[85vw] 
           sm:auto-cols-[60vw]
           md:auto-cols-[33vw]
@@ -102,48 +101,49 @@ export default function WhatOurPatientsSay() {
         "
       >
         {testimonials.map((t, i) => {
-          // تحديد الصف 0 أو 1 أو 2
           const row = i % 3;
 
-          // *** التعديل المطلوب فقط ***
-          let desktopOffset = "";
-          if (row === 1) desktopOffset = "md:-translate-x-[-300px]"; // middle row shifted LEFT ONLY
+          /* حل كامل للـ offset */
+          let Offset = "translate-x-[800px]"; // default value
+
+          if (row === 1) {
+            Offset = "translate-x-[500px]"; // middle row shift
+          }
 
           return (
-            // fixed width and height for each tistememonial card
             <CorneredBoxes
               key={i}
               type="section"
               className={`
-                ${desktopOffset}
+                ${Offset}
                 mx-auto 
                 p-4 sm:p-6 md:p-7 lg:p-8
                 rounded-[14px] sm:rounded-[18px] md:rounded-[20px]
                 bg-white shadow-[0px_8px_24px_rgba(0,0,0,0.08)]                
                 flex flex-col justify-between items-center
-                w-full transform translate-x-[500px]
+                w-full 
                 h-[120px] sm:h-[140px] md:h-[160px] lg:h-[180px]                
               `}
             >
-              <h1
+              <p
                 className="
                   text-[14px] sm:text-[16px] md:text-[18px] lg:text-[20px]
-                  font-bold leading-snug mb-2
+                  font-bold leading-snug mb-2 font-medium text-center 
                 "
                 style={{ color: color.success }}
               >
-                {t.text}
-              </h1>
+                {t.comment}
+              </p>
 
-              <p
+              <h3
                 className="
                   text-black
-                  text-[12px] sm:text-[14px] md:text-[16px]
-                  leading-relaxed
+                  sm:text-[14px]
+                  leading-relaxed md:text-[29px]
                 "
               >
-                {t.text}
-              </p>
+                <span className="font-bold">{t.name}, </span>{t.role}
+              </h3>
             </CorneredBoxes>
           );
         })}
