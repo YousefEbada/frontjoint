@@ -126,11 +126,12 @@ function WhoWeAre() {
         scale: 0.4,
         y: 50,
         ease: "power2.out",
-      });
+      }); // اختفاء indicator
     // ظهور Members
     master.from(members, { opacity: 0, y: 50, duration: 0.5 });
     // اخفاء Members
     master.to(members, { opacity: 0, y: -50, duration: 0.5 });
+    master.to(indicator, { opacity: 0, y: -50, duration: 0.5 });
     // ظهور Choose Us
     master.from(chooseUs, { opacity: 0, y: 50, duration: 0.5 });
   }, []);
