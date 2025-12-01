@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons'
 import { motion, AnimatePresence, Variants } from "framer-motion"
 import HelloCard from '@/components/organisms/helloCard';
+import CustomDropdown from '@/components/molecules/dropdown';
 
 const Page = () => {
 
@@ -91,14 +92,14 @@ const Page = () => {
 
                         <div className="relative">
                           <FontAwesomeIcon icon={faCaretDown} className="absolute top-1/2 -translate-y-1/2 right-[20px]" />
-                          <select
-                            className="custom-select w-[300px] text-[24px] h-[80px] px-5 rounded-full border border-[#0D294D]
-                                   bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none
-                                   focus:ring-2 focus:ring-[#1E5598]/30 transition appearance-none"
-                          >
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                          </select>
+                          <CustomDropdown
+                            items={[
+                              "Male",
+                              "Female"
+                            ]}
+                            width="w-[300px]"
+                            text="Gender"
+                          />
                         </div>
                       </div>
                     </motion.div>
@@ -162,78 +163,79 @@ const Page = () => {
 
                         <div className="relative">
                           <FontAwesomeIcon icon={faCaretDown} size="xl" className="absolute top-[50%] translate-y-[-50%] right-[50px]" />
-                          <select name="nationality" id="nationality"
-                            className={`custom-select w-[305px] text-[24px] relative h-[80px] px-5 rounded-full border border-[#0D294D] bg-transparent text-[${activeN ? '#0D294D' : '#7b8a99'}] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition appearance-none`}
-                            onChange={() => setActiveN(true)}
-                          >
-                            <option value="" disabled selected className="text-[#7b8a99]">Nationality</option>
-                            <option value="">Egypt</option>
-                            <option value="">Saudi Arabia</option>
-                            <option value="">UAE</option>
-                            <option value="">Qatar</option>
-                            <option value="">Oman</option>
-                            <option value="">Bahrain</option>
-                            <option value="">Kuwait</option>
-                          </select>
+                          <CustomDropdown
+                            items={[
+                              "Saudi Arabia",
+                              "United Arab Emirates",
+                              "Egypt",
+                              "Jordan",
+                              "Sudan",
+                              "Kuwait"
+                            ]}
+                            width="w-[305px]"
+                            text="Nationality"
+                          />
                         </div>
 
                         <div className="relative">
                           <FontAwesomeIcon icon={faCaretDown} size="xl" className="absolute top-[50%] translate-y-[-50%] right-[50px]" />
-                          <select name="city" id="city"
-                            className={`custom-select w-[275px] text-[24px] relative h-[80px] px-5 rounded-full border border-[#0D294D] bg-transparent text-[${activeC ? '#0D294D' : '#7b8a99'}] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition appearance-none`}
-                            onChange={() => setActiveC(true)}
-                          >
-                            <option value="" disabled selected className="text-[#7b8a99]">City</option>
-                            <option value="">Cairo</option>
-                            <option value="">Alexandria</option>
-                            <option value="">Giza</option>
-                            <option value="">Shubra El-Kheima</option>
-                            <option value="">Port Said</option>
-                            <option value="">Zagazig</option>
-                          </select>
+                          <CustomDropdown
+                            items={[
+                              "Cairo",
+                              "Alexandria",
+                              "Giza",
+                              "Shubra El-Kheima",
+                              "Port Said",
+                              "Zagazig"
+                            ]}
+                            width="w-[275px]"
+                            text="City"
+                          />
                         </div>
 
                         <input type="text" placeholder="Address" className="w-[1000px] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition" />
 
                         <div className="relative">
                           <FontAwesomeIcon icon={faCaretDown} size="xl" className="absolute top-[50%] translate-y-[-50%] right-[170px]" />
-                          <select name="Identifiertype" id="Identifiertype"
-                            className={`custom-select w-[560px] text-[24px] relative h-[80px] px-5 rounded-full border border-[#0D294D] bg-transparent text-[${activeIdentifier ? '#0D294D' : '#7b8a99'}] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition appearance-none`}
-                            onChange={() => setActiveIdentifier(true)}
-                          >
-                            <option value="" disabled selected className="text-[#7b8a99]">Identifier type</option>
-                            <option value="">NID</option>
-                            <option value="">Iqama ID</option>
-                            <option value="">Passport</option>
-                          </select>
+                          <CustomDropdown
+                            items={[
+                              "Saudi Arabia",
+                              "United Arab Emirates",
+                              "Egypt",
+                              "Jordan",
+                              "Sudan",
+                              "Kuwait"
+                            ]}
+                            width="w-[560px]"
+                            text="Identifier type"
+                          />
                         </div>
 
                         <div className="relative">
                           <FontAwesomeIcon icon={faCaretDown} size="xl" className="absolute top-[50%] translate-y-[-50%] right-[50px]" />
-                          <select name="MaritalStatus" id="MaritalStatus"
-                            className={`custom-select w-[310px] text-[24px] relative h-[80px] px-5 rounded-full border border-[#0D294D] bg-transparent text-[${activeMarital ? '#0D294D' : '#7b8a99'}] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition appearance-none`}
-                            onChange={() => setActiveMarital(true)}
-                          >
-                            <option value="" disabled selected className="text-[#7b8a99]">Marital Status</option>
-                            <option value="">Single</option>
-                            <option value="">Married</option>
-                            <option value="">Divorced</option>
-                            <option value="">Widowed</option>
-                          </select>
+                          <CustomDropdown
+                            items={[
+                              "Single",
+                              "Married",
+                              "Divorced",
+                              "Widowed"
+                            ]}
+                            width="w-[310px]"
+                            text="Marital Status"
+                          />
                         </div>
 
                         <div className="relative">
                           <FontAwesomeIcon icon={faCaretDown} size="xl" className="absolute top-[50%] translate-y-[-50%] right-[50px]" />
-                          <select name="Speaking Language" id="Speaking Language"
-                            className={`custom-select w-[370px] text-[24px] relative h-[80px] px-5 rounded-full border border-[#0D294D] bg-transparent text-[${activeLanguage ? '#0D294D' : '#7b8a99'}] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition appearance-none`}
-                            onChange={() => setActiveLanguage(true)}
-                          >
-                            <option value="" disabled selected className="text-[#7b8a99]">Speaking Language</option>
-                            <option value="">English</option>
-                            <option value="">Arabic</option>
-                            <option value="">French</option>
-                            <option value="">Spanish</option>
-                          </select>
+                          <CustomDropdown
+                            items={[
+                              "English",
+                              "Arabic",
+                              "Other"
+                            ]}
+                            width="w-[375px]"
+                            text="Speaking Language"
+                          />
                         </div>
                       </form>
 
@@ -250,7 +252,21 @@ const Page = () => {
                           <input type="email" placeholder="Guardian’s Email Address" className="w-[720px] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition" />
                           <input type="text" placeholder="Blood Group" className="w-[440px] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition" />
                           <input type="text" placeholder="Patient Category" className="w-[450px] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition" />
-                          <input type="file" placeholder="Upload File" className="w-[370px] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] border-dashed text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition" />
+                          <div className="relative">
+                            <input
+                              id="upload"
+                              type="file"
+                              className="hidden"
+                              onChange={(e) => console.log(e.target.files?.[0])}
+                            />
+
+                            <label
+                              htmlFor="upload"
+                              className="w-[370px] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#6d7a80] text-center flex items-center justify-center cursor-pointer outline-none border-dashed transition"
+                            >
+                              Upload File
+                            </label>
+                          </div>
                         </form>
                       </div>
                     </motion.div>
@@ -276,7 +292,7 @@ const Page = () => {
                       onClick={() => setStep(step + 1)}
                       className="w-[220px] h-[60px] cursor-pointer py-3 bg-[#ea392f] text-white rounded-full
                              font-semibold mt-4 hover:bg-transparent hover:text-[#ea392f]
-                             hover:border-[#ea392f] border-[4px] transition-all duration-300">
+                             hover:border-[#ea392f] border-[4px] border-[#ea392f] transition-all duration-300">
                       Continue
                     </button>
                   )}

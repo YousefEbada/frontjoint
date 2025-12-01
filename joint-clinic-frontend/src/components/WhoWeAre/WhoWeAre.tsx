@@ -53,13 +53,20 @@ function WhoWeAre() {
     },
   ];
 
-  const sectionRef = useRef(null);
-  const circleRef = useRef(null);
-  const titleRef = useRef(null);
-  const paragraphRef = useRef(null);
-  const indicatorRef = useRef(null);
-  const membersRef = useRef(null);
-  const chooseUsRef = useRef(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const circleRef = useRef<HTMLElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const paragraphRef = useRef<HTMLParagraphElement>(null);
+  const indicatorRef = useRef<HTMLDivElement>(null);
+  const membersRef = useRef<HTMLElement>(null);
+  const chooseUsRef = useRef<HTMLElement>(null);
+  const centerCircleRef = useRef<HTMLDivElement>(null);
+  const leftDotRef = useRef<HTMLDivElement>(null);
+  const rightDotRef = useRef<HTMLDivElement>(null);
+  const redLineRef = useRef<HTMLDivElement>(null);
+  const leftLineRef = useRef<HTMLDivElement>(null);
+  const rightLineRef = useRef<HTMLDivElement>(null);
+  const [activeCardIndex, setActiveCardIndex] = React.useState(0);
 
   React.useEffect(() => {
     const section = sectionRef.current;
@@ -69,6 +76,12 @@ function WhoWeAre() {
     const indicator = indicatorRef.current;
     const members = membersRef.current;
     const chooseUs = chooseUsRef.current;
+    const centerCircle = centerCircleRef.current;
+    const leftDot = leftDotRef.current;
+    const rightDot = rightDotRef.current;
+    const redLine = redLineRef.current;
+    const leftLine = leftLineRef.current;
+    const rightLine = rightLineRef.current;
 
     if (
       !section ||
@@ -77,62 +90,100 @@ function WhoWeAre() {
       !paragraph ||
       !indicator ||
       !members ||
-      !chooseUs
+      !chooseUs ||
+      !centerCircle ||
+      !leftDot ||
+      !rightDot ||
+      !redLine ||
+      !leftLine ||
+      !rightLine
     )
       return;
 
+    const master = gsap.timeline({
+      scrollTrigger: {
+        trigger: section,
+        start: "top top",
+        end: "+=3000",
+        scrub: true,
+        pin: true,
+      },
+    });
+
+    master.to(circle, { y: -150, rotate: 180 });
+    master.from(title, { opacity: 0, y: 40 });
+    master.from(paragraph, { opacity: 0, y: 50 });
+
+    master.to([title, paragraph], { opacity: 0, y: -40 });
+
+    const circleRect = circle.getBoundingClientRect();
+    const indicatorRect = indicator.getBoundingClientRect();
+
+    const deltaX =
+      indicatorRect.left +
+      indicatorRect.width / 2 -
+      (circleRect.left + circleRect.width / 2);
+
+    const deltaY =
+      indicatorRect.top +
+      indicatorRect.height / 2 -
+      (circleRect.top + circleRect.height / 2);
+
+    master.to(circle, {
+      x: deltaX,
+      y: deltaY,
+      background: "transparent",
+      border: "3px solid #0d294d",
+      borderRadius: "50%",
+      duration: 1,
+      ease: "power3.inOut",
+    });
+
+    master.from([leftDot, rightDot], {
+      opacity: 0,
+      x: (i) => (i === 0 ? "+=100" : "-=100"),
+      duration: 0.6,
+      ease: "power2.out",
+    });
+
+    master.from(
+      redLine,
+      {
+        opacity: 0,
+        y: 50,
+        duration: 0.6,
+        ease: "power2.out",
+      },
+      "<"
+    );
+
+    master.from(leftLine, { opacity: 0, duration: 0.5 });
+    master.from(rightLine, { opacity: 0, duration: 0.5 }, "<");
+
+    master.from(members, { opacity: 0, y: 50, duration: 0.5 });
+
+    master.to([members, indicator], { opacity: 0, y: -50, duration: 0.5 });
+    master.to(circle, { opacity: 0, duration: 0.5 }, "<");
+
+    master.from(chooseUs, { opacity: 0, y: 50, duration: 0.5 });
+
+    // ---- تفعيل الكروت بناءً على ال Timeline ----
     //
     // ───────────────────────────────────────────────
     // MASTER TIMELINE — كل شيء يحدث بالتتابع
     // ───────────────────────────────────────────────
     //
-    const master = gsap.timeline({
-      scrollTrigger: {
-        trigger: section,
-        start: "top top",
-        end: "+=2000", // المسافة اللي تمشي فيها الأنيميشن
-        scrub: true,
-        pin: true,
-        // markers: true,
+
+    const cardsCount = cards.length;
+    master.to({}, {
+      duration: 2,
+      onUpdate: function () {
+        const progress = this.progress();
+        const index = Math.floor(progress * cardsCount);
+        setActiveCardIndex(Math.min(index, cardsCount - 1));
       },
     });
 
-    //
-    // ─────── Timeline 1 (الدائرة تطلع + الكلام يظهر) ───────
-    //
-    master
-      // حركة الدائرة
-      .to(circle, { y: -150, rotate: 180 })
-
-      // ظهور العنوان
-      .from(title, { opacity: 0, y: 40 })
-
-      // ظهور الفقرة
-      .from(paragraph, { opacity: 0, y: 50 });
-
-    //
-    // ─────── Timeline 2 (الدائرة + الكلام يختفوا + indicator يظهر) ───────
-    //
-    master
-      // إخفاء الدائرة
-      .to(circle, { opacity: 0, scale: 0.6 })
-
-      // إخفاء العنوان + الفقرة
-      .to([title, paragraph], { opacity: 0, y: -40 })
-
-      // ظهور indicator
-      .from(indicator, {
-        opacity: 0,
-        scale: 0.4,
-        y: 50,
-        ease: "power2.out",
-      }); // اختفاء indicator
-    // ظهور Members
-    master.from(members, { opacity: 0, y: 50, duration: 0.5 });
-    // اخفاء Members و indicator في نفس الوقت
-    master.to([members, indicator], { opacity: 0, y: -50, duration: 0.5 });
-    // ظهور Choose Us
-    master.from(chooseUs, { opacity: 0, y: 50, duration: 0.5 });
   }, []);
 
   return (
@@ -143,15 +194,16 @@ function WhoWeAre() {
       <section
         id="circle"
         ref={circleRef}
-        className="bg-gradient-to-b absolute top-50% translate-y-[-50%] from-[#0D294D] to-[#1E5598]"
-      ></section>
+        className="circleMorph bg-gradient-to-b from-[#0D294D] to-[#1E5598] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+      >
+      </section>
       <div ref={indicatorRef} className="indicator">
-        <div className="dot left"></div>
-        <div className="line"></div>
-        <div className="circle"></div>
-        <div className="line"></div>
-        <div className="dot right"></div>
-        <div className="red-line"></div>
+        <div className="dot left" ref={leftDotRef}></div>
+        <div className="line" ref={leftLineRef}></div>
+        <div className="circle" ref={centerCircleRef}></div>
+        <div className="line" ref={rightLineRef}></div>
+        <div className="dot right" ref={rightDotRef}></div>
+        <div className="red-line" ref={redLineRef}></div>
       </div>
 
       <h2
@@ -221,12 +273,14 @@ function WhoWeAre() {
                 key={index}
                 title={card.title}
                 description={card.desc}
+                isActive={activeCardIndex >= index}   // 👈 هنا
               />
             );
           })}
         </div>
+
       </section>
-    </section>
+    </section >
   );
 }
 

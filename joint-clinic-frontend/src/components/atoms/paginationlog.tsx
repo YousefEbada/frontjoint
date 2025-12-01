@@ -17,8 +17,8 @@ export default function PaginationDots({ total, activeIndex, className = "" }: P
           className={`
             w-[30px] h-[30px] rounded-full transition-all duration-300
             pointer-events-none             /* 🔥 منع الضغط نهائياً */
-            ${activeIndex === index 
-              ? "bg-[#0a1c32] scale-110" 
+            ${activeIndex === index
+              ? "bg-[#0a1c32] scale-110"
               : "border border-[#0D294D] bg-transparent"
             }
           `}
