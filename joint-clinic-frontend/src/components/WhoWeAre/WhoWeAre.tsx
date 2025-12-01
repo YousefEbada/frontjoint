@@ -66,6 +66,7 @@ function WhoWeAre() {
   const redLineRef = useRef<HTMLDivElement>(null);
   const leftLineRef = useRef<HTMLDivElement>(null);
   const rightLineRef = useRef<HTMLDivElement>(null);
+  const [activeCardIndex, setActiveCardIndex] = React.useState(0);
 
   React.useEffect(() => {
     const section = sectionRef.current;
@@ -99,53 +100,35 @@ function WhoWeAre() {
     )
       return;
 
-    //
-    // ───────────────────────────────────────────────
-    // MASTER TIMELINE — كل شيء يحدث بالتتابع
-    // ───────────────────────────────────────────────
-    //
     const master = gsap.timeline({
       scrollTrigger: {
         trigger: section,
         start: "top top",
-        end: "+=2000", // المسافة اللي تمشي فيها الأنيميشن
+        end: "+=3000",
         scrub: true,
         pin: true,
-        // markers: true,
       },
     });
 
-    //
-    // ─────── Timeline 1 (الدائرة تطلع + الكلام يظهر) ───────
-    //
-    master
-      // حركة الدائرة
-      .to(circle, { y: -150, rotate: 180 })
+    master.to(circle, { y: -150, rotate: 180 });
+    master.from(title, { opacity: 0, y: 40 });
+    master.from(paragraph, { opacity: 0, y: 50 });
 
-      // ظهور العنوان
-      .from(title, { opacity: 0, y: 40 })
-
-      // ظهور الفقرة
-      .from(paragraph, { opacity: 0, y: 50 });
-
-    //
-    // ─────── Timeline 2 (الدائرة + الكلام يختفوا + indicator يظهر) ───────
-    //
-    master
-      // إخفاء العنوان + الفقرة
-      .to([title, paragraph], { opacity: 0, y: -40 })
+    master.to([title, paragraph], { opacity: 0, y: -40 });
 
     const circleRect = circle.getBoundingClientRect();
     const indicatorRect = indicator.getBoundingClientRect();
 
     const deltaX =
-      indicatorRect.left + indicatorRect.width / 2 -
+      indicatorRect.left +
+      indicatorRect.width / 2 -
       (circleRect.left + circleRect.width / 2);
 
     const deltaY =
-      indicatorRect.top + indicatorRect.height / 2 -
+      indicatorRect.top +
+      indicatorRect.height / 2 -
       (circleRect.top + circleRect.height / 2);
-    // انتقال الدايره للموقع بتاعها في ال indicator عشان يبدوا كانها اتحولتله
+
     master.to(circle, {
       x: deltaX,
       y: deltaY,
@@ -155,44 +138,52 @@ function WhoWeAre() {
       duration: 1,
       ease: "power3.inOut",
     });
-    // ظهور indicator      
-    // ظهور Members
-    // master.from(indicator, {
-    //   opacity: 0,
-    //   scale: 0.4,
-    //   y: 50,
-    //   ease: "power2.out",
-    // });
-    // master.from(centerCircle, { opacity: 0, y: 50, duration: 0.5 });
-    master.from(
-      [leftDot, rightDot],
-      {
-        opacity: 0,
-        x: (i) => (i === 0 ? "+=100" : "-=100"),
-        duration: 0.6,
-        ease: "power2.out"
-      }
-    );
 
-    // redLine مع نفس التوقيت
+    master.from([leftDot, rightDot], {
+      opacity: 0,
+      x: (i) => (i === 0 ? "+=100" : "-=100"),
+      duration: 0.6,
+      ease: "power2.out",
+    });
+
     master.from(
       redLine,
       {
         opacity: 0,
         y: 50,
         duration: 0.6,
-        ease: "power2.out"
+        ease: "power2.out",
       },
-      "<" // ← دي بتخليه يبدأ مع اللي فوق فوراً
+      "<"
     );
+
     master.from(leftLine, { opacity: 0, duration: 0.5 });
     master.from(rightLine, { opacity: 0, duration: 0.5 }, "<");
+
     master.from(members, { opacity: 0, y: 50, duration: 0.5 });
-    // اخفاء Members و indicator في نفس الوقت
+
     master.to([members, indicator], { opacity: 0, y: -50, duration: 0.5 });
     master.to(circle, { opacity: 0, duration: 0.5 }, "<");
-    // ظهور Choose Us
+
     master.from(chooseUs, { opacity: 0, y: 50, duration: 0.5 });
+
+    // ---- تفعيل الكروت بناءً على ال Timeline ----
+    //
+    // ───────────────────────────────────────────────
+    // MASTER TIMELINE — كل شيء يحدث بالتتابع
+    // ───────────────────────────────────────────────
+    //
+
+    const cardsCount = cards.length;
+    master.to({}, {
+      duration: 2,
+      onUpdate: function () {
+        const progress = this.progress();
+        const index = Math.floor(progress * cardsCount);
+        setActiveCardIndex(Math.min(index, cardsCount - 1));
+      },
+    });
+
   }, []);
 
   return (
@@ -282,10 +273,12 @@ function WhoWeAre() {
                 key={index}
                 title={card.title}
                 description={card.desc}
+                isActive={activeCardIndex >= index}   // 👈 هنا
               />
             );
           })}
         </div>
+
       </section>
     </section >
   );
