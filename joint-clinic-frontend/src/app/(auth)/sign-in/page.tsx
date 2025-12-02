@@ -46,7 +46,7 @@ const Page = () => {
         !showHello && (
           <div className="w-[100vw] relative right-[50%] translate-x-[50%] min-h-screen flex items-center justify-center">
 
-            <CorneredBoxes type="glass" className="w-[95vw] md:w-[80vw] min-h-[100vh] absolute right-[50%] top-[5%] translate-x-[50%] mb-[10%]">
+            <CorneredBoxes type="glass" className="w-[95vw] py-[100px] md:w-[80vw] min-h-[100vh] absolute right-[50%] top-[5%] translate-x-[50%] mb-[10%]">
 
               <Logo fill="#112a4d" className="w-[100px] md:w-[150px] h-[100px] md:h-[150px] absolute top-[10px] right-[40px]" />
 
@@ -143,7 +143,7 @@ const Page = () => {
                       animate="visible"
                       exit="exit"
                       variants={pageAnim}
-                      className="page3 flex flex-col md:flex-row flex-wrap items-center justify-center"
+                      className="page3 bg flex flex-col md:flex-row flex-wrap items-center justify-center"
                     >
                       <h2 className="md:text-[42px] text-[25px] md:w-[80%] w-[100%] font-bold bg-gradient-to-b from-[#0D294D] to-[#1E5598]
                                 bg-clip-text text-transparent text-center">
@@ -262,7 +262,7 @@ const Page = () => {
 
                             <label
                               htmlFor="upload"
-                              className="w-[370px] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#6d7a80] text-center flex items-center justify-center cursor-pointer outline-none border-dashed transition"
+                              className="md:w-[370px] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#6d7a80] text-center flex items-center justify-center cursor-pointer outline-none border-dashed transition"
                             >
                               Upload File
                             </label>
