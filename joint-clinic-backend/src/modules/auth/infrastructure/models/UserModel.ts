@@ -37,8 +37,6 @@ const UserSchema = new Schema(
       required: false
     },
     speakingLanguages: [{ type: String }],
-    // link to guardian info
-    guardianInformation: { type: Schema.Types.ObjectId, ref: 'Guardian', required: false },
     // account status
     accountStatus: {
       type: String,

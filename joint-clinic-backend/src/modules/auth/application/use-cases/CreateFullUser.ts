@@ -39,7 +39,7 @@ export class CreateFullUser {
 		try {
 			saved = await this.userRepo.save(merged as Partial<User>);
 		} catch (error) {
-			console.error("Error saving full user:", error?.message);
+			console.error("Error saving full user:", (error as any).message);
 			throw new Error("Failed to persist full user.");
 		}
 		if (!saved) {

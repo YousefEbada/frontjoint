@@ -13,6 +13,8 @@ import { MailPort } from 'infra/mail/mail.port.js';
 import { SMSPort } from 'infra/sms/sms.port.js';
 import { twilioMailAdapter } from 'infra/mail/twilio.mail.adapter.js';
 import { smsAdapter } from 'infra/sms/sms.adapter.js';
+import { PatientRepoPort } from 'modules/patient/application/ports/PatientRepoPort.js';
+import { PatientRepoMongo } from 'modules/patient/infrastructure/repos/PatientRepoMongo.js';
 
 export const OTP_REPO = token<OTPRepoPort>('OTP_REPO');
 export const BOOKING_REPO = token<BookingRepoPort>('BOOKING_REPO');
@@ -21,6 +23,7 @@ export const BLOB_PORT = token<BlobPort>('BLOB_PORT');
 export const USER_AUTH_REPO = token<UserRepoPort>('USER_AUTH_REPO');
 export const MAIL_REPO = token<MailPort>('MAIL_REPO');
 export const SMS_REPO = token<SMSPort>('SMS_REPO');
+export const PATIENT_REPO = token<PatientRepoPort>('PATIENT_REPO');
 
 export function bindAll() {
   register(OTP_REPO, OTPRepoMongo);
@@ -30,4 +33,5 @@ export function bindAll() {
   register(USER_AUTH_REPO, UserRepoMongo);
   register(MAIL_REPO, twilioMailAdapter);
   register(SMS_REPO, smsAdapter);
+  register(PATIENT_REPO, PatientRepoMongo);
 }
