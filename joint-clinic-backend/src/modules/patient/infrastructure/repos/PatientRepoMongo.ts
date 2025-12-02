@@ -19,6 +19,9 @@ export const PatientRepoMongo: PatientRepoPort = {
 
     async updatePatient(id, data) {
         try {
+            if (!mongoose.Types.ObjectId.isValid(id)) {
+                return null; // let use-case decide
+            }
             const patient = await PatientModel.findByIdAndUpdate(
                 id,
                 { $set: data },
