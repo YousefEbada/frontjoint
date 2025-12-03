@@ -22,9 +22,7 @@ const BookingContent = () => {
 
             {/* Left Column */}
             <div className="flex flex-col gap-6 flex-1 items-center lg:items-start">
-                <Typography variant="heading2" className="text-[#0D294D] text-center lg:text-left">
-                    Select the date
-                </Typography>
+                <Typography text="Select the date" variant="heading2" className="text-[#0D294D] text-center lg:text-left" />
 
                 <div className="w-full flex justify-center lg:justify-start">
                     <Calendar />
@@ -32,12 +30,12 @@ const BookingContent = () => {
 
                 <div className="flex flex-col gap-2 mt-4 w-full max-w-[380px]">
                     <div className="flex justify-between items-center">
-                        <Typography variant="bodyBold" className="text-[#1e5598]">Remaining Sessions:</Typography>
-                        <Typography variant="bodyBold" className="text-[#167c4f]">11</Typography>
+                        <Typography text="Remaining Sessions:" variant="bodyBold" className="text-[#1e5598]" />
+                        <Typography text="11" variant="bodyBold" className="text-[#167c4f]" />
                     </div>
                     <div className="flex justify-between items-center">
-                        <Typography variant="bodyBold" className="text-[#1e5598]">Remaining Weeks:</Typography>
-                        <Typography variant="bodyBold" className="text-[#167c4f]">5 Weeks</Typography>
+                        <Typography text="Remaining Weeks:" variant="bodyBold" className="text-[#1e5598]" />
+                        <Typography text="5 Weeks" variant="bodyBold" className="text-[#167c4f]" />
                     </div>
                 </div>
             </div>
@@ -52,9 +50,7 @@ const BookingContent = () => {
 
                 {/* Time Slot */}
                 <div className="w-full max-w-[500px]">
-                    <Typography variant="heading2" className="text-[#0D294D] mb-4 text-center lg:text-left">
-                        Choose your time slot
-                    </Typography>
+                    <Typography text="Choose your time slot" variant="heading2" className="text-[#0D294D] mb-4 text-center lg:text-left" />
                     <CustomSelect
                         items={["8:00 Am", "9:00 Am", "10:00 Am", "11:00 Am", "12:00 Pm"]}
                         onChange={setSelectedTime}
@@ -66,18 +62,14 @@ const BookingContent = () => {
 
                 {/* Confirm Booking */}
                 <div className="w-full max-w-[500px] flex flex-col gap-4">
-                    <Typography variant="heading2" className="text-[#0D294D] text-center lg:text-left">
-                        Confirm your booking
-                    </Typography>
+                    <Typography text="Confirm your booking" variant="heading2" className="text-[#0D294D] text-center lg:text-left" />
 
                     <div className="text-center lg:text-left">
                         <span className="text-[#0D294D] font-bold text-[16px] md:text-[18px]">Your Session will be on: </span>
                         <span className="text-[#167c4f] font-bold text-[16px] md:text-[18px]">{selectedDate} at {selectedTime}</span>
                     </div>
 
-                    <Typography variant="bodyRegular" className="text-gray-400 text-center lg:text-left text-[14px]">
-                        Please note that the bookings can be rescheduled or cancelled at least 24 hours before the appointment
-                    </Typography>
+                    <Typography text="Please note that the bookings can be rescheduled or cancelled at least 24 hours before the appointment" variant="bodyRegular" className="text-gray-400 text-center lg:text-left text-[14px]" />
 
                     <div className="flex justify-center lg:justify-start mt-4">
                         <Button text="Confirm" variant="primary" />
@@ -87,12 +79,12 @@ const BookingContent = () => {
                 {/* Session Info */}
                 <div className="flex flex-col gap-2 w-full max-w-[500px] mt-auto">
                     <div className="flex justify-between items-center">
-                        <Typography variant="bodyBold" className="text-[#1e5598]">Now you're booking :</Typography>
-                        <Typography variant="bodyBold" className="text-[#167c4f]">6th Session</Typography>
+                        <Typography text="Now you're booking :" variant="bodyBold" className="text-[#1e5598]" />
+                        <Typography text="6th Session" variant="bodyBold" className="text-[#167c4f]" />
                     </div>
                     <div className="flex justify-between items-center">
-                        <Typography variant="bodyBold" className="text-[#1e5598]">Current Week:</Typography>
-                        <Typography variant="bodyBold" className="text-[#167c4f]">3</Typography>
+                        <Typography text="Current Week:" variant="bodyBold" className="text-[#1e5598]" />
+                        <Typography text="3" variant="bodyBold" className="text-[#167c4f]" />
                     </div>
                 </div>
 
