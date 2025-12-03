@@ -1,9 +1,12 @@
-import React from 'react'
+import React from 'react';
+import Typography from '@/components/atoms/Typography';
 
-const page = () => {
+const ExercisesPage = () => {
   return (
-    <div>page</div>
-  )
-}
+    <div className="w-full h-full flex items-center justify-center">
+      <Typography variant="heading1">Exercises Page</Typography>
+    </div>
+  );
+};
 
-export default page
+export default ExercisesPage;
