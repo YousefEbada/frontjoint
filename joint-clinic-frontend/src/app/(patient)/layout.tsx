@@ -4,9 +4,10 @@ import SideBar from "@/components/SideBar/SideBar";
 import CorneredBoxes from "@/components/atoms/CorneredBoxes";
 import Profile from "@/components/icons/Profile";
 import Calendar from "@/components/icons/Calendar";
-import Clients from "@/components/icons/clients";
 import Report from "@/components/icons/Report";
 import Support from "@/components/icons/Support";
+import Exercise from "@/components/icons/Exercise";
+import Faqs from "@/components/icons/Faqs";
 
 export default function PatientLayout({
     children,
@@ -14,11 +15,12 @@ export default function PatientLayout({
     children: React.ReactNode;
 }) {
     const navItems = [
-        { href: "/patientboard/main", icon: Profile, title: "Dashboard" },
-        { href: "/patientboard/booking", icon: Calendar, title: "Booking" },
-        { href: "/patientboard/clients", icon: Clients, title: "Clients" },
-        { href: "/patientboard/reports", icon: Report, title: "Medical Reports" },
-        { href: "/patientboard/support", icon: Support, title: "Support" },
+        { href: "/dashboard/main", icon: Profile, title: "Dashboard" },
+        { href: "/dashboard/booking", icon: Calendar, title: "Booking" },
+        { href: "/dashboard/exercises", icon: Exercise, title: "Exercises" },
+        { href: "/dashboard/reports", icon: Report, title: "Medical Reports" },
+        { href: "/dashboard/faqs", icon: Faqs, title: "FAQs" },
+        { href: "/dashboard/support", icon: Support, title: "Support" },
     ];
     return (
         <section

@@ -1,0 +1,7 @@
+.taskcategory:after {
+    content: "";
+    width: 1px;
+    height: 40px;
+    background-color: #f5f;
+}
+    
