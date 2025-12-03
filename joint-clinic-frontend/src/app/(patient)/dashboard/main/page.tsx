@@ -12,55 +12,33 @@ const Page = () => {
       <main className="w-full h-full flex flex-col gap-6 p-4 md:p-8 overflow-y-auto custom-scrollbar">
         {/* Welcome Section */}
         <div className="flex flex-col sm:flex-row gap-2 items-start sm:items-baseline">
-          <Typography variant="heading1" style={{ color: color.secondary }}>
-            Welcome Back,
-          </Typography>
-          <Typography variant="heading1" style={{ color: color.primary }}>
-            {data.patientName}
-          </Typography>
+          <Typography text="Welcome Back," variant="heading1" style={{ color: color.secondary }} />
+          <Typography text={data.patientName} variant="heading1" style={{ color: color.primary }} />
         </div>
 
         {/* Progress Section */}
         <div className="flex flex-col gap-4">
-          <Typography variant="heading2" style={{ color: color.secondary }}>
-            Progress
-          </Typography>
+          <Typography text="Progress" variant="heading2" style={{ color: color.secondary }} />
           <ProgressBar percentage={data.progressPercentage} />
           <div className="flex flex-col md:flex-row justify-between w-full pr-0 md:pr-12 gap-4 md:gap-0">
             <div className="flex flex-col gap-2">
               <div className="flex flex-row gap-2 justify-between md:justify-start">
-                <Typography variant="bodyBold" style={{ color: color.secondary }}>
-                  Number Of sessions:
-                </Typography>
-                <Typography variant="bodyBold" style={{ color: color.success }}>
-                  {data.totalSessions}
-                </Typography>
+                <Typography text="Number Of sessions:" variant="bodyBold" style={{ color: color.secondary }} />
+                <Typography text={data.totalSessions} variant="bodyBold" style={{ color: color.success }} />
               </div>
               <div className="flex flex-row gap-2 justify-between md:justify-start">
-                <Typography variant="bodyBold" style={{ color: color.secondary }}>
-                  Treatment length:
-                </Typography>
-                <Typography variant="bodyBold" style={{ color: color.success }}>
-                  {data.treatmentLength}
-                </Typography>
+                <Typography text="Treatment length:" variant="bodyBold" style={{ color: color.secondary }} />
+                <Typography text={data.treatmentLength} variant="bodyBold" style={{ color: color.success }} />
               </div>
             </div>
             <div className="flex flex-col gap-2">
               <div className="flex flex-row gap-2 justify-between md:justify-start">
-                <Typography variant="bodyBold" style={{ color: color.secondary }}>
-                  Sessions completed:
-                </Typography>
-                <Typography variant="bodyBold" style={{ color: color.success }}>
-                  {data.sessionsCompleted}
-                </Typography>
+                <Typography text="Sessions completed:" variant="bodyBold" style={{ color: color.secondary }} />
+                <Typography text={data.sessionsCompleted} variant="bodyBold" style={{ color: color.success }} />
               </div>
               <div className="flex flex-row gap-2 justify-between md:justify-start">
-                <Typography variant="bodyBold" style={{ color: color.secondary }}>
-                  Exercises completed:
-                </Typography>
-                <Typography variant="bodyBold" style={{ color: color.success }}>
-                  {data.exercisesCompleted}
-                </Typography>
+                <Typography text="Exercises completed:" variant="bodyBold" style={{ color: color.secondary }} />
+                <Typography text={data.exercisesCompleted} variant="bodyBold" style={{ color: color.success }} />
               </div>
             </div>
           </div>
@@ -70,9 +48,7 @@ const Page = () => {
 
         {/* Summary Section */}
         <div className="flex flex-col gap-4">
-          <Typography variant="heading2" style={{ color: color.secondary }}>
-            Week 3 summary
-          </Typography>
+          <Typography text="Week 3 summary" variant="heading2" style={{ color: color.secondary }} />
           <div className="flex flex-col gap-2">
             {data.summaryItems.map((item, index) => (
               <SummaryItem key={index} {...item} />

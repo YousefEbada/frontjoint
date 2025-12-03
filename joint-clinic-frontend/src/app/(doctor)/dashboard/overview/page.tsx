@@ -9,7 +9,7 @@ const data={
 const Page = () => {
   return (
     <>
-        <DashBoardHeader />
+        <DashBoardHeader therapyName="Physiotherapy" />
         <main className="w-full h-full">
 
         </main>
