@@ -31,6 +31,7 @@ const DashBoardHeader = ({ therapyName, nav, children }: DashBoardHeaderProps) =
       </nav>
       <div>
         <Typography
+          text={therapyName}
           variant="bodyBold"
           style={{
             backgroundClip: 'text',
@@ -38,10 +39,7 @@ const DashBoardHeader = ({ therapyName, nav, children }: DashBoardHeaderProps) =
             color: 'transparent',
             display: 'inline-block'
           }}
-          gradient={true}
-        >
-          {therapyName}
-        </Typography>
+        />
         <DateTime />
       </div>
     </header>

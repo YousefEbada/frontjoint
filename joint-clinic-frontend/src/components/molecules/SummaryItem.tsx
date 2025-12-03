@@ -28,18 +28,11 @@ const SummaryItem: React.FC<SummaryItemProps> = ({
                         <div
                             className={`w-2 h-2 rounded-full ${isDone ? "bg-black" : "border border-black bg-transparent"}`}
                         />
-                        <Typography variant="bodyBold" style={{ color: color.secondary }}>
-                            {title}
-                        </Typography>
+                        <Typography text={title} variant="bodyBold" style={{ color: color.secondary }} />
                     </div>
                     {/* Show status next to title on mobile */}
                     <div className="flex sm:hidden items-center">
-                        <Typography
-                            variant="bodyBold"
-                            style={{ color: statusColor }}
-                        >
-                            {status}
-                        </Typography>
+                        <Typography text={status} variant="bodyBold" style={{ color: statusColor }} />
                     </div>
                 </div>
                 {subtitle && (
@@ -47,32 +40,21 @@ const SummaryItem: React.FC<SummaryItemProps> = ({
                         <div
                             className={`w-2 h-2 rounded-full border border-gray-400 bg-transparent`}
                         />
-                        <Typography variant="bodyRegular" style={{ color: color.secondary }}>
-                            {subtitle}
-                        </Typography>
+                        <Typography text={subtitle} variant="bodyRegular" style={{ color: color.secondary }} />
                     </div>
                 )}
             </div>
 
             <div className="flex flex-row sm:flex-col items-center sm:items-end gap-4 sm:gap-1 pl-4 sm:pl-0 w-full sm:w-auto justify-between sm:justify-start">
-                <Typography variant="bodyBold" style={{ color: color.secondary }}>
-                    {date}
-                </Typography>
+                <Typography text={date} variant="bodyBold" style={{ color: color.secondary }} />
                 {time && (
-                    <Typography variant="bodyBold" style={{ color: color.secondary }}>
-                        {time}
-                    </Typography>
+                    <Typography text={time} variant="bodyBold" style={{ color: color.secondary }} />
                 )}
             </div>
 
             {/* Hide status here on mobile, show on desktop */}
             <div className="hidden sm:flex items-center">
-                <Typography
-                    variant="bodyBold"
-                    style={{ color: statusColor }}
-                >
-                    {status}
-                </Typography>
+                <Typography text={status} variant="bodyBold" style={{ color: statusColor }} />
             </div>
         </div>
     );

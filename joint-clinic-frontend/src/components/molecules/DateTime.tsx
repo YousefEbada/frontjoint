@@ -24,9 +24,11 @@ const DateTime = () => {
     }, [])
 
     return (
-        <Typography variant='bodyRegular' gradient={true} style={{}}>
-            {formattedDate}
-        </Typography>
+        <Typography
+          text={formattedDate}
+          variant='bodyRegular'
+          style={{}}
+        />
     )
 }
 
