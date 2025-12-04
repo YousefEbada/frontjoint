@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import CustomSelect from "@/components/atoms/CustomSelect";
 import Calendar from "@/components/molecules/Calendar";
-import Button from "@/components/atoms/Button";
+import Button from "@/components/atoms/button";
 
 const Book = () => {
   const [step, setStep] = useState(1);
