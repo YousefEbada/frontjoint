@@ -1,7 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
-import Typography from '../atoms/Typography'
-import Arrow from '../icons/Arrow';
+import Typography from '@/components/atoms/Typography'
+import Arrow from '@/components/atoms/icons/Arrow';
 
 interface BackToProps {
   href: string;

@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
 import Link from "next/link";
 import DashBoardHeader from "@/components/molecules/DashBoardHeader";
-import BookingContent from "@/components/booking/BookingContent";
+import BookingContent from "@/components/organisms/Booking/BookingContent";
 import Typography from "@/components/atoms/Typography";
 
 const BookingPage = () => {

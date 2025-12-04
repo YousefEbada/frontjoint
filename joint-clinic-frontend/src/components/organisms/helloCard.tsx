@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import Logo from "../icons/Logo";
+import Logo from "@/components/atoms/icons/Logo";
 
 export default function HelloCard({ onGo }: { onGo: () => void }) {
   return (

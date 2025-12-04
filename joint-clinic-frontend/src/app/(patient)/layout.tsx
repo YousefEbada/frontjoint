@@ -1,13 +1,13 @@
 import React from "react";
 import { color } from "@/lib/constants/colors";
-import SideBar from "@/components/SideBar/SideBar";
+import SideBar from "@/components/organisms/SideBar/SideBar";
 import CorneredBoxes from "@/components/atoms/CorneredBoxes";
-import Profile from "@/components/icons/Profile";
-import Calendar from "@/components/icons/Calendar";
-import Report from "@/components/icons/Report";
-import Support from "@/components/icons/Support";
-import Exercise from "@/components/icons/Exercise";
-import Faqs from "@/components/icons/Faqs";
+import Profile from "@/components/atoms/icons/Profile";
+import Calendar from "@/components/atoms/icons/Calendar";
+import Report from "@/components/atoms/icons/Report";
+import Support from "@/components/atoms/icons/Support";
+import Exercise from "@/components/atoms/icons/Exercise";
+import Faqs from "@/components/atoms/icons/Faqs";
 
 export default function PatientLayout({
     children,

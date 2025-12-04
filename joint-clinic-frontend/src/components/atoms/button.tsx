@@ -2,8 +2,8 @@ import React from "react";
 import { IBM_Plex_Sans } from "next/font/google";
 
 const ibm = IBM_Plex_Sans({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+    subsets: ["latin"],
+    weight: ["400", "500", "600", "700"],
 });
 
 type ButtonProps = {

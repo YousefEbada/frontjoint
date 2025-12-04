@@ -1,14 +1,14 @@
 "use client";
 import CorneredBoxes from '@/components/atoms/CorneredBoxes'
-import PaginationDots from '@/components/atoms/paginationlog'
-import Logo from '@/components/icons/Logo'
+import PaginationDots from '@/components/atoms/PaginationLog'
+import Logo from '@/components/atoms/icons/Logo'
 import "./style.css"
 import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons'
 import { motion, AnimatePresence, Variants } from "framer-motion"
-import HelloCard from '@/components/organisms/helloCard';
-import CustomDropdown from '@/components/molecules/dropdown';
+import HelloCard from '@/components/organisms/HelloCard';
+import CustomDropdown from '@/components/molecules/Dropdown';
 
 const Page = () => {
 
@@ -29,7 +29,7 @@ const Page = () => {
 
   return (
     <main
-      className="w-[100%] min-h-screen relative bg-cover relative bg-center flex items-center justify-start overflow-y-auto"
+      className="w-full min-h-screen relative bg-cover bg-center flex items-center justify-start overflow-y-auto"
       style={{ backgroundImage: "url('./loginbg.png')" }}
     >
       <div className="w-full h-full flex items-center justify-start">
@@ -56,9 +56,9 @@ const Page = () => {
       <AnimatePresence mode="wait">
         {
           !showHello && (
-            <div className="w-[100vw] relative right-[50%] translate-x-[50%] min-h-screen flex items-center justify-center">
+            <div className="w-screen relative right-1/2 translate-x-1/2 min-h-screen flex items-center justify-center">
 
-              <CorneredBoxes type="glass" className="w-[95vw] py-[100px] md:w-[80vw] min-h-[100vh] absolute right-[50%] top-[5%] translate-x-[50%] mb-[10%]">
+              <CorneredBoxes type="glass" className="w-[95vw] py-[100px] md:w-[80vw] min-h-screen absolute right-1/2 top-[5%] translate-x-1/2 mb-[10%]">
 
                 <Logo fill="#112a4d" className="w-[100px] md:w-[150px] h-[100px] md:h-[150px] absolute top-[10px] right-[40px]" />
 
@@ -299,7 +299,7 @@ const Page = () => {
                         }
                       }}
                       className="w-[220px] h-[60px] cursor-pointer py-3 bg-transparent border-[4px]
-                              border-[#fff] text-[#fff] rounded-full font-semibold mt-4 hover:bg-[#fff]
+                              border-white text-white rounded-full font-semibold mt-4 hover:bg-white
                               hover:text-[#ea392f] transition-all duration-300"
                     >
                       Back
