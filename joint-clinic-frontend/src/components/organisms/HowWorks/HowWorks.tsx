@@ -2,8 +2,8 @@
 import React, { useRef, useState, useEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Pagination from "@/components/molecules/Pagination";
 import Image from "next/image";
+import Pagination from "@/pages/pagination";
 
 gsap.registerPlugin(ScrollTrigger);
 
