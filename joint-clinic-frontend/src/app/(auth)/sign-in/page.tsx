@@ -1,14 +1,16 @@
 "use client";
 import CorneredBoxes from '@/components/atoms/CorneredBoxes'
-import PaginationDots from '@/components/atoms/PaginationLog'
+
 import Logo from '@/components/atoms/icons/Logo'
 import "./style.css"
 import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons'
 import { motion, AnimatePresence, Variants } from "framer-motion"
-import HelloCard from '@/components/organisms/HelloCard';
-import CustomDropdown from '@/components/molecules/Dropdown';
+
+import PaginationDots from '@/components/atoms/paginationlog';
+import HelloCard from '@/components/organisms/helloCard';
+import CustomDropdown from '@/components/molecules/dropdown';
 
 const Page = () => {
 
