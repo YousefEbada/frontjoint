@@ -4,7 +4,7 @@ import { useSearchParams } from "next/navigation";
 import dayjs from "dayjs";
 import Calendar from "@/components/molecules/Calendar";
 import CustomSelect from "@/components/atoms/CustomSelect";
-import Button from "@/components/atoms/Button";
+import Button from "@/components/atoms/button";
 import Typography from "@/components/atoms/Typography";
 import Divider from "@/components/atoms/Divider";
 

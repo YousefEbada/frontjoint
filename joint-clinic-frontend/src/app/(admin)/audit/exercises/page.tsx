@@ -9,7 +9,7 @@ import { mockDashboardData as data } from "@/lib/data/dashboardData";
 import TaskList from "../../../../components/atoms/tasklist/tasklist";
 import SearchInput from "@/components/atoms/searchInput";
 import SessionCard from "@/components/molecules/sessionCard";
-import Button from "@/components/atoms/Button";
+import Button from "@/components/atoms/button";
 
 const Page = () => {
     const [activate, setActivate] = useState("Sholders");

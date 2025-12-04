@@ -1,7 +1,7 @@
 import React from "react";
 import Typography from "@/components/atoms/Typography";
 import StatusBadge from "@/components/atoms/StatusBadge";
-import ActionButton from "@/components/atoms/ActionButton";
+import ActionButton from "@/components/atoms/actionButton";
 
 interface ReportItemProps {
     reportName: string;
