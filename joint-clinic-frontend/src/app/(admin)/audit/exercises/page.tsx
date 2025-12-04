@@ -9,7 +9,7 @@ import { mockDashboardData as data } from "@/lib/data/dashboardData";
 import TaskList from "../../../../components/atoms/tasklist/tasklist";
 import SearchInput from "@/components/atoms/searchInput";
 import SessionCard from "@/components/molecules/sessionCard";
-import Button from "@/components/atoms/button";
+import Button from "@/components/atoms/Button";
 
 const Page = () => {
     const [activate, setActivate] = useState("Sholders");
@@ -76,8 +76,8 @@ const Page = () => {
                     <SessionCard
                         imageSrc="/sessionCard.png"
                         title="Shoulder Stretch"
-                        status="Pending"    
-                        minutes={20}     
+                        status="Pending"
+                        minutes={20}
                         className="w-[460px]"
                     />
                     <SessionCard
