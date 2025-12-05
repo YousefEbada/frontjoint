@@ -5,6 +5,7 @@ import BookingItem from "@/components/molecules/BookingItem";
 interface Booking {
     id: string;
     sessionNumber: number;
+    type: "patient" | "session";
     status: "Confirmed" | "Pending" | "Cancelled";
     date: string;
     time: string;
@@ -21,6 +22,7 @@ const BookingList: React.FC<BookingListProps> = ({ bookings }) => {
                 <BookingItem
                     key={booking.id}
                     sessionNumber={booking.sessionNumber}
+                    type={booking.type}
                     status={booking.status}
                     date={booking.date}
                     time={booking.time}

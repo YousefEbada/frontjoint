@@ -1,12 +1,9 @@
 "use client";
 import DashBoardHeader from "@/components/molecules/DashBoardHeader";
 import Typography from "@/components/atoms/Typography";
-import ProgressBar from "@/components/atoms/ProgressBar";
-import SummaryItem from "@/components/molecules/SummaryItem";
 import { color } from "@/lib/constants/colors";
 import { useState } from "react";
 import { mockDashboardData as data } from "@/lib/data/dashboardData";
-import TaskList from "../../../../components/atoms/tasklist/tasklist";
 import SearchInput from "@/components/atoms/searchInput";
 import SessionCard from "@/components/molecules/sessionCard";
 import Button from "@/components/atoms/Button";

@@ -10,6 +10,7 @@ const BookingsPage = () => {
         {
             id: "1",
             sessionNumber: 5,
+            type: "session" as const,
             status: "Confirmed" as const,
             date: "Oct 13th 2025",
             time: "2:00 Pm"
@@ -17,6 +18,7 @@ const BookingsPage = () => {
         {
             id: "2",
             sessionNumber: 6,
+            type: "session" as const,
             status: "Pending" as const,
             date: "Nov 2nd 2025",
             time: "8:00 Pm"
@@ -24,6 +26,7 @@ const BookingsPage = () => {
         {
             id: "3",
             sessionNumber: 7,
+            type: "session" as const,
             status: "Pending" as const,
             date: "Jan 2nd 2025",
             time: "8:00 Pm"

@@ -5,6 +5,7 @@ import ActionButton from "@/components/atoms/ActionButton";
 
 interface BookingItemProps {
     sessionNumber: number;
+    type: "patient" | "session";
     status: "Confirmed" | "Pending" | "Cancelled";
     date: string;
     time: string;
@@ -14,6 +15,7 @@ interface BookingItemProps {
 
 const BookingItem: React.FC<BookingItemProps> = ({
     sessionNumber,
+    type,
     status,
     date,
     time,
@@ -24,7 +26,7 @@ const BookingItem: React.FC<BookingItemProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1fr_2fr_auto] items-center gap-4 py-6 border-b border-gray-200 last:border-none">
             {/* Session Name */}
             <Typography
-                text={`Session No ${sessionNumber}`}
+                text={`${type === "patient" ? "Patient" : "Session No"} ${sessionNumber}`}
                 variant="bodyBold"
                 className="text-[#1E5598]"
             />
@@ -48,7 +50,7 @@ const BookingItem: React.FC<BookingItemProps> = ({
                     className="w-[100px]"
                 />
                 <ActionButton
-                    text="Reschedule"
+                    text={`${type === "patient" ? "Change" : "Reschedule"}`}
                     variant="solid"
                     onClick={onReschedule}
                     className="w-[120px]"

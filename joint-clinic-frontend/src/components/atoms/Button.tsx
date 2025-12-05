@@ -58,7 +58,7 @@ const Button: React.FC<ButtonProps> = ({ text, variant, onClick, className = "",
         rounded-[48px]
         text-center 
         text-[18px] sm:text-[20px] md:text-[22px]
-        border-2
+        border-[3px]
         py-[8px] px-[32px]
         cursor-pointer
         transition
