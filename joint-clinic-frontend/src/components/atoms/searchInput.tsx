@@ -7,6 +7,7 @@ type SearchInputProps = {
   onChange?: (value: string) => void;
   placeholder?: string;
   className?: string;
+  rightIcon?: React.ReactNode;
 };
 
 const SearchInput: React.FC<SearchInputProps> = ({
@@ -14,6 +15,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
   onChange,
   placeholder = "Search by Injury",
   className = "",
+  rightIcon,
 }) => {
   return (
     <div
@@ -68,6 +70,13 @@ const SearchInput: React.FC<SearchInputProps> = ({
           placeholder:text-[#B3B3B3]
         "
       />
+
+      {/* right icon */}
+      {rightIcon && (
+        <div className="ml-2 sm:ml-3 text-[#B3B3B3] flex-shrink-0">
+          {rightIcon}
+        </div>
+      )}
     </div>
   );
 };

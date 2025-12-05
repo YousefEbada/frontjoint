@@ -1,8 +1,11 @@
 "use client";
 
 import React from "react";
+import Typography from "@/components/atoms/Typography";
+import Link from "next/link";
 
 type SessionCardProps = {
+    id?: number | string;
     imageSrc: string;
     title: string;
     status?: "Completed" | "Pending" | "In Progress" | "Cancelled" | string;
@@ -18,6 +21,7 @@ const statusColors: Record<string, string> = {
 };
 
 const SessionCard: React.FC<SessionCardProps> = ({
+    id,
     imageSrc,
     title,
     status = "Completed",
@@ -32,16 +36,17 @@ const SessionCard: React.FC<SessionCardProps> = ({
         `${hasCustomWidth ? "" : "w-[220px]"} ` +
         `${hasCustomHeight ? "" : "h-[220px]"}`;
 
-    return (
+    const CardContent = (
         <div
             className={`
         ${defaultSize}
-        w-[465px] h-[400px]
+        h-fit
         rounded-[24px]
         shadow-[0_10px_25px_rgba(0,0,0,0.12)]
         p-2
         flex flex-col
         ${className}
+        ${id ? "cursor-pointer hover:scale-[1.02] transition-transform duration-200" : ""}
       `}
         >
             {/* الصورة */}
@@ -54,16 +59,26 @@ const SessionCard: React.FC<SessionCardProps> = ({
             </div>
 
             {/* النصوص تحت الصورة */}
-            <div className="flex items-center justify-between my-auto px-1">
-                <span className="text-[24px] font-bold text-[#1E5598] my-auto">
-                    {title}
-                </span>
-                <span className={`text-[22px] font-bold ${statusColors[status]}`}>
-                    {minutes ? `${minutes} min` : `${status}`}
-                </span>
+            <div className="flex items-center justify-between my-auto px-3 py-2 ">
+                <Typography
+                    text={title}
+                    variant="bodyBold"
+                    className="text-[#1E5598] my-auto text-[24px]"
+                />
+                <Typography
+                    text={minutes ? `${minutes} min` : `${status}`}
+                    variant="bodyBold"
+                    className={`${statusColors[status]} text-[22px]`}
+                />
             </div>
         </div>
     );
+
+    if (id) {
+        return <Link href={`/dashboard/exercises/${id}`}>{CardContent}</Link>;
+    }
+
+    return CardContent;
 };
 
 export default SessionCard;

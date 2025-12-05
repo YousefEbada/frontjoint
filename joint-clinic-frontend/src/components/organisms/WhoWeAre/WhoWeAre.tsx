@@ -5,7 +5,7 @@ import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "./whoWeAre.css";
 import Profile from "@/components/atoms/icons/Profile";
-import FeatureCard from "@/components/molecules/featureCard";
+import FeatureCard from "@/components/molecules/FeatureCard";
 
 
 gsap.registerPlugin(ScrollTrigger);

@@ -1,6 +1,6 @@
 
 import NavBar from "@/components/organisms/NavBar/NavBar";
-import Button2 from "@/components/atoms/button2";
+import Button2 from "@/components/atoms/Button2";
 
 interface HeroProps {
   font: {
