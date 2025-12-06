@@ -10,6 +10,8 @@ type ButtonProps = {
   text: string;
 };
 
+// this is my new button component
+
 const Button2: React.FC<ButtonProps> = ({ text }) => {
 
   return (
