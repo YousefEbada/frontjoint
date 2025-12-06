@@ -36,7 +36,7 @@ const HistorySection: React.FC<HistorySectionProps> = ({
                         } font-medium`}
                 />
             </div>
-            <ReportList reports={reports} />
+            <ReportList reports={reports} type="patient" />
         </div>
     );
 };
