@@ -4,7 +4,7 @@ import Typography from '@/components/atoms/Typography';
 import DashBoardHeader from "@/components/molecules/DashBoardHeader";
 import ContactForm from "@/components/organisms/ContactForm";
 import RequestDoctorHelp from "@/components/organisms/RequestDoctorHelp";
-import Button from '@/components/atoms/Button';
+import Button from '@/components/atoms/button';
 import RequestItem from '@/components/atoms/RequestItem';
 
 const SupportPage = () => {

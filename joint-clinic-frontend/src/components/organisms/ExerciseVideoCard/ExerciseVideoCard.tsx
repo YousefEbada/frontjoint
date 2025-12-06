@@ -3,7 +3,7 @@ import React from "react";
 import CorneredBoxes from "@/components/atoms/CorneredBoxes";
 import VideoPlayer from "@/components/organisms/VideoPlayer/VideoPlayer";
 import Typography from "@/components/atoms/Typography";
-import Button from "@/components/atoms/Button";
+import Button from "@/components/atoms/button";
 import ExerciseStats from "@/components/molecules/ExerciseStats";
 import BackLink from "@/components/molecules/BackLink";
 
