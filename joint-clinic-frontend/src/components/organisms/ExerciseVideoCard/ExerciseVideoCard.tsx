@@ -50,7 +50,7 @@ const ExerciseVideoCard: React.FC<ExerciseVideoCardProps> = ({ videoId, sets, re
                     </div>
                 </div>
 
-                <BackLink href="/dashboard/exercises" text="Back to Videos" />
+                <BackLink href="/patient/exercises" text="Back to Videos" />
             </div>
         </CorneredBoxes>
     );

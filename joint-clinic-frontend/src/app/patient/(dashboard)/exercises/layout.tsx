@@ -12,9 +12,9 @@ export default function ExercisesLayout({ children }: { children: React.ReactNod
     const pathname = usePathname();
 
     const tabs = [
-        { name: "Assigned Exercises", href: "/dashboard/exercises/assigned" },
-        { name: "Find Exercises", href: "/dashboard/exercises/find" },
-        { name: "My Progress", href: "/dashboard/exercises/progress" },
+        { name: "Assigned Exercises", href: "/patient/exercises/assigned" },
+        { name: "Find Exercises", href: "/patient/exercises/find" },
+        { name: "My Progress", href: "/patient/exercises/progress" },
     ];
 
     return (

@@ -9,21 +9,20 @@ import PatientCard from "@/components/molecules/PatientCard";
 import Link from "next/link";
 
 // Mock Data
-const allReports = Array.from({ length: 12 }, (_, i) => ({
+const allPatients = Array.from({ length: 15 }, (_, i) => ({
     id: i + 1,
-    reportName: `Blood Test Report`,
-    patientName: "Patient Name",
-    date: "Oct 12, 2025",
-    type: "Blood Test",
-    status: "Active"
+    name: "Patient Name",
+    injury: "Back injury",
+    status: i % 3 === 0 ? "Inactive" : "Active",
+    statusColor: i % 3 === 0 ? "text-[#8A8A8A]" : "text-[#1C9A55]"
 }));
 
 const MedicalReportsPage = () => {
     const [searchTerm, setSearchTerm] = useState("");
 
-    const filteredReports = allReports.filter(r =>
-        r.patientName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        r.reportName.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredReports = allPatients.filter(r =>
+        r.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        r.injury.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (
@@ -55,10 +54,10 @@ const MedicalReportsPage = () => {
                                 filteredReports.map((report) => (
                                     <Link key={report.id} href={`/doctor/reports/${report.id}`} className="w-full">
                                         <PatientCard
-                                            name={report.patientName}
-                                            injury={report.reportName} // Mapping report name to "injury" slot (subtitle)
-                                            status={report.date} // Mapping date to "status" slot (top right)
-                                            statusColor="text-[#8A8A8A]" // Grey color for date
+                                            name={report.name}
+                                            injury={report.injury}
+                                            status={report.status}
+                                            statusColor={report.statusColor}
                                         />
                                     </Link>
                                 ))

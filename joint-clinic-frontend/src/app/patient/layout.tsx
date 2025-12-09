@@ -15,12 +15,12 @@ export default function PatientLayout({
     children: React.ReactNode;
 }) {
     const navItems = [
-        { href: "/dashboard/main", icon: Profile, title: "Dashboard" },
-        { href: "/dashboard/booking", icon: Calendar, title: "Booking" },
-        { href: "/dashboard/exercises", icon: Exercise, title: "Exercises" },
-        { href: "/dashboard/reports", icon: Report, title: "Medical Reports" },
-        { href: "/dashboard/faqs", icon: Faqs, title: "FAQs" },
-        { href: "/dashboard/support", icon: Support, title: "Support" },
+        { href: "/patient/main", icon: Profile, title: "Dashboard" },
+        { href: "/patient/booking", icon: Calendar, title: "Booking" },
+        { href: "/patient/exercises", icon: Exercise, title: "Exercises" },
+        { href: "/patient/reports", icon: Report, title: "Medical Reports" },
+        { href: "/patient/faqs", icon: Faqs, title: "FAQs" },
+        { href: "/patient/support", icon: Support, title: "Support" },
     ];
     return (
         <section

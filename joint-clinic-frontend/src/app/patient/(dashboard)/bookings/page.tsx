@@ -36,7 +36,7 @@ const BookingsPage = () => {
     return (
         <>
             <DashBoardHeader therapyName="Shoulder Therapy">
-                <Link href="/dashboard/booking">
+                <Link href="/patient/booking">
                     <Typography text="Book a Session" variant="bodyRegular" className="text-gray-400 font-medium hover:text-[#1e5598] transition-colors" />
                 </Link>
                 <Typography text="My Bookings" variant="bodyRegular" className="text-[#1e5598] font-medium" />

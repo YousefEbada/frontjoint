@@ -1,6 +1,7 @@
 import React from "react";
 import SearchInput from "@/components/atoms/searchInput";
 import Typography from "@/components/atoms/Typography";
+import ScrollableArea from "../atoms/ScrollableArea";
 
 interface PatientSnippet {
     id: number;
@@ -22,14 +23,14 @@ interface ChatSidebarProps {
 
 const ChatSidebar = ({ patients, searchTerm, onSearchChange, onSelectPatient, activePatientId, className = "" }: ChatSidebarProps) => {
     return (
-        <div className={`flex flex-col p-6 gap-6 h-full ${className}`}>
+        <div className={`flex flex-col p-6 gap-6 h-full min-h-0 overflow-hidden ${className}`}>
             <SearchInput
                 placeholder="Search By patient"
                 value={searchTerm}
                 onChange={onSearchChange}
             />
 
-            <div className="flex-1 overflow-y-auto flex flex-col gap-4 pr-2">
+            <ScrollableArea className="flex-1 flex flex-col gap-4 pr-2">
                 {patients.map((p) => (
                     <div
                         key={p.id}
@@ -51,7 +52,7 @@ const ChatSidebar = ({ patients, searchTerm, onSearchChange, onSelectPatient, ac
                         </p>
                     </div>
                 ))}
-            </div>
+            </ScrollableArea>
         </div>
     );
 };

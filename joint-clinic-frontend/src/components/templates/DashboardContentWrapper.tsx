@@ -9,7 +9,7 @@ interface DashboardContentWrapperProps {
 
 const DashboardContentWrapper: React.FC<DashboardContentWrapperProps> = ({ children }) => {
     const pathname = usePathname();
-    const isFaqPage = pathname === "/dashboard/faqs";
+    const isFaqPage = pathname === "/patient/faqs";
 
     if (isFaqPage) {
         return (

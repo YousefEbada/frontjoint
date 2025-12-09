@@ -19,11 +19,11 @@ const DashBoardHeader = ({ therapyName, nav, children }: DashBoardHeaderProps) =
         {children ? children : (nav &&
           <>
             <DashBoardLink
-              linkHref={"/dashboard/main"}
+              linkHref={"/patient/main"}
               title={"Dashboard"}
             />
             <DashBoardLink
-              linkHref={"/dashboard/progress"}
+              linkHref={"/patient/progress"}
               title={"Progress"}
             />
           </>

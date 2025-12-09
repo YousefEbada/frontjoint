@@ -10,6 +10,7 @@ type SessionCardProps = {
     title: string;
     status?: "Completed" | "Pending" | "In Progress" | "Cancelled" | string;
     minutes?: number;
+    noLink?: boolean;
     className?: string;
 };
 
@@ -27,6 +28,7 @@ const SessionCard: React.FC<SessionCardProps> = ({
     status = "Completed",
     minutes,
     className = "",
+    noLink = false,
 }) => {
     // لو الـ className فيه w- أو h- ما نحطّش المقاس الافتراضي
     const hasCustomWidth = /\bw-/.test(className);
@@ -74,8 +76,8 @@ const SessionCard: React.FC<SessionCardProps> = ({
         </div>
     );
 
-    if (id) {
-        return <Link href={`/dashboard/exercises/${id}`}>{CardContent}</Link>;
+    if (id && !noLink) {
+        return <Link href={`/patient/exercises/${id}`}>{CardContent}</Link>;
     }
 
     return CardContent;

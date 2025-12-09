@@ -4,6 +4,7 @@ import Link from "next/link";
 import Paperclip from "@/components/atoms/icons/Paperclip";
 import Send from "@/components/atoms/icons/Send";
 import ChatBubble from "@/components/molecules/ChatBubble";
+import ScrollableArea from "../atoms/ScrollableArea";
 
 interface Message {
     id: number;
@@ -24,7 +25,7 @@ const ChatWindow = ({ messages, patientName, messageInput, onInputChange, onBack
     return (
         <div className={`flex flex-col h-full bg-white relative ${className}`}>
             {/* Chat Header */}
-            <div className="h-20 border-b border-gray-200 flex justify-between items-center px-4 md:px-8 shrink-0">
+            <div className="h-fit border-b py-4 border-gray-200 flex justify-between items-center px-4 md:px-8 shrink-0">
                 <div className="flex items-center gap-4">
                     {/* Back Button for Mobile */}
                     <button onClick={onBack} className="md:hidden text-[#1E5598] font-bold">
@@ -38,11 +39,11 @@ const ChatWindow = ({ messages, patientName, messageInput, onInputChange, onBack
             </div>
 
             {/* Messages Area */}
-            <div className="flex-1 overflow-y-auto p-4 md:p-8 flex flex-col gap-6 bg-white">
+            <ScrollableArea className="flex-1 overflow-y-auto p-4 md:p-8 flex flex-col gap-6 bg-white">
                 {messages.map((msg) => (
                     <ChatBubble key={msg.id} text={msg.text} type={msg.type} />
                 ))}
-            </div>
+            </ScrollableArea>
 
             {/* Input Area */}
             <div className="h-24 border-t border-[#9FD5E2] px-4 md:px-8 flex items-center gap-4 shrink-0">

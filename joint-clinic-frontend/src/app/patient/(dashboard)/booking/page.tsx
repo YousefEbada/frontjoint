@@ -9,7 +9,7 @@ const BookingPage = () => {
         <>
             <DashBoardHeader therapyName="Shoulder Therapy">
                 <Typography text="Book a Session" variant="bodyRegular" gradient={true} />
-                <Link href="/dashboard/bookings">
+                <Link href="/patient/bookings">
                     <Typography text="My Bookings" variant="bodyRegular" className="text-gray-400 font-medium hover:text-[#1e5598] transition-colors" />
                 </Link>
             </DashBoardHeader>
