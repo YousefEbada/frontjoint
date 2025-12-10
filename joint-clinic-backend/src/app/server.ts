@@ -35,7 +35,7 @@ export async function startServer() {
   app.use(express.json({ limit: '10mb' }));
 
   app.use(traceId);
-  app.use(requestLogger);
+  app.use(requestLogger as any);
 
   app.use(pinoHttp());
 
