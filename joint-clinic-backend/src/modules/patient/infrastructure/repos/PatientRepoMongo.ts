@@ -9,7 +9,12 @@ export const PatientRepoMongo: PatientRepoPort = {
             if (!mongoose.Types.ObjectId.isValid(id)) {
                 return null; // let use-case decide
             }
-            const patient = await PatientModel.findById(id).lean();
+            const patient = await PatientModel.findById(id)
+            .populate({
+                path: 'userId',
+                select: 'fullName firstName lastName email phone gender'
+            })
+            .lean();
             return patient as any as Patient ?? null;
         } catch (error) {
             console.error("[PatientRepoMongo.getPatient] DB error:", (error as any).message);
@@ -30,6 +35,17 @@ export const PatientRepoMongo: PatientRepoPort = {
             return patient as any as Patient ?? null;
         } catch (error) {
             console.error("[PatientRepoMongo.updatePatient] DB error:", (error as any).message);
+            throw new Error("DATABASE_ERROR");
+        }
+    },
+
+    async createPatient(data) {
+        try {
+            const newPatient = new PatientModel(data);
+            const savedPatient = await newPatient.save();
+            return savedPatient.toObject() as any as Patient;
+        } catch (error) {
+            console.error("[PatientRepoMongo.createPatient] DB error:", (error as any).message);
             throw new Error("DATABASE_ERROR");
         }
     }
