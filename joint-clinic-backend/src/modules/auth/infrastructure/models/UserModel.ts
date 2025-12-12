@@ -9,6 +9,9 @@ const UserSchema = new Schema(
       default: 'Patient'
     },
     fullName: { type: String, required: true },
+    // decide for the frontend to send first and last name separately or full name
+    firstName: { type: String, required: false },
+    lastName: { type: String, required: false },
     // check email and phone are indexed for faster lookup but without harm performance
     email: { type: String, lowercase: true, trim: true, required: false },
     phone: { type: String, trim: true, required: false },
