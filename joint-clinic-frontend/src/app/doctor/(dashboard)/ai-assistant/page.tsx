@@ -6,8 +6,8 @@ import CorneredBoxes from "@/components/atoms/CorneredBoxes";
 import Paperclip from "@/components/atoms/icons/Paperclip";
 import Send from "@/components/atoms/icons/Send";
 import AiAssistant from "@/components/atoms/icons/AiAssistant";
-import Profile from "@/components/atoms/icons/Profile";
 import ScrollableArea from "@/components/atoms/ScrollableArea";
+import Profile from "@/components/atoms/icons/Profile";
 
 interface Message {
     id: number;
@@ -79,7 +79,7 @@ const AiAssistantPage = () => {
                                 // User Query Style
                                 <div key={msg.id} className="flex items-center gap-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
                                     <div className="w-10 h-10 rounded-full bg-[#9FD5E2] flex items-center justify-center shrink-0">
-                                        <Profile className="w-6 h-6 text-white" />
+                                        <Profile fill="#ffffff" className="w-6 h-6 text-white" />
                                     </div>
                                     <Typography text={msg.text} variant="bodyRegular" className="text-[#9CA3AF] text-lg font-medium" />
                                 </div>
