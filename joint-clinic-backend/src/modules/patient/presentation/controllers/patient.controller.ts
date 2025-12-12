@@ -1,16 +1,16 @@
 import { resolve } from "app/container";
-import { NIXPEND_ADAPTER, PATIENT_REPO } from "app/container.bindings";
+import { NIXPEND_ADAPTER, PATIENT_REPO, USER_AUTH_REPO } from "app/container.bindings";
 import { Request, Response } from "express";
 import { FetchType, UpdateType } from "modules/integration/domain/Nixpend";
-import { GetPatient } from "modules/integration/use-cases/GetPatient";
-import { GetPractitioners } from "modules/integration/use-cases/GetPractitioners";
-import { RegisterPatient } from "modules/integration/use-cases/RegisterPatient";
-import { UpdatePatient } from "modules/integration/use-cases/UpdatePatient";
+import { CreatePatient } from "modules/patient/application/use-cases/CreatePatient";
+import { GetPatient } from "modules/patient/application/use-cases/GetPatient";
+import { UpdatePatient } from "modules/patient/application/use-cases/UpdatePatient";
+
 
 export async function getPatient(req: Request, res: Response) {
-    const { type, value } = req.query;
-    const uc = new GetPatient(resolve(PATIENT_REPO), resolve(NIXPEND_ADAPTER));
-    const result = await uc.exec(type as FetchType, value as string);
+    const { type, value, id } = req.query;
+    const uc = new GetPatient(resolve(PATIENT_REPO));
+    const result = await uc.exec(id as string);
     if (result.ok) {
         res.status(200).json(result);
     } else {
@@ -20,10 +20,10 @@ export async function getPatient(req: Request, res: Response) {
 }
 
 export async function updatePatient (req: Request, res: Response) {
-    const patientId = req.query.nixpendName as string;
+    const userId = req.query.nixpendName as string;
     const updateData = req.body as UpdateType;
-    const uc = new UpdatePatient(resolve(PATIENT_REPO), resolve(NIXPEND_ADAPTER));
-    const result = await uc.exec(patientId, updateData);
+    const uc = new UpdatePatient(resolve(PATIENT_REPO), resolve(USER_AUTH_REPO), resolve(NIXPEND_ADAPTER));
+    const result = await uc.exec(userId, updateData);
     if (result.ok) {
         res.status(200).json(result);
     } else {
@@ -33,10 +33,10 @@ export async function updatePatient (req: Request, res: Response) {
 }
 
 export async function createPatient(req: Request, res: Response) {
-    // const id = req.params.userId;
+    const id = req.params.userId;
     const data = req.body;
-    const uc = new RegisterPatient(resolve(PATIENT_REPO), resolve(NIXPEND_ADAPTER));
-    const result = await uc.exec(data);
+    const uc = new CreatePatient(resolve(PATIENT_REPO), resolve(NIXPEND_ADAPTER), resolve(USER_AUTH_REPO));
+    const result = await uc.exec(id, data);
     if (result.ok) {
         res.status(201).json(result);
     } else {
@@ -45,18 +45,6 @@ export async function createPatient(req: Request, res: Response) {
     }
 }
 
-// move it to doctor later
-export async function getPractitioners(req: Request, res: Response) {
-    const { branch, department } = req.query;
-    const uc = new GetPractitioners(resolve(NIXPEND_ADAPTER));
-    const result = await uc.exec(branch as any, department as any);
-    if (result.ok) {
-        res.status(200).json(result);
-    } else {
-        console.error("[getPractitioners] Error:", result.error);
-        res.status(500).json({ error: result.error });
-    }
-}
 
 // import { PatientModel } from "./models/Patient";
 
