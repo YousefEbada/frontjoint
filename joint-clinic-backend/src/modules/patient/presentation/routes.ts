@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createPatient, getPatientById, updatePatient } from "./controllers/patient.controller.js";
+import {createPatient, getPatient, getPractitioners, updatePatient } from "./controllers/patient.controller.js";
 import rateLimit from "express-rate-limit";
 
 export const patientRoutes = Router();
@@ -12,5 +12,7 @@ const patientLimiter = rateLimit({
 });
 
 patientRoutes.post("/", patientLimiter, createPatient);
-patientRoutes.get("/patient/:id", patientLimiter, getPatientById);
-patientRoutes.put("/patient/:id", patientLimiter, updatePatient);
+patientRoutes.get("/", patientLimiter, getPatient);
+patientRoutes.put("/", patientLimiter, updatePatient);
+
+patientRoutes.get("/practitioners", patientLimiter, getPractitioners);
