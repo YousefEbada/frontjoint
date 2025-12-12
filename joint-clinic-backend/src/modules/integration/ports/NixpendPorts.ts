@@ -1,28 +1,27 @@
-import { bookType, cancelType, fetchType, registerType, updateType } from "../domain/Nixpend";
+import { AvailableSlotReturnType, BookType, BranchType, CancelType, DepartmentType, FetchType, RegisterType, RescheduleType, UpdateType } from "../domain/Nixpend";
 
 export interface NixpendPort {
-  // Not found
-  fetchSchedules(): Promise<any[]>;
-
-  // Patient
-  findPatient(type: fetchType, value: string): Promise<any | null>;
-  registerPatient(data: registerType): Promise<any>;
-  updatePatient(id: string, data: updateType): Promise<any>;
+  // patient
+  findPatient(type: FetchType, value: string): Promise<any | null>;
+  registerPatient(value: RegisterType): Promise<any>;
+  updatePatient(patient_id: string, value: UpdateType): Promise<any>;
 
   // Practitioner
-  getPractitioners(branch: string, department: string): Promise<any[]>;
+  getPractitioners(branch?: BranchType, department?: DepartmentType): Promise<any[] | null>;
 
   // Appointment
-  bookAppointment(data: bookType): Promise<any>;
+  // get the event name from get available slots
+  bookAppointment(value: BookType): Promise<any>;
+  getAvailableSlots(practitionerId: string, company: "Joint Clinic", fromDate?: string, toDate?: string): Promise<AvailableSlotReturnType>;
 
   // IVR
-  ivrGetPatientData(mobile: string): Promise<any | null>;
-  ivrConfirmAppointment(confirm: '0' | '1' | '2', name: string): Promise<boolean>;
-  ivrPatientAppointment(after: string, branch: string): Promise<any[]>;
+  // still has CORS issue
+  ivrConfirmAppointment?(confirm: '0' | '1' | '2', name: string): Promise<any>;
+  ivrGetPatientAppointment?(after: string, branch: string): Promise<any>;
+
+  // reschedule appointment
+  rescheduleAppointment(appointment_id: string, appointment_details: RescheduleType): Promise<any>
 
   // cancel appointment
-  cancelAppointment(data: cancelType): Promise<boolean>;
-
-  // Not found
-  fetchReportById(id: string): Promise<{ bytes: Buffer, name: string } | null>;
+  cancelAppointment(data: CancelType): Promise<any>;
 }
