@@ -51,8 +51,6 @@ export async function createFullUser(req: Request, res: Response) {
     city,
     maritalStatus,
     speakingLanguages,
-    guardianInformation,
-    patientCategory,
   } = req.body as any;
 
   const uc = new CreateFullUser(resolve(USER_AUTH_REPO));
@@ -63,7 +61,7 @@ export async function createFullUser(req: Request, res: Response) {
     if (fullName !== undefined) mergedProps.fullName = fullName;
     if (gender !== undefined) mergedProps.gender = gender;
     if (birthdate !== undefined) mergedProps.birthdate = typeof birthdate === 'string' ? new Date(birthdate) : birthdate;
-    ["email", "phone", "identifier", "identifierType", "nationality", "address", "city", "maritalStatus", "speakingLanguages", "guardianInformation", "patientCategory"].forEach(k => {
+    ["email", "phone", "identifier", "identifierType", "nationality", "address", "city", "maritalStatus", "speakingLanguages"].forEach(k => {
       if ((req.body as any)[k] !== undefined) mergedProps[k] = (req.body as any)[k];
     });
     console.log("\nCreating full user with lookup:", lookup, "and mergedProps:", mergedProps);
