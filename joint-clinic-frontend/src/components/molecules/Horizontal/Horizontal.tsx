@@ -2,9 +2,10 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { color } from "@/lib/constants/colors";
 
 const scrollCalculator = (totalWidth: number) => {
-    return totalWidth>768 ? totalWidth - window.innerWidth + 500 : totalWidth - window.innerWidth -300;
+    return totalWidth > 768 ? totalWidth - window.innerWidth + 500 : totalWidth - window.innerWidth - 300;
 }
 export default function HorizontalScroll() {
     const wrapperRef = useRef(null);
@@ -16,7 +17,7 @@ export default function HorizontalScroll() {
         const wrapper = wrapperRef.current;
         const track = trackRef.current;
 
-        const totalWidth = track?.scrollWidth?? 0;
+        const totalWidth = track?.scrollWidth ?? 0;
         const scrollAmount = scrollCalculator(totalWidth);
         console.log("Total Width:", totalWidth);
         console.log("Scroll Amount:", scrollAmount);
@@ -61,6 +62,9 @@ export default function HorizontalScroll() {
         <section
             ref={wrapperRef}
             className="relative h-screen w-full overflow-hidden"
+            style={{
+                backgroundColor: color.secondary
+            }}
         >
             {/* Background image */}
             <div className="absolute transform uppercase translate-y-[100%] inset-0 h-50 object-cover z-0 w-[500px] md:w-[700px] top-50 mr-[300px] md:ml-[150px] flex items-center">

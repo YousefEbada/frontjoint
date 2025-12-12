@@ -9,6 +9,7 @@ import YourSafety from "@/components/organisms/YourSafety/YourSafety";
 import Book from "@/components/organisms/Booking/Book";
 import WhatOurPatientsSay from "@/components/organisms/WhatOurPatientsSay/WhatOurPatientsSay";
 import Footer from "@/components/organisms/Footer/Footer";
+import { color } from "@/lib/constants/colors";
 
 const ibmPlex = IBM_Plex_Sans({
   subsets: ["latin"],
@@ -21,25 +22,21 @@ export default function Home() {
       <div className={"h-screen w-full flex flex-col justify-center items-center"}>
         <Hero font={ibmPlex} />
       </div>
-
       <WhoWeAre />
-
-      <section className="h-screen flex flex-col justify-center items-center">
-        <MeetOurTeam />
-      </section>
-
-      <section className="features_section bg-[#0d7b93] overflow-hidden py-10">
+      <section className="features_section overflow-hidden">
         <HorizontalScroll />
       </section>
       <HowWorks />
-      <section className="h-screen flex items-center justify-center">
-        <YourSafety />
-      </section>
       <section className="h-screen flex items-center bg-[#edf7f9] justify-center" id="contact-us">
         <Book />
       </section>
       <WhatOurPatientsSay />
-      <section className="min-h-screen bg-[#edf7f9] flex items-end justify-center overflow-x-hidden">
+      <section className="h-screen flex items-center justify-center">
+        <YourSafety />
+      </section>
+      <section className="min-h-screen flex items-end justify-center overflow-x-hidden"
+        style={{ backgroundColor: color.primary }}
+      >
         <Footer />
       </section>
 

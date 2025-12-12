@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "./whoWeAre.css";
 import Profile from "@/components/atoms/icons/Profile";
 import FeatureCard from "@/components/molecules/FeatureCard";
+import { color } from "@/lib/constants/colors";
 
 
 gsap.registerPlugin(ScrollTrigger);
@@ -218,6 +219,9 @@ function WhoWeAre() {
     <section id="who-we-are"
       ref={sectionRef}
       className="flex overflow-hidden flex-col relative justify-center h-screen items-center"
+      style={{
+          background: `linear-gradient(to bottom, ${color.primary}, ${color.secondary})`
+      }}
     >
       <section
         id="circle"

@@ -5,7 +5,7 @@ const Footer = () => {
   return (
     <footer id="contact"
       className="
-        w-full lg:w-[92%]
+        w-[92%]
         mx-auto 
         bg-[#0D294D] 
         text-white 
@@ -15,6 +15,7 @@ const Footer = () => {
         mt-16 md:mt-20
         overflow-hidden
         relative
+        h-fit
       "
     >
       <div className="px-6 md:px-10">
@@ -28,7 +29,7 @@ const Footer = () => {
               sm:w-[220px] sm:h-[90px]
               md:w-[260px] md:h-[110px]
               lg:w-[300px] lg:h-[120px]
-              mx-auto md:mx-0
+              md:mx-0
             "
           />
 
@@ -36,8 +37,7 @@ const Footer = () => {
           <div
             className="
               grid 
-              grid-cols-1 
-              sm:grid-cols-2 
+              grid-cols-2 
               md:grid-cols-3 
               lg:grid-cols-4 
               gap-x-10 sm:gap-x-12 
@@ -47,7 +47,7 @@ const Footer = () => {
             "
           >
             <ul
-              className="hidden md:block space-y-[30px] sm:space-y-[40px] md:space-y-[50px]"
+              className="space-y-[10px] sm:space-y-[40px] md:space-y-[50px]"
             >
               <li className="text-[#F6574D] lnk">Who We Are</li>
               <li className="text-[#F6574D] lnk">Why Choose Us</li>
@@ -56,20 +56,20 @@ const Footer = () => {
             </ul>
 
             <ul
-              className="hidden md:block space-y-[30px] sm:space-y-[40px] md:space-y-[50px]"
+              className="space-y-[10px] sm:space-y-[40px] md:space-y-[50px]"
             >
               <li className="text-[#F6574D] lnk">Sign Up</li>
               <li className="text-[#F6574D] lnk">Login</li>
               <li className="text-[#F6574D] lnk">Book an appointment</li>
             </ul>
 
-            <ul className="space-y-[30px] sm:space-y-[40px] md:space-y-[50px]">
+            <ul className="space-y-[10px] sm:space-y-[40px] md:space-y-[50px]">
               <li className="text-[#F6574D] lnk">For Partners</li>
               <li className="text-[#F6574D] lnk">For Business</li>
               <li className="text-[#F6574D] lnk">Join Our Team</li>
             </ul>
 
-            <ul className="space-y-[30px] sm:space-y-[40px] md:space-y-[50px]">
+            <ul className="space-y-[10px] sm:space-y-[40px] md:space-y-[50px]">
               <li className="text-[#F6574D] lnk">Terms & Conditions</li>
               <li className="text-[#F6574D] lnk">Privacy Policy</li>
               <li className="text-[#F6574D] lnk">FAQs</li>
