@@ -11,6 +11,7 @@ import { errorHandler } from '../shared/middleware/errorHandler.js';
 import { traceId } from '../shared/middleware/traceId.js';
 import { bindAll } from './container.bindings.js';
 import { requestLogger } from 'shared/middleware/requestLogger.js';
+import { StartJobs } from 'jobs/startJobs.js';
 
 export async function startServer() {
   await connectMongo();
@@ -63,6 +64,9 @@ export async function startServer() {
   mountRoutes(app);
 
   app.use(errorHandler);
+
+  // start the sync jobs
+  StartJobs();
 
   app.listen(env.PORT, () => {
     console.log(`API running at http://localhost:${env.PORT}`);

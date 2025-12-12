@@ -1,46 +1,51 @@
-import { DoctorRepoPort } from "modules/doctor/application/ports/DoctorRepoPort";
-import { DoctorModel } from "../models/DoctorModel";
 import { Doctor } from "modules/doctor/domain/Doctor";
-import mongoose from "mongoose";
+import { DoctorModel } from "../models/DoctorModel"; // your Mongoose schema
+import { DoctorRepoPort } from "modules/doctor/application/ports/DoctorRepoPort";
 
 export const DoctorRepoMongo: DoctorRepoPort = {
-    async getDoctorById(doctorId): Promise<Doctor | null> {
-        try {
-            if (!mongoose.Types.ObjectId.isValid(doctorId)) {
-                return null;
-            }
-            const doc = await DoctorModel.findById(doctorId).lean();
-            return doc as Doctor | null;
-        } catch (error) {
-            console.error("[DoctorRepoMongo.getDoctorById] DB error:", (error as any).message);
-            throw new Error("DATABASE_ERROR");
-        }
-    },
+  // Save many practitioners (replace existing ones)
+  async saveMany(practitioners: Doctor[]): Promise<void> {
+    if (!practitioners.length) return;
 
-    async getDoctorsBySpecialization(specialization): Promise<Doctor[]> {
-        try {
-            const docs = await DoctorModel.find({ specialization }).lean();
-            return docs as any as Doctor[];
-        } catch (error) {
-            console.error("[DoctorRepoMongo.getDoctorsBySpecialization] DB error:", (error as any).message);
-            throw new Error("DATABASE_ERROR");
-        }
-    },
+    // Upsert each practitioner by nixpendId
+    const bulkOps = practitioners.map(prac => ({
+      updateOne: {
+        filter: { nixpendId: prac.nixpendId },
+        update: { $set: prac },
+        upsert: true
+      }
+    }));
 
-    async updateDoctor(doctorId, updateData): Promise<Doctor | null> {
-        try {
-            if (!mongoose.Types.ObjectId.isValid(doctorId)) {
-                return null;
-            }
-            const doc = await DoctorModel.findByIdAndUpdate(
-                doctorId,
-                { $set: updateData },
-                { new: true, lean: true }
-            );
-            return doc as Doctor | null;
-        } catch (error) {
-            console.error("[DoctorRepoMongo.updateDoctor] DB error:", (error as any).message);
-            throw new Error("DATABASE_ERROR");
-        }
+    // Sends multiple insertOne, updateOne, updateMany, 
+    // replaceOne, deleteOne, and/or deleteMany operations to the MongoDB server in one command. 
+    // This is faster than sending multiple independent operations 
+    // (e.g. if you use create()) because with bulkWrite() 
+    // there is only one network round trip to the MongoDB server.
+    await DoctorModel.bulkWrite(bulkOps);
+  },
+
+  // Get all practitioners, optionally filtered by branch or department
+  async getAll(branch?: string, department?: string): Promise<Doctor[]> {
+    const filter: any = {};
+
+    if (branch) {
+      filter["practitionerCompany.branch"] = branch;
     }
-};
+    if (department) {
+      filter.department = department;
+    }
+
+    const docs = await DoctorModel.find(filter).lean();
+    return docs as Doctor[];
+  },
+
+  async findById(id: string): Promise<Doctor | null> {
+    const doc = await DoctorModel.findOne({ nixpendId: id }).lean();
+    return doc ? (doc as Doctor) : null;
+  },
+
+  // Clear the collection
+  async clear(): Promise<void> {
+    await DoctorModel.deleteMany({});
+  }
+}

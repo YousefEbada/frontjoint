@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 const environment = process.env.NODE_ENV || 'development';
 const result = dotenv.config({ 
-    path: `../../.env.${environment}` 
+    path: `.env.${environment}` 
 });
 
 // Optionally handle errors if the file is missing (e.g., in a secure server environment)
@@ -24,6 +24,8 @@ const EnvSchema = z.object({
     JWT_SECRET: z.string().min(10),
     RATE_LIMIT_WINDOW_MS: z.coerce.number().default(60000),
     RATE_LIMIT_MAX: z.coerce.number().default(120),
+    NIXPEND_API_URL: z.string().min(1),
+    NIXPEND_TOKEN: z.string().min(1),
     AZURE_BLOB_CONN: z.string().default('UseDevelopmentStorage=true'),
     AZURE_BLOB_CONTAINER: z.string().default('medical')
 });

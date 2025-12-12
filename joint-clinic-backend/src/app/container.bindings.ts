@@ -17,6 +17,8 @@ import { PatientRepoPort } from 'modules/patient/application/ports/PatientRepoPo
 import { PatientRepoMongo } from 'modules/patient/infrastructure/repos/PatientRepoMongo.js';
 import { DoctorRepoPort } from 'modules/doctor/application/ports/DoctorRepoPort.js';
 import { DoctorRepoMongo } from 'modules/doctor/infrastructure/repos/DoctorRepoMongo.js';
+import { nixpendAdapter } from 'modules/integration/adapters/nixpend.adapter.js';
+import { NixpendPort } from 'modules/integration/ports/NixpendPorts.js';
 
 export const OTP_REPO = token<OTPRepoPort>('OTP_REPO');
 export const BOOKING_REPO = token<BookingRepoPort>('BOOKING_REPO');
@@ -27,6 +29,7 @@ export const MAIL_REPO = token<MailPort>('MAIL_REPO');
 export const SMS_REPO = token<SMSPort>('SMS_REPO');
 export const PATIENT_REPO = token<PatientRepoPort>('PATIENT_REPO');
 export const DOCTOR_REPO = token<DoctorRepoPort>('DOCTOR_REPO');
+export const NIXPEND_ADAPTER = token<NixpendPort>('NIXPEND_ADAPTER');
 
 export function bindAll() {
   register(OTP_REPO, OTPRepoMongo);
@@ -37,5 +40,6 @@ export function bindAll() {
   register(MAIL_REPO, twilioMailAdapter);
   register(SMS_REPO, smsAdapter);
   register(PATIENT_REPO, PatientRepoMongo);
-  register(DOCTOR_REPO, DoctorRepoMongo)
+  register(DOCTOR_REPO, DoctorRepoMongo);
+  register(NIXPEND_ADAPTER, nixpendAdapter);
 }

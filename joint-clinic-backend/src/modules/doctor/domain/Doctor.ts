@@ -1,16 +1,17 @@
-import { ObjectId } from "mongoose"
+export interface PractitionerCompany {
+  company: string;
+  branch: string;
+}
 
 export interface Doctor {
-    _id: ObjectId | string,
-    userId: ObjectId | string,
-    // Determine the specialization of the doctor to prevent SQL injection
-    specialization: String,
-    licenseNumber: String,
-    yearsOfExperience: Number,
-    department: String,
-    clinicSchedule: [{
-        day: String,
-        startTime: String,
-        endTime: String
-    }]
+  nixpendId: string; // maps to Nixpend "name" field
+  practitionerName: string; // maps to "practitioner_name"
+  fullNameArabic?: string; // maps to "full_name_arabic"
+  gender: 'Male' | 'Female' | string;
+  status: string; // Active / Inactive
+  practitionerType?: string; // Practitioner / Specialist etc.
+  department?: string;
+  designation?: string | null;
+  practitionerCompany: PractitionerCompany[];
+  priceList?: string;
 }
