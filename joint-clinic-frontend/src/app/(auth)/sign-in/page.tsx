@@ -8,9 +8,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons'
 import { motion, AnimatePresence, Variants } from "framer-motion"
 
-import PaginationDots from '@/components/atoms/PaginationLog';
-import HelloCard from '@/components/organisms/HelloCard';
-import DropDown from '@/components/molecules/Dropdown';
+import PaginationDots from '@/components/atoms/paginationlog';
+// import HelloCard from '@/components/organisms/HelloCard';
+// import DropDown from '@/components/molecules/Dropdown';
 import Typography from '@/components/atoms/Typography';
 
 
@@ -50,6 +50,9 @@ const JOINTS = {
 
 import JointMarker from '@/components/molecules/JointMarker';
 import InjuryDetailsForm from '@/components/organisms/InjuryDetailsForm';
+import HelloCard from '@/components/organisms/helloCard';
+import CustomDropdown from '@/components/molecules/dropdown';
+
 
 const Page = () => {
 
@@ -397,7 +400,7 @@ const Page = () => {
 
                           <div className="relative">
                             <FontAwesomeIcon icon={faCaretDown} className="absolute top-1/2 -translate-y-1/2 right-[20px]" />
-                            <DropDown
+                            <CustomDropdown
                               items={[
                                 "Male",
                                 "Female"
@@ -468,7 +471,7 @@ const Page = () => {
 
                           <div className="relative">
                             <FontAwesomeIcon icon={faCaretDown} size="xl" className="absolute top-[50%] translate-y-[-50%] md:right-[50px] right-[30px]" />
-                            <DropDown
+                            <CustomDropdown
                               items={[
                                 "Saudi Arabia",
                                 "United Arab Emirates",
@@ -484,7 +487,7 @@ const Page = () => {
 
                           <div className="relative">
                             <FontAwesomeIcon icon={faCaretDown} size="xl" className="absolute top-[50%] translate-y-[-50%] md:right-[50px] right-[30px]" />
-                            <DropDown
+                            <CustomDropdown
                               items={[
                                 "Cairo",
                                 "Alexandria",
@@ -502,7 +505,7 @@ const Page = () => {
 
                           <div className="relative">
                             <FontAwesomeIcon icon={faCaretDown} size="xl" className="absolute top-[50%] translate-y-[-50%] md:right-[50px] right-[30px]" />
-                            <DropDown
+                            <CustomDropdown
                               items={[
                                 "Saudi Arabia",
                                 "United Arab Emirates",
@@ -518,7 +521,7 @@ const Page = () => {
 
                           <div className="relative">
                             <FontAwesomeIcon icon={faCaretDown} size="xl" className="absolute top-[50%] translate-y-[-50%] md:right-[50px] right-[30px]" />
-                            <DropDown
+                            <CustomDropdown
                               items={[
                                 "Single",
                                 "Married",
@@ -532,7 +535,7 @@ const Page = () => {
 
                           <div className="relative">
                             <FontAwesomeIcon icon={faCaretDown} size="xl" className="absolute top-[50%] translate-y-[-50%] md:right-[50px] right-[30px]" />
-                            <DropDown
+                            <CustomDropdown
                               items={[
                                 "English",
                                 "Arabic",
