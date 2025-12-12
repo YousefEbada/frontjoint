@@ -21,7 +21,7 @@ const requestLimiter = rateLimit({
 
 doctorRoutes.use(requestLimiter);
 
-doctorRoutes.get("/:nixpendId", findDoctorById);
+doctorRoutes.get("/", findDoctorById);
 doctorRoutes.get("/", findDoctors);
 
 

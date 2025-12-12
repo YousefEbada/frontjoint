@@ -5,7 +5,7 @@ import { resolve } from "app/container";
 import { GetCachedPractitioners } from "modules/doctor/application/use-cases/GetCachedDoctors";
 
 export async function findDoctorById(req: Request, res: Response) {
-    const doctorId = req.params.nixpendId;
+    const doctorId = req.query.id as string;
     try {
         const uc = new FindDoctorById(resolve(DOCTOR_REPO))
         const doctor = await uc.execute(doctorId);
