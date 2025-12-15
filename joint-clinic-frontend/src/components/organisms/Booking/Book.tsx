@@ -1,24 +1,23 @@
-"use client"
+"use client";
 import React, { useState } from "react";
-import CustomSelect from "@/components/atoms/CustomSelect";
+// import Button from "../atoms/Button";
+
+// import Pagination from "../molecules/Pagination2";
+// import Calendar from "../molecules/Calender";
+import Button from "@/components/atoms/Button";
 import Calendar from "@/components/molecules/Calendar";
-import ActionButton from "@/components/atoms/ActionButton";
+import Pagination from "@/components/molecules/Pagination2";
+import CustomSelect from "@/components/atoms/CustomSelect";
 
 const Book = () => {
   const [step, setStep] = useState(1);
-
-  const next = () => {
-    setStep((prev) => prev + 1);
-  };
+  const totalSteps = 3;
+  const next = () => step < totalSteps && setStep(step + 1);
+  const back = () => step > 1 && setStep(step - 1);
 
   return (
-    <div id="book" className="h-[90vh] sm:h-screen w-full flex flex-col items-center justify-center md:justify-start pb-10"
-      style={{
-        background: `linear-gradient(to bottom, #edf7fa, #cfeaf1)`
-      }}
-    >
+    <div id="book" className="h-screen w-full flex flex-col items-center justify-start bg-[#edf7f9] pb-10">
 
-      {/* MAIN CONTAINER */}
       {/* MAIN CONTAINER */}
       <div
         className="
@@ -29,22 +28,18 @@ const Book = () => {
         rounded-[20px] sm:rounded-[32px] md:rounded-[48px]
         flex flex-col items-center my-auto
         py-2 md:py-10
-        justify-center md:justify-start
       "
       >
 
         {/* TITLE */}
         <h2
           className="
-          text-[9vw] text-[27px] sm:text-[25px] xsm:text-[20px] md:text-[120px]
+          text-[9vw] text-[27px] sm:text-[25px] xsm:text-[20px] md:text-[80px]
           font-bold 
           bg-gradient-to-b from-[#0D294D] to-[#1E5598]
           bg-clip-text text-transparent 
           text-center leading-tight
         "
-          style={step > 1 && typeof window !== "undefined" && window.innerWidth < 640 ? {
-            display: "none"
-          } : undefined}
         >
           Book Your Session Now
         </h2>
@@ -71,15 +66,14 @@ const Book = () => {
         <div
           className={`
             relative 
-            ${typeof window !== "undefined" && window.innerWidth < 640 ? `w-[92%]
+            w-[92%] md:w-[80%]
             bg-white
             mt-2 sm:mt-4 md:mt-10
             rounded-[18px] sm:rounded-[22px] md:rounded-[32px]
-            p-[30px] sm:p-5 md:p-10
+            p-[30px] sm:p-5 md:p-8
             flex flex-col justify-between
             min-h-[300px] sm:min-h-[350px] md:min-h-[400px]
             ${step === 3 ? "" : "shadow-[0px_20px_60px_rgba(30,85,152,0.15)]"}
-            ` : ""}
           `}
         >
 
@@ -100,7 +94,7 @@ const Book = () => {
                 />
               </div>
 
-              <ActionButton text="Next" variant="solid" onClick={next} />
+              <Button text="Next" variant="primary" onClick={next} />
             </div>
           )}
 
@@ -130,7 +124,7 @@ const Book = () => {
                 className="md:!w-[600px]"
               />
 
-              <ActionButton text="Next" variant="solid" onClick={next} />
+              <Button text="Next" variant="primary" onClick={next} />
             </div>
           )}
 
@@ -184,12 +178,12 @@ const Book = () => {
                     <span className="text-[#167c4f]">Monday, January 2nd 2026 at 8:00 AM</span>
                   </p>
 
-                  <p className="text-[#9ca3af] text-[12px] sm:text-[14px] md:text-[18px] leading-5 mt-1 max-w-[260px] mx-auto lg:mx-0">
+                  <p className="text-[#9ca3af] text-[12px] sm:text-[14px] md:text-[18px] leading-5 mt-1 max-w-[100%] mx-auto lg:mx-0">
                     Bookings can be rescheduled or cancelled at least 24 hours before the appointment.
                   </p>
 
                   <div className="mt-3 flex justify-center lg:justify-start">
-                    <ActionButton text="Confirm" variant="solid" />
+                    <Button text="Confirm" variant="primary" />
                   </div>
                 </div>
 
@@ -199,9 +193,15 @@ const Book = () => {
           )}
 
         </div>
+
+        {/* PAGINATION */}
+        <div className="mt-4 mb-4">
+          <Pagination total={totalSteps} current={step} onChange={setStep} />
+        </div>
+
       </div>
     </div>
   );
-}
+};
 
 export default Book;
