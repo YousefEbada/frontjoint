@@ -140,7 +140,7 @@ export type RescheduleType = {
     // "HH:MM"
     appointment_time: string,
     daily_practitioner_event: string,
-    service_unit: string,
+    service_unit?: string,
     duration: number,
     actual_duration: number
   }

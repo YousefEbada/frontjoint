@@ -109,6 +109,7 @@ export const nixpendAdapter: NixpendPort = {
   )
   if(typeof data.response === 'string') {
     console.log("\n======= The data is String:", data)
+    return data.response
   }
   console.log("\n========= The data:", data);
     return null; 
@@ -129,7 +130,7 @@ export const nixpendAdapter: NixpendPort = {
       headers: {
         'Content-Type': 'application/json'
     },
-      body: JSON.stringify({ appointment_id, ...appointment_details })
+      body: JSON.stringify({ appointment_id, ...appointment_details, service_unit: "" })
     })
     .then(res => res.json()
   )

@@ -13,15 +13,12 @@ export interface NixpendPort {
   // get the event name from get available slots
   bookAppointment(value: BookType): Promise<any>;
   getAvailableSlots(practitionerId: string, company: "Joint Clinic", fromDate?: string, toDate?: string): Promise<AvailableSlotReturnType>;
+  rescheduleAppointment(appointment_id: string, appointment_details: RescheduleType): Promise<any>
+  cancelAppointment(data: CancelType): Promise<any>;
 
   // IVR
   // still has CORS issue
   ivrConfirmAppointment?(confirm: '0' | '1' | '2', name: string): Promise<any>;
   ivrGetPatientAppointment?(after: string, branch: string): Promise<any>;
 
-  // reschedule appointment
-  rescheduleAppointment(appointment_id: string, appointment_details: RescheduleType): Promise<any>
-
-  // cancel appointment
-  cancelAppointment(data: CancelType): Promise<any>;
 }
