@@ -51,7 +51,7 @@ export default function CustomSelect({
   return (
     <div
       ref={menuRef}
-      className={clsx("relative w-full", isSmall ? "" : "max-w-[600px] md:w-auto", className)}
+      className={clsx("relative w-full", isSmall ? "" : "md:w-auto", className)}
       style={{ width: finalWidth }}
     >
       {/* BUTTON */}

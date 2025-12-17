@@ -58,8 +58,17 @@ const exercises: Exercise[] = [
     },
 ];
 
+import UploadWorkout from "./UploadWorkout";
+import SessionVideo from "./SessionVideo";
+
 const Page = () => {
     const [activate, setActivate] = useState("Sholders");
+    const [isUploading, setIsUploading] = useState(false);
+
+    // ⛔ If uploading, show UploadWorkout only
+    if (isUploading) {
+        return <UploadWorkout onClose={() => setIsUploading(false)} />;
+    }
     return (
         <>
             <DashBoardHeader therapyName={data.therapyName} nav={false} dateTime={true} />
@@ -71,7 +80,7 @@ const Page = () => {
                     // onSearchChange={() => {}} // Connect logic later
                     actionButton={{
                         label: "Upload Video",
-                        onClick: () => { }
+                        onClick: () => setIsUploading(true)
                     }}
                     filters={[
                         { label: "Shoulder", active: true },
@@ -92,6 +101,7 @@ const Page = () => {
                     ))}
                 </section>
             </DashBoardContent>
+            {/* <SessionVideo/> */}
         </>
     );
 };

@@ -463,14 +463,29 @@ const Page = () => {
                           We need more details about you.
                         </p>
 
-                        <form action="" className='flex md:flex-row flex-col gap-[30px] flex-wrap justify-center items-center'>
+                        <form
+                          action=""
+                          className="flex md:flex-row flex-col gap-[30px] flex-wrap justify-center w-full items-center"
+                        >
+                          {/* ---- FIRST ROW: 3 inputs ---- */}
+                          <input
+                            type="email"
+                            placeholder="Email Address"
+                            className="md:w-[39%] w-[90vw] h-[80px] px-5 md:text-[24px] text-[18px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition"
+                          />
 
-                          <input type="email" placeholder="Email Address" className="md:w-[580px] w-[90vw] h-[80px] px-5 md:text-[24px] text-[18px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition" />
+                          <input
+                            type="text"
+                            placeholder="NID or Iqama ID"
+                            className="md:w-[25%] w-[90vw] h-[80px] px-5 md:text-[24px] text-[18px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition"
+                          />
 
-                          <input type="text" placeholder="NID or Iqama ID" className="md:w-[350px] w-[90vw] h-[80px] px-5 md:text-[24px] text-[18px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition" />
-
-                          <div className="relative">
-                            <FontAwesomeIcon icon={faCaretDown} size="xl" className="absolute top-[50%] translate-y-[-50%] md:right-[50px] right-[30px]" />
+                          <div className="relative md:w-[17%] w-[90vw]">
+                            <FontAwesomeIcon
+                              icon={faCaretDown}
+                              size="xl"
+                              className="absolute top-[50%] translate-y-[-50%] md:right-[20px] right-[30px]"
+                            />
                             <CustomDropdown
                               items={[
                                 "Saudi Arabia",
@@ -478,15 +493,20 @@ const Page = () => {
                                 "Egypt",
                                 "Jordan",
                                 "Sudan",
-                                "Kuwait"
+                                "Kuwait",
                               ]}
-                              width="md:w-[305px] w-[90vw]"
+                              width="w-full"
                               text="Nationality"
                             />
                           </div>
 
-                          <div className="relative">
-                            <FontAwesomeIcon icon={faCaretDown} size="xl" className="absolute top-[50%] translate-y-[-50%] md:right-[50px] right-[30px]" />
+                          {/* ---- SECOND ROW: City + Address ---- */}
+                          <div className="relative md:w-[21.4%] w-[90vw]">
+                            <FontAwesomeIcon
+                              icon={faCaretDown}
+                              size="xl"
+                              className="absolute top-[50%] translate-y-[-50%] md:right-[20px] right-[30px]"
+                            />
                             <CustomDropdown
                               items={[
                                 "Cairo",
@@ -494,17 +514,26 @@ const Page = () => {
                                 "Giza",
                                 "Shubra El-Kheima",
                                 "Port Said",
-                                "Zagazig"
+                                "Zagazig",
                               ]}
-                              width="md:w-[275px] w-[90vw]"
+                              width="w-full"
                               text="City"
                             />
                           </div>
 
-                          <input type="text" placeholder="Address" className="md:w-[1000px] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition" />
+                          <input
+                            type="text"
+                            placeholder="Address"
+                            className="md:w-[61.5%] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition"
+                          />
 
-                          <div className="relative">
-                            <FontAwesomeIcon icon={faCaretDown} size="xl" className="absolute top-[50%] translate-y-[-50%] md:right-[50px] right-[30px]" />
+                          {/* ---- THIRD ROW: 3 dropdowns ---- */}
+                          <div className="relative md:w-[36.5%] w-[90vw]">
+                            <FontAwesomeIcon
+                              icon={faCaretDown}
+                              size="xl"
+                              className="absolute top-[50%] translate-y-[-50%] md:right-[20px] right-[30px]"
+                            />
                             <CustomDropdown
                               items={[
                                 "Saudi Arabia",
@@ -512,40 +541,40 @@ const Page = () => {
                                 "Egypt",
                                 "Jordan",
                                 "Sudan",
-                                "Kuwait"
+                                "Kuwait",
                               ]}
-                              width="md:w-[560px] w-[90vw]"
+                              width="w-full"
                               text="Identifier type"
                             />
                           </div>
 
-                          <div className="relative">
-                            <FontAwesomeIcon icon={faCaretDown} size="xl" className="absolute top-[50%] translate-y-[-50%] md:right-[50px] right-[30px]" />
+                          <div className="relative md:w-[20%] w-[90vw]">
+                            <FontAwesomeIcon
+                              icon={faCaretDown}
+                              size="xl"
+                              className="absolute top-[50%] translate-y-[-50%] md:right-[20px] right-[30px]"
+                            />
                             <CustomDropdown
-                              items={[
-                                "Single",
-                                "Married",
-                                "Divorced",
-                                "Widowed"
-                              ]}
-                              width="md:w-[310px] w-[90vw]"
+                              items={["Single", "Married", "Divorced", "Widowed"]}
+                              width="w-full"
                               text="Marital Status"
                             />
                           </div>
 
-                          <div className="relative">
-                            <FontAwesomeIcon icon={faCaretDown} size="xl" className="absolute top-[50%] translate-y-[-50%] md:right-[50px] right-[30px]" />
+                          <div className="relative md:w-[25%] w-[90vw]">
+                            <FontAwesomeIcon
+                              icon={faCaretDown}
+                              size="xl"
+                              className="absolute top-[50%] translate-y-[-50%] md:right-[20px] right-[30px]"
+                            />
                             <CustomDropdown
-                              items={[
-                                "English",
-                                "Arabic",
-                                "Other"
-                              ]}
-                              width="md:w-[375px] w-[90vw]"
+                              items={["English", "Arabic", "Other"]}
+                              width="w-full"
                               text="Speaking Language"
                             />
                           </div>
                         </form>
+
 
                         <div className="part2 flex flex-col items-center justify-center">
                           <h2 className="md:text-[42px] text-[24px] font-bold mt-0 bg-gradient-to-b mt-[60px] from-[#0D294D] to-[#1E5598] bg-clip-text text-transparent tracking-wide text-center">Guardian Information,</h2>
@@ -554,13 +583,13 @@ const Page = () => {
                             can’t make decisions due to medical conditions.
                           </p>
                           <form action="" className='flex flex-row gap-[30px] flex-wrap justify-center items-center'>
-                            <input type="text" placeholder="Guardian’s Full Name" className="md:w-[750px] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition" />
-                            <input type="text" placeholder="Guardian’s Phone Number" className="md:w-[540px] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition" />
-                            <input type="text" placeholder="Guardian’s NID or Iqama ID" className="md:w-[570px] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition" />
-                            <input type="email" placeholder="Guardian’s Email Address" className="md:w-[720px] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition" />
-                            <input type="text" placeholder="Blood Group" className="md:w-[440px] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition" />
-                            <input type="text" placeholder="Patient Category" className="md:w-[450px] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition" />
-                            <div className="relative">
+                            <input type="text" placeholder="Guardian’s Full Name" className="md:w-[48%] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition" />
+                            <input type="text" placeholder="Guardian’s Phone Number" className="md:w-[35%] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition" />
+                            <input type="text" placeholder="Guardian’s NID or Iqama ID" className="md:w-[37%] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition" />
+                            <input type="email" placeholder="Guardian’s Email Address" className="md:w-[46.2%] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition" />
+                            <input type="text" placeholder="Blood Group" className="md:w-[29%] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition" />
+                            <input type="text" placeholder="Patient Category" className="md:w-[29%] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition" />
+                            <div className="relative md:w-[23.5%] w-[90vw] flex items-center justify-center">
                               <input
                                 id="upload"
                                 type="file"
@@ -570,7 +599,7 @@ const Page = () => {
 
                               <label
                                 htmlFor="upload"
-                                className="md:w-[370px] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#6d7a80] text-center flex items-center justify-center cursor-pointer outline-none border-dashed transition"
+                                className="md:w-[100%] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#6d7a80] text-center flex items-center justify-center cursor-pointer outline-none border-dashed transition"
                               >
                                 Upload File
                               </label>
