@@ -1,4 +1,5 @@
 import DashBoardHeader from "@/components/molecules/DashBoardHeader";
+import DashBoardContent from "@/components/atoms/DashBoardContent";
 import AppointmentList from "@/components/organisms/AppointmentList";
 import ExerciseAssignList from "@/components/organisms/ExerciseAssignList";
 
@@ -17,8 +18,8 @@ const assigns = [
 const OverviewPage = () => {
   return (
     <>
-      <DashBoardHeader therapyName="" nav={false} />
-      <main className="w-full h-full flex flex-col gap-6 overflow-y-auto custom-scrollbar px-1">
+      <DashBoardHeader therapyName="" nav={false} dateTime={true} />
+      <DashBoardContent>
         {/* Title */}
         <div className="mb-6">
           <h1 className="text-[32px] font-bold text-[#0D294D]">
@@ -33,7 +34,7 @@ const OverviewPage = () => {
 
         {/* Section 2: Exercise Assigns */}
         <ExerciseAssignList assigns={assigns} />
-      </main>
+      </DashBoardContent>
     </>
   );
 };

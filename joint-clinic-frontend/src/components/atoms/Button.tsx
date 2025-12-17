@@ -1,5 +1,7 @@
 import React from "react";
 import { IBM_Plex_Sans } from "next/font/google";
+import Typography from "./Typography";
+import { color } from "@/lib/constants/colors";
 
 const ibm = IBM_Plex_Sans({
     subsets: ["latin"],
@@ -37,7 +39,7 @@ const Button: React.FC<ButtonProps> = ({ text, variant, onClick, className = "",
     const hasCustomWidth = className?.includes("w-") || className?.includes("w[");
 
     const defaultWidth = !hasCustomWidth
-        ? "w-[200px] sm:w-[220px] md:w-[248px]"
+        ? "w-full md:w-fit"
         : "";
 
     /* ⚡ لو active true نطبّق hover classes يدويًا */
@@ -54,12 +56,12 @@ const Button: React.FC<ButtonProps> = ({ text, variant, onClick, className = "",
         ${ibm.className}
         font-bold
         ${defaultWidth}
-        h-[45px] sm:h-[48px] md:h-[51px]
+        h-[50px]
         rounded-[48px]
         text-center 
-        text-[18px] sm:text-[20px] md:text-[22px]
+        text-[13px] sm:text-[20px] md:text-[22px]
         border-[3px]
-        py-[8px] px-[32px]
+        py-[8px] px-[12px] sm:px-[32px]
         cursor-pointer
         transition
         leading-[115%]
@@ -69,7 +71,13 @@ const Button: React.FC<ButtonProps> = ({ text, variant, onClick, className = "",
         ${className}
         `}
         >
-            {text}
+            <Typography
+                text={text}
+                variant="bodyBold"
+                style={{
+                    
+                }}
+            /> 
         </button>
     );
 };

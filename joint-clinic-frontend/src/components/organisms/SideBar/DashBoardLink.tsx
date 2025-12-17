@@ -61,7 +61,7 @@ const DashBoardLink = ({ linkHref, title, Icon, expanded = true, mobileIconOnly 
                     className="font-medium whitespace-nowrap"
                     style={{
                         color: colorState,
-                        ...(Icon && { fontSize: "clamp(16px, 2vw, 22px)" }),
+                        ...(Icon && { fontSize: "clamp(12px, 2vw, 22px)" }),
                     }}
                 />
             </div>

@@ -1,4 +1,5 @@
 import DashBoardHeader from "@/components/molecules/DashBoardHeader";
+import DashBoardContent from "@/components/atoms/DashBoardContent";
 import Typography from "@/components/atoms/Typography";
 import ProgressBar from "@/components/atoms/ProgressBar";
 import SummaryItem from "@/components/molecules/SummaryItem";
@@ -8,8 +9,8 @@ import { mockDashboardData as data } from "@/lib/data/dashboardData";
 const Page = () => {
   return (
     <>
-      <DashBoardHeader therapyName={data.therapyName} nav={false} />
-      <main className="w-full h-full flex flex-col gap-6 overflow-y-auto custom-scrollbar">
+      <DashBoardHeader therapyName={data.therapyName} nav={false} dateTime={true} />
+      <DashBoardContent>
         <div className="flex flex-col sm:flex-row gap-2 items-start sm:items-baseline">
           <Typography text="Welcome Back," variant="heading1" gradient={true} />
           <Typography text={data.patientName} variant="heading1" style={{ color: color.primary }} />
@@ -54,7 +55,7 @@ const Page = () => {
             ))}
           </div>
         </div>
-      </main>
+      </DashBoardContent>
     </>
   );
 };

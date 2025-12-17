@@ -47,30 +47,31 @@ const SessionCard: React.FC<SessionCardProps> = ({
         shadow-[0_10px_25px_rgba(0,0,0,0.12)]
         p-2
         flex flex-col
+        w-full
         ${className}
         ${id ? "cursor-pointer hover:scale-[1.02] transition-transform duration-200" : ""}
       `}
         >
             {/* الصورة */}
-            <div className="rounded-[20px] h-[80%] overflow-hidden w-full">
+            <div className="rounded-[20px] overflow-hidden w-full aspect-video md:aspect-[4/3] relative">
                 <img
                     src={imageSrc}
                     alt={title}
-                    className="w-full  object-cover"
+                    className="w-full h-full object-cover"
                 />
             </div>
 
             {/* النصوص تحت الصورة */}
-            <div className="flex items-center justify-between my-auto px-3 py-2 ">
+            <div className="flex items-center justify-between mt-auto px-2 py-3 gap-2">
                 <Typography
                     text={title}
                     variant="bodyBold"
-                    className="text-[#1E5598] my-auto text-[24px]"
+                    className="text-[#1E5598] text-[16px] md:text-[22px] leading-tight"
                 />
                 <Typography
                     text={minutes ? `${minutes} min` : `${status}`}
                     variant="bodyBold"
-                    className={`${statusColors[status]} text-[22px]`}
+                    className={`${statusColors[status]} text-[14px] md:text-[20px] whitespace-nowrap`}
                 />
             </div>
         </div>
