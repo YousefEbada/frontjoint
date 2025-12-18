@@ -7,7 +7,7 @@ import "./whoWeAre.css";
 import Profile from "@/components/atoms/icons/Profile";
 import FeatureCard from "@/components/molecules/FeatureCard";
 import { color } from "@/lib/constants/colors";
-
+//  gg
 
 gsap.registerPlugin(ScrollTrigger);
 

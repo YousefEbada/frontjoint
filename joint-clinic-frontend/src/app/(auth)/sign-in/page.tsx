@@ -16,7 +16,7 @@ import HelloCard from '@/components/organisms/helloCard';
 // import DropDown from '@/components/molecules/Dropdown';
 import Typography from '@/components/atoms/Typography';
 
-
+// sdsd
 // Mock Data for Joints
 const JOINTS = {
   front: [
@@ -48,8 +48,6 @@ const JOINTS = {
     { id: 'l_ankle_back', x: 45, y: 95, label: 'Left Ankle', side: 'left' },
   ]
 } as const;
-
-
 
 
 
