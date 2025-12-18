@@ -7,8 +7,11 @@ import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons'
 import { motion, AnimatePresence, Variants } from "framer-motion"
-
-import PaginationDots from '@/components/atoms/PaginationLog';
+import JointMarker from '@/components/molecules/JointMarker';
+import InjuryDetailsForm from '@/components/organisms/InjuryDetailsForm';
+import PaginationDots from '@/components/atoms/paginationlog';
+import CustomDropdown from '@/components/molecules/dropdown';
+import HelloCard from '@/components/organisms/helloCard';
 // import HelloCard from '@/components/organisms/HelloCard';
 // import DropDown from '@/components/molecules/Dropdown';
 import Typography from '@/components/atoms/Typography';
@@ -48,10 +51,7 @@ const JOINTS = {
 
 
 
-import JointMarker from '@/components/molecules/JointMarker';
-import InjuryDetailsForm from '@/components/organisms/InjuryDetailsForm';
-import HelloCard from '@/components/organisms/HelloCard';
-import CustomDropdown from '@/components/molecules/Dropdown';
+
 
 
 const Page = () => {
