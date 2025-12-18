@@ -30,35 +30,35 @@ const typographyConfig: Record<
 > = {
     display1: {
         tag: "h1",
-        className: "text-[120px] font-bold",
+        className: "text-[60px] md:text-[80px] lg:text-[120px] font-bold",
     },
     display2: {
         tag: "h2",
-        className: "text-[90px] font-semibold",
+        className: "text-[45px] md:text-[60px] lg:text-[90px] font-semibold",
     },
     heading1: {
         tag: "h2",
-        className: "text-[60px] font-semibold",
+        className: "text-[32px] md:text-[48px] lg:text-[60px] font-semibold",
     },
     heading2: {
         tag: "h2",
-        className: "text-[40px] font-medium",
+        className: "text-[24px] md:text-[32px] lg:text-[40px] font-medium",
     },
     subheader: {
         tag: "p",
-        className: "text-[30px] font-medium",
+        className: "text-[20px] md:text-[24px] lg:text-[30px] font-medium",
     },
     bodyBold: {
         tag: "p",
-        className: "text-[20px] font-semibold",
+        className: "text-[16px] md:text-[18px] lg:text-[20px] font-semibold",
     },
     bodyRegular: {
         tag: "p",
-        className: "text-[18px] font-normal",
+        className: "text-[14px] md:text-[16px] lg:text-[18px] font-normal",
     },
     bodySmall: {
         tag: "p",
-        className: "text-[14px] font-normal",
+        className: "text-[12px] md:text-[14px] font-normal",
     },
 };
 
