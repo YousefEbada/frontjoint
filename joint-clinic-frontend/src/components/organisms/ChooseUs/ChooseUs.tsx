@@ -1,4 +1,4 @@
-import FeatureCard from "@/components/molecules/FeatureCard";
+import FeatureCard from "@/components/molecules/FeatureCardCom";
 
 const ChooseUs = () => {
     const cards = [

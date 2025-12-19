@@ -3,7 +3,7 @@ import NavBar from "@/components/organisms/NavBar/NavBar";
 import React from "react";
 
 import { IBM_Plex_Sans } from "next/font/google";
-import Button2 from "@/components/atoms/Button2";
+import Button2 from "@/components/atoms/Button2Com";
 // shdsjsdhhds
 const ibmPlex = IBM_Plex_Sans({
   subsets: ["latin"],
