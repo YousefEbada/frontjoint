@@ -38,6 +38,17 @@ export const BookingRepoMongo: BookingRepoPort = {
     }
     return doc as unknown as Booking;
   },
+
+  async findBookingsByPatient(patientId: string): Promise<Booking[]> {
+    const docs = await BookingModel.find({ patientId }).lean();
+    return docs as unknown as Booking[];
+  },
+
+  async findBookingsByDoctor(doctorId: string): Promise<Booking[]> {
+    const docs = await BookingModel.find({ doctorId }).lean();
+    return docs as unknown as Booking[];
+  },
+
   async findBookingsByDoctorAndWeek(doctorId: string, weekStart: Date): Promise<Booking[]> {
     const weekEnd = new Date(weekStart);
     weekEnd.setDate(weekEnd.getDate() + 7);

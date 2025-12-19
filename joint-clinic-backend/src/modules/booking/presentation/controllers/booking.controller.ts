@@ -10,6 +10,7 @@ import { NixpendPort } from '../../../integration/ports/NixpendPorts.js';
 import { GetAvailableSlots } from 'modules/booking/application/use-cases/GetAvailableSlots.js';
 import { BookType } from 'modules/integration/domain/Nixpend.js';
 import { SESSION_REPO } from 'app/container.bindings.js';
+import { GetDoctorDashboard } from 'modules/doctor/application/use-cases/GetDoctorDashboard.js';
 
 const BOOKING_REPO = token<BookingRepoPort>('BOOKING_REPO');
 const NIXPEND_PORT = token<NixpendPort>('NIXPEND_PORT');
@@ -104,27 +105,28 @@ export async function getBookingById(req: Request, res: Response) {
   }
 }
 
+// CHECK THIS FUNCTION
 export async function getDoctorBookings(req: Request, res: Response) {
   try {
     const { doctorId } = req.params;
     const { period, date } = req.query;
-    const repo = resolve(BOOKING_REPO);
-    const targetDate = date ? new Date(String(date)) : new Date();
+    const uc = new GetDoctorDashboard(resolve(BOOKING_REPO));
+    const bookings = await uc.exec(doctorId);
     
-    let bookings;
-    switch (period) {
-      case 'day':
-        bookings = await repo.findBookingsByDoctorAndDay(doctorId, targetDate);
-        break;
-      case 'week':
-        bookings = await repo.findBookingsByDoctorAndWeek(doctorId, targetDate);
-        break;
-      case 'month':
-        bookings = await repo.findBookingsByDoctorAndMonth(doctorId, targetDate);
-        break;
-      default:
-        bookings = await repo.findBookingsByDoctorAndDay(doctorId, targetDate);
-    }
+    // let bookings;
+    // switch (period) {
+    //   case 'day':
+    //     bookings = await repo.findBookingsByDoctorAndDay(doctorId, targetDate);
+    //     break;
+    //   case 'week':
+    //     bookings = await repo.findBookingsByDoctorAndWeek(doctorId, targetDate);
+    //     break;
+    //   case 'month':
+    //     bookings = await repo.findBookingsByDoctorAndMonth(doctorId, targetDate);
+    //     break;
+    //   default:
+    //     bookings = await repo.findBookingsByDoctorAndDay(doctorId, targetDate);
+    // }
     
     res.json({ ok: true, data: bookings });
   } catch (error) {
