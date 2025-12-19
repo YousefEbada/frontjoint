@@ -21,10 +21,10 @@ const Page = () => {
         <StatsGrid
           title="Progress"
           items={[
-            { label: "Number Of sessions:", value: data.totalSessions },
+            { label: "Number Of sessions:", value: data.totalSessions.toString() },
             { label: "Treatment length:", value: data.treatmentLength },
-            { label: "Sessions completed:", value: data.sessionsCompleted },
-            { label: "Exercises completed:", value: data.exercisesCompleted },
+            { label: "Sessions completed:", value: data.sessionsCompleted.toString() },
+            { label: "Exercises completed:", value: data.exercisesCompleted.toString() },
           ]}
         />
 
