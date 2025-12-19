@@ -1,3 +1,4 @@
+import { Schema } from "mongoose";
 import { ObjectId } from "mongoose";
 
 export type Role = 'Patient' | 'Doctor' | 'Admin' | 'Staff';
@@ -22,7 +23,7 @@ export interface User {
   city?: string;
   maritalStatus?: MaritalStatus;
   speakingLanguages?: string[];
-  guardianInformation: ObjectId
+  guardianInformation: string | Schema.Types.ObjectId;
   patientCategory?: string;
   userStatus?: UserStatus;
   accountStatus?: AccountStatus;

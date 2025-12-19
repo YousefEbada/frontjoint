@@ -3,6 +3,7 @@ import { verifyHash } from "../../../../shared/utils/crypto.js";
 import { security } from "../../../../config/security.js";
 import jwt from "jsonwebtoken";
 import { UserRepoPort } from "../ports/UserRepoPort.js";
+import { generateAccessToken, generateRefreshToken } from "shared/utils/generateTokens.js";
 
 type VerifyResult =
   | { ok: true }
@@ -71,7 +72,7 @@ export class VerifyOtp {
     await this.otpRepo.save(otp);
   }
 
-  private async handleSubjectType(subjectType: string, subjectRef: string): Promise<VerifyResult> {
+  private async handleSubjectType(subjectType: string, subjectRef: string): Promise<VerifyResult | any> {
     const user = await this.userRepo.findById(subjectRef);
     if (!user) return { ok: false, reason: "not_found" };
 
@@ -87,8 +88,10 @@ export class VerifyOtp {
         if (!user.userStatus?.registerOtpVerified) {
           return { ok: false, reason: "register OTP unverified" };
         }
-        return { ok: true };
-
+        const accessToken = generateAccessToken({ userId: subjectRef });
+        const refreshToken = generateRefreshToken({ userId: subjectRef });
+        return { ok: true, accessToken, refreshToken };
+        
         // Other types (e.g. "resetPassword", "emailChange", etc.)
       default:
         return { ok: false, reason: "not_found" };

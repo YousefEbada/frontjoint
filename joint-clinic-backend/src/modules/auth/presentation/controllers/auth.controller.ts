@@ -97,7 +97,18 @@ export async function verifyOtp(req: Request, res: Response) {
   const { otpToken, code } = VerifyOtpSchema.parse(req.body);
   const uc = new VerifyOtp(resolve(OTP_REPO), resolve(USER_AUTH_REPO));
   const result = await uc.exec(otpToken, code);
-  if (result.ok) return res.json(result);
+  if (result.ok) {
+    if( 'accessToken' in result && 'refreshToken' in result ) {
+      // res.cookie('refreshToken', result.refreshToken, {
+      //   httpOnly: true,
+      //   secure: process.env.NODE_ENV === 'production',
+      //   sameSite: 'strict',
+      //   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      // });
+      return res.json({ ok: true, accessToken: result.accessToken, refreshToken: result.refreshToken });
+    }
+    return res.json(result);
+  }
   const statusMap: Record<string, number> = { invalid: 401, expired: 400, locked: 429, not_found: 404, invalid_token: 401 };
   const status = result.reason ? (statusMap[result.reason] ?? 400) : 400;
   return res.status(status).json(result);
