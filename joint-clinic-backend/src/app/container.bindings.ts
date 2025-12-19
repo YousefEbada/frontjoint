@@ -19,6 +19,10 @@ import { DoctorRepoPort } from 'modules/doctor/application/ports/DoctorRepoPort.
 import { DoctorRepoMongo } from 'modules/doctor/infrastructure/repos/DoctorRepoMongo.js';
 import { nixpendAdapter } from 'modules/integration/adapters/nixpend.adapter.js';
 import { NixpendPort } from 'modules/integration/ports/NixpendPorts.js';
+import { SessionRepoPort } from '../modules/session/application/ports/SessionRepoPort.js';
+import { SessionRepoMongo } from '../modules/session/infrastructure/repos/SessionRepoMongo.js';
+import { TreatmentRepoPort } from 'modules/treatment-plan/application/ports/TreatmentRepoPort.js';
+import { TreatmentRepoMongo } from 'modules/treatment-plan/infrastructure/repos/TreamtentRepoMongo.js';
 
 export const OTP_REPO = token<OTPRepoPort>('OTP_REPO');
 export const BOOKING_REPO = token<BookingRepoPort>('BOOKING_REPO');
@@ -30,6 +34,8 @@ export const SMS_REPO = token<SMSPort>('SMS_REPO');
 export const PATIENT_REPO = token<PatientRepoPort>('PATIENT_REPO');
 export const DOCTOR_REPO = token<DoctorRepoPort>('DOCTOR_REPO');
 export const NIXPEND_ADAPTER = token<NixpendPort>('NIXPEND_ADAPTER');
+export const SESSION_REPO = token<SessionRepoPort>('SESSION_REPO');
+export const TREATMENT_PLAN_REPO = token<TreatmentRepoPort>('TREATMENT_PLAN_REPO');
 
 export function bindAll() {
   register(OTP_REPO, OTPRepoMongo);
@@ -42,4 +48,6 @@ export function bindAll() {
   register(PATIENT_REPO, PatientRepoMongo);
   register(DOCTOR_REPO, DoctorRepoMongo);
   register(NIXPEND_ADAPTER, nixpendAdapter);
+  register(SESSION_REPO, SessionRepoMongo);
+  register(TREATMENT_PLAN_REPO, TreatmentRepoMongo);
 }
