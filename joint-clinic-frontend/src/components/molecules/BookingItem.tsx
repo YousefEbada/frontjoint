@@ -23,26 +23,32 @@ const BookingItem: React.FC<BookingItemProps> = ({
     onReschedule,
 }) => {
     return (
-        <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1fr_2fr_auto] items-center gap-4 py-6 border-b border-gray-200 last:border-none">
+        <div className="grid grid-cols-2 grid-rows-2 md:grid-rows-1 md:grid-cols-[1.5fr_1fr_2fr_auto] items-center rounded-[39px] md:rounded-none md:border-none bg-[#eff6ff] md:bg-transparent md:border-gray-200 last:border-none">
             {/* Session Name */}
-            <Typography
-                text={`${type === "patient" ? "Patient" : "Session No"} ${sessionNumber}`}
-                variant="bodyBold"
-                className="text-[#1E5598]"
-            />
+            <div className="py-3 pl-4 border-r border-b md:border-none border-[#9FD5E2]">
+                <Typography
+                    text={`${type === "patient" ? "Patient" : "Session No"} ${sessionNumber}`}
+                    variant="bodyBold"
+                    className="text-[#1E5598]"
+                />
+            </div>
 
             {/* Status */}
-            <StatusBadge status={status} />
+            <div className="py-3 pl-4 border-b md:border-none border-[#9FD5E2]">
+                <StatusBadge status={status} />
+            </div>
 
             {/* Date & Time */}
-            <Typography
-                text={`${date} at ${time}`}
-                variant="bodyRegular"
-                className="text-[#1E5598] font-medium"
-            />
+            <div className="py-3 pl-4 border-r md:border-none border-[#9FD5E2]">
+                <Typography
+                    text={`${date} - ${time}`}
+                    variant="bodyBold"
+                    className="text-[#1E5598]"
+                />
+            </div>
 
             {/* Actions */}
-            <div className="flex gap-3">
+            <div className="hidden md:flex gap-3">
                 <ActionButton
                     text="Cancel"
                     variant="outline"
@@ -54,6 +60,13 @@ const BookingItem: React.FC<BookingItemProps> = ({
                     variant="solid"
                     onClick={onReschedule}
                     className="w-[120px]"
+                />
+            </div>
+            <div className="py-3 pl-4 md:hidden flex">
+                <Typography
+                    text={"Change/Cancel"}
+                    variant="bodyBold"
+                    className="text-red-600 underline"
                 />
             </div>
         </div>

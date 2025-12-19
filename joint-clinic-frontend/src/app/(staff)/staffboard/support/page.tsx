@@ -6,6 +6,7 @@ import ContactForm from "@/components/organisms/ContactForm";
 import RequestDoctorHelp from "@/components/organisms/RequestDoctorHelp";
 import Button from '@/components/atoms/Button';
 import RequestItem from '@/components/atoms/RequestItem';
+import DashBoardContent from '@/components/atoms/DashBoardContent';
 
 const SupportPage = () => {
   const [activeTab, setActiveTab] = useState<'call' | 'doctor'>('call');
@@ -30,7 +31,7 @@ const SupportPage = () => {
           </div>
         </div>
       </DashBoardHeader>
-      <main className="w-full h-full flex flex-col gap-8 p-4 md:p-8">
+      <DashBoardContent>
 
         <>
           <Typography text="Call Requests" variant="heading2" className="bg-gradient-to-b from-[#0D294D] to-[#1E5598] bg-clip-text text-transparent font-bold mb-2 pl-[30px]" />
@@ -43,7 +44,7 @@ const SupportPage = () => {
           </div>
         </>
 
-      </main>
+      </DashBoardContent>
     </>
   );
 };

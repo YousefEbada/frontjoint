@@ -20,7 +20,7 @@ const DashboardContentWrapper: React.FC<DashboardContentWrapperProps> = ({ child
     }
 
     return (
-        <CorneredBoxes type="shadowBox" className="relative w-full h-[calc(100vh-140px)] md:h-[88.2vh] p-6 sm:p-8 md:p-12 md:pl-28">
+        <CorneredBoxes type="shadowBox" className="relative w-full h-[calc(100vh-32px)] md:h-[88.2vh] p-6 sm:p-8 md:p-12 md:pl-28">
             {children}
         </CorneredBoxes>
     );

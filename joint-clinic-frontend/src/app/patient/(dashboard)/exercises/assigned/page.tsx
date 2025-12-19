@@ -66,7 +66,7 @@ const AssignedPage = () => {
             {/* Assigned by doctor Section */}
             <section className="flex flex-col gap-4">
                 <div className="flex flex-col gap-1">
-                    <div className="flex flex-row justify-between items-end">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-end">
                         <Typography
                             text="Assigned by doctor"
                             variant="heading2"

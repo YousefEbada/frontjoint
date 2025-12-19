@@ -8,12 +8,25 @@ interface AppointmentItemProps {
     statusColor?: string;
 }
 
+import Typography from "@/components/atoms/Typography";
+
 const AppointmentItem = ({ name, status, date, statusColor = "text-[#1E5598]" }: AppointmentItemProps) => {
     return (
         <div className="grid grid-cols-4 w-full items-center">
-            <span className="text-[#1E5598] font-bold text-lg">{name}</span>
-            <span className={`${statusColor} font-medium text-center`}>{status}</span>
-            <span className="text-[#1E5598] font-medium text-center">{date}</span>
+            <Typography text={name} variant="bodyBold" className="text-[#1E5598] text-lg" />
+
+            <Typography
+                text={status}
+                variant="bodyRegular"
+                className={`${statusColor} text-center`}
+            />
+
+            <Typography
+                text={date}
+                variant="bodyRegular"
+                className="text-[#1E5598] text-center"
+            />
+
             <div className="text-right">
                 <Link
                     href="#"

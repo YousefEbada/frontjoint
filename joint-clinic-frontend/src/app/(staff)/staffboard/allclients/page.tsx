@@ -6,7 +6,8 @@ import BookingList from "@/components/organisms/Bookings/BookingList";
 import BookingStats from "@/components/molecules/BookingStats";
 import SearchInput from '@/components/atoms/searchInput';
 import PatientRow from '@/components/atoms/PatientRow';
-import PatientCard from '@/components/atoms/PatientCard';
+import PatientCard from '@/components/molecules/PatientCard';
+import DashBoardContent from '@/components/atoms/DashBoardContent';
 
 const BookingsPage = () => {
     const bookings = [
@@ -45,22 +46,22 @@ const BookingsPage = () => {
                 <Typography text="All Patients" variant="bodyRegular" className="text-[#1e5598] font-medium" />
             </DashBoardHeader>
 
-            <main className="w-full h-full flex flex-col gap-4 p-4 md:p-8 overflow-y-auto custom-scrollbar">
-                <div className="flex flex-row items-center justify-between mb-[15px]">
+            <DashBoardContent>
+                <div className="flex flex-col md:flex-row items-center justify-between mb-[15px] gap-4 md:gap-0">
                     <Typography text="Active Patients" variant="heading1" style={{
                         fontWeight: "bold",
                         fontSize: "45px"
-                    }} className="bg-gradient-to-b pl-[50px] from-[#0D294D] to-[#1E5598] bg-clip-text text-transparent" />
+                    }} className="bg-gradient-to-b pl-0 md:pl-[50px] from-[#0D294D] to-[#1E5598] bg-clip-text text-transparent" />
                     <SearchInput
                         // value={query}
                         // onChange={setQuery}
                         // تقدر تزود كلاس لو حابب تتحكم في العرض
                         placeholder="Search By patient"
-                        className="w-[260px] sm:w-[320px] md:w-[380px]"
+                        className="w-full md:w-[380px]"
                     />
                 </div>
 
-                <div className="w-full bg-white rounded-[20px] shadow-[0px_10px_30px_10px_rgba(0,0,0,0.08)] p-5 py-[40px] overflow-y-auto grid grid-cols-3 gap-[30px] md:grid-cols-2 lg:grid-cols-3 gap-4 custom-scrollbar">
+                <div className="w-full md:bg-white md:rounded-[20px] md:shadow-[0px_10px_30px_10px_rgba(0,0,0,0.08)] md:p-5 md:py-[40px] overflow-y-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-2 md:gap-4 custom-scrollbar">
                     <PatientCard name="John Doe" injury="Shoulder Injury" status="Active" />
                     <PatientCard name="John Doe" injury="Shoulder Injury" status="Active" />
                     <PatientCard name="John Doe" injury="Shoulder Injury" status="Active" />
@@ -69,8 +70,8 @@ const BookingsPage = () => {
                     <PatientCard name="John Doe" injury="Shoulder Injury" status="Active" />
                     <PatientCard name="John Doe" injury="Shoulder Injury" status="Active" />
                     <PatientCard name="John Doe" injury="Shoulder Injury" status="Active" />
-                </div>                
-            </main>
+                </div>
+            </DashBoardContent>
         </>
     )
 }

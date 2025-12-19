@@ -12,6 +12,8 @@ interface ExerciseAssignItemProps {
     isRead?: boolean;
 }
 
+import Typography from "@/components/atoms/Typography";
+
 const ExerciseAssignItem = ({ name, injury, due, dueColor = "text-[#EE3124]", onAssign, isRead = false }: ExerciseAssignItemProps) => {
     return (
         <div className="grid grid-cols-4 items-center">
@@ -20,10 +22,13 @@ const ExerciseAssignItem = ({ name, injury, due, dueColor = "text-[#EE3124]", on
                     className={`w-1.5 h-1.5 rounded-full ${isRead ? "border border-gray-400 bg-white" : "bg-[#0D294D]"
                         }`}
                 ></div>
-                <span className="text-[#1E5598] text-lg font-normal">{name}</span>
+                <Typography text={name} variant="bodyRegular" className="text-[#1E5598] text-lg" />
             </div>
-            <span className="text-[#1E5598] font-medium text-center">{injury}</span>
-            <span className={`${dueColor} font-bold text-center`}>{due}</span>
+
+            <Typography text={injury} variant="bodyRegular" className="text-[#1E5598] text-center" />
+
+            <Typography text={due} variant="bodyBold" className={`${dueColor} text-center`} />
+
             <div className="flex justify-end text-right">
                 <ActionButton
                     text="Assign"

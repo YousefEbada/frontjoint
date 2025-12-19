@@ -16,7 +16,7 @@ interface ReportListProps {
 
 const ReportList: React.FC<ReportListProps> = ({ reports }) => {
     return (
-        <div className="w-full bg-white rounded-[24px] shadow-sm p-6 md:p-8 h-[400px] overflow-y-auto custom-scrollbar">
+        <div className="w-full bg-white rounded-[24px] shadow-sm p-6 md:p-8 h-full overflow-y-auto custom-scrollbar">
             {reports.map((report) => (
                 <ReportItem
                     key={report.id}

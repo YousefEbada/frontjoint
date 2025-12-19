@@ -1,4 +1,5 @@
 import DashBoardHeader from "@/components/molecules/DashBoardHeader";
+import Typography from "@/components/atoms/Typography";
 import DashBoardContent from "@/components/atoms/DashBoardContent";
 import AppointmentList from "@/components/organisms/AppointmentList";
 import ExerciseAssignList from "@/components/organisms/ExerciseAssignList";
@@ -21,10 +22,17 @@ const OverviewPage = () => {
       <DashBoardHeader therapyName="" nav={false} dateTime={true} />
       <DashBoardContent>
         {/* Title */}
-        <div className="mb-6">
-          <h1 className="text-[32px] font-bold text-[#0D294D]">
-            Welcome Back, <span className="text-[#9FD5E2]">Doctor Name</span>
-          </h1>
+        <div className="mb-6 flex flex-col md:flex-row gap-2">
+          <Typography
+            text="Welcome Back,"
+            variant="heading1"
+            style={{ color: "#0D294D", fontWeight: "bold", fontSize: "32px" }}
+          />
+          <Typography
+            text="Doctor Name"
+            variant="heading1"
+            style={{ color: "#9FD5E2", fontWeight: "bold", fontSize: "32px" }}
+          />
         </div>
 
         {/* Section 1: Today's appointments */}
