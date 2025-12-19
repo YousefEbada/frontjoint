@@ -8,12 +8,12 @@ interface FeatureCardProps {
   className?: string;
 }
 
-const FeatureCard: React.FC<FeatureCardProps> = ({
+export default function FeatureCard({
   title,
   description,
   isActive = false,
   className = "",
-}) => {
+}: FeatureCardProps) {
   return (
     <div
       className={`
@@ -44,4 +44,3 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
   );
 };
 
-export default FeatureCard;

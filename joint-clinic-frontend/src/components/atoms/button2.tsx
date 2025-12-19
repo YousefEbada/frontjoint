@@ -12,7 +12,7 @@ type ButtonProps = {
 
 // this is my new button component
 
-const Button2: React.FC<ButtonProps> = ({ text }) => {
+export default function Button2({ text }: ButtonProps) {
 
   return (
     <button
@@ -24,5 +24,3 @@ const Button2: React.FC<ButtonProps> = ({ text }) => {
     </button>
   );
 };
-
-export default Button2;
