@@ -36,7 +36,7 @@ const Page = () => {
         <hr className="border-t border-gray-300 w-full" />
 
         {/* Summary Section */}
-        <div className="flex flex-row gap-4 w-full">
+        <div className="flex flex-col md:flex-row gap-4 w-full">
           <TaskList taskItems={tasks} />
         </div>
       </DashBoardContent>

@@ -64,11 +64,19 @@ import SessionVideo from "./SessionVideo";
 const Page = () => {
     const [activate, setActivate] = useState("Sholders");
     const [isUploading, setIsUploading] = useState(false);
+    const [activeVideo, setActiveVideo] = useState<Exercise | null>(null);
 
     // ⛔ If uploading, show UploadWorkout only
     if (isUploading) {
         return <UploadWorkout onClose={() => setIsUploading(false)} />;
     }
+
+    // ⛔ If viewing video, show SessionVideo only
+    if (activeVideo) {
+        // You might want to pass activeVideo data to SessionVideo later
+        return <SessionVideo onClose={() => setActiveVideo(null)} />;
+    }
+
     return (
         <>
             <DashBoardHeader therapyName={data.therapyName} nav={false} dateTime={true} />
@@ -97,11 +105,11 @@ const Page = () => {
                             title={exercise.title}
                             status={exercise.status}
                             minutes={exercise.minutes}
+                            onClick={() => setActiveVideo(exercise)}
                         />
                     ))}
                 </section>
             </DashBoardContent>
-            {/* <SessionVideo/> */}
         </>
     );
 };

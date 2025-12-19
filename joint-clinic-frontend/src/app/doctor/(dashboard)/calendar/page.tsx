@@ -51,7 +51,7 @@ const CalendarPage = () => {
       </DashBoardHeader>
 
       <main className="w-full flex-1 flex flex-col justify-center items-center gap-6 overflow-hidden p-1">
-        <div className="grid grid-cols-2 w-full">
+        <div className="flex flex-col-reverse lg:grid lg:grid-cols-2 w-full gap-4 lg:gap-0">
           <div className=" flex flex-col w-full gap-6">
             <div className="flex flex-col gap-2 self-start">
               <Typography
@@ -64,13 +64,12 @@ const CalendarPage = () => {
                 <Typography text="Please note that these bookings are for the upcoming week only" variant="bodyRegular" className="text-[#8A8A8A] text-sm" />
               )}
             </div>
-              <div className="flex flex-col md:flex-row justify-start items-center gap-4 min-w-full">
-                {/* Filters */}
-                {activeTab === "upcoming" && ["Today", "This Week", "This Month"].map((f) => (
-                <div className="flex gap-4 items-start w-fit">
+            <div className="flex flex-col sm:flex-row justify-start items-start sm:items-center gap-4 min-w-full">
+              {/* Filters */}
+              {activeTab === "upcoming" && ["Today", "This Week", "This Month"].map((f) => (
+                <div key={f} className="flex gap-4 items-start w-fit">
 
                   <button
-                    key={f}
                     onClick={() => setFilter(f as any)}
                     className={`px-6 py-2 rounded-full font-bold text-sm transition-colors border ${filter === f
                       ? "bg-[#1E5598] text-white border-[#1E5598]"
@@ -80,15 +79,16 @@ const CalendarPage = () => {
                     {f}
                   </button>
                 </div>))}
-              </div>
+            </div>
           </div>
 
           {/* Search */}
-          <div className="w-full flex justify-end items-center">
+          <div className="w-full flex justify-end items-start lg:items-center">
             <SearchInput
               placeholder="Search By patient"
               value={searchTerm}
               onChange={(value) => setSearchTerm(value)}
+              className="w-full lg:w-auto"
             />
           </div>
         </div>

@@ -1,11 +1,9 @@
 import DashBoardHeader from "@/components/molecules/DashBoardHeader";
 import Typography from "@/components/atoms/Typography";
-import ProgressBar from "@/components/atoms/ProgressBar";
-import SummaryItem from "@/components/molecules/SummaryItem";
 import { color } from "@/lib/constants/colors";
 import { mockDashboardData as data } from "@/lib/data/dashboardData";
-import TaskList from "../../../../components/atoms/tasklist/tasklist";
 import RoleManage from "@/components/atoms/roleList/roleList";
+import DashBoardContent from "@/components/atoms/DashBoardContent";
 
 const Page = () => {
     const tasks = [
@@ -35,20 +33,14 @@ const Page = () => {
     return (
         <>
             <DashBoardHeader therapyName={data.therapyName} nav={false} />
-            <main className="w-full h-full flex flex-col gap-6 p-4 md:p-8 overflow-y-auto custom-scrollbar">
-                {/* Welcome Section */}
-                <div className="flex flex-row gap-2 justify-between w-full items-center">
-                    <Typography text="CMS" variant="heading1" style={{
-                        color: color.secondary,
-                        fontWeight: "bold",
-                        fontSize: "45px"
-                    }} />                
+            <DashBoardContent>
+                <div className="flex flex-col md:flex-row gap-2 justify-between w-full items-start md:items-center">
+                    <Typography text="CMS" variant="heading1" className="text-[32px] md:text-[45px] font-bold text-secondary" />
                 </div>
-                <div className="flex flex-row gap-4 w-full">
+                <div className="flex flex-col md:flex-row gap-4 w-full">
                     <RoleManage title="Doctor/staff Name" major="Doctors" count={3} />
-                </div>                            
-
-            </main>
+                </div>
+            </DashBoardContent>
         </>
     );
 };

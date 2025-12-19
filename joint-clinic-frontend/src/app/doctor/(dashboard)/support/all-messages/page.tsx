@@ -47,46 +47,32 @@ const AllMessagesPage = () => {
                 <Typography text="All Messages" variant="subheader" className="text-[#1c9a55]" />
             </DashBoardHeader>
 
-            <main className="w-full flex-1 h-[95%] flex flex-col gap-6 p-1 overflow-hidden">
-                <CorneredBoxes type="shadowBox" className="w-full h-full bg-white rounded-[30px] grid grid-cols-3 overflow-hidden relative items-stretch justify-items-stretch text-left">
+            <main className="w-full h-full flex-1 flex flex-col gap-6 p-1 overflow-hidden">
+                <CorneredBoxes type="shadowBox" className="w-full h-full bg-white rounded-[30px] relative overflow-hidden text-left">
 
-                    {/* Sidebar: 
-                        - Mobile: Hidden if patient selected
-                        - Desktop: Always visible (w-1/3)
-                    */}
+                    {/* Sidebar: Drawer behavior in all screens */}
                     <ChatSidebar
                         patients={filteredPatients}
                         searchTerm={searchTerm}
                         onSearchChange={setSearchTerm}
                         onSelectPatient={handleSelectPatient}
                         activePatientId={selectedPatientId}
-                        className={`w-full min-w-[300px] border-r border-gray-200 transition-all duration-300 md:relative bg-white z-10
-                            ${selectedPatientId !== null ? '-translate-x-full md:translate-x-0' : 'translate-x-0'}
+                        className={`absolute inset-0 w-full h-full bg-white z-10 transition-transform duration-300
+                            ${selectedPatientId !== null ? '-translate-x-full' : 'translate-x-0'}
                         `}
                     />
 
-                    {/* Chat Window:
-                        - Mobile: Visible if patient selected (slide in or just replace)
-                        - Desktop: Always visible (flex-1)
-                    */}
+                    {/* Chat Window: Slides in when patient selected */}
                     <ChatWindow
                         messages={chatMessages}
                         patientName={patients.find(p => p.id === selectedPatientId)?.name || "Select a Patient"}
                         messageInput={messageInput}
                         onInputChange={setMessageInput}
                         onBack={handleBackToList}
-                        className={`w-full md:flex-1 md:relative bg-white z-20 col-span-2 transition-all duration-300
-                             ${selectedPatientId !== null ? 'translate-x-0' : 'translate-x-full md:translate-x-0'}
+                        className={`absolute inset-0 w-full h-full bg-white z-20 transition-transform duration-300
+                             ${selectedPatientId !== null ? 'translate-x-0' : 'translate-x-full'}
                         `}
                     />
-
-                    {/* Desktop Empty State (Optional, but here we just show ChatWindow by default for design match or empty) 
-                        For now, the logic above keeps ChatWindow visible on Desktop even if null, but maybe we want an empty state?
-                        Design image shows a pre-selected chat. We can default to first patient or just show empty.
-                        The logic above: 
-                        - Desktop: Sidebar is static. ChatWindow is static. 
-                        - Mobile: Sidebar slides out, ChatWindow slides in.
-                    */}
 
                 </CorneredBoxes>
             </main>

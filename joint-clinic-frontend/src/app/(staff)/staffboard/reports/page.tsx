@@ -6,6 +6,7 @@ import Link from 'next/link';
 import ReportList from "@/components/organisms/Reports/ReportList";
 import ReportsHistory from "@/components/organisms/Reports/ReportsHistory";
 import { color } from 'framer-motion';
+import DashBoardContent from '@/components/atoms/DashBoardContent';
 
 const ReportsPage = () => {
   const [activeTab, setActiveTab] = useState<"view" | "history">("view");
@@ -35,19 +36,19 @@ const ReportsPage = () => {
     <>
       <DashBoardHeader therapyName="Shoulder Therapy" />
 
-      <main className="w-full h-full flex flex-col gap-4 p-4 md:p-8 overflow-y-auto custom-scrollbar">
+      <DashBoardContent>
         {activeTab === "view" ? (
           <>
-            <div className="flex flex-row gap-[30px] items-center px-[30px]">
+            <div className="flex flex-col md:flex-row gap-4 md:gap-[30px] items-start md:items-center px-0 md:px-[30px]">
               <Typography text="Reports" variant="heading2" className="bg-gradient-to-b from-[#0D294D] to-[#1E5598] bg-clip-text text-transparent font-bold mb-2" />
-              <p className={`text-[20px] font-medium text-[#167c4f] w-[200px]`}>Patient Name</p>
+              <p className={`text-[20px] font-medium text-[#167c4f] w-full md:w-[200px]`}>Patient Name</p>
             </div>
             <ReportList reports={reports} type="staff" />
           </>
         ) : (
           <ReportsHistory />
         )}
-      </main>
+      </DashBoardContent>
     </>
   )
 }

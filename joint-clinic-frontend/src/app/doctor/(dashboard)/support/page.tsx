@@ -22,7 +22,7 @@ const SupportPage = () => {
             <main className="w-full flex-1 flex flex-col gap-6 overflow-hidden p-1">
                 <Typography text="Patient Communication" variant="heading2" gradient={true} className="font-bold text-3xl" />
 
-                <CorneredBoxes type="shadowBox" className="w-full h-full bg-white p-8 rounded-[30px] flex flex-col relative">
+                <CorneredBoxes type="shadowBox" className="w-full h-full bg-white p-4 md:p-8 rounded-[30px] flex flex-col relative">
                     <Typography text="All Messages" variant="subheader" className="text-[#167C4F] font-bold mb-8 self-start" />
 
                     <div className="flex flex-col gap-6 w-full">

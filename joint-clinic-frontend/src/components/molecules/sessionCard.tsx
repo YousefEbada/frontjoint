@@ -12,6 +12,7 @@ type SessionCardProps = {
     minutes?: number;
     noLink?: boolean;
     className?: string;
+    onClick?: () => void;
 };
 
 const statusColors: Record<string, string> = {
@@ -29,6 +30,7 @@ const SessionCard: React.FC<SessionCardProps> = ({
     minutes,
     className = "",
     noLink = false,
+    onClick,
 }) => {
     // لو الـ className فيه w- أو h- ما نحطّش المقاس الافتراضي
     const hasCustomWidth = /\bw-/.test(className);
@@ -51,6 +53,7 @@ const SessionCard: React.FC<SessionCardProps> = ({
         ${className}
         ${id ? "cursor-pointer hover:scale-[1.02] transition-transform duration-200" : ""}
       `}
+            onClick={onClick}
         >
             {/* الصورة */}
             <div className="rounded-[20px] overflow-hidden w-full aspect-video md:aspect-[4/3] relative">
@@ -77,7 +80,7 @@ const SessionCard: React.FC<SessionCardProps> = ({
         </div>
     );
 
-    if (id && !noLink) {
+    if (id && !noLink && !onClick) {
         return <Link href={`/patient/exercises/${id}`}>{CardContent}</Link>;
     }
 

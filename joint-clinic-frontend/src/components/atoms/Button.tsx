@@ -56,12 +56,12 @@ const Button: React.FC<ButtonProps> = ({ text, variant, onClick, className = "",
         ${ibm.className}
         font-bold
         ${defaultWidth}
-        h-[50px]
+        sm:h-[50px]
         rounded-[48px]
         text-center 
         text-[13px] sm:text-[20px] md:text-[22px]
-        border-[3px]
-        py-[8px] px-[12px] sm:px-[32px]
+        border md:border-[3px]
+        sm:py-[8px] sm:px-[32px]
         cursor-pointer
         transition
         leading-[115%]

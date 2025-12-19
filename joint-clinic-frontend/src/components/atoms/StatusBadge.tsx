@@ -3,9 +3,10 @@ import Typography from "./Typography";
 
 interface StatusBadgeProps {
     status: "Confirmed" | "Pending" | "Cancelled" | "Ready" | "In progress" | "Uploaded" | "Waiting";
+    className?: string;
 }
 
-const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
+const StatusBadge: React.FC<StatusBadgeProps> = ({ status, className = "" }) => {
     const colors = {
         Confirmed: "text-[#167c4f]", // Green
         Pending: "text-[#FDB515]",   // Orange/Yellow
@@ -20,7 +21,7 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
         <Typography
             text={status}
             variant="bodyBold"
-            className={`${colors[status]} font-bold`}
+            className={`${colors[status]} font-bold ${className}`}
         />
     );
 };

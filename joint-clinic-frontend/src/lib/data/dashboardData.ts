@@ -33,14 +33,14 @@ export const mockDashboardData: DashboardData = {
       subtitle: "Shoulder therapy session",
       status: "Done",
       date: "Today",
-      time: "Tuesday at 4:00 pm",
+      time: "Oct 12 - 4:00Pm",
     },
     {
       title: "Exercise 13",
       subtitle: "Shoulder therapy session",
       status: "Pending",
       date: "Tomorrow",
-      time: "Wednesday at 10:00 am",
+      time: "Oct 12 - 3:00Pm",
     },
   ],
 };

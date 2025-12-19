@@ -7,6 +7,7 @@ import Calendar from "@/components/atoms/icons/Calendar";
 import Clients from "@/components/atoms/icons/clients";
 import Report from "@/components/atoms/icons/Report";
 import Support from "@/components/atoms/icons/Support";
+import DashboardContentWrapper from "@/components/templates/DashboardContentWrapper";
 
 export default function StaffLayout({
     children,
@@ -28,9 +29,9 @@ export default function StaffLayout({
             }}
         >
             <SideBar navItems={navItems} />
-            <CorneredBoxes type="shadowBox" className="relative w-full h-[calc(100vh-140px)] md:h-[88.2vh] p-6 sm:p-8 md:p-12 md:pl-28">
+            <DashboardContentWrapper>
                 {children}
-            </CorneredBoxes>
+            </DashboardContentWrapper>
 
         </section>
     );

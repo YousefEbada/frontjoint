@@ -17,8 +17,9 @@ interface BookingListProps {
 
 const BookingList: React.FC<BookingListProps> = ({ bookings }) => {
     return (
-        <div className="w-full bg-white rounded-[24px] shadow-sm p-6 md:p-8 h-[400px] overflow-y-auto custom-scrollbar">
+        <section className="flex flex-col gap-y-2 md:gap-y-8 w-full overflow-y-auto custom-scrollbar">
             {bookings.map((booking) => (
+                <>
                 <BookingItem
                     key={booking.id}
                     sessionNumber={booking.sessionNumber}
@@ -29,8 +30,10 @@ const BookingList: React.FC<BookingListProps> = ({ bookings }) => {
                     onCancel={() => console.log("Cancel", booking.id)}
                     onReschedule={() => console.log("Reschedule", booking.id)}
                 />
+                <div className="md:h-[1px] md:w-full md:bg-black"></div>
+                </>
             ))}
-        </div>
+        </section>
     );
 };
 
