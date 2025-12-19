@@ -8,27 +8,37 @@ import { GetPatientDashboard } from "modules/patient/application/use-cases/GetPa
 import { UpdatePatient } from "modules/patient/application/use-cases/UpdatePatient";
 
 
-export async function getPatient(req: Request, res: Response) {
-    const { type, value, id } = req.query;
-    const uc = new GetPatient(resolve(PATIENT_REPO));
-    const result = await uc.exec(id as string);
-    if (result.ok) {
-        res.status(200).json(result);
-    } else {
-        console.error("[getPatient] Error:", result.error);
-        res.status(404).json({ error: result.error });
+export async function getPatientById(req: Request, res: Response) {
+    const { userId } = req.params;
+    try {
+        const uc = new GetPatient(resolve(PATIENT_REPO));
+        const result = await uc.exec(userId as string);
+        if (result.ok) {
+            res.status(200).json(result);
+        } else {
+            console.error("[getPatient] Error:", result.error);
+            res.status(404).json({ok: false, error: result.error });
+        }
+    } catch (error) {
+        console.error("[getPatient] There is an error in the patient controller", error);
+        res.status(500).json({ ok: false, error: "Something Went Wrong" });
     }
 }
 
 export async function getPatientDashboard(req: Request, res: Response) {
     const patientId = req.params.patientId;
-    const uc = new GetPatientDashboard(resolve(SESSION_REPO), resolve(TREATMENT_PLAN_REPO));
-    const result = await uc.exec(patientId);
-    if (result.ok) {
-        res.status(200).json(result);
-    } else {
-        console.error("[getPatientDashboard] Error:", result.error);
-        res.status(404).json({ error: result.error });
+    try {
+        const uc = new GetPatientDashboard(resolve(SESSION_REPO), resolve(TREATMENT_PLAN_REPO));
+        const result = await uc.exec(patientId);
+        if (result.ok) {
+            res.status(200).json(result);
+        } else {
+            console.error("[getPatientDashboard] Error:", result.error);
+            res.status(404).json({ok: false, error: result.error });
+        }
+    } catch (error) {
+        console.error("[getPatientDashboard] There is an error in the patient controller", error);
+        res.status(500).json({ ok: false, error: "Something Went Wrong" });
     }
 }
 

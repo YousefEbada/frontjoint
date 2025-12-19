@@ -24,30 +24,6 @@ const InjuryDetailsSchema = new Schema({
   medicalReports: [String]
 });
 
-// const SessionSchema = new Schema({
-//   name: { type: String, required: true },
-//   scheduledFor: { type: Date, required: true },
-//   status: {
-//     type: String,
-//     enum: ['pending', 'completed', 'cancelled'],
-//     default: 'pending'
-//   },
-//   completedAt: Date
-// });
-
-// this will be coming from booking
-
-// const WeeklyPlanSchema = new Schema({
-//   weekNumber: { type: Number, required: true },
-//   exercises: [ExerciseSchema],
-//   plannedBookings: [{
-//     type: Schema.Types.ObjectId,
-//     ref: 'Booking'
-//   }],
-//   startDate: Date,
-//   endDate: Date
-// });
-
 const PatientSchema = new Schema({
   userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
   nixpendId: { type: String, required: true, unique: true },
@@ -58,16 +34,7 @@ const PatientSchema = new Schema({
   allergies: [String],
   medicalHistory: [String],
   injuryDetails: InjuryDetailsSchema,
-  // progress: {
-  //   totalSessions: { type: Number, default: 0 },
-  //   sessionsCompleted: { type: Number, default: 0 },
-  //   totalExercises: { type: Number, default: 0 },
-  //   exercisesCompleted: { type: Number, default: 0 },
-  //   treatmentLengthWeeks: { type: Number, default: 0 },
-  //   treatmentStartDate: Date,
-  //   currentWeek: { type: Number, default: 1 }
-  // },
-  // weeklyPlans: [WeeklyPlanSchema],
+  status: { type: String, enum: ['active', 'inactive'], default: 'active' },
   notes: String
 }, { timestamps: true });
 

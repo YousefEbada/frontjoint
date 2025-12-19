@@ -1,33 +1,26 @@
 export interface Patient {
-    _id: string,
-    userId: string,
-    nixpendId: string,
-    guardianInformation: string,
-    medicalRecordNumber: String,
-    insuranceId: String,
-    bloodGroup: String,
-    allergies: [String],
-    injuryDetails: {
-        affectedArea: String,
-        startDate: Date,
-        receivedTreatment: Boolean,
-        painSeverity: Number,
-        howDidInjurHappened: String,
-        affectDailyActivities: Boolean,
-        additionalNotes: String,
+    _id?: string;
+    userId: string;
+    nixpendId: string;
+    guardianInformation?: string;
+    medicalRecordNumber?: string;
+    insuranceId?: string;
+    bloodGroup?: string;
+    allergies?: string[];
+    medicalHistory?: string[];
+    injuryDetails?: {
+        affectedArea?: string;
+        startDate?: Date;
+        receivedTreatment?: boolean;
+        painSeverity?: number; // 0-10 scale
+        howDidInjurHappened?: string;
+        affectDailyActivities?: boolean;
+        additionalNotes?: string;
         // check this from the report module and how to sync it
-        medicalReports: [String]
-    },
-    progress: {
-        totalSessions: Number,
-        sessionsCompleted: Number,
-        totalExercises: Number,
-        exercisesCompleted: Number,
-        treatmentLengthWeeks: Number,
-        treatmentStartDate: Date,
-        currentWeek: Number
-    },
-    //   check the medical history
-    medicalHistory: [String],
-    notes: String
+        medicalReports?: string[];
+    };
+    status?: 'active' | 'inactive';
+    notes?: string;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
