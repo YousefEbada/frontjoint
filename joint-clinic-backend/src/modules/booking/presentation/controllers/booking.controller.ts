@@ -7,8 +7,9 @@ import { CancelBooking } from '../../application/use-cases/CancelBooking.js';
 import { RescheduleBooking } from '../../application/use-cases/RescheduleBooking.js';
 import { BookingRepoPort } from '../../application/ports/BookingRepoPort.js';
 import { NixpendPort } from '../../../integration/ports/NixpendPorts.js';
-import { GetAvailableSlots } from 'modules/booking/application/use-cases/getAvailableSlots.js';
+import { GetAvailableSlots } from 'modules/booking/application/use-cases/GetAvailableSlots.js';
 import { BookType } from 'modules/integration/domain/Nixpend.js';
+import { SESSION_REPO } from 'app/container.bindings.js';
 
 const BOOKING_REPO = token<BookingRepoPort>('BOOKING_REPO');
 const NIXPEND_PORT = token<NixpendPort>('NIXPEND_PORT');
@@ -16,7 +17,7 @@ const NIXPEND_PORT = token<NixpendPort>('NIXPEND_PORT');
 export async function createBooking(req: Request, res: Response) {
   try {
     const input = CreateBookingSchema.parse(req.body);
-    const uc = new CreateBooking(resolve(BOOKING_REPO), resolve(NIXPEND_PORT));
+    const uc = new CreateBooking(resolve(BOOKING_REPO), resolve(NIXPEND_PORT), resolve(SESSION_REPO));
     const result = await uc.exec(input as BookType);
     
     if (result.ok) {

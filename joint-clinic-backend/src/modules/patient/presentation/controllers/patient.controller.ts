@@ -1,9 +1,10 @@
 import { resolve } from "app/container";
-import { NIXPEND_ADAPTER, PATIENT_REPO, USER_AUTH_REPO } from "app/container.bindings";
+import { NIXPEND_ADAPTER, PATIENT_REPO, SESSION_REPO, TREATMENT_PLAN_REPO, USER_AUTH_REPO } from "app/container.bindings";
 import { Request, Response } from "express";
 import { FetchType, UpdateType } from "modules/integration/domain/Nixpend";
 import { CreatePatient } from "modules/patient/application/use-cases/CreatePatient";
 import { GetPatient } from "modules/patient/application/use-cases/GetPatient";
+import { GetPatientDashboard } from "modules/patient/application/use-cases/GetPatientDashboard";
 import { UpdatePatient } from "modules/patient/application/use-cases/UpdatePatient";
 
 
@@ -15,6 +16,18 @@ export async function getPatient(req: Request, res: Response) {
         res.status(200).json(result);
     } else {
         console.error("[getPatient] Error:", result.error);
+        res.status(404).json({ error: result.error });
+    }
+}
+
+export async function getPatientDashboard(req: Request, res: Response) {
+    const patientId = req.params.patientId;
+    const uc = new GetPatientDashboard(resolve(SESSION_REPO), resolve(TREATMENT_PLAN_REPO));
+    const result = await uc.exec(patientId);
+    if (result.ok) {
+        res.status(200).json(result);
+    } else {
+        console.error("[getPatientDashboard] Error:", result.error);
         res.status(404).json({ error: result.error });
     }
 }
@@ -33,10 +46,9 @@ export async function updatePatient (req: Request, res: Response) {
 }
 
 export async function createPatient(req: Request, res: Response) {
-    const id = req.params.userId;
-    const data = req.body;
+    const {userId, data} = req.body;
     const uc = new CreatePatient(resolve(PATIENT_REPO), resolve(NIXPEND_ADAPTER), resolve(USER_AUTH_REPO));
-    const result = await uc.exec(id, data);
+    const result = await uc.exec(userId, data);
     if (result.ok) {
         res.status(201).json(result);
     } else {

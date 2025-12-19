@@ -58,15 +58,15 @@ const PatientSchema = new Schema({
   allergies: [String],
   medicalHistory: [String],
   injuryDetails: InjuryDetailsSchema,
-  progress: {
-    totalSessions: { type: Number, default: 0 },
-    sessionsCompleted: { type: Number, default: 0 },
-    totalExercises: { type: Number, default: 0 },
-    exercisesCompleted: { type: Number, default: 0 },
-    treatmentLengthWeeks: { type: Number, default: 0 },
-    treatmentStartDate: Date,
-    currentWeek: { type: Number, default: 1 }
-  },
+  // progress: {
+  //   totalSessions: { type: Number, default: 0 },
+  //   sessionsCompleted: { type: Number, default: 0 },
+  //   totalExercises: { type: Number, default: 0 },
+  //   exercisesCompleted: { type: Number, default: 0 },
+  //   treatmentLengthWeeks: { type: Number, default: 0 },
+  //   treatmentStartDate: Date,
+  //   currentWeek: { type: Number, default: 1 }
+  // },
   // weeklyPlans: [WeeklyPlanSchema],
   notes: String
 }, { timestamps: true });

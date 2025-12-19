@@ -26,18 +26,22 @@ const bookingLimiter = rateLimit({
 bookingRoutes.use(bookingLimiter);
 // bookingRoutes.use(auth); // Uncomment when auth middleware is ready
 
-// Booking operations
+// Booking operations (I will refactor these later)
+// This is important for creating and getAvailable slots
+// ensure you handle double bookings 
 bookingRoutes.post('/', createBooking);
+bookingRoutes.get('/doctor/:doctorId/slots', getAvailableSlots);
+
+// i will see this later
 bookingRoutes.get('/:id', getBookingById);
 bookingRoutes.put('/:id/cancel', cancelBooking);
 bookingRoutes.put('/:id/reschedule', rescheduleBooking);
 bookingRoutes.patch('/:id/status', updateBookingStatus);
 
-// Calendar and availability
+// Calendar and availability (I will refactor these later)
 bookingRoutes.get('/calendar/doctor/:doctorId', getCalendar);
-bookingRoutes.get('/doctor/:doctorId/slots', getAvailableSlots);
 bookingRoutes.get('/doctor/:doctorId/bookings', getDoctorBookings);
 
-// Legacy routes (for backward compatibility)
+// Legacy routes for backward compatibility
 bookingRoutes.post('/book', createBooking);
 bookingRoutes.get('/calendar', getCalendar);

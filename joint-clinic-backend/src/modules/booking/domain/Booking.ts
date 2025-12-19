@@ -1,3 +1,5 @@
+import { Schema } from "mongoose";
+
 export type BookingStatus = 'confirmed' | 'rescheduled' | 'cancelled' | 'noShow' | 'inProgress' | 'pending';
 export type BookingType = 'consultation' | 'followUp' | 'emergency' | 'session';
 
@@ -6,6 +8,7 @@ export interface Booking {
   patientId: string;
   doctorId: string;
   branchId?: string;
+  sessionId?: string | Schema.Types.ObjectId | null;
   eventName: string;
   appointmentNixpendId: string;
   appointmentDate: Date;

@@ -1,9 +1,9 @@
 import { Booking } from '../../domain/Booking.js';
 export interface BookingRepoPort {
   findById(id: string): Promise<Booking | null>;
-  book(b: Omit<Booking, '_id'|'createdAt'|'updatedAt'|'status'|'reminder24hSent'|'reminder1hSent'>): Promise<Booking>;
-  reschedule(b: Omit<Partial<Booking>, 'createdAt'|'updatedAt'>): Promise<Booking>;
-  cancel(b: Booking): Promise<Boolean>
+  book(b: Omit<Booking, '_id'|'createdAt'|'updatedAt'|'status'|'reminder24hSent'|'reminder1hSent'>, options?: { tx?: any }): Promise<Booking>;
+  reschedule(b: Omit<Partial<Booking>, 'createdAt'|'updatedAt'>, options?: { tx?: any }): Promise<Booking>;
+  cancel(b: Booking, options?: { tx?: any }): Promise<Boolean>
   // I should put reminders here
   findBookingsByDoctorAndDay(doctorId: string, day: Date): Promise<Booking[]>;
   findBookingsByDoctorAndWeek(doctorId: string, weekStart: Date): Promise<Booking[]>;
