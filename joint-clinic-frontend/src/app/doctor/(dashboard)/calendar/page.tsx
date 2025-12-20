@@ -9,6 +9,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import ScrollableArea from "@/components/atoms/ScrollableArea";
+import DashBoardContent from "@/components/atoms/DashBoardContent";
+import Button from "@/components/atoms/Button";
 
 const allBookings = Array.from({ length: 15 }, (_, i) => ({
   id: i + 1,
@@ -50,7 +52,7 @@ const CalendarPage = () => {
         </div>
       </DashBoardHeader>
 
-      <main className="w-full flex-1 flex flex-col justify-center items-center gap-6 overflow-hidden p-1">
+      <DashBoardContent>
         <div className="flex flex-col-reverse lg:grid lg:grid-cols-2 w-full gap-4 lg:gap-0">
           <div className=" flex flex-col w-full gap-6">
             <div className="flex flex-col gap-2 self-start">
@@ -64,20 +66,18 @@ const CalendarPage = () => {
                 <Typography text="Please note that these bookings are for the upcoming week only" variant="bodyRegular" className="text-[#8A8A8A] text-sm" />
               )}
             </div>
-            <div className="flex flex-col sm:flex-row justify-start items-start sm:items-center gap-4 min-w-full">
+            <div className="flex flex-row justify-start items-start sm:items-center gap-4 min-w-full">
               {/* Filters */}
               {activeTab === "upcoming" && ["Today", "This Week", "This Month"].map((f) => (
                 <div key={f} className="flex gap-4 items-start w-fit">
 
-                  <button
+                  <Button
                     onClick={() => setFilter(f as any)}
-                    className={`px-6 py-2 rounded-full font-bold text-sm transition-colors border ${filter === f
-                      ? "bg-[#1E5598] text-white border-[#1E5598]"
-                      : "bg-white text-[#1E5598] border-[#1E5598] hover:bg-[#EAF2FF]"
-                      }`}
-                  >
-                    {f}
-                  </button>
+                    text={f}
+                    variant="primary"
+                    active={filter === f}
+                    className="rounded-full! text-sm! border!"
+                  />
                 </div>))}
             </div>
           </div>
@@ -93,11 +93,11 @@ const CalendarPage = () => {
           </div>
         </div>
 
-        <CorneredBoxes type="shadowBox" className="w-[90%] h-full flex-1 bg-white p-6 flex flex-col gap-4 overflow-hidden">
+        <div className="w-full flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-y-2 md:block md:bg-white md:rounded-[24px] md:shadow-sm md:p-8">
           <ScrollableArea className="w-full px-2">
             {filteredBookings.length > 0 ? (
               filteredBookings.map((apt, index) => (
-                <div key={index} className="border-b border-gray-300 last:border-0 py-6">
+                <div key={index} className="md:border-b md:border-gray-300 last:border-0 py-2 md:py-6">
                   <AppointmentItem
                     name={apt.name}
                     status={apt.status}
@@ -112,8 +112,8 @@ const CalendarPage = () => {
               </div>
             )}
           </ScrollableArea>
-        </CorneredBoxes>
-      </main>
+        </div>
+      </DashBoardContent>
     </div>
   );
 };

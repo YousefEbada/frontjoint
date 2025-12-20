@@ -6,6 +6,7 @@ import CorneredBoxes from "@/components/atoms/CorneredBoxes";
 import Link from "next/link";
 import Button from "@/components/atoms/Button";
 import CustomSelect from "@/components/atoms/CustomSelect";
+import DashBoardContent from "@/components/atoms/DashBoardContent";
 
 const PatientExerciseProgressPage = ({ params }: { params: { id: string } }) => {
     const [isCancelling, setIsCancelling] = React.useState(false);
@@ -15,7 +16,7 @@ const PatientExerciseProgressPage = ({ params }: { params: { id: string } }) => 
         <div className="w-full h-full flex flex-col">
             <DashBoardHeader therapyName="" nav={false} />
 
-            <main className="w-full flex-1 flex flex-col gap-6 overflow-hidden p-1">
+            <DashBoardContent>
                 {isCancelling ? (
                     // Cancel View
                     <CorneredBoxes type="shadowBox" className="w-full h-full flex-1 bg-white p-6 md:p-10 flex flex-col items-center justify-center gap-12 overflow-hidden rounded-[30px]">
@@ -57,7 +58,7 @@ const PatientExerciseProgressPage = ({ params }: { params: { id: string } }) => 
                             <span className="text-[#1C9A55] font-bold text-lg">Active</span>
                         </div>
 
-                        <CorneredBoxes type="shadowBox" className="w-full h-full flex-1 bg-white p-6 md:p-10 flex flex-col gap-8 overflow-hidden rounded-[30px]">
+                        <div className="w-full flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-y-2 md:block md:bg-white md:rounded-[24px] md:shadow-sm md:p-8">
                             <div className="flex flex-col gap-6 w-full">
                                 <div className="flex justify-between items-start">
                                     <Typography text="Back Injury" variant="heading2" className="text-[#1E5598] font-bold text-2xl" />
@@ -116,10 +117,10 @@ const PatientExerciseProgressPage = ({ params }: { params: { id: string } }) => 
                                     />
                                 </div>
                             </div>
-                        </CorneredBoxes>
+                        </div>
                     </>
                 )}
-            </main>
+            </DashBoardContent>
         </div>
     );
 };

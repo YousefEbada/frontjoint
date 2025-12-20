@@ -4,6 +4,7 @@ import DashBoardHeader from "@/components/molecules/DashBoardHeader";
 import Typography from "@/components/atoms/Typography";
 import CorneredBoxes from "@/components/atoms/CorneredBoxes";
 import Link from "next/link";
+import DashBoardContent from "@/components/atoms/DashBoardContent";
 
 const PersonalDetailsPage = ({ params }: { params: { id: string } }) => {
     // Mock Data
@@ -29,9 +30,9 @@ const PersonalDetailsPage = ({ params }: { params: { id: string } }) => {
         <div className="w-full h-full flex flex-col">
             <DashBoardHeader therapyName="" nav={false} />
 
-            <main className="w-full flex-1 h-[95%] flex flex-col gap-6 p-1">
+            <DashBoardContent>
                 {/* Header Information Box */}
-                <CorneredBoxes type="shadowBox" className="w-full h-[95%] bg-white p-6 rounded-[30px] flex justify-between items-start">
+                <div className="w-full flex-1 overflow-y-auto overflow-x-visible custom-scrollbar flex flex-col gap-y-2 md:block md:bg-white md:rounded-[24px] md:shadow-sm md:p-8">
                     <div className="flex flex-col sm:flex-row w-full justify-between">
                         <div className="flex flex-col gap-1 w-fit">
                             <Typography text={patient.name} variant="heading2" className="text-[#1E5598] font-bold text-3xl" />
@@ -39,8 +40,8 @@ const PersonalDetailsPage = ({ params }: { params: { id: string } }) => {
                             <Typography text={patient.nationalId} variant="bodyRegular" className="text-[#1C9A55] font-bold" />
                         </div>
 
-                        <div className="flex flex-col gap-1 w-fit items-end pt-2">
-                            <div className="flex gap-12">
+                        <div className="flex flex-col gap-1 w-full md:w-fit items-end pt-2">
+                            <div className="flex gap-12 w-full justify-between">
                                 <Typography text="Status:" variant="bodyBold" className="text-[#1E5598] font-bold" />
                                 <span className={`${patient.statusColor} font-bold`}>{patient.status}</span>
                             </div>
@@ -60,7 +61,7 @@ const PersonalDetailsPage = ({ params }: { params: { id: string } }) => {
                     <div className="flex flex-col md:flex-row gap-6 w-full h-full flex-1 overflow-hidden pb-4">
 
                         {/* Left Card: Personal Details */}
-                        <CorneredBoxes type="shadowBox" className="flex-1 bg-white p-8 rounded-[30px] h-full flex flex-col relative">
+                        <CorneredBoxes type="shadowBox" className="flex-1 bg-white p-8 rounded-[30px] h-full w-full shadow-sm! flex flex-col relative">
                             <Typography text="Personal Details" variant="subheader" className="text-[#167C4F] font-bold mb-6" /> {/* Green title as per image */}
 
                             <div className="flex flex-col gap-4 flex-1">
@@ -81,7 +82,7 @@ const PersonalDetailsPage = ({ params }: { params: { id: string } }) => {
                         </CorneredBoxes>
 
                         {/* Right Card: Diagnosis */}
-                        <CorneredBoxes type="shadowBox" className="flex-1 bg-white p-8 rounded-[30px] h-full flex flex-col relative">
+                        <CorneredBoxes type="shadowBox" className="flex-1 bg-white p-8 rounded-[30px] h-full w-full shadow-sm flex flex-col relative">
                             <Typography text="Diagnosis" variant="subheader" className="text-[#167C4F] font-bold mb-6" />
 
                             <div className="flex-1">
@@ -89,17 +90,17 @@ const PersonalDetailsPage = ({ params }: { params: { id: string } }) => {
                             </div>
 
                             {/* Back Button */}
-                            <div className="flex justify-end mt-auto">
+                            <div className="flex justify-center md:justify-end w-full mt-auto">
                                 <Link href={`/doctor/patients/${params.id}`}>
-                                    <button className="border border-[#1E5598] text-[#1E5598] rounded-full px-8 py-2 font-bold hover:bg-[#1E5598] hover:text-white transition-colors">
+                                    <button className="border border-[#1E5598] text-[#1E5598] rounded-full px-8 py-2 font-bold hover:bg-[#1E5598] hover:text-white transition-colors md:self-end">
                                         Back
                                     </button>
                                 </Link>
                             </div>
                         </CorneredBoxes>
                     </div>
-                </CorneredBoxes>
-            </main>
+                </div>
+            </DashBoardContent>
         </div>
     );
 };

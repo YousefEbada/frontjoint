@@ -44,9 +44,10 @@ const Button: React.FC<ButtonProps> = ({ text, variant, onClick, className = "",
 
     /* ⚡ لو active true نطبّق hover classes يدويًا */
     const activeStyle = {
-        primary: "text-[#9fd5e2] bg-[#1e5598] border-[#1e5598]",
+        primary: "text-white bg-[#1e5598] border-[#1e5598]",
         secondary: "text-[#696969] bg-[#ababab] border-[#ababab]",
         third: "text-[#1e5598] bg-[#fdb515] border-[#fdb515]",
+        fourth: "text-[#1e5598] bg-[#fdb515] border-[#fdb515]",
     };
 
     return (
@@ -61,13 +62,13 @@ const Button: React.FC<ButtonProps> = ({ text, variant, onClick, className = "",
         text-center 
         text-[13px] sm:text-[20px] md:text-[22px]
         border md:border-[3px]
-        sm:py-[8px] sm:px-[32px]
+        px-2 sm:py-[8px] sm:px-[32px]
         cursor-pointer
         transition
         leading-[115%]
         m-0
 
-        ${variants[variant]}
+        ${active ? activeStyle[variant] : variants[variant]}
         ${className}
         `}
         >
@@ -75,9 +76,9 @@ const Button: React.FC<ButtonProps> = ({ text, variant, onClick, className = "",
                 text={text}
                 variant="bodyBold"
                 style={{
-                    
+
                 }}
-            /> 
+            />
         </button>
     );
 };

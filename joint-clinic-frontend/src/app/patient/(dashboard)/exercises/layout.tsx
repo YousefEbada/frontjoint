@@ -7,6 +7,7 @@ import DashBoardHeader from "@/components/molecules/DashBoardHeader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretLeft } from "@fortawesome/free-solid-svg-icons";
 import { mockDashboardData as data } from "@/lib/data/dashboardData";
+import DashBoardContent from "@/components/atoms/DashBoardContent";
 
 export default function ExercisesLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
@@ -37,9 +38,9 @@ export default function ExercisesLayout({ children }: { children: React.ReactNod
                 </div>
             </DashBoardHeader>
 
-            <div className="flex-1 overflow-hidden">
+            <DashBoardContent>
                 {children}
-            </div>
+            </DashBoardContent>
         </div>
     );
 }

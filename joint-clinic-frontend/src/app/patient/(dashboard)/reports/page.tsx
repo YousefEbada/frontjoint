@@ -5,6 +5,7 @@ import Typography from "@/components/atoms/Typography";
 import Link from 'next/link';
 import ReportList from "@/components/organisms/Reports/ReportList";
 import ReportsHistory from "@/components/organisms/Reports/ReportsHistory";
+import DashBoardContent from '@/components/atoms/DashBoardContent';
 
 const ReportsPage = () => {
   const [activeTab, setActiveTab] = useState<"view" | "history">("view");
@@ -51,7 +52,7 @@ const ReportsPage = () => {
         </div>
       </DashBoardHeader>
 
-      <main className="w-full h-full flex flex-col gap-4 p-4 md:p-8 overflow-y-auto custom-scrollbar">
+      <DashBoardContent>
         {activeTab === "view" ? (
           <>
             <Typography text="Reports" variant="heading2" className="text-[#0D294D] font-bold text-3xl mb-2" />
@@ -60,7 +61,7 @@ const ReportsPage = () => {
         ) : (
           <ReportsHistory />
         )}
-      </main>
+      </DashBoardContent>
     </>
   )
 }

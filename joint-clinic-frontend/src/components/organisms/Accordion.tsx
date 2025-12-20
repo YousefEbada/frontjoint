@@ -13,7 +13,7 @@ interface AccordionProps {
 
 const Accordion: React.FC<AccordionProps> = ({ items }) => {
     return (
-        <div className="w-full bg-white rounded-2xl shadow-sm p-6">
+        <div className="w-full md:bg-white md:rounded-2xl md:shadow-sm md:p-6">
             {items.map((item, index) => (
                 <AccordionItem
                     key={index}

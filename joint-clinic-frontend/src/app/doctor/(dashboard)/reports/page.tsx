@@ -7,6 +7,7 @@ import SearchInput from "@/components/atoms/searchInput";
 import ScrollableArea from "@/components/atoms/ScrollableArea";
 import PatientCard from "@/components/molecules/PatientCard";
 import Link from "next/link";
+import DashBoardContent from "@/components/atoms/DashBoardContent";
 
 // Mock Data
 const allPatients = Array.from({ length: 15 }, (_, i) => ({
@@ -29,12 +30,12 @@ const MedicalReportsPage = () => {
         <div className="w-full h-full flex flex-col">
             <DashBoardHeader therapyName="" nav={false} />
 
-            <main className="w-full flex-1 flex flex-col gap-6 overflow-hidden p-1">
+            <DashBoardContent>
                 <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                     <Typography
                         text="Medical Reports"
                         variant="heading2"
-                        className="font-bold text-3xl"
+                        className="font-bold text-3xl self-start"
                         gradient={true}
                     />
 
@@ -43,11 +44,12 @@ const MedicalReportsPage = () => {
                             placeholder="Search By Report or Patient"
                             value={searchTerm}
                             onChange={(value) => setSearchTerm(value)}
+                            className="w-full"
                         />
                     </div>
                 </div>
 
-                <CorneredBoxes type="shadowBox" className="w-full h-full flex-1 bg-white p-6 flex flex-col gap-4 overflow-hidden">
+                <div className="w-full flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-y-2 md:block md:bg-white md:rounded-[24px] md:shadow-sm md:p-8">
                     <ScrollableArea className="w-full h-full px-2">
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pb-4">
                             {filteredReports.length > 0 ? (
@@ -68,8 +70,8 @@ const MedicalReportsPage = () => {
                             )}
                         </div>
                     </ScrollableArea>
-                </CorneredBoxes>
-            </main>
+                </div>
+            </DashBoardContent>
         </div>
     );
 };

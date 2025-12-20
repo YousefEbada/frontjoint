@@ -6,8 +6,8 @@ import ExerciseAssignList from "@/components/organisms/ExerciseAssignList";
 
 // Mock Data for Appointments
 const appointments = [
-  { id: 1, name: "Patient 1", status: "Done", date: "Oct 12th 2025 at 3:00 Pm", statusColor: "text-[#1E5598]" },
-  { id: 2, name: "Patient 2", status: "Confirmed", date: "Oct 12th 2025 at 7:00 Pm", statusColor: "text-[#1C9A55]" },
+  { id: 1, name: "Patient 1", status: "Done", date: "Oct 12th - 3:00 Pm", statusColor: "text-[#1E5598]" },
+  { id: 2, name: "Patient 2", status: "Confirmed", date: "Oct 12th - 7:00 Pm", statusColor: "text-[#1C9A55]" },
 ];
 
 // Mock Data for Exercise Assigns

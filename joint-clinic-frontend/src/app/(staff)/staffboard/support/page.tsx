@@ -35,7 +35,10 @@ const SupportPage = () => {
 
         <>
           <Typography text="Call Requests" variant="heading2" className="bg-gradient-to-b from-[#0D294D] to-[#1E5598] bg-clip-text text-transparent font-bold mb-2 pl-[30px]" />
-          <div className="w-full bg-white rounded-[20px] shadow-[0px_10px_30px_10px_rgba(0,0,0,0.08)] p-5 overflow-y-auto custom-scrollbar">
+          <div className="w-full md:bg-white md:rounded-[20px] md:shadow-[0px_10px_30px_10px_rgba(0,0,0,0.08)] md:p-5 md:py-[40px] overflow-y-auto grid grid-cols-1gap-y-2 md:gap-4 custom-scrollbar">
+            <div className="hidden md:block">
+              <Typography text="All Messages" variant="heading2" className="text-[#167C4F]" />
+            </div>
             <RequestItem name="John Doe" status="Done" phone="123-456-7890" department="Cardiology" date="Oct 12th 2025 at 3:00 Pm"/>
             <RequestItem name="John Doe" status="Opened" phone="123-456-7890" department="Cardiology" date="Oct 12th 2025 at 3:00 Pm"/>
             <RequestItem name="John Doe" status="Done" phone="123-456-7890" department="Cardiology" date="Oct 12th 2025 at 3:00 Pm"/>

@@ -4,6 +4,7 @@ import Typography from '@/components/atoms/Typography';
 import Accordion from '@/components/organisms/Accordion';
 import DashBoardHeader from "@/components/molecules/DashBoardHeader";
 import SearchInput from '@/components/atoms/searchInput';
+import DashBoardContent from '@/components/atoms/DashBoardContent';
 
 const faqsData = {
     "Appointments & Scheduling": [
@@ -59,7 +60,7 @@ const FaqsPage = () => {
             <DashBoardHeader therapyName="Shoulder Therapy">
                 <Typography text="FAQs" variant="bodyRegular" className="text-gray-400" />
             </DashBoardHeader>
-            <main className="w-full h-full flex flex-col gap-8 p-4 md:p-8">
+            <DashBoardContent>
                 <div>
                     <Typography text="Frequently Asked Questions" variant="heading2" className="text-[#0D294D] font-bold text-3xl mb-6" />
                     <SearchInput
@@ -81,7 +82,7 @@ const FaqsPage = () => {
                         <Typography text="No results found." variant="bodyRegular" className="text-gray-500" />
                     )}
                 </div>
-            </main>
+            </DashBoardContent>
         </>
     );
 };

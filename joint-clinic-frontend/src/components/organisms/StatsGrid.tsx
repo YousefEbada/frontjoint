@@ -26,7 +26,7 @@ const StatsGrid: React.FC<StatsGridProps> = ({ title, items }) => {
                     style={{ color: color.secondary }}
                 />
             )}
-            <div className="grid grid-cols-2 gap-x-4 gap-y-4 md:gap-y-6 w-full">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4 md:gap-y-6 w-full">
                 {items.map((item, index) => {
                     // Logic for 3 items: First item spans 2 columns (full width of grid)
                     const isFirstOfThree = isThreeItems && index === 0;

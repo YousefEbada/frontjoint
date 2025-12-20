@@ -17,7 +17,7 @@ interface ProgressCardProps {
 
 const ProgressCard: React.FC<ProgressCardProps> = ({ percentage, stats }) => {
     return (
-        <div className="w-full bg-white rounded-[30px] shadow-[0_4px_20px_rgba(0,0,0,0.02)] p-6 md:p-8 flex flex-col gap-6">
+        <>
             <Typography
                 text="Progress"
                 variant="heading2"
@@ -32,7 +32,7 @@ const ProgressCard: React.FC<ProgressCardProps> = ({ percentage, stats }) => {
                 stats={stats}
                 className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-12 w-full"
             />
-        </div>
+        </>
     );
 };
 

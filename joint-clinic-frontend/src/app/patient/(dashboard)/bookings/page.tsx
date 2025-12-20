@@ -4,6 +4,7 @@ import Typography from "@/components/atoms/Typography";
 import Link from 'next/link';
 import BookingList from "@/components/organisms/Bookings/BookingList";
 import BookingStats from "@/components/molecules/BookingStats";
+import DashBoardContent from '@/components/atoms/DashBoardContent';
 
 const BookingsPage = () => {
     const bookings = [
@@ -42,21 +43,20 @@ const BookingsPage = () => {
                 <Typography text="My Bookings" variant="bodyRegular" className="text-[#1e5598] font-medium" />
             </DashBoardHeader>
 
-            <main className="w-full h-full flex flex-col gap-4 p-4 md:p-8 overflow-y-auto custom-scrollbar">
+            <DashBoardContent>
                 <Typography text="Dates" variant="heading2" className="text-[#0D294D] font-bold text-3xl mb-2" />
 
                 <BookingList bookings={bookings} />
 
-                <div className="mt-4">
+                <div className="mt-4 md:block hidden">
                     <Typography
                         text="Please note that the bookings can be rescheduled or cancelled at least 24 hours before the appointment"
                         variant="bodyRegular"
                         className="text-gray-400 text-sm mb-4"
                     />
-
-                    <BookingStats />
+                    <BookingStats/>
                 </div>
-            </main>
+            </DashBoardContent>
         </>
     )
 }

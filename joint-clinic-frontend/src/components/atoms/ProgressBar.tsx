@@ -12,7 +12,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ percentage, className = "" })
 
     return (
         <div
-            className={`w-full h-4 rounded-full overflow-hidden ${className}`}
+            className={`w-full h-6 md:h-8 rounded-full overflow-hidden ${className}`}
             style={{ backgroundColor: color.tertiary }}
         >
             <div

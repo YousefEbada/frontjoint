@@ -2,6 +2,7 @@
 import React from "react";
 import ProgressCard from "@/components/organisms/ProgressCard/ProgressCard";
 import DoctorDetails from "@/components/molecules/DoctorDetails";
+import DashBoardContent from "@/components/atoms/DashBoardContent";
 
 export default function MyProgressPage() {
     const stats = [
@@ -12,9 +13,12 @@ export default function MyProgressPage() {
     ];
 
     return (
-        <main className="w-full h-full flex flex-col gap-8 p-4 md:p-8 overflow-y-auto custom-scrollbar">
-            <ProgressCard percentage={35} stats={stats} />
-            <DoctorDetails />
-        </main>
+        <DashBoardContent>
+            <div className="w-full h-full md:bg-white md:rounded-[30px] md:shadow-[0_4px_20px_rgba(0,0,0,0.02)] md:p-8 flex flex-col gap-y-6 md:gap-6">
+                <ProgressCard percentage={35} stats={stats} />
+                <hr className=" bg-black h-px w-full" />
+                <DoctorDetails />
+            </div>
+        </DashBoardContent>
     );
 }

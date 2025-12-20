@@ -19,24 +19,25 @@ interface ExerciseAssignListProps {
 
 const ExerciseAssignList = ({ assigns }: ExerciseAssignListProps) => {
     return (
-        <section className="flex flex-col gap-6">
+        <section className="flex flex-col gap-6 h-full">
             <Typography
                 text="Exercise Assigns"
                 variant="heading2"
                 className="text-[#1E5598] font-bold text-2xl"
             />
 
-            <div className="flex flex-col gap-8">
+            <div className="w-full flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-y-2 md:block md:bg-white md:rounded-[24px] md:shadow-sm md:p-8">
                 {assigns.map((assign) => (
-                    <ExerciseAssignItem
-                        key={assign.id}
-                        name={assign.name}
-                        injury={assign.injury}
-                        due={assign.due}
-                        dueColor={assign.dueColor}
-                        isRead={assign.isRead}
-                        onAssign={() => console.log(`Assigned to ${assign.name}`)}
-                    />
+                    <div key={assign.id}>
+                        <ExerciseAssignItem
+                            name={assign.name}
+                            injury={assign.injury}
+                            due={assign.due}
+                            dueColor={assign.dueColor}
+                            isRead={assign.isRead}
+                            onAssign={() => console.log(`Assigned to ${assign.name}`)}
+                        />
+                    </div>
                 ))}
             </div>
         </section>

@@ -2,9 +2,9 @@
 import React from "react";
 import ReportItem from "@/components/molecules/ReportItem";
 
-interface Report {
+export interface Report {
     id: string;
-    reportName: string;  
+    reportName: string;
     status: "Ready" | "In progress" | "Pending" | "Uploaded" | "Waiting";
     dateInfo: string;
 }
@@ -16,16 +16,20 @@ interface ReportListProps {
 
 const ReportList: React.FC<ReportListProps> = ({ reports }) => {
     return (
-        <div className="w-full bg-white rounded-[24px] shadow-sm p-6 md:p-8 h-full overflow-y-auto custom-scrollbar">
+        <div className="w-full h-full overflow-y-auto custom-scrollbar flex flex-col gap-y-2 md:bg-white md:rounded-[24px] md:shadow-sm md:p-8 md:gap-y-8">
             {reports.map((report) => (
-                <ReportItem
-                    key={report.id}
-                    reportName={report.reportName}
-                    status={report.status}
-                    dateInfo={report.dateInfo}
-                    onView={() => console.log("View", report.id)}
-                    onDownload={() => console.log("Download", report.id)}
-                />
+                <>
+                    <div key={report.id}>
+                        <ReportItem
+                            reportName={report.reportName}
+                            status={report.status}
+                            dateInfo={report.dateInfo}
+                            onView={() => console.log("View", report.id)}
+                            onDownload={() => console.log("Download", report.id)}
+                        />
+                    </div>
+                    <hr className="hidden md:block w-full h-px bg-black" />
+                </>
             ))}
         </div>
     );

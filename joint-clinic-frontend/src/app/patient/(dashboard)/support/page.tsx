@@ -4,6 +4,7 @@ import Typography from '@/components/atoms/Typography';
 import DashBoardHeader from "@/components/molecules/DashBoardHeader";
 import ContactForm from "@/components/organisms/ContactForm";
 import RequestDoctorHelp from "@/components/organisms/RequestDoctorHelp";
+import DashBoardContent from '@/components/atoms/DashBoardContent';
 
 const SupportPage = () => {
     const [activeTab, setActiveTab] = useState<'call' | 'doctor'>('call');
@@ -28,7 +29,7 @@ const SupportPage = () => {
                     </div>
                 </div>
             </DashBoardHeader>
-            <main className="w-full h-full flex flex-col gap-8 p-4 md:p-8">
+            <DashBoardContent>
                 {activeTab === 'call' ? (
                     <>
                         <Typography text="Request Contact" variant="heading2" className="text-[#0D294D] font-bold text-3xl mb-2" />
@@ -37,7 +38,7 @@ const SupportPage = () => {
                 ) : (
                     <RequestDoctorHelp />
                 )}
-            </main>
+            </DashBoardContent>
         </>
     );
 };

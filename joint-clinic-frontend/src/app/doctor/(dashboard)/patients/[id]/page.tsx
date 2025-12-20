@@ -5,6 +5,8 @@ import Typography from "@/components/atoms/Typography";
 import CorneredBoxes from "@/components/atoms/CorneredBoxes";
 import Link from "next/link";
 import BackTo from "@/components/molecules/BackTo";
+import DashBoardContent from "@/components/atoms/DashBoardContent";
+import ProgressBar from "@/components/atoms/ProgressBar";
 
 const PatientDetailsPage = ({ params }: { params: { id: string } }) => {
     // Mock Data - in a real app, fetch based on params.id
@@ -23,20 +25,23 @@ const PatientDetailsPage = ({ params }: { params: { id: string } }) => {
     };
 
     return (
-        <div className="w-full h-full flex flex-col">
+        <>
             <DashBoardHeader therapyName="" nav={false}>
                 {/* DashBoardHeader handles the layout and Back button */}
             </DashBoardHeader>
 
-            <main className="w-full flex-1 flex flex-col gap-6 overflow-hidden p-1">
+            <DashBoardContent>
                 {/* Header Title Row */}
-                <div className="flex justify-between items-end">
+                <div className="hidden md:flex justify-between items-end">
                     <Typography text={patient.name} variant="heading2" className="font-bold text-3xl" gradient={true} />
                     <span className="text-[#1C9A55] font-bold text-lg">{patient.status}</span>
                 </div>
 
-                <CorneredBoxes type="shadowBox" className="w-full h-fit bg-white p-8 flex flex-col gap-8 rounded-[30px]">
-
+                <div className="w-full flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-y-2 md:block md:bg-white md:rounded-[24px] md:shadow-sm md:p-8">
+                    <div className="md:hidden flex justify-between items-end">
+                        <Typography text={patient.name} variant="heading2" className="font-bold text-3xl" gradient={true} />
+                        <span className="text-[#1C9A55] font-bold text-lg">{patient.status}</span>
+                    </div>
                     {/* Top Section */}
                     <div className="flex flex-col w-full gap-4">
                         <div className="flex justify-between w-full items-start">
@@ -46,18 +51,16 @@ const PatientDetailsPage = ({ params }: { params: { id: string } }) => {
                             </div>
                             <div className="flex flex-col gap-2 items-end">
                                 <Link href="#" className="underline text-[#1E5598] font-bold text-base">View Reports</Link>
-                                <Link href="#" className="underline text-[#1E5598] font-bold text-base">Assign New Exercise</Link>
+                                <Link href="#" className="hidden md:block underline text-[#1E5598] font-bold text-base">Assign New Exercise</Link>
                             </div>
                         </div>
 
                         {/* Progress Bar */}
-                        <div className="w-full bg-[#CFE8EA] rounded-full h-6 overflow-hidden">
-                            <div className="bg-[#94D0D6] h-full rounded-full" style={{ width: '40%' }}></div>
-                        </div>
+                        <ProgressBar percentage={40} className="my-4" />
                     </div>
 
                     {/* Stats Grid */}
-                    <div className="grid grid-cols-2 gap-y-6 gap-x-12 w-full">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 md:gap-y-6 gap-x-12 w-full py-6 md:py-0">
                         <div className="flex justify-between">
                             <Typography text="Number Of sessions:" variant="bodyBold" className="text-[#1E5598]" />
                             <Typography text={patient.sessions.toString()} variant="bodyBold" className="text-[#1C9A55]" />
@@ -92,23 +95,20 @@ const PatientDetailsPage = ({ params }: { params: { id: string } }) => {
                     <div className="w-full h-px bg-gray-200"></div>
 
                     {/* Bottom Section */}
-                    <div className="flex justify-between items-start w-full text-sm md:text-base">
-                        <div className="flex flex-col gap-2">
-                            <Typography text="Next Patient Appointment is on:" variant="bodyRegular" className="text-[#1E5598] font-bold" />
-                            <Typography text={patient.nextAppointment} variant="bodyRegular" className="text-[#1C9A55] font-bold" />
-                        </div>
-                        <div className="flex flex-col gap-2 items-end">
-                            <Typography text="Patient 's Next Exercise:" variant="bodyRegular" className="text-[#1E5598] font-bold" />
-                            <div className="flex gap-4 items-center">
-                                <Typography text={patient.nextExercise} variant="bodyRegular" className="text-[#1C9A55] font-bold" />
-                                <Link href="#" className="underline text-[#1E5598] font-bold">Cancel</Link>
-                            </div>
-                        </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 md:grid-rows-2 w-full h-[30%] md:h-[18%] text-sm md:text-base">
+                        <Typography text="Next Patient Appointment is on:" variant="bodyBold" className="text-[#1E5598] self-end md:self-auto" />
+                        <Typography text={patient.nextAppointment} variant="bodyBold" className="text-[#1C9A55] self-start md:self-auto md:row-start-2 md:col-start-1" />
+                        <Typography text="Patient 's Next Exercise:" variant="bodyBold" className="text-[#1E5598] self-end md:col-start-2 md:self-end" />
+                        <Typography text={patient.nextExercise} variant="bodyBold" className="text-[#1C9A55] self-start md:col-start-2 md:self-end" />
+                    </div>
+                    <div className="w-full flex justify-center md:justify-end">
+                        <Link href="#" className="underline text-[#1E5598] font-bold self-center md:self-end">Cancel</Link>
                     </div>
 
-                </CorneredBoxes>
-            </main>
-        </div>
+
+                </div>
+            </DashBoardContent>
+        </>
     );
 };
 
