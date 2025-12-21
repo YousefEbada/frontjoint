@@ -48,5 +48,21 @@ export const PatientRepoMongo: PatientRepoPort = {
             console.error("[PatientRepoMongo.createPatient] DB error:", (error as any).message);
             throw new Error("DATABASE_ERROR");
         }
+    },
+
+    async updatePatientStatus(id, status, options) {
+        try {
+            if (!mongoose.Types.ObjectId.isValid(id)) {
+                throw new Error("INVALID_ID");
+            }
+            await PatientModel.findByIdAndUpdate(
+                id,
+                { status },
+                { session: options?.tx }
+            );
+        } catch (error) {
+            console.error("[PatientRepoMongo.updatePatientStatus] DB error:", (error as any).message);
+            throw new Error("DATABASE_ERROR");
+        }
     }
 };

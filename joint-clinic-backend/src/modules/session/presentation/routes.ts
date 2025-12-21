@@ -16,6 +16,3 @@ const sessionLimiter = rateLimit({
 
 sessionRoutes.use(sessionLimiter);
 // sessionRoutes.use(auth); // Uncomment when auth middleware is ready
-
-// patient and treatment plan
-sessionRoutes.get('/sessions/patient/:patientId/treatment/:treatmentPlanId', getSessionbookingsByTreatmentPlan)

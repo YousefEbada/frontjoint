@@ -34,7 +34,7 @@ export async function getPatientDashboard(req: Request, res: Response) {
             res.status(200).json(result);
         } else {
             console.error("[getPatientDashboard] Error:", result.error);
-            res.status(404).json({ok: false, error: result.error });
+            res.status(404).json(result);
         }
     } catch (error) {
         console.error("[getPatientDashboard] There is an error in the patient controller", error);

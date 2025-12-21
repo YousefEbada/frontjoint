@@ -34,7 +34,7 @@ const PatientSchema = new Schema({
   allergies: [String],
   medicalHistory: [String],
   injuryDetails: InjuryDetailsSchema,
-  status: { type: String, enum: ['active', 'inactive'], default: 'active' },
+  status: { type: String, enum: ['active', 'inactive'], default: 'inactive' },
   notes: String
 }, { timestamps: true });
 
