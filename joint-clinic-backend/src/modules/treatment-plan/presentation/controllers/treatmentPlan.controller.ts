@@ -17,3 +17,39 @@ export async function createTreatmentPlan(req: Request, res: Response) {
         res.status(500).json({ ok: false, error: 'Internal server error' });
     }
 }
+
+export async function getAllTreatmentPlans(req: Request, res: Response) {
+    console.log("getAllTreatmentPlans called");
+}
+
+export async function updateTreatmentPlan(req: Request, res: Response) {
+    console.log("updateTreatmentPlan called");
+}
+
+export async function deleteTreatmentPlan(req: Request, res: Response) {
+    console.log("updateTreatmentPlan called");
+}
+
+export async function getTreatmentPlanById(req: Request, res: Response) {
+    console.log("updateTreatmentPlan called");
+}
+
+export async function getTreatmentPlansByPatient(req: Request, res: Response) {
+    console.log("updateTreatmentPlan called");
+}
+
+export async function getTreatmentPlansByDoctor(req: Request, res: Response) {
+    console.log("updateTreatmentPlan called");
+}
+
+export async function addSessionToTreatmentPlan(req: Request, res: Response) {
+    console.log("updateTreatmentPlan called");
+}
+
+export async function getSessionsByTreatmentPlan(req: Request, res: Response) {
+    console.log("updateTreatmentPlan called");
+}
+
+export async function removeSessionFromTreatmentPlan(req: Request, res: Response) {
+    console.log("updateTreatmentPlan called");
+}
