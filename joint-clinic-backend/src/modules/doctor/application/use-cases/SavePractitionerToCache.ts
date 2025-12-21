@@ -1,5 +1,6 @@
 import { DoctorRepoPort } from "../ports/DoctorRepoPort";
 
+// may i need to use it when i implement the queue for syncing doctors
 export class SavePractitionerToCache {
   constructor(private doctorRepo: DoctorRepoPort) {}
     async execute(practitioners: any[]) {
