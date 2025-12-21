@@ -14,9 +14,24 @@ export class SyncDoctorJob {
                 console.log("[SyncDoctorsJob] No practitioners found.");
                 return;
             }
+
+            const modifiedPracs = practitioners.map(prac => {
+                return {
+                    nixpendId: prac.name,
+                    practitionerName: prac.practitioner_name,
+                    fullNameArabic: prac.full_name_arabic,
+                    gender: prac.gender,
+                    status: prac.status,
+                    practitionerType: prac.practitioner_type,
+                    department: prac.department,
+                    designation: prac.designation,
+                    practitionerCompany: prac.practitioner_company,
+                    priceList: prac.price_list
+                }
+            })
             // Clear existing cached doctors and save the new ones
             await this.doctorRepo.clear();
-            await this.doctorRepo.saveMany(practitioners);
+            await this.doctorRepo.saveMany(modifiedPracs);
 
             console.log(`[SyncDoctorsJob] Synced ${practitioners.length} doctors successfully.`);
         } catch (err) {

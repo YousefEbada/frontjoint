@@ -5,23 +5,9 @@ import { DoctorRepoPort } from "modules/doctor/application/ports/DoctorRepoPort"
 export const DoctorRepoMongo: DoctorRepoPort = {
   // Save many practitioners (replace existing ones)
   async saveMany(practitioners: Doctor[]): Promise<void> {
-    if (!practitioners.length) return;
-
-    // Upsert each practitioner by nixpendId
-    const bulkOps = practitioners.map(prac => ({
-      updateOne: {
-        filter: { nixpendId: prac.nixpendId },
-        update: { $set: prac },
-        upsert: true
-      }
-    }));
-
-    // Sends multiple insertOne, updateOne, updateMany, 
-    // replaceOne, deleteOne, and/or deleteMany operations to the MongoDB server in one command. 
-    // This is faster than sending multiple independent operations 
-    // (e.g. if you use create()) because with bulkWrite() 
-    // there is only one network round trip to the MongoDB server.
-    await DoctorModel.bulkWrite(bulkOps);
+    console.log("[DoctorRepoMongo] Saving practitioners:", practitioners);
+    const res = await DoctorModel.insertMany(practitioners, { ordered: false });
+    return;
   },
 
   // Get all practitioners, optionally filtered by branch or department

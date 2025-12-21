@@ -87,8 +87,8 @@ export const nixpendAdapter: NixpendPort = {
       .then(res => res.json());
     }
     if (data && data.length > 0) {
-      console.log("\n======= Practitioners Data:", data);
-      return data[0];
+      console.log("\n======= Practitioners Data:", data.length);
+      return data;
     }
     console.log("\n======= Practitioners Data: &&&&^ No data found", data);
     return null; 
