@@ -14,7 +14,8 @@ export class SyncDoctorJob {
                 console.log("[SyncDoctorsJob] No practitioners found.");
                 return;
             }
-            // Save or update doctors in DB
+            // Clear existing cached doctors and save the new ones
+            await this.doctorRepo.clear();
             await this.doctorRepo.saveMany(practitioners);
 
             console.log(`[SyncDoctorsJob] Synced ${practitioners.length} doctors successfully.`);
