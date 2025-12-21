@@ -9,8 +9,7 @@ import { BookingRepoPort } from '../../application/ports/BookingRepoPort.js';
 import { NixpendPort } from '../../../integration/ports/NixpendPorts.js';
 import { GetAvailableSlots } from 'modules/booking/application/use-cases/GetAvailableSlots.js';
 import { BookType } from 'modules/integration/domain/Nixpend.js';
-import { SESSION_REPO } from 'app/container.bindings.js';
-import { GetDoctorDashboard } from 'modules/doctor/application/use-cases/GetDoctorDashboard.js';
+import { PATIENT_REPO, SESSION_REPO } from 'app/container.bindings.js';
 
 const BOOKING_REPO = token<BookingRepoPort>('BOOKING_REPO');
 const NIXPEND_PORT = token<NixpendPort>('NIXPEND_PORT');
@@ -18,7 +17,7 @@ const NIXPEND_PORT = token<NixpendPort>('NIXPEND_PORT');
 export async function createBooking(req: Request, res: Response) {
   try {
     const input = CreateBookingSchema.parse(req.body);
-    const uc = new CreateBooking(resolve(BOOKING_REPO), resolve(NIXPEND_PORT), resolve(SESSION_REPO));
+    const uc = new CreateBooking(resolve(BOOKING_REPO), resolve(NIXPEND_PORT), resolve(SESSION_REPO), resolve(PATIENT_REPO));
     const result = await uc.exec(input as BookType);
     
     if (result.ok) {
@@ -100,35 +99,6 @@ export async function getBookingById(req: Request, res: Response) {
     } else {
       res.status(404).json({ ok: false, error: 'Booking not found' });
     }
-  } catch (error) {
-    res.status(500).json({ ok: false, error: 'Internal server error' });
-  }
-}
-
-// CHECK THIS FUNCTION
-export async function getDoctorBookings(req: Request, res: Response) {
-  try {
-    const { doctorId } = req.params;
-    const { period, date } = req.query;
-    const uc = new GetDoctorDashboard(resolve(BOOKING_REPO));
-    const bookings = await uc.exec(doctorId);
-    
-    // let bookings;
-    // switch (period) {
-    //   case 'day':
-    //     bookings = await repo.findBookingsByDoctorAndDay(doctorId, targetDate);
-    //     break;
-    //   case 'week':
-    //     bookings = await repo.findBookingsByDoctorAndWeek(doctorId, targetDate);
-    //     break;
-    //   case 'month':
-    //     bookings = await repo.findBookingsByDoctorAndMonth(doctorId, targetDate);
-    //     break;
-    //   default:
-    //     bookings = await repo.findBookingsByDoctorAndDay(doctorId, targetDate);
-    // }
-    
-    res.json({ ok: true, data: bookings });
   } catch (error) {
     res.status(500).json({ ok: false, error: 'Internal server error' });
   }

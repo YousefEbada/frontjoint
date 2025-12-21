@@ -7,7 +7,6 @@ import {
   rescheduleBooking,
   getAvailableSlots,
   getBookingById,
-  getDoctorBookings,
   updateBookingStatus
 } from './controllers/booking.controller.js';
 // import { auth } from '../../../shared/middleware/auth.js';
@@ -40,9 +39,6 @@ bookingRoutes.patch('/:id/status', updateBookingStatus);
 
 // Calendar and availability (I will refactor these later)
 bookingRoutes.get('/calendar/doctor/:doctorId', getCalendar);
-
-// CHECK THIS FUNCTION
-bookingRoutes.get('/doctor/:doctorId/bookings', getDoctorBookings);
 
 // Legacy routes for backward compatibility
 bookingRoutes.post('/book', createBooking);

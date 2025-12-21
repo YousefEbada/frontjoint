@@ -3,6 +3,7 @@ import { BookingRepoPort } from '../ports/BookingRepoPort.js';
 import { BookType } from 'modules/integration/domain/Nixpend.js';
 import { NixpendPort } from 'modules/integration/ports/NixpendPorts.js';
 import { SessionRepoPort } from 'modules/session/application/ports/SessionRepoPort.js';
+import { PatientRepoPort } from 'modules/patient/application/ports/PatientRepoPort.js';
 
 type ValidateResult = {
   violation: string;
@@ -16,7 +17,8 @@ export class CreateBooking {
   constructor(
     private bookingRepo: BookingRepoPort,
     private nixpendRepo: NixpendPort,
-    private sessionRepo: SessionRepoPort
+    private sessionRepo: SessionRepoPort,
+    private patientRepo: PatientRepoPort
   ) {}
 
   async exec(
@@ -74,7 +76,7 @@ export class CreateBooking {
       );
 
       if (session) {
-        await this.sessionRepo.updateSession(
+        const updateSession = this.sessionRepo.updateSession(
           session._id,
           {
             bookingId: booking._id,
@@ -82,6 +84,16 @@ export class CreateBooking {
           },
           { tx: tx.session }
         );
+
+        // should I update patient status to active when booking a session is made?
+        // or when i check that the patient attended the session?
+        const updatePatient = this.patientRepo.updatePatientStatus(
+          booking.patientId,
+          'active',
+          { tx: tx.session }
+        );
+
+        await Promise.all([updateSession, updatePatient]);
       }
 
       await tx.commit();

@@ -6,6 +6,9 @@ export interface BookingRepoPort {
   cancel(b: Booking, options?: { tx?: any }): Promise<Boolean>
   // I should put reminders here
   findBookingsByPatient(patientId: string): Promise<Booking[]>;
+  // findBookingsByDoctorAndPatient(patientId: string, doctorId: string): Promise<{ _id: string; name: string } | null>;
+  // to get patients related by doctors through booking
+  findPatientsByDoctorAndStatus(doctorId: string, status?: 'active' | 'inactive'): Promise<{_id: string, name: string, injury: string, status: string}[]>;
   findBookingsByDoctor(doctorId: string): Promise<Booking[]>;
   findBookingsByDoctorAndDay(doctorId: string, day: Date): Promise<Booking[]>;
   findBookingsByDoctorAndWeek(doctorId: string, weekStart: Date): Promise<Booking[]>;
