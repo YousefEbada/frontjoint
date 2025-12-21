@@ -1,13 +1,7 @@
 import { Router } from "express";
 import rateLimit from "express-rate-limit";
 import express from "express";
-import { findDoctorById, findDoctors } from "./controllers/doctor.controller.js";
-  // getDoctorBookingsForDay,
-  // getDoctorBookingsForWeek,
-  // getDoctorBookingsForMonth,
-  // getNextAppointment,
-  // getCurrentPatient,
-  // getDoctorDashboard from "./controllers/doctor.controller.js";
+import { findDoctorById, findDoctors, getDoctorBookings, getDoctorSessions, getPatients } from "./controllers/doctor.controller.js";
 
 const router = express.Router();
 export const doctorRoutes = Router();
@@ -23,14 +17,9 @@ doctorRoutes.use(requestLimiter);
 
 doctorRoutes.get("/", findDoctorById);
 doctorRoutes.get("/", findDoctors);
-
-
-
-
-// // Doctor booking views
-// router.get("/doctors/:doctorId/bookings/day", getDoctorBookingsForDay);
-// router.get("/doctors/:doctorId/bookings/week", getDoctorBookingsForWeek);
-// router.get("/doctors/:doctorId/bookings/month", getDoctorBookingsForMonth);
+doctorRoutes.get('/:doctorId/bookings', getDoctorBookings);
+doctorRoutes.get('/:doctorId/sessions', getDoctorSessions);
+doctorRoutes.get('/:doctorId/patients', getPatients);
 
 // // Doctor quick views
 // router.get("/doctors/:doctorId/next-appointment", getNextAppointment);
