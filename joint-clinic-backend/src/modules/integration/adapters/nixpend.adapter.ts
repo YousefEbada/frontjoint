@@ -120,6 +120,9 @@ export const nixpendAdapter: NixpendPort = {
     let data = await fetch(`${env.NIXPEND_API_URL}/nis/external/available_slots?practitioner=${practitionerId}&company=${company}` + (fromDate ? `&from_date=${fromDate}` : '') + (toDate ? `&to_date=${toDate}` : ''))
     .then(res => res.json());
     console.log("\n======= Available Slots Data:", data);
+    if (data && data.length > 0) {
+      return { data };
+    }
     return { data: [] };
   },
 
@@ -135,6 +138,9 @@ export const nixpendAdapter: NixpendPort = {
     .then(res => res.json()
   )
   console.log("\n========= Reschedule Appointment Data:", data);
+  if(data && data.appointment_id) {
+    return data;
+  }
     return null;
   },
 
@@ -150,6 +156,9 @@ export const nixpendAdapter: NixpendPort = {
     .then(res => res.json()
   )
   console.log("\n========= Cancel Appointment Data:", data);
+  if(data && data.response.message.status === 'cancelled') {
+    return data.response.message;
+  }
     return null; 
   },
   // async ivrConfirmAppointment(confirm: '0' | '1' | '2', name: string) { return false; },
