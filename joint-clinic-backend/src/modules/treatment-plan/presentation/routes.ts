@@ -6,3 +6,5 @@ export const treatmentPlanRoutes = Router()
 // rate limiter and middlewares
 
 treatmentPlanRoutes.post('/', createTreatmentPlan)
+
+// Update, Delete, Get by ID, List routes

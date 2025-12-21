@@ -2,15 +2,21 @@ import { SessionRepoPort } from "modules/session/application/ports/SessionRepoPo
 import { TreatmentRepoPort } from "../ports/TreatmentRepoPort";
 import { TreatmentPlan } from "modules/treatment-plan/domain/TreatmentPlan";
 
+type CreateTreatmentPlanResult = {
+  ok: boolean,
+  newPlan?: TreatmentPlan,
+  error?: string
+}
+
 export class CreateTreatmentPlan {
   constructor(
     private treatmentRepo: TreatmentRepoPort,
     private sessionRepo: SessionRepoPort
   ) {}
 
-  async execute(
+  async exec(
     planData: Omit<TreatmentPlan, '_id' | 'createdAt' | 'updatedAt'>
-  ): Promise<TreatmentPlan> {
+  ): Promise<CreateTreatmentPlanResult> {
 
     // can patient have multiple active plans?
 
@@ -56,11 +62,12 @@ export class CreateTreatmentPlan {
 
       await tx.commit();
 
-      return newPlan;
+      return {ok: true, newPlan};
 
     } catch (error) {
       await tx.abort();
-      throw error;
+      console.error('Error creating treatment plan:', (error as Error).message);
+      return {ok: false, error: (error as Error).message};
     }
   }
 }
