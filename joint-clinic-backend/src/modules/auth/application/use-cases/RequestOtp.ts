@@ -55,7 +55,7 @@ export class RequestOtp {
   }
 
   private signJwt(payload: Record<string, string>) {
-    const secret = process.env.JWT_SECRET as string;
+    const secret = process.env.JWT_REQUEST_TOKEN_SECRET as string;
     const expiresIn = security.otp.ttlMinutes * 60;
     return jwt.sign(payload, secret, { expiresIn });
   }

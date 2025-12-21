@@ -21,7 +21,7 @@ const EnvSchema = z.object({
     PORT: z.coerce.number().default(4000),
     MONGO_URI: z.string().min(1), 
     CORS_ORIGINS: z.string().default('http://localhost:3000'),
-    JWT_SECRET: z.string().min(10),
+    JWT_REQUEST_TOKEN_SECRET: z.string().min(10),
     RATE_LIMIT_WINDOW_MS: z.coerce.number().default(60000),
     RATE_LIMIT_MAX: z.coerce.number().default(120),
     NIXPEND_API_URL: z.string().min(1),

@@ -51,7 +51,7 @@ export class VerifyOtp {
 
   private verifyToken(token: string): { subjectType: string; subjectRef: string } | null {
     try {
-      const jwtSecret = process.env.JWT_SECRET as string;
+      const jwtSecret = process.env.JWT_REQUEST_TOKEN_SECRET as string;
       return jwt.verify(token, jwtSecret) as PayloadToken;
     } catch {
       return null;
