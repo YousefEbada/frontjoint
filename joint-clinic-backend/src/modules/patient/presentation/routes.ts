@@ -16,6 +16,3 @@ patientRoutes.post("/", patientLimiter, createPatient);
 patientRoutes.get("/:patientId/dashboard", patientLimiter, getPatientDashboard);
 patientRoutes.get("/:patientId", patientLimiter, getPatientById);
 patientRoutes.put("/:patientId", patientLimiter, updatePatient);
-
-// patient and treatment plan
-patientRoutes.get('/:patientId/treatment/:treatmentPlanId/sessions', getSessionsByTreatmentPlan)
