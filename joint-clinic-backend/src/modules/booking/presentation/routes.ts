@@ -2,7 +2,6 @@ import { Router } from 'express';
 import rateLimit from 'express-rate-limit';
 import {
   createBooking,
-  getCalendar,
   cancelBooking,
   rescheduleBooking,
   getAvailableSlots,
@@ -25,21 +24,10 @@ const bookingLimiter = rateLimit({
 bookingRoutes.use(bookingLimiter);
 // bookingRoutes.use(auth); // Uncomment when auth middleware is ready
 
-// Booking operations (I will refactor these later)
-// This is important for creating and getAvailable slots
 // ensure you handle double bookings 
 bookingRoutes.post('/', createBooking);
 bookingRoutes.get('/doctor/:doctorId/slots', getAvailableSlots);
-
-// i will see this later
 bookingRoutes.get('/:id', getBookingById);
 bookingRoutes.put('/:id/cancel', cancelBooking);
 bookingRoutes.put('/:id/reschedule', rescheduleBooking);
 bookingRoutes.patch('/:id/status', updateBookingStatus);
-
-// Calendar and availability (I will refactor these later)
-bookingRoutes.get('/calendar/doctor/:doctorId', getCalendar);
-
-// Legacy routes for backward compatibility
-bookingRoutes.post('/book', createBooking);
-bookingRoutes.get('/calendar', getCalendar);
