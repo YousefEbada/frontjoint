@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { CreatePartialUserSchema, FindUserSchema, RequestOtpSchema, VerifyOtpSchema } from '../validators/auth.schemas.js';
+import { CreateFullUserSchema, CreatePartialUserSchema, FindUserSchema, RequestOtpSchema, VerifyOtpSchema } from '../validators/auth.schemas.js';
 import { RequestOtp } from '../../application/use-cases/RequestOtp.js';
 import { VerifyOtp } from '../../application/use-cases/VerifyOtp.js';
 import { FindUserByContact } from 'modules/auth/application/use-cases/FindUserByContact.js';
@@ -43,7 +43,7 @@ export async function createPartialUser(req: Request, res: Response) {
 // create full user
 export async function createFullUser(req: Request, res: Response) {
   // use validation schema
-  const body = req.body;
+  const body = CreateFullUserSchema.parse(req.body);
   const uc = new CreateFullUser(resolve(USER_AUTH_REPO));
   try {
     const result = await uc.exec(body);
