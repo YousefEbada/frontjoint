@@ -17,7 +17,8 @@ export async function findDoctorById(req: Request, res: Response) {
         }
         return res.status(200).json(result);
     } catch (error) {
-        return res.status(500).json({ ok: false, message: "Internal server error" });
+        console.error("Error in findDoctorById controller:", (error as Error).message);
+        return res.status(500).json({ ok: false, message: "Find DoctorById controller Internal server error" });
     }
 }
 
@@ -31,7 +32,7 @@ export async function findDoctors(req: Request, res: Response) {
         return res.status(200).json(result);
     } catch (error) {
         console.error("Error in findDoctors controller:", (error as Error).message);
-        return res.status(500).json({ ok: false, message: "Internal server error" });
+        return res.status(500).json({ ok: false, message: "Find Doctors controller Internal server error" });
     }
 }
 
@@ -48,6 +49,7 @@ export async function getDoctorBookings(req: Request, res: Response) {
 
         res.status(200).json(result);
     } catch (error) {
+        console.error("Error in getDoctorBookings controller:", (error as Error).message);
         res.status(500).json({ ok: false, error: 'Internal server error' });
     }
 }
@@ -65,6 +67,7 @@ export async function getDoctorSessions(req: Request, res: Response) {
 
         res.status(200).json(result);
     } catch (error) {
+        console.error("Error in getDoctorSessions controller:", (error as Error).message);
         res.status(500).json({ ok: false, error: 'Internal server error' });
     }
 }
@@ -80,6 +83,7 @@ export async function getPatients(req: Request, res: Response) {
         }
         res.status(200).json(result);
     } catch (error) {
+        console.error("Error in getPatients controller:", (error as Error).message);
         res.status(500).json({ ok: false, error: 'Internal server error' });
     }
 }

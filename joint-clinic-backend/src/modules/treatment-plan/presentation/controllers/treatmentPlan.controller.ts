@@ -14,6 +14,7 @@ export async function createTreatmentPlan(req: Request, res: Response) {
         }
         res.status(200).json(result);
     } catch (error) {
+        console.error("Error in createTreatmentPlan controller:", (error as Error).message);
         res.status(500).json({ ok: false, error: 'Internal server error' });
     }
 }

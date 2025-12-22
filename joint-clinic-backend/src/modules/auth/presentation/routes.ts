@@ -1,4 +1,3 @@
-// path: src/modules/auth/presentation/routes.ts
 import { Router } from 'express';
 import rateLimit from 'express-rate-limit';
 import { createFullUser, createPartialUser, findUser, requestOtp, verifyOtp } from './controllers/auth.controller.js';
@@ -23,12 +22,10 @@ const verifyLimiter = rateLimit({
 // TODO: implement per-route rate limiting
 
 // rate limit for each route?
-authRoutes.get('/auth/find', requestLimiter, findUser);
-authRoutes.post('/auth/create-partial', requestLimiter, createPartialUser);
-authRoutes.post('/auth/create-full', requestLimiter, createFullUser);
+authRoutes.get('/find', requestLimiter, findUser);
+authRoutes.post('/create-partial', requestLimiter, createPartialUser);
+authRoutes.post('/create-full', requestLimiter, createFullUser);
 authRoutes.get('/otp/request', requestLimiter, requestOtp);
 authRoutes.post('/otp/verify', verifyLimiter, verifyOtp);
 // Don't Forget Logout
-// Don't Forget Refresh Token
-// Don't Forget Access Token
 // Don't Forget Change Password

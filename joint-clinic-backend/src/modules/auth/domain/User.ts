@@ -29,3 +29,20 @@ export interface User {
   accountStatus?: AccountStatus;
   createdAt: Date;
 }
+
+export interface CreateFullUserRequest {
+  userId?: string;
+  contact?: string;
+  fullName?: string;
+  gender?: string;
+  birthdate?: string | Date;
+  email?: string;
+  phone?: string;
+  identifier?: string;
+  identifierType?: string;
+  nationality?: string;
+  address?: string;
+  city?: string;
+  maritalStatus?: string;
+  speakingLanguages?: string[];
+}

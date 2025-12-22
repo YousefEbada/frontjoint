@@ -15,23 +15,20 @@ export class RequestOtp {
     private otpRepo: OTPRepoPort,
     private smsRepo: SMSPort,
     private mailRepo: MailPort
-  ) {}
+  ) { }
 
   async exec(subjectType: SubjectType, subjectRef: string, contact: string) {
-    console.log("----------- da5l exec -----------------")
     const otp = await this.createOtp(subjectType, subjectRef);
     const otpToken = this.signJwt({ subjectType, subjectRef });
-    console.log("-  ------------ GEHHH HNNNNAAAAA OTP TOKEN - -- - -- --")
     const contactType = detectContactType(contact);
     try {
       await this.sendOtp(contactType, subjectType, contact, subjectRef, otp.code);
-    console.log("-------- SSSEEEEEND --------")
-    } catch (error) {``
-      console.log("-------- ERROR ------------")
-      return { err: (error as Error).message };
+      console.log(`[Request OTP] OTP sent to ${contact} via ${contactType}`);
+      return { ok: true, otpToken };
+    } catch (error) {
+      console.log('[Request OTP] Error sending OTP:', (error as Error).message);
+      return { ok: false, error: (error as Error).message };
     }
-
-    return { ok: true, otpToken };
   }
 
   // Private helper methods
