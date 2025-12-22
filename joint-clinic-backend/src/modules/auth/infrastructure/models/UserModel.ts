@@ -1,3 +1,4 @@
+import { GuardianModel } from 'modules/auth/infrastructure/models/GuardianModel';
 import mongoose, { Schema } from 'mongoose';
 
 const UserSchema = new Schema(
@@ -45,6 +46,10 @@ const UserSchema = new Schema(
       type: String,
       enum: ['active', 'inactive'],
       default: 'active'
+    },
+    guardianInformation: {
+      type: GuardianModel.schema,
+      required: false
     },
     createdAt: {
       type: Date,

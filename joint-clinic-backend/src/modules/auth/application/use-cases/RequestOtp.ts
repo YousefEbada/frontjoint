@@ -72,7 +72,7 @@ export class RequestOtp {
     if (contactType === 'email') {
       const mailConfig = this.getMailConfig(subjectType, subjectRef, code);
       if (!mailConfig) throw new Error('Invalid subjectType for email');
-      await this.mailRepo.send(contact, mailConfig.subject, mailConfig.context);
+      await this.mailRepo.send(contact, mailConfig.templateId, mailConfig.context);
       return;
     }
 
@@ -82,11 +82,11 @@ export class RequestOtp {
   private getMailConfig(subjectType: string, subjectRef: string, code: string) {
     const mailTemplates: Record<
       string,
-      { subject: string; context: Record<string, any> }
+      { templateId: string; context: Record<string, any> }
     > = {
-      login: { subject: 'OTP for login', context: { otp: code } },
-      register: { subject: 'Verify your account', context: { otp: code } },
-      report: { subject: 'OTP to download report', context: { otp: code } },
+      login: { templateId: 'login-otp', context: { otp: code } },
+      register: { templateId: 'register-otp', context: { otp: code } },
+      report: { templateId: 'report-otp', context: { otp: code } },
     };
 
     return mailTemplates[subjectType] || null;

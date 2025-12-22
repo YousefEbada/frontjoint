@@ -23,7 +23,17 @@ export interface User {
   city?: string;
   maritalStatus?: MaritalStatus;
   speakingLanguages?: string[];
-  guardianInformation: string | Schema.Types.ObjectId;
+  // what if the guardian has many users under his care?
+  guardianInformation?: {
+    guardianName?: string;
+    guardianEmail?: string;
+    guardianPhone?: string;
+    guardianBloodType?: string;
+    guardianRelation?: string;
+    guardianIdentifier?: string;
+    guardianIdentifierType?: string;
+    patientCategory?: string;
+  };
   patientCategory?: string;
   userStatus?: UserStatus;
   accountStatus?: AccountStatus;
@@ -45,4 +55,14 @@ export interface CreateFullUserRequest {
   city?: string;
   maritalStatus?: string;
   speakingLanguages?: string[];
+  guardianInformation?: {
+    guardianName?: string;
+    guardianEmail?: string;
+    guardianPhone?: string;
+    guardianBloodType?: string;
+    guardianRelation?: string;
+    guardianIdentifier?: string;
+    guardianIdentifierType?: string;
+    patientCategory?: string;
+  };
 }

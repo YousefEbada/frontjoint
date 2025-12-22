@@ -12,7 +12,7 @@ const client = twilio(
 
 export const smsAdapter: SMSPort = {
   async send(to: string, text: string): Promise<void> {
-    console.log(`📨 Sending SMS to ${to} with text: "${text}"`);
+    console.log(`=== Sending SMS to ${to} with text: "${text}"`);
     try {
       const message = await client.messages.create({
         body: text,
@@ -20,9 +20,9 @@ export const smsAdapter: SMSPort = {
         from: process.env.TWILIO_PHONE_NUMBER,
       });
 
-      console.log(`✅ SMS sent successfully! SID: ${message.sid}`);
+      console.log(`=== SMS sent successfully! SID: ${message.sid}`);
     } catch (error: any) {
-      console.error(`❌ Error sending SMS: ${error.message || error}`);
+      console.error(`=== Error sending SMS: ${error.message || error}`);
     }
   },
 };

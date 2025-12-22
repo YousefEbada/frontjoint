@@ -13,6 +13,7 @@ export const UserRepoMongo: UserRepoPort = {
 
   async save(user: Partial<User> | any): Promise<User | null> {
     console.log("Saving user to MongoDB...", user._doc._id);
+    console.log("\n =-=-=-= User data to save:", user._doc);
     const userModel = await UserModel.findById(user._doc._id);
     console.log("Saving user to MongoDB...", userModel);
     if (!userModel) return null;

@@ -44,6 +44,15 @@ export class CreateFullUser {
 			updateFields.birthdate = new Date(updateFields.birthdate);
 		}
 
+		// Handle guardian information validation
+		if (updateFields.guardianInformation) {
+			// Validate required guardian fields if provided
+			const guardian = updateFields.guardianInformation;
+			if (!guardian.guardianName || !guardian.guardianRelation) {
+				return { ok: false, error: "Guardian name and relation are required when providing guardian information." };
+			}
+		}
+
 		// Update user with new fields and mark as full profile completed
 		const updated: any = await this.userRepo.save({
 			...user,

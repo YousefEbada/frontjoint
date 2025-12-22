@@ -15,7 +15,7 @@ export async function findUser(req: Request, res: Response) {
   try {
     const result = await uc.exec(contact);
     if (!result.ok) {
-      return res.status(400).json({ ok: false, message: 'User Not Found.' });
+      return res.status(400).json(result);
     }
     res.status(200).json(result);
   } catch (error) {
@@ -31,7 +31,7 @@ export async function createPartialUser(req: Request, res: Response) {
   try {
     const result = await uc.exec(fullName, gender, birthdate, contact);
     if (!result.ok) {
-      return res.status(400).json({ ok: false, message: result.error });
+      return res.status(400).json(result);
     }
     return res.status(201).json(result);
   } catch (error) {

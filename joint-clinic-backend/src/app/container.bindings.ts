@@ -23,6 +23,7 @@ import { SessionRepoPort } from '../modules/session/application/ports/SessionRep
 import { SessionRepoMongo } from '../modules/session/infrastructure/repos/SessionRepoMongo.js';
 import { TreatmentRepoPort } from 'modules/treatment-plan/application/ports/TreatmentRepoPort.js';
 import { TreatmentRepoMongo } from 'modules/treatment-plan/infrastructure/repos/TreamtentRepoMongo.js';
+import { NodemailerMailAdapter } from 'infra/mail/nodemailer.mail.adapter.js';
 
 export const OTP_REPO = token<OTPRepoPort>('OTP_REPO');
 export const BOOKING_REPO = token<BookingRepoPort>('BOOKING_REPO');
@@ -43,7 +44,8 @@ export function bindAll() {
   register(REPORT_REPO, ReportRepoMongo);
   register(BLOB_PORT, blobAzureAdapter);
   register(USER_AUTH_REPO, UserRepoMongo);
-  register(MAIL_REPO, twilioMailAdapter);
+  // register(MAIL_REPO, twilioMailAdapter);
+  register(MAIL_REPO, NodemailerMailAdapter);
   register(SMS_REPO, smsAdapter);
   register(PATIENT_REPO, PatientRepoMongo);
   register(DOCTOR_REPO, DoctorRepoMongo);

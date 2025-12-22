@@ -27,7 +27,6 @@ const InjuryDetailsSchema = new Schema({
 const PatientSchema = new Schema({
   userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
   nixpendId: { type: String, required: true, unique: true },
-  guardianInformation: { type: Schema.Types.ObjectId, ref: "Guardian", required: false },
   medicalRecordNumber: String,
   insuranceId: String,
   bloodGroup: String,
