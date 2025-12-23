@@ -1,0 +1,17 @@
+.taskcategoryright {
+    position: absolute;
+    right: 10px;    
+    width: 2px;
+    height: 40px;
+    background-color: #9fd5e2;
+}
+
+.taskcategoryleft {
+    position: absolute;
+    left: 10px;
+    width: 2px;
+    height: 40px;
+    background-color: #9fd5e2;
+}
+
+    

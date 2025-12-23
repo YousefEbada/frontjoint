@@ -1,0 +1,17 @@
+.majorRight {
+    position: absolute;
+    right: 00px;    
+    width: 2px;
+    height: 40px;
+    background-color: #9fd5e2;
+}
+
+.majorLeft {
+    position: absolute;
+    left: 00px;
+    width: 2px;
+    height: 40px;
+    background-color: #9fd5e2;
+}
+
+    

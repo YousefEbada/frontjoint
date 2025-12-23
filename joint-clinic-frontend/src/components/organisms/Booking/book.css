@@ -1,0 +1,20 @@
+.left {
+  position: relative;
+}
+
+.left::after {
+  content: "";
+  position: absolute;
+  right: -15px;
+  top: 50%;
+  transform: translateY(-46%);
+  width: 1px;
+  height: 100%;
+  background-color: #000000;
+}
+
+@media (max-width: 768px) {   /* lg breakpoint */
+  .left::after {
+    display: none;
+  }
+}

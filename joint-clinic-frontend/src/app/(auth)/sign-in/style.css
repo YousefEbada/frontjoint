@@ -1,0 +1,18 @@
+.custom-select {
+  position: relative;
+  background-image: none !important;
+}
+
+/* السهم */
+.custom-select::after {
+  content: "";
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid #0D294D;
+  border-bottom: 2px solid #0D294D;
+  transform: translateY(-50%) rotate(45deg);
+  pointer-events: none;
+}

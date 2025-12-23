@@ -1,0 +1,89 @@
+.circleMorph {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  transition: border 0.3s ease;
+}
+
+/* Indicator */
+.indicator {
+  position: relative;
+  width: 400px;
+  height: 120px;
+  margin: 30px auto;
+  display: flex;
+  justify-content: center;
+  transform: translateY(-50px);
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .indicator {
+    width: 320px;
+    transform: translateY(-30px);
+  }
+  .indicator .circle {
+    width: 35px;
+    height: 35px;
+    opacity: 0;
+  }
+  .circleMorph {
+    width: 35px;
+    height: 35px;
+  }
+}
+
+.indicator .line {
+  width: 140px;
+  height: 3px;
+  background: #0d294d;
+}
+
+.indicator .circle {
+  width: 45px;
+  height: 45px;
+  border: 3px solid #0d294d;
+  background: transparent;
+  border-radius: 50%;
+  position: relative;
+  opacity: 0;
+}
+
+.indicator .dot {
+  width: 20px;
+  height: 20px;
+  background: #0d294d;
+  border-radius: 50%;
+}
+
+.indicator .left {
+  margin-right: 0px;
+}
+
+.indicator .right {
+  margin-left: 0px;
+}
+
+/* الخط القديم */
+.indicator .red-line {
+  width: 3px;
+  height: 70px;
+  background: #e41d1d;
+  position: absolute;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* الخط الجديد المتحرك */
+.moving-red-line {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  height: 4px;
+  width: 0;
+  background: #e41d1d;
+  transform: translateY(-50%);
+  z-index: 0;
+  transition: all 0.35s ease-in-out;
+}

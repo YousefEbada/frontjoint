@@ -1,0 +1,39 @@
+{
+  "piny.project_settings": {
+    "open-pages": [
+      "pinyfakepage.html"
+    ],
+    "app-routes": {
+      "routes": [
+        "/",
+        "/(admin)/audit",
+        "/(auth)/sign-in",
+        "/(doctor)/ai-assistant",
+        "/(doctor)/calendar",
+        "/(doctor)/dashboard/ai-assistant",
+        "/(doctor)/dashboard/calendar",
+        "/(doctor)/dashboard/overview",
+        "/(doctor)/reports/upload",
+        "/(patient)/bookings",
+        "/(patient)/dashboard/bookings",
+        "/(patient)/dashboard/exercises",
+        "/(patient)/dashboard/main",
+        "/(patient)/dashboard/reports",
+        "/(patient)/exercises",
+        "/(patient)/reports",
+        "/(public)",
+        "/(staff)/activepatient",
+        "/(staff)/staffboard",
+        "/dashboard/main",
+        "/main",
+        "/pagination"
+      ],
+      "current_route": "/dashboard/main"
+    },
+    "component-settings": {
+      "joint-clinic-frontend/src/app/%28patient%29/dashboard/main/page.tsx:::Temp": {
+        "black-box": true
+      }
+    }
+  }
+}

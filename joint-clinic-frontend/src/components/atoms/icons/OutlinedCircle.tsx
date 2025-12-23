@@ -1,0 +1,58 @@
+"use client";
+import React from "react";
+
+interface Props extends React.SVGProps<SVGSVGElement> {
+  fill?: string;
+}
+
+const OutlinedCircle: React.FC<Props> = ({
+  fill = "none",
+  className,
+  style,
+  ...rest
+}) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 450 389"
+    fill={fill}
+    className={className}
+    style={style}
+    {...rest}
+  >
+    <g clipPath="url(#clip0)">
+      <path
+        d="M194.293 388.532C301.356 388.532 388.148 301.654 388.148 194.485C388.148 87.3164 301.356 0.438843 194.293 0.438843C87.2294 0.438843 0.4375 87.3164 0.4375 194.485C0.4375 301.654 87.2294 388.532 194.293 388.532Z"
+        stroke="#0A1C32"
+        strokeMiterlimit="10"
+      />
+      <path
+        d="M194.294 343.239C276.367 343.239 342.901 276.64 342.901 194.485C342.901 112.331 276.367 45.7319 194.294 45.7319C112.221 45.7319 45.6875 112.331 45.6875 194.485C45.6875 276.64 112.221 343.239 194.294 343.239Z"
+        stroke="#0A1C32"
+        strokeMiterlimit="10"
+      />
+      <path
+        d="M194.294 217.278C206.869 217.278 217.064 207.074 217.064 194.485C217.064 181.897 206.869 171.693 194.294 171.693C181.718 171.693 171.523 181.897 171.523 194.485C171.523 207.074 181.718 217.278 194.294 217.278Z"
+        stroke="#0A1C32"
+        strokeMiterlimit="10"
+      />
+      <path
+        d="M45.6875 192.381C46.8476 192.381 47.7891 193.323 47.7891 194.486C47.7888 195.648 46.8475 196.589 45.6875 196.589C44.5275 196.589 43.5862 195.648 43.5859 194.486C43.5859 193.323 44.5273 192.381 45.6875 192.381Z"
+        fill="#0D294D"
+        stroke="#0A1C32"
+      />
+      <path
+        d="M449.561 248.615H54.5135C24.6402 248.615 0.4375 224.388 0.4375 194.485C0.4375 164.612 24.6402 140.356 54.5135 140.356H449.561V248.585V248.615Z"
+        stroke="#0A1C32"
+        strokeMiterlimit="10"
+      />
+      <path d="M45.6875 194.485H449.562" stroke="#0A1C32" strokeMiterlimit="10" />
+    </g>
+    <defs>
+      <clipPath id="clip0">
+        <rect width="450" height="389" fill="white" />
+      </clipPath>
+    </defs>
+  </svg>
+);
+
+export default OutlinedCircle;

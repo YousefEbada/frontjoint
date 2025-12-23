@@ -1,0 +1,16 @@
+.lnk {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #ffffff;
+}
+
+.lnk:before {
+  content: "";
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #f6574d;
+  flex-shrink: 0;
+}
