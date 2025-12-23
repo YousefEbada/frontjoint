@@ -2,9 +2,9 @@ import { PatientRepoPort } from "../ports/PatientRepoPort";
 
 export class GetPatient {
     constructor(private patientRepo: PatientRepoPort) {}
-    async exec(userId: string): Promise<any> {
+    async exec(patientId: string): Promise<any> {
         try {
-            const patient = await this.patientRepo.getPatient(userId);
+            const patient = await this.patientRepo.getPatient(patientId);
             if (!patient) {
                 return { ok: false, error: "Patient not found" };
             }

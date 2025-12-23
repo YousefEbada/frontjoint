@@ -22,7 +22,11 @@ export class RequestOtp {
     const otpToken = this.signJwt({ subjectType, subjectRef });
     const contactType = detectContactType(contact);
     try {
+      // const res =
       await this.sendOtp(contactType, subjectType, contact, subjectRef, otp.code);
+      // if(!res) {
+      //   return { ok: false, error: 'Failed to send OTP' };
+      // }
       console.log(`[Request OTP] OTP sent to ${contact} via ${contactType}`);
       return { ok: true, otpToken };
     } catch (error) {
@@ -64,6 +68,7 @@ export class RequestOtp {
     subjectRef: string,
     code: string
   ) {
+    // Error handling
     if (contactType === 'phone') {
       await this.smsRepo.send(contact, code);
       return;

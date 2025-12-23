@@ -8,15 +8,16 @@ import { GetPatientDashboard } from "modules/patient/application/use-cases/GetPa
 import { UpdatePatient } from "modules/patient/application/use-cases/UpdatePatient";
 
 export async function getPatientById(req: Request, res: Response) {
-    const { userId } = req.params;
+    const { patientId } = req.params;
+    console.log("Getting patient for patientId:", patientId);
     try {
         const uc = new GetPatient(resolve(PATIENT_REPO));
-        const result = await uc.exec(userId as string);
+        const result = await uc.exec(patientId as string);
         if (result.ok) {
             res.status(200).json(result);
         } else {
             console.error("[getPatient] Error:", result.error);
-            res.status(404).json({ok: false, error: result.error });
+            res.status(404).json({ ok: false, error: result.error });
         }
     } catch (error) {
         console.error("[getPatient] There is an error in the patient controller", error);
@@ -41,11 +42,11 @@ export async function getPatientDashboard(req: Request, res: Response) {
     }
 }
 
-export async function updatePatient (req: Request, res: Response) {
-    const userId = req.query.nixpendName as string;
+export async function updatePatient(req: Request, res: Response) {
+    const { patientId } = req.params;
     const updateData = req.body as UpdateType;
     const uc = new UpdatePatient(resolve(PATIENT_REPO), resolve(USER_AUTH_REPO), resolve(NIXPEND_ADAPTER));
-    const result = await uc.exec(userId, updateData);
+    const result = await uc.exec(patientId, updateData);
     if (result.ok) {
         res.status(200).json(result);
     } else {
@@ -55,13 +56,16 @@ export async function updatePatient (req: Request, res: Response) {
 }
 
 export async function createPatient(req: Request, res: Response) {
-    const {userId, data} = req.body;
+    const { userId, data } = req.body;
     const uc = new CreatePatient(resolve(PATIENT_REPO), resolve(NIXPEND_ADAPTER), resolve(USER_AUTH_REPO));
-    const result = await uc.exec(userId, data);
-    if (result.ok) {
-        res.status(201).json(result);
-    } else {
-        console.error("[createPatient] Error:", result.error);
-        res.status(400).json({ error: result.error });
+    try {
+        const result = await uc.exec(userId, data);
+        if (!result.ok) {
+            return res.status(400).json(result);
+        }
+        return res.status(201).json(result);
+    } catch (error) {
+        console.error("[createPatient] There is an error in the patient controller", error);
+        return res.status(500).json({ ok: false, error: "Something Went Wrong" });
     }
 }

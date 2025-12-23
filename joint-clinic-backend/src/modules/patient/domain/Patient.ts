@@ -2,7 +2,7 @@ export interface Patient {
     _id?: string;
     userId: string;
     nixpendId: string;
-    guardianInformation?: string;
+    // Note: Guardian information is accessed through User.guardianInformation via userId reference
     medicalRecordNumber?: string;
     insuranceId?: string;
     bloodGroup?: string;

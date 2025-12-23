@@ -4,7 +4,7 @@ import { resolve } from "app/container"
 
 export function StartJobs() {
     const doctorSyncJob = new SyncDoctorJob(resolve(NIXPEND_ADAPTER), resolve(DOCTOR_REPO));
-    doctorSyncJob.schedule("*/5 * * * *"); // every 5 minutes
+    doctorSyncJob.schedule("*/10 * * * *"); // every 10 minutes
 
     // another jobs can be started here
 }

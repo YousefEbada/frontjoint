@@ -45,12 +45,12 @@ export class UpdatePatient {
         ]
     };
 
-    async exec(userId: string, data: Partial<Patient & User & UpdateType>): Promise<any> {
+    async exec(patientId: string, data: Partial<Patient & User & UpdateType>): Promise<any> {
         const userFields: Partial<User> = {};
         const patientFields: Partial<Patient> = {};
         const nixpendFields: Partial<UpdateType> = {};
 
-        const patient = await this.patientRepo.getPatient(userId);
+        const patient = await this.patientRepo.getPatient(patientId);
         if (!patient) {
             return { ok: false, error: "Patient not found" };
         }
@@ -80,11 +80,11 @@ export class UpdatePatient {
             const updatePromises = [];
             // update patient, user, nixpend to be in sync
             if (Object.keys(patientFields).length) {
-                updatePromises.push(this.patientRepo.updatePatient(userId, patientFields))
+                updatePromises.push(this.patientRepo.updatePatient(patientId, patientFields))
             }
 
             if (Object.keys(userFields).length) {
-                updatePromises.push(this.userRepo.updateUserInfo(userId, { ...userFields }));
+                updatePromises.push(this.userRepo.updateUserInfo(patient.userId, { ...userFields }));
             }
 
             if (Object.keys(nixpendFields).length) {

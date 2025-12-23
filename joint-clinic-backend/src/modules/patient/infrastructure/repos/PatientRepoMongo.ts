@@ -6,15 +6,16 @@ import { PatientRepoPort } from "modules/patient/application/ports/PatientRepoPo
 export const PatientRepoMongo: PatientRepoPort = {
     async getPatient(id) {
         try {
-            if (!mongoose.Types.ObjectId.isValid(id)) {
-                return null; // let use-case decide
-            }
-            const patient = await PatientModel.findById(id)
-            .populate({
-                path: 'userId',
-                select: 'fullName firstName lastName email phone gender'
-            })
-            .lean();
+            console.log("PatientRepoMongo.getPatient] Fetching patient with id:", id);
+            // if (!mongoose.Types.ObjectId.isValid(id)) {
+            //     return null; // let use-case decide
+            // }
+            const patient = await PatientModel.findOne({ userId: id })
+                .populate({
+                    path: 'userId',
+                    select: 'fullName firstName lastName email phone gender'
+                })
+                .lean();
             return patient as any as Patient ?? null;
         } catch (error) {
             console.error("[PatientRepoMongo.getPatient] DB error:", (error as any).message);
@@ -22,13 +23,14 @@ export const PatientRepoMongo: PatientRepoPort = {
         }
     },
 
+    // Decide if you want to use patient id or userId here
     async updatePatient(id, data) {
         try {
-            if (!mongoose.Types.ObjectId.isValid(id)) {
-                return null; // let use-case decide
-            }
-            const patient = await PatientModel.findByIdAndUpdate(
-                id,
+            // if (!mongoose.Types.ObjectId.isValid(id)) {
+            //     return null; // let use-case decide
+            // }
+            const patient = await PatientModel.findOneAndUpdate(
+                { userId: id },
                 { $set: data },
                 { new: true, lean: true }
             );
@@ -52,9 +54,9 @@ export const PatientRepoMongo: PatientRepoPort = {
 
     async updatePatientStatus(id, status, options) {
         try {
-            if (!mongoose.Types.ObjectId.isValid(id)) {
-                throw new Error("INVALID_ID");
-            }
+            // if (!mongoose.Types.ObjectId.isValid(id)) {
+            //     throw new Error("INVALID_ID");
+            // }
             await PatientModel.findByIdAndUpdate(
                 id,
                 { status },

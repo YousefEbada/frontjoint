@@ -22,10 +22,10 @@ const verifyLimiter = rateLimit({
 // TODO: implement per-route rate limiting
 
 // rate limit for each route?
-authRoutes.get('/find', requestLimiter, findUser);
-authRoutes.post('/create-partial', requestLimiter, createPartialUser);
-authRoutes.post('/create-full', requestLimiter, createFullUser);
-authRoutes.get('/otp/request', requestLimiter, requestOtp);
-authRoutes.post('/otp/verify', verifyLimiter, verifyOtp);
+authRoutes.get('/find', findUser);
+authRoutes.post('/create-partial', createPartialUser);
+authRoutes.post('/create-full', createFullUser);
+authRoutes.get('/otp/request',  requestOtp);
+authRoutes.post('/otp/verify', verifyOtp);
 // Don't Forget Logout
 // Don't Forget Change Password
