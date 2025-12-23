@@ -1,7 +1,6 @@
-// path: src/modules/auth/presentation/routes.ts
 import { Router } from 'express';
 import rateLimit from 'express-rate-limit';
-import { requestOtp, verifyOtp } from './controllers/auth.controller.js';
+import { createFullUser, createPartialUser, findUser, requestOtp, verifyOtp } from './controllers/auth.controller.js';
 
 export const authRoutes = Router();
 
@@ -19,5 +18,14 @@ const verifyLimiter = rateLimit({
     legacyHeaders: false
 });
 
-authRoutes.post('/otp/request', requestLimiter, requestOtp);
-authRoutes.post('/otp/verify', verifyLimiter, verifyOtp);
+// generic rate limiter - throttle requests to 5 per 15 minutes
+// TODO: implement per-route rate limiting
+
+// rate limit for each route?
+authRoutes.get('/find', findUser);
+authRoutes.post('/create-partial', createPartialUser);
+authRoutes.post('/create-full', createFullUser);
+authRoutes.get('/otp/request',  requestOtp);
+authRoutes.post('/otp/verify', verifyOtp);
+// Don't Forget Logout
+// Don't Forget Change Password

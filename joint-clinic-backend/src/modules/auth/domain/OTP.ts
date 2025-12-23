@@ -1,6 +1,6 @@
 export interface OTP {
   _id: string;
-  subjectType: 'report'|'login';
+  subjectType: 'report'|'login'|'register';
   subjectRef: string;
   codeHash: string;
   expiresAt: Date;
