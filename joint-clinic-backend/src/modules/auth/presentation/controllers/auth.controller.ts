@@ -10,7 +10,7 @@ import { MAIL_REPO, OTP_REPO, SMS_REPO } from 'app/container.bindings.js';
 import { USER_AUTH_REPO } from 'app/container.bindings.js';
 
 export async function findUser(req: Request, res: Response) {
-  const { contact } = FindUserSchema.parse(req.body);
+  const { contact } = FindUserSchema.parse(req.query);
   const uc = new FindUserByContact(resolve(USER_AUTH_REPO));
   try {
     const result = await uc.exec(contact);
