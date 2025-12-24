@@ -33,3 +33,18 @@ html {
   background-color: #0d294d;
   border-radius: 9999px;
 }
+
+/* Booking Change Page - Custom breakpoint at 1400px */
+@media (min-width: 1400px) {
+  .booking-change-container {
+    flex-direction: row;
+    gap: 0;
+    row-gap: 0;
+  }
+  .booking-change-left {
+    width: 40%;
+  }
+  .booking-change-right {
+    width: 60%;
+  }
+}

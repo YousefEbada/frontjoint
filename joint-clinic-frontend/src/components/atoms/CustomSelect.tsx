@@ -59,7 +59,7 @@ export default function CustomSelect({
         type="button"
         onClick={() => setOpen(!open)}
         className={clsx(
-          "bg-[#fff]",
+          "bg-[#fff] !text-[#1e5598]",
           isSmall ? "rounded-[30px] border border-gray-200" : "rounded-[30px] sm:rounded-[40px] md:rounded-[50px]",
           "text-[#1e5598]",
           "w-full",
@@ -76,7 +76,7 @@ export default function CustomSelect({
         )}
       >
         <span className={clsx("block w-full pointer-events-none", isSmall ? "text-left text-gray-500" : "text-center")}>
-          {selected === placeholder ? <span className="text-gray-400">{selected}</span> : <span className="text-[#000]">{selected}</span>}
+          {selected === placeholder ? <span className="text-gray-400">{selected}</span> : <span className="text-[#1e5598]">{selected}</span>}
         </span>
 
         {/* ARROW */}

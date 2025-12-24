@@ -10,9 +10,10 @@ const days = Array.from({ length: 7 }).map((_, i) =>
 
 interface CalendarProps {
   onSelect?: (date: string) => void;
+  width?: string;
 }
 
-const Calendar = ({ onSelect }: CalendarProps) => {
+const Calendar = ({ onSelect, width }: CalendarProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [currentMonth, setCurrentMonth] = useState(dayjs());
@@ -68,30 +69,30 @@ const Calendar = ({ onSelect }: CalendarProps) => {
   return (
     <div
       className={clsx(
-        "bg-white",
+        "bg-white text-[#1e5598]",
         "p-3 sm:p-4 md:p-6",
         "rounded-[16px] sm:rounded-[20px] md:rounded-[24px]",
         "shadow-[0px_15px_50px_rgba(30,85,152,0.15)]",
         "w-full",
-        "max-w-[260px] sm:max-w-[200px] md:max-w-[380px]"
+        width ?? "max-w-[260px] sm:max-w-[200px] md:max-w-[380px]"
       )}
     >
       {/* Month Header */}
       <div className="flex justify-between items-center mb-3 sm:mb-4">
-        <h3 className="text-[14px] sm:text-[16px] md:text-[20px] font-semibold text-[#0D294D]">
+        <h3 className="text-[14px] sm:text-[16px] md:text-[20px] font-semibold text-[#1e5598]">
           {currentMonth.format("MMMM YYYY")}
         </h3>
 
         <div className="flex gap-2">
           <button
             onClick={handlePrevMonth}
-            className="text-[#1e5598] text-[16px] sm:text-[18px] md:text-[20px] font-bold hover:opacity-70"
+            className="cursor-pointer text-[#1e5598] text-[16px] sm:text-[18px] md:text-[20px] font-bold hover:opacity-70"
           >
             {"<"}
           </button>
           <button
             onClick={handleNextMonth}
-            className="text-[#1e5598] text-[16px] sm:text-[18px] md:text-[20px] font-bold hover:opacity-70"
+            className="cursor-pointer text-[#1e5598] text-[16px] sm:text-[18px] md:text-[20px] font-bold hover:opacity-70"
           >
             {">"}
           </button>
@@ -102,8 +103,7 @@ const Calendar = ({ onSelect }: CalendarProps) => {
       <div
         className={clsx(
           "grid grid-cols-7",
-          "text-center text-[#0D294D]/70",
-          "font-medium",
+          "text-center text-[#1e5598]",      
           "mb-2",
           "text-[10px] sm:text-[11px] md:text-[14px]"
         )}
@@ -133,10 +133,10 @@ const Calendar = ({ onSelect }: CalendarProps) => {
               className={clsx(
                 "aspect-square",
                 "flex items-center justify-center",
-                "rounded-full",
-                "text-[10px] sm:text-[12px] md:text-[16px]",
+                "rounded-[10px]",
+                "text-[10px] text-[#1e5598] sm:text-[12px] md:text-[16px]",
                 "transition-all duration-200",
-                isSelected ? "bg-[#1e5598] text-white shadow-md scale-105" : "hover:bg-[#e2ecf6]",
+                isSelected ? "bg-[#9fd5e2]" : "hover:bg-[#e2ecf6] cursor-pointer",
                 !isCurrentMonth && "opacity-30"
               )}
             >

@@ -2,6 +2,7 @@ import React from "react";
 import Typography from "@/components/atoms/Typography";
 import StatusBadge from "@/components/atoms/StatusBadge";
 import ActionButton from "@/components/atoms/ActionButton";
+import Link from "next/link";
 
 interface BookingItemProps {
     sessionNumber: number;
@@ -49,18 +50,22 @@ const BookingItem: React.FC<BookingItemProps> = ({
 
             {/* Actions */}
             <div className="hidden md:flex gap-3">
-                <ActionButton
-                    text="Cancel"
-                    variant="outline"
-                    onClick={onCancel}
-                    className="w-[100px]"
-                />
-                <ActionButton
-                    text={`${type === "patient" ? "Change" : "Reschedule"}`}
-                    variant="solid"
-                    onClick={onReschedule}
-                    className="w-[120px]"
-                />
+                <Link href="/staffboard/bookingcancel">
+                    <ActionButton
+                        text="Cancel"
+                        variant="outline"
+                        onClick={onCancel}
+                        className="w-[100px]"
+                    />
+                </Link>
+                <Link href="/staffboard/bookingchange">
+                    <ActionButton
+                        text={`${type === "patient" ? "Change" : "Reschedule"}`}
+                        variant="solid"
+                        onClick={onReschedule}
+                        className="w-[120px]"
+                    />
+                </Link>
             </div>
             <div className="py-3 pl-4 md:hidden flex">
                 <Typography
