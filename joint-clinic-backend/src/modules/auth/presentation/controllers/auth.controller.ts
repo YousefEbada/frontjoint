@@ -11,14 +11,15 @@ import { USER_AUTH_REPO } from 'app/container.bindings.js';
 
 export async function findUser(req: Request, res: Response) {
   const { contact } = FindUserSchema.parse(req.query);
+  console.log("CONTACT:", contact);
   const uc = new FindUserByContact(resolve(USER_AUTH_REPO));
   try {
     const result = await uc.exec(contact);
     if (!result.ok) {
       return res.status(400).json(result);
     }
-    res.status(200).json(result);
-  } catch (error) {
+    return res.status(200).json(result);
+  } catch (error) { 
     console.log("Error in findUser controller:", (error as Error).message);
     return res.status(500).json({ ok: false, message: 'Internal Server Error.' } );
   }
@@ -89,7 +90,8 @@ export async function verifyOtp(req: Request, res: Response) {
         // });
         return res.status(200).json(result);
       }
-      return res.status(204).json(result);
+      console.log("====OTP verified successfullyafkjl;dsjf;f8uoeqr809480298509====.", result);
+      return res.status(200).json(result);
     }
     const statusMap: Record<string, number> = { invalid: 401, expired: 400, locked: 429, not_found: 404, invalid_token: 401 };
     const status = result.reason ? (statusMap[result.reason] ?? 400) : 400;

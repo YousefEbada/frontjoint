@@ -7,34 +7,21 @@ import "./whoWeAre.css";
 import Profile from "@/components/atoms/icons/Profile";
 import FeatureCard from "@/components/molecules/FeatureCardCom";
 import { color } from "@/lib/constants/colors";
-//  gg
+import { testAuth } from "@/lib/api/doctor.api";
+import { useDoctors } from "@/hooks/useDoctors";
 
 gsap.registerPlugin(ScrollTrigger);
 
 function WhoWeAre() {
-  const memberinfo = [
-    { name: "Bryan", major: "BranchChiropractor Aqiq Branch", fill: "#d5ece3" },
-    {
-      name: "Saad Al Omar",
-      major: "Chiropractor Aqiq Branch",
-      fill: "#167c4f",
-    },
-    {
-      name: "Abdallah El Mahya",
-      major: "Physiotherapy Specialist Aqiq Branch",
-      fill: "#112a4d",
-    },
-    {
-      name: "Mohammed Alzahrani",
-      major: "Physiotherapy Specialist Aqiq Branch",
-      fill: "#ee3124",
-    },
-    {
-      name: "Aly El Sennedy",
-      major: "Physiotherapy Specialist Aqiq Branch",
-      fill: "#fdb515",
-    },
-  ];
+  const { doctors, loading, error } = useDoctors()
+  
+  const memberColors = ["#d5ece3", "#167c4f", "#112a4d", "#ee3124", "#fdb515"];
+  const memberinfo = doctors?.slice(0, 5).map((doctor: any, index) => ({
+    name: doctor.practitionerName,
+    major: `${doctor.department} Specialist ${doctor.practitionerCompany?.[0]?.branch || ''} Branch`,
+    fill: memberColors[index % memberColors.length]
+  })) || [];
+
 
   const cards = [
     {
@@ -88,6 +75,7 @@ function WhoWeAre() {
   };
 
   React.useEffect(() => {
+    testAuth()
     const section = sectionRef.current;
     const circle = circleRef.current;
     const title = titleRef.current;
@@ -265,7 +253,7 @@ function WhoWeAre() {
 
         <div
           className={
-            "members translate-y-6 max-w-[800px] mx-auto grid grid-cols-3 md:grid-cols-5 " +
+            "members translate-y-6 max-w-[1400px] mx-auto grid grid-cols-3 md:grid-cols-5 " +
             // center the whole grid content (useful when last row has fewer items)
             "justify-center justify-items-center gap-[10px] overflow-hidden transition-all"
           }
@@ -274,14 +262,14 @@ function WhoWeAre() {
             <div key={index} className="flex flex-col justify-center items-center w-auto mb-4">
               <Profile
                 fill={member.fill}
-                className="w-[40px] md:w-[60px] mb-[4px]"
-              />
+                className={`w-[40px] md:w-[60px] mb-[4px]`}
+              /> 
 
-              <h4 className="text-[13px] md:text-[20px] max-w-[250px] my-0 text-[#fff] font-bold text-center">
-                {member.name}
+              <h4 className={`text-[13px] md:text-[20px] max-w-[250px] my-0 text-[#fff] font-bold text-center`}>
+                { member.name}
               </h4>
 
-              <p className="text-[10px] md:text-[16px] max-w-[100px] text-center text-[#fff]">
+              <p className="text-[10px] md:text-[16px] max-w-[100px] mt-2 text-center text-[#fff]">
                 {member.major}
               </p>
             </div>

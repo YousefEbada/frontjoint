@@ -8,7 +8,7 @@ import { GetDoctorSessions } from "modules/doctor/application/use-cases/GetDocto
 import { GetPatientsByDoctorAndStatus } from "modules/doctor/application/use-cases/GetPatientsByDoctorAndStatus";
 
 export async function findDoctorById(req: Request, res: Response) {
-    const doctorId = req.query.id as string;
+    const doctorId = req.params.id as string;
     try {
         const uc = new FindDoctorById(resolve(DOCTOR_REPO))
         const result = await uc.execute(doctorId);

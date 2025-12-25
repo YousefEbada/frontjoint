@@ -13,8 +13,11 @@ export class CreatePartialUser {
     async exec(fullName: string, gender: 'Male' | 'Female' | 'male' | 'female', birthdate: Date, contact: string): Promise<CreatePartialResult> {
         try {
             const contactType = detectContactType(contact);
-            const existingUser = await this.userRepo.findByEmailOrPhone(contact);
+            console.log('[Create Partial User] Detected contact type:', contactType);
+            console.log('[Create Partial User] Creating partial user with contact:', contact);
+            const existingUser = await this.userRepo.findByEmailOrPhone(contactType, contact);
             if (existingUser) {
+                console.log('[Create Partial User] User already exists with contact:', existingUser);
                 return {ok: false, error: 'User Already Exists.'};
             }
             const user = await this.userRepo.create({ fullName, gender, birthdate, [contactType]: contact, userStatus: { partialProfileCompleted: true, registerOtpVerified: false, fullProfileCompleted: false } });

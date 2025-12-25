@@ -12,7 +12,7 @@ const patientLimiter = rateLimit({
     legacyHeaders: false
 });
 
-patientRoutes.post("/", createPatient);
+patientRoutes.post("/create", createPatient);
 patientRoutes.get("/:patientId/dashboard", patientLimiter, getPatientDashboard);
 patientRoutes.get("/:patientId", patientLimiter, getPatientById);
 patientRoutes.put("/:patientId", patientLimiter, updatePatient);
