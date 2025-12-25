@@ -33,7 +33,7 @@ export class CreatePatient {
                 first_name: firstName,
                 last_name: lastName[0],
                 // Handle this from the frontend later
-                nationality: nationality == 'Egyptian' ? 'Egypt' : nationality == 'Saudi' ? 'Saudi Arabia' : nationality,
+                nationality: nationality == 'Egyptian' ? 'Egypt' : nationality == 'Saudi' ? 'Saudi Arabia' : "France",
                 mobile,
                 sex
             });

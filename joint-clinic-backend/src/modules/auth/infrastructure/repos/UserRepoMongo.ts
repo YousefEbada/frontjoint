@@ -3,8 +3,9 @@ import { User } from "modules/auth/domain/User";
 import { UserModel } from "../models/UserModel";
 
 export const UserRepoMongo: UserRepoPort = {
-  async findByEmailOrPhone(contact: string): Promise<User | null> {
-    return UserModel.findOne({ [contact]: contact });
+  async findByEmailOrPhone(contactType: string, contact: string): Promise<User | null> {
+    console.log("Finding user by", contactType, ":", contact);
+    return UserModel.findOne({ [contactType]: contact });
   },
 
   async findById(id: string): Promise<User | null> {

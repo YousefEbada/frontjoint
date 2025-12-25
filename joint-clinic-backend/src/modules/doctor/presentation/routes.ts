@@ -13,9 +13,9 @@ const requestLimiter = rateLimit({
     legacyHeaders: false
 });
 
-doctorRoutes.use(requestLimiter);
+// doctorRoutes.use(requestLimiter);
 
-doctorRoutes.get("/", findDoctorById);
+doctorRoutes.get("/:id", findDoctorById);
 doctorRoutes.get("/", findDoctors);
 doctorRoutes.get('/:doctorId/bookings', getDoctorBookings);
 doctorRoutes.get('/:doctorId/sessions', getDoctorSessions);

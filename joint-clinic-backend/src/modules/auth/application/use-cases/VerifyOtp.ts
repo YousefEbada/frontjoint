@@ -82,7 +82,7 @@ export class VerifyOtp {
           ...user.userStatus,
           registerOtpVerified: true,
         });
-        return { ok: true };
+        return { ok: true, message: "Registration OTP verified." };
 
       case "login":
         if (!user.userStatus?.registerOtpVerified) {

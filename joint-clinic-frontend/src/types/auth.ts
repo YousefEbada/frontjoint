@@ -1,0 +1,71 @@
+export interface CreatePartialUserInput {
+    fullName: string,
+    gender: 'Male' | 'Female' | 'male' | 'female',
+    contact: string,
+    birthDate: string
+}
+
+export interface CreateFullUserInput {
+  userId?: string;
+  contact?: string;
+  fullName?: string;
+  gender?: string;
+  birthdate?: string | Date;
+  email?: string;
+  phone?: string;
+  identifier?: string;
+  identifierType?: string;
+  nationality?: string;
+  address?: string;
+  city?: string;
+  maritalStatus?: string;
+  speakingLanguages?: string[];
+  guardianInformation?: {
+    guardianName?: string;
+    guardianEmail?: string;
+    guardianPhone?: string;
+    guardianBloodType?: string;
+    guardianRelation?: string;
+    guardianIdentifier?: string;
+    guardianIdentifierType?: string;
+    patientCategory?: string;
+  };
+}
+
+export interface RequestOTPInput {
+    subjectRef: string;
+    subjectType: 'login' | 'register' | 'report';
+    contact: string;
+}
+
+export interface VerifyOTPInput {
+    otpToken: string;
+    code: string;
+}
+
+export interface CreatePatientInput {
+    _id?: string;
+    userId?: string;
+    nixpendId?: string;
+    // Note: Guardian information is accessed through User.guardianInformation via userId reference
+    medicalRecordNumber?: string;
+    insuranceId?: string;
+    bloodGroup?: string;
+    allergies?: string[];
+    medicalHistory?: string[];
+    injuryDetails?: {
+        affectedArea?: string;
+        startDate?: string | Date;
+        receivedTreatment?: boolean;
+        painSeverity?: number; // 0-10 scale
+        howDidInjurHappened?: string;
+        affectDailyActivities?: boolean;
+        additionalNotes?: string;
+        // check this from the report module and how to sync it
+        medicalReports?: string[];
+    };
+    status?: 'active' | 'inactive';
+    notes?: string;
+    createdAt?: Date;
+    updatedAt?: Date;
+}

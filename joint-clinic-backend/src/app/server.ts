@@ -22,8 +22,10 @@ export async function startServer() {
   // app.use(cors({ origin: env.CORS_ORIGINS.split(',').map(s => s.trim()) }));
 
   const allowedOrigins = env.CORS_ORIGINS.split(',').map(s => s.trim()).filter(Boolean);
+  console.log(allowedOrigins)
   app.use(cors({
     origin: function (origin, callback) {
+      console.log("THE ORIGIN IS: ", origin)
       if (!origin) return callback(null, true); // tools/health/local
       if (allowedOrigins.includes(origin)) return callback(null, true);
       return callback(new Error('Not allowed by CORS'));
