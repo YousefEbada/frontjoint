@@ -4,13 +4,19 @@ import "./dropdown.css";
 
 interface DropdownProps {
   items: string[];
-  text: string; // new prop
+  text: string;
   width?: string;
+  onSelect?: (value: string) => void;
+  value?: string;
 }
 
-export default function CustomDropdown({ items, text, width }: DropdownProps) {
+export default function CustomDropdown({ items, text, width, onSelect, value }: DropdownProps) {
   const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState<string>(text);
+  const [internalSelected, setInternalSelected] = useState<string>(text);
+
+  // Determine current value: controlled (value prop) or uncontrolled (internal state)
+  const currentSelection = value !== undefined ? value : internalSelected;
+
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -26,7 +32,17 @@ export default function CustomDropdown({ items, text, width }: DropdownProps) {
     return () => document.removeEventListener("mousedown", close);
   }, []);
 
-  const isDefault = selected === text;
+  const isDefault = currentSelection === text || !items.includes(currentSelection);
+
+  const handleSelect = (item: string) => {
+    if (value === undefined) {
+      setInternalSelected(item);
+    }
+    if (onSelect) {
+      onSelect(item);
+    }
+    setOpen(false);
+  };
 
   return (
     <div
@@ -52,7 +68,7 @@ export default function CustomDropdown({ items, text, width }: DropdownProps) {
         "
         style={{ color: isDefault ? "#7b8a99" : "#0D294D" }}
       >
-        {selected}
+        {currentSelection}
       </div>
 
       {/* Dropdown */}
@@ -73,16 +89,14 @@ export default function CustomDropdown({ items, text, width }: DropdownProps) {
                 onMouseDown={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
-                  setSelected(item);
-                  setOpen(false);
+                  handleSelect(item);
                 }}
                 className={`
                   text-[24px] cursor-pointer transition select-none
 
-                  ${
-                    selected === item
-                      ? "sel text-[#7b8a99] scale-105 rounded-full py-2"
-                      : "text-[#7b8a99] hover:text-[#0D294D]"
+                  ${currentSelection === item
+                    ? "sel text-[#7b8a99] scale-105 rounded-full py-2"
+                    : "text-[#7b8a99] hover:text-[#0D294D]"
                   }
                 `}
               >

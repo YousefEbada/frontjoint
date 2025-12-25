@@ -25,7 +25,7 @@ const verifyLimiter = rateLimit({
 authRoutes.get('/find', findUser);
 authRoutes.post('/create-partial', createPartialUser);
 authRoutes.post('/create-full', createFullUser);
-authRoutes.get('/otp/request',  requestOtp);
+authRoutes.post('/otp/request',  requestOtp);
 authRoutes.post('/otp/verify', verifyOtp);
 // Don't Forget Logout
 // Don't Forget Change Password

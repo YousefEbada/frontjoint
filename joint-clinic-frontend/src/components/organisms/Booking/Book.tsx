@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 // import Button from "../atoms/Button";
 
 // import Pagination from "../molecules/Pagination2";
@@ -9,12 +9,26 @@ import Calendar from "@/components/molecules/Calendar";
 import Pagination from "@/components/molecules/Pagination2";
 import CustomSelect from "@/components/atoms/CustomSelect";
 import "./book.css";
+import { authApi } from "@/features/auth/api";
 
 const Book = () => {
   const [step, setStep] = useState(1);
   const totalSteps = 3;
   const next = () => step < totalSteps && setStep(step + 1);
   const back = () => step > 1 && setStep(step - 1);
+  
+  useEffect(() => {
+    const run = async () => {
+      try {
+        const user = await authApi.findUser("+201096766428");
+        console.log("User:", user);
+      } catch (err) {
+        console.error("Error:", err);
+      }
+    };
+    run();
+    console.log("Test222");
+  }, []);
 
   return (
     <div id="book" className="min-h-screen w-full flex flex-col items-center justify-start bg-[#edf7f9] pb-10">
@@ -171,7 +185,7 @@ const Book = () => {
                   </h3>
 
                   <pre className="text-[#1e5598] text-[14px] sm:text-[16px] md:text-[22px] font-bold leading-5 md:leading-6 max-w-[85vw] whitespace-pre-wrap break-words overflow-hidden">
-Your session will be on:<span className="text-[#167c4f]">  Monday, January 2nd 2026 at 8:00 AM</span>
+                    Your session will be on:<span className="text-[#167c4f]">  Monday, January 2nd 2026 at 8:00 AM</span>
                   </pre>
 
                   <p className="text-[#9ca3af] leading-7 translate-x-4 text-[12px] sm:text-[14px] md:text-[20px] leading-5 mt-1 max-w-[100%] mx-auto lg:mx-0">
