@@ -1,55 +1,42 @@
-import express from 'express';
-import helmet from 'helmet';
-import cors from 'cors';
-import compression from 'compression';
-import pinoHttp from 'pino-http';
-import rateLimit from 'express-rate-limit';
-import { env } from '../config/env.js';
-import { mountRoutes } from './routes.js';
-import { connectMongo, mongoState } from '../infra/db/mongoose.js';
-import { errorHandler } from '../shared/middleware/errorHandler.js';
-import { traceId } from '../shared/middleware/traceId.js';
-import { bindAll } from './container.bindings.js';
-import { requestLogger } from 'shared/middleware/requestLogger.js';
-import { StartJobs } from 'jobs/startJobs.js';
-
 export async function startServer() {
-  await connectMongo();
+  try {
+    await connectMongo();
+  } catch (err) {
+    console.error('Mongo connection failed:', err);
+  }
+
   bindAll();
   const app = express();
 
   app.use(helmet());
-  // app.use(cors({ origin: env.CORS_ORIGINS.split(',').map(s => s.trim()) }));
 
-  const allowedOrigins = env.CORS_ORIGINS.split(',').map(s => s.trim()).filter(Boolean);
-  console.log(allowedOrigins)
+  const allowedOrigins = (env.CORS_ORIGINS || '')
+    .split(',')
+    .map(s => s.trim())
+    .filter(Boolean);
+
   app.use(cors({
-    origin: function (origin, callback) {
-      console.log("THE ORIGIN IS: ", origin)
-      if (!origin) return callback(null, true); // tools/health/local
-      if (allowedOrigins.includes(origin)) return callback(null, true);
+    origin(origin, callback) {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.length === 0 || allowedOrigins.includes(origin))
+        return callback(null, true);
       return callback(new Error('Not allowed by CORS'));
-    },
-    credentials: false
+    }
   }));
 
   app.use(compression());
-
   app.use(express.json({ limit: '10mb' }));
 
   app.use(traceId);
   app.use(requestLogger as any);
-
   app.use(pinoHttp());
 
-  app.use(rateLimit(
-    {
-      windowMs: env.RATE_LIMIT_WINDOW_MS,
-      max: env.RATE_LIMIT_MAX,
-      standardHeaders: true,
-      legacyHeaders: false
-    })
-  );
+  app.use(rateLimit({
+    windowMs: Number(env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000,
+    max: Number(env.RATE_LIMIT_MAX) || 100,
+    standardHeaders: true,
+    legacyHeaders: false
+  }));
 
   app.get('/health', (req, res) => {
     res.json({
@@ -64,13 +51,16 @@ export async function startServer() {
   });
 
   mountRoutes(app);
-
   app.use(errorHandler);
 
-  // start the sync jobs
-  StartJobs();
+  try {
+    StartJobs();
+  } catch (err) {
+    console.error('StartJobs failed:', err);
+  }
 
-  app.listen(env.PORT, () => {
-    console.log(`API running at http://localhost:${env.PORT}`);
+  const PORT = process.env.PORT || env.PORT || 3000;
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`API running on port ${PORT}`);
   });
 }
