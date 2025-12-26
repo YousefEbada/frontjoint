@@ -1,3 +1,18 @@
+import express from 'express';
+import helmet from 'helmet';
+import cors from 'cors';
+import compression from 'compression';
+import pinoHttp from 'pino-http';
+import rateLimit from 'express-rate-limit';
+import { env } from '../config/env.js';
+import { mountRoutes } from './routes.js';
+import { connectMongo, mongoState } from '../infra/db/mongoose.js';
+import { errorHandler } from '../shared/middleware/errorHandler.js';
+import { traceId } from '../shared/middleware/traceId.js';
+import { bindAll } from './container.bindings.js';
+import { requestLogger } from 'shared/middleware/requestLogger.js';
+import { StartJobs } from 'jobs/startJobs.js';
+
 export async function startServer() {
   try {
     await connectMongo();
