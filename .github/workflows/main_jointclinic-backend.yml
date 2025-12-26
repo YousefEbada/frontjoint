@@ -13,17 +13,18 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read # This is required for actions/checkout
+      contents: read # required for actions/checkout
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Set up Node.js version
+      - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '22.x'
 
-      - name: npm install & build backend
+      - name: Install & build backend
         run: |
           npm install --prefix joint-clinic-backend
           npm run build --prefix joint-clinic-backend
@@ -46,6 +47,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: backend-artifact
+          path: joint-clinic-backend  # downloads directly into this folder
 
       - name: Login to Azure
         uses: azure/login@v2
@@ -60,4 +62,4 @@ jobs:
         with:
           app-name: 'jointclinic-backend'
           slot-name: 'Production'
-          package: './backend-artifact'
+          package: './joint-clinic-backend'  # folder with package.json
