@@ -4,6 +4,7 @@ import { Request, Response } from "express";
 import { UpdateType } from "modules/integration/domain/Nixpend";
 import { CreatePatient } from "modules/patient/application/use-cases/CreatePatient";
 import { GetPatient } from "modules/patient/application/use-cases/GetPatient";
+import { GetPatientByUser } from "modules/patient/application/use-cases/GetPatientByUser";
 import { GetPatientDashboard } from "modules/patient/application/use-cases/GetPatientDashboard";
 import { UpdatePatient } from "modules/patient/application/use-cases/UpdatePatient";
 
@@ -18,6 +19,23 @@ export async function getPatientById(req: Request, res: Response) {
         } else {
             console.error("[getPatient] Error:", result.error);
             res.status(404).json({ ok: false, error: result.error });
+        }
+    } catch (error) {
+        console.error("[getPatient] There is an error in the patient controller", error);
+        res.status(500).json({ ok: false, error: "Something Went Wrong" });
+    }
+}
+
+export async function getPatientByUserId(req: Request, res: Response) {
+    const userId = req.params.userId;
+    try {
+        const uc = new GetPatientByUser(resolve(PATIENT_REPO));
+        const result = await uc.exec(userId);
+        if (result.ok) {
+            res.status(200).json(result);
+        } else {
+            console.error("[getPatient] Error:", result.error);
+            res.status(404).json(result);
         }
     } catch (error) {
         console.error("[getPatient] There is an error in the patient controller", error);
