@@ -10,8 +10,8 @@ import { connectMongo, mongoState } from '../infra/db/mongoose.js';
 import { errorHandler } from '../shared/middleware/errorHandler.js';
 import { traceId } from '../shared/middleware/traceId.js';
 import { bindAll } from './container.bindings.js';
-import { requestLogger } from 'shared/middleware/requestLogger.js';
-import { StartJobs } from 'jobs/startJobs.js';
+import { requestLogger } from '../shared/middleware/requestLogger.js';
+import { StartJobs } from '../jobs/startJobs.js';
 
 export async function startServer() {
   try {

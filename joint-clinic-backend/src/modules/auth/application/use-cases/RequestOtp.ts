@@ -5,7 +5,7 @@ import { OTPRepoPort } from '../ports/OTPRepoPort.js';
 import { SMSPort } from 'infra/sms/sms.port.js';
 import { MailPort } from 'infra/mail/mail.port.js';
 import { randomCode, hashValue } from '../../../../shared/utils/crypto.js';
-import { detectContactType } from 'shared/utils/detectContactType.js';
+import { detectContactType } from '../../../../shared/utils/detectContactType.js';
 import { security } from '../../../../config/security.js';
 
 type SubjectType = 'report' | 'login' | 'register';
