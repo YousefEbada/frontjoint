@@ -23,30 +23,30 @@ jobs:
         with:
           node-version: '22.x'
 
-      - name: npm install, build, and test
+      - name: npm install & build backend
         run: |
           npm install --prefix joint-clinic-backend
           npm run build --prefix joint-clinic-backend
 
-      - name: Upload artifact for deployment job
+      - name: Upload backend artifact
         uses: actions/upload-artifact@v4
         with:
-          name: node-app
+          name: backend-artifact
           path: joint-clinic-backend
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
     permissions:
-      id-token: write # This is required for requesting the JWT
-      contents: read # This is required for actions/checkout
+      id-token: write
+      contents: read
 
     steps:
-      - name: Download artifact from build job
+      - name: Download backend artifact
         uses: actions/download-artifact@v4
         with:
-          name: node-app
-      
+          name: backend-artifact
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -60,5 +60,4 @@ jobs:
         with:
           app-name: 'jointclinic-backend'
           slot-name: 'Production'
-          package: joint-clinic-backend
-
+          package: './backend-artifact'
