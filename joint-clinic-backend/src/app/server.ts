@@ -65,6 +65,8 @@ export async function startServer() {
       }
     });
 
+    app.get('/', (req, res) => res.send('Server is running'));
+
     // --- Routes & error handler ---
     mountRoutes(app);
     app.use(errorHandler);
