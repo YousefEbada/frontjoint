@@ -14,17 +14,11 @@ import { requestLogger } from 'shared/middleware/requestLogger.js';
 import { StartJobs } from 'jobs/startJobs.js';
 
 export async function startServer() {
-  try {
-    await connectMongo();
-  } catch (err) {
-    console.error('Mongo connection failed:', err);
-  }
-
   bindAll();
   const app = express();
 
+  // Basic middleware
   app.use(helmet());
-
   const allowedOrigins = (env.CORS_ORIGINS || '')
     .split(',')
     .map(s => s.trim())
@@ -32,16 +26,15 @@ export async function startServer() {
 
   app.use(cors({
     origin(origin, callback) {
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.length === 0 || allowedOrigins.includes(origin))
-        return callback(null, true);
+      if (!origin) return callback(null, true); // allow tools/health/local
+      if (allowedOrigins.length === 0 || allowedOrigins.includes(origin)) return callback(null, true);
       return callback(new Error('Not allowed by CORS'));
-    }
+    },
+    credentials: false
   }));
 
   app.use(compression());
   app.use(express.json({ limit: '10mb' }));
-
   app.use(traceId);
   app.use(requestLogger as any);
   app.use(pinoHttp());
@@ -53,6 +46,7 @@ export async function startServer() {
     legacyHeaders: false
   }));
 
+  // Health check
   app.get('/health', (req, res) => {
     res.json({
       ok: true,
@@ -65,17 +59,24 @@ export async function startServer() {
     });
   });
 
+  // Mount routes and error handler
   mountRoutes(app);
   app.use(errorHandler);
+
+  // Start server immediately
+  const PORT = Number(process.env.PORT) || Number(env.PORT) || 4000;
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`API running on port ${PORT}`);
+  });
+
+  // 🔥 Non-blocking startup tasks
+  connectMongo()
+    .then(() => console.log('Mongo connected'))
+    .catch(err => console.error('Mongo connection failed:', err));
 
   try {
     StartJobs();
   } catch (err) {
     console.error('StartJobs failed:', err);
   }
-
-  const PORT = Number(process.env.PORT) || Number(env.PORT) || 4000;
-  app.listen(PORT, '0.0.0.0', () => {
-    console.log(`API running on port ${PORT}`);
-  });
 }
