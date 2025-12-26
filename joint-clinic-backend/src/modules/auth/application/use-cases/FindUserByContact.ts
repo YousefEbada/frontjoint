@@ -4,7 +4,7 @@ import { User } from "modules/auth/domain/User";
 
 type FindUserReturn = {
     ok: true | false;
-    user: User | null;
+    user?: User | null;
     error?: string | null;
 }
 
@@ -12,6 +12,9 @@ export class FindUserByContact {
     constructor(private userRepo: UserRepoPort) {}
     async exec(contact: string): Promise<FindUserReturn> {
         try {
+            if(!contact) {
+                return { ok: false, error: 'Contact is required' };
+            }
             const contactType = detectContactType(contact);
             if (contactType === 'invalid') return { ok: false, user: null, error: 'Invalid contact type' };
             const user = await this.userRepo.findByEmailOrPhone(contact);
@@ -21,7 +24,7 @@ export class FindUserByContact {
             return { ok: true, user };
         } catch (error) {
             console.log('[Find User] Error in find user controller:', (error as Error).message);
-            return { ok: false, user: null, error: 'Internal server error' };
+            return { ok: false, error: 'Internal server error' };
         }
     }
 }
