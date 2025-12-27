@@ -1,8 +1,18 @@
 export interface Doctor {
-  _id: string;
-  userId: string;
-  specialization: string;
-  licenseNumber: string;
+  _id?: string; // MongoDB ID might still be there commonly
+  nixpendId: string;
+  practitionerName: string;
+  fullNameArabic?: string;
+  gender?: string | null;
+  status: string; // "Active"
+  practitionerType: string;
+  department: string;
+  designation?: string;
+  practitionerCompany?: { company: string; branch: string }[];
+  priceList?: string;
+  // Legacy/Optional fields from previous definition that might be used elsewhere
+  specialization?: string;
+  licenseNumber?: string;
   bio?: string;
   experienceYears?: number;
   consultationFee?: number;
@@ -11,7 +21,6 @@ export interface Doctor {
     startTime: string;
     endTime: string;
   }[];
-  status: "active" | "inactive" | "suspended";
   rating?: number;
 }
 
