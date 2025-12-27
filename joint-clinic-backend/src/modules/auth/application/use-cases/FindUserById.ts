@@ -1,5 +1,5 @@
-import { User } from "modules/auth/domain/User";
-import { UserRepoPort } from "../ports/UserRepoPort";
+import { User } from "modules/auth/domain/User.js";
+import { UserRepoPort } from "../ports/UserRepoPort.js";
 
 export class FindUserById {
     constructor(private userRepo: UserRepoPort) {}

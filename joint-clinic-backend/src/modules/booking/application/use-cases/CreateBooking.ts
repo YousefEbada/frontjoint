@@ -1,9 +1,9 @@
-import { Booking, BookingType } from 'modules/booking/domain/Booking.js';
+import { Booking, BookingType } from '../../domain/Booking.js';
 import { BookingRepoPort } from '../ports/BookingRepoPort.js';
-import { BookType } from 'modules/integration/domain/Nixpend.js';
-import { NixpendPort } from 'modules/integration/ports/NixpendPorts.js';
-import { SessionRepoPort } from 'modules/session/application/ports/SessionRepoPort.js';
-import { PatientRepoPort } from 'modules/patient/application/ports/PatientRepoPort.js';
+import { BookType } from '../../../integration/domain/Nixpend.js';
+import { NixpendPort } from '../../../integration/ports/NixpendPorts.js';
+import { SessionRepoPort } from '../../../session/application/ports/SessionRepoPort.js';
+import { PatientRepoPort } from '../../../patient/application/ports/PatientRepoPort.js';
 
 type ValidateResult = {
   violation: string;

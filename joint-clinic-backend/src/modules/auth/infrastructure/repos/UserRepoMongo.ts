@@ -1,6 +1,6 @@
-import { UserRepoPort } from "modules/auth/application/ports/UserRepoPort";
-import { User } from "modules/auth/domain/User";
-import { UserModel } from "../models/UserModel";
+import { UserRepoPort } from "modules/auth/application/ports/UserRepoPort.js";
+import { User } from "modules/auth/domain/User.js";
+import { UserModel } from "../models/UserModel.js";
 
 export const UserRepoMongo: UserRepoPort = {
   async findByEmailOrPhone(contactType: string, contact: string): Promise<User | null> {

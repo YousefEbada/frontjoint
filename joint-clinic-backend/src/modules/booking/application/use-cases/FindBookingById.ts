@@ -1,4 +1,4 @@
-import { BookingRepoPort } from "../ports/BookingRepoPort";
+import { BookingRepoPort } from "../ports/BookingRepoPort.js";
 
 export class FindBookingById {
   constructor(private repo: BookingRepoPort) {}

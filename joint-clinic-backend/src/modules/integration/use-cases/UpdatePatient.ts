@@ -1,7 +1,7 @@
-import { Patient } from "modules/patient/domain/Patient";
-import { PatientRepoPort } from "../../patient/application/ports/PatientRepoPort";
-import { NixpendPort } from "modules/integration/ports/NixpendPorts";
-import { UpdateType } from "modules/integration/domain/Nixpend";
+import { Patient } from "modules/patient/domain/Patient.js";
+import { PatientRepoPort } from "../../patient/application/ports/PatientRepoPort.js";
+import { NixpendPort } from "modules/integration/ports/NixpendPorts.js";
+import { UpdateType } from "modules/integration/domain/Nixpend.js";
 
 type UpdatePatientResult =
     | { ok: true; patient: any }

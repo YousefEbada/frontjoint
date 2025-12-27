@@ -7,11 +7,11 @@ import { CancelBooking } from '../../application/use-cases/CancelBooking.js';
 import { RescheduleBooking } from '../../application/use-cases/RescheduleBooking.js';
 import { BookingRepoPort } from '../../application/ports/BookingRepoPort.js';
 import { NixpendPort } from '../../../integration/ports/NixpendPorts.js';
-import { GetAvailableSlots } from 'modules/booking/application/use-cases/GetAvailableSlots.js';
-import { BookType } from 'modules/integration/domain/Nixpend.js';
+import { GetAvailableSlots } from '../../application/use-cases/GetAvailableSlots.js';
+import { BookType } from '../../../integration/domain/Nixpend.js';
 import { DOCTOR_REPO, PATIENT_REPO, SESSION_REPO } from 'app/container.bindings.js';
-import { FindBookingById } from 'modules/booking/application/use-cases/FindBookingById.js';
-import { UpdateBookingStatus } from 'modules/booking/application/use-cases/UpdateBookingStatus.js';
+import { FindBookingById } from '../../application/use-cases/FindBookingById.js';
+import { UpdateBookingStatus } from '../../application/use-cases/UpdateBookingStatus.js';
 
 const BOOKING_REPO = token<BookingRepoPort>('BOOKING_REPO');
 const NIXPEND_PORT = token<NixpendPort>('NIXPEND_PORT');

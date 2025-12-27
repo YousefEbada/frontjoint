@@ -9,8 +9,10 @@ import BackTo from "@/components/molecules/BackTo";
 import Link from "next/link";
 import PatientCard from "@/components/molecules/PatientCard";
 import DashBoardContent from "@/components/atoms/DashBoardContent";
+import { useDoctorPatients } from "@/hooks/useDoctor";
 
 // Mock Data
+// const allPatients = ... (Replaced)
 const allPatients = Array.from({ length: 15 }, (_, i) => ({
     id: i + 1,
     name: "Patient Name",
@@ -23,11 +25,16 @@ const PatientsPage = () => {
     const [activeTab, setActiveTab] = useState<"active" | "all">("active");
     const [searchTerm, setSearchTerm] = useState("");
 
-    const filteredPatients = allPatients.filter(p => {
-        const matchesSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesTab = activeTab === "active" ? p.status === "Active" : true;
-        return matchesSearch && matchesTab;
-    });
+    // TODO: Replace with actual logged-in doctor ID
+    const doctorId = "672ca9029f64264624b45070";
+
+    const statusFilter = activeTab === "active" ? "active" : undefined;
+    const { data: patients, isLoading } = useDoctorPatients(doctorId, statusFilter);
+
+    const filteredPatients = patients?.filter(p => {
+        const matchesSearch = p.fullName.toLowerCase().includes(searchTerm.toLowerCase());
+        return matchesSearch;
+    }) || [];
 
     return (
         <div className="w-full h-full flex flex-col">
@@ -74,12 +81,12 @@ const PatientsPage = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pb-4">
                             {filteredPatients.length > 0 ? (
                                 filteredPatients.map((patient, index) => (
-                                    <Link key={index} href={`/doctor/patients/${patient.id}`} className="w-full">
+                                    <Link key={patient._id || index} href={`/doctor/patients/${patient._id}`} className="w-full">
                                         <PatientCard
-                                            name={patient.name}
-                                            injury={patient.injury}
-                                            status={patient.status}
-                                            statusColor={patient.statusColor}
+                                            name={patient.fullName}
+                                            injury={patient.condition || "No specified injury"}
+                                            status={patient.status === 'active' ? "Active" : "Inactive"}
+                                            statusColor={patient.status === 'active' ? "text-[#1C9A55]" : "text-[#8A8A8A]"}
                                         />
                                     </Link>
                                 ))

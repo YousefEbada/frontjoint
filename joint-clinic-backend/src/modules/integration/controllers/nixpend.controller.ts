@@ -1,11 +1,11 @@
-import { resolve } from "app/container";
-import { NIXPEND_ADAPTER, PATIENT_REPO } from "app/container.bindings";
+import { resolve } from "app/container.js";
+import { NIXPEND_ADAPTER, PATIENT_REPO } from "app/container.bindings.js";
 import { Request, Response } from "express";
-import { FetchType, UpdateType } from "../domain/Nixpend";
-import { GetPatient } from "../use-cases/GetPatient";
-import { GetPractitioners } from "../use-cases/GetPractitioners";
-import { RegisterPatient } from "../use-cases/RegisterPatient";
-import { UpdatePatient } from "../use-cases/UpdatePatient";
+import { FetchType, UpdateType } from "../domain/Nixpend.js";
+import { GetPatient } from "../use-cases/GetPatient.js";
+import { GetPractitioners } from "../use-cases/GetPractitioners.js";
+import { RegisterPatient } from "../use-cases/RegisterPatient.js";
+import { UpdatePatient } from "../use-cases/UpdatePatient.js";
 
 export async function getPatient(req: Request, res: Response) {
     const { type, value } = req.query;

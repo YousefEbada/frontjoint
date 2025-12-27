@@ -1,6 +1,6 @@
-import { NixpendPort } from "modules/integration/ports/NixpendPorts";
-import { BookingRepoPort } from "../ports/BookingRepoPort";
-import { CancelType } from "modules/integration/domain/Nixpend";
+import { NixpendPort } from "modules/integration/ports/NixpendPorts.js";
+import { BookingRepoPort } from "../ports/BookingRepoPort.js";
+import { CancelType } from "modules/integration/domain/Nixpend.js";
 
 export class CancelBooking {
   constructor(private repo: BookingRepoPort, private nixpendAdapter: NixpendPort) {}

@@ -1,6 +1,6 @@
-import { SessionRepoPort } from "modules/session/application/ports/SessionRepoPort";
-import { TreatmentRepoPort } from "../ports/TreatmentRepoPort";
-import { TreatmentPlan } from "modules/treatment-plan/domain/TreatmentPlan";
+import { SessionRepoPort } from "modules/session/application/ports/SessionRepoPort.js";
+import { TreatmentRepoPort } from "../ports/TreatmentRepoPort.js";
+import { TreatmentPlan } from "modules/treatment-plan/domain/TreatmentPlan.js";
 
 type CreateTreatmentPlanResult = {
   ok: boolean,

@@ -2,7 +2,7 @@ import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 import compression from 'compression';
-import pinoHttp from 'pino-http';
+import {pinoHttp} from 'pino-http';
 import rateLimit from 'express-rate-limit';
 import { env } from '../config/env.js';
 import { mountRoutes } from './routes.js';
@@ -10,67 +10,87 @@ import { connectMongo, mongoState } from '../infra/db/mongoose.js';
 import { errorHandler } from '../shared/middleware/errorHandler.js';
 import { traceId } from '../shared/middleware/traceId.js';
 import { bindAll } from './container.bindings.js';
-import { requestLogger } from 'shared/middleware/requestLogger.js';
-import { StartJobs } from 'jobs/startJobs.js';
+import { requestLogger } from '../shared/middleware/requestLogger.js';
+import { StartJobs } from '../jobs/startJobs.js';
 
 export async function startServer() {
-  await connectMongo();
-  bindAll();
-  const app = express();
+  try {
+    bindAll();
 
-  app.use(helmet());
-  // app.use(cors({ origin: env.CORS_ORIGINS.split(',').map(s => s.trim()) }));
+    const app = express();
 
-  const allowedOrigins = env.CORS_ORIGINS.split(',').map(s => s.trim()).filter(Boolean);
-  console.log(allowedOrigins)
-  app.use(cors({
-    origin: function (origin, callback) {
-      console.log("THE ORIGIN IS: ", origin)
-      if (!origin) return callback(null, true); // tools/health/local
-      if (allowedOrigins.includes(origin)) return callback(null, true);
-      return callback(new Error('Not allowed by CORS'));
-    },
-    credentials: false
-  }));
+    // --- Middleware ---
+    app.use(helmet());
+    const allowedOrigins = (env.CORS_ORIGINS || '')
+      .split(',')
+      .map(s => s.trim())
+      .filter(Boolean);
 
-  app.use(compression());
+    app.use(cors({
+      origin(origin, callback) {
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.length === 0 || allowedOrigins.includes(origin)) return callback(null, true);
+        return callback(new Error('Not allowed by CORS'));
+      },
+      credentials: false
+    }));
 
-  app.use(express.json({ limit: '10mb' }));
-
-  app.use(traceId);
-  app.use(requestLogger as any);
-
-  app.use(pinoHttp());
-
-  app.use(rateLimit(
-    {
-      windowMs: env.RATE_LIMIT_WINDOW_MS,
-      max: env.RATE_LIMIT_MAX,
+    app.use(compression());
+    app.use(express.json({ limit: '10mb' }));
+    app.use(traceId);
+    if (requestLogger) app.use(requestLogger as any);
+    app.use(pinoHttp());
+    app.use(rateLimit({
+      windowMs: Number(env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000,
+      max: Number(env.RATE_LIMIT_MAX) || 100,
       standardHeaders: true,
       legacyHeaders: false
-    })
-  );
+    }));
 
-  app.get('/health', (req, res) => {
-    res.json({
-      ok: true,
-      service: 'api',
-      env: env.NODE_ENV,
-      now: new Date().toISOString(),
-      uptimeSec: Math.round(process.uptime()),
-      mongo: mongoState(),
-      traceId: (req as any).traceId
+    // --- Health check ---
+    app.get('/health', (req, res) => {
+      try {
+        res.json({
+          ok: true,
+          service: 'api',
+          env: env.NODE_ENV,
+          now: new Date().toISOString(),
+          uptimeSec: Math.round(process.uptime()),
+          mongo: mongoState(),
+          traceId: (req as any).traceId
+        });
+      } catch (err) {
+        console.error('Health check failed', err);
+        res.status(500).json({ ok: false, error: 'Health check failed' });
+      }
     });
-  });
 
-  mountRoutes(app);
+    app.get('/', (req, res) => res.send('Server is running'));
 
-  app.use(errorHandler);
+    // --- Routes & error handler ---
+    mountRoutes(app);
+    app.use(errorHandler);
 
-  // start the sync jobs
-  StartJobs();
+    // --- Start server ---
+    const PORT = Number(process.env.PORT) || Number(env.PORT) || 4000;
+    app.listen(PORT, '0.0.0.0', () => console.log(`API running on port ${PORT}`));
 
-  app.listen(env.PORT, () => {
-    console.log(`API running at http://localhost:${env.PORT}`);
-  });
+    // --- Non-blocking MongoDB & Jobs ---
+    connectMongo()
+      .then(() => {
+        console.log('Mongo connected');
+        try { StartJobs(); } catch (err) {
+          console.error('StartJobs failed:', err);
+        }
+      })
+      .catch(err => console.error('Mongo connection failed:', err));
+
+    // --- Global crash protection ---
+    process.on('uncaughtException', (err) => console.error('Uncaught Exception:', err));
+    process.on('unhandledRejection', (reason) => console.error('Unhandled Rejection:', reason));
+
+  } catch (err) {
+    console.error('Server startup failed:', err);
+    process.exit(1); // fail gracefully
+  }
 }

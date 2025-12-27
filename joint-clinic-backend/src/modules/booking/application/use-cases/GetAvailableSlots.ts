@@ -1,5 +1,5 @@
-import { DoctorRepoPort } from "modules/doctor/application/ports/DoctorRepoPort";
-import { NixpendPort } from "modules/integration/ports/NixpendPorts";
+import { DoctorRepoPort } from "modules/doctor/application/ports/DoctorRepoPort.js";
+import { NixpendPort } from "modules/integration/ports/NixpendPorts.js";
 
 export class GetAvailableSlots {
   constructor(private repo: NixpendPort, private doctorRepo: DoctorRepoPort) {}

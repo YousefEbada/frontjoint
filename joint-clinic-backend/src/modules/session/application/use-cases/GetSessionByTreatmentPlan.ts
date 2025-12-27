@@ -1,4 +1,4 @@
-import { SessionRepoPort } from "../ports/SessionRepoPort";
+import { SessionRepoPort } from "../ports/SessionRepoPort.js";
 
 export class GetSessionByTreatmentPlan {
     constructor(private sessionRepo: SessionRepoPort) {}

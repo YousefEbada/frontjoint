@@ -3,7 +3,7 @@ import Typography from "@/components/atoms/Typography";
 import AppointmentItem from "@/components/molecules/AppointmentItem";
 
 interface Appointment {
-    id: number;
+    id: number | string;
     name: string;
     status: string;
     date: string;

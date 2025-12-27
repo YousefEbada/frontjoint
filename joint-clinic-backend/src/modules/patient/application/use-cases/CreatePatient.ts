@@ -1,7 +1,7 @@
-import { Patient } from "modules/patient/domain/Patient";
-import { PatientRepoPort } from "../ports/PatientRepoPort";
-import { NixpendPort } from "modules/integration/ports/NixpendPorts";
-import { UserRepoPort } from "modules/auth/application/ports/UserRepoPort";
+import { Patient } from "modules/patient/domain/Patient.js";
+import { PatientRepoPort } from "../ports/PatientRepoPort.js";
+import { NixpendPort } from "modules/integration/ports/NixpendPorts.js";
+import { UserRepoPort } from "modules/auth/application/ports/UserRepoPort.js";
 
 export class CreatePatient {
     constructor(private patientRepo: PatientRepoPort, private nixpendAdapter: NixpendPort, private userRepo: UserRepoPort) { }
