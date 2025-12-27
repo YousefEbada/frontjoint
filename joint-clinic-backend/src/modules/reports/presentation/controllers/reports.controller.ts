@@ -4,7 +4,7 @@ import { UploadReport } from '../../application/use-cases/UploadReport.js';
 import { GenerateReportLink } from '../../application/use-cases/GenerateReportLink.js';
 import type { ReportRepoPort } from '../../application/ports/ReportRepoPort.js';
 import type { BlobPort } from '../../application/infra-ports/BlobPort.js';
-import { logger } from 'shared/logger/index.js';
+import { logger } from '../../../../shared/logger/index.js';
 
 const REPORT_REPO = token<ReportRepoPort>('REPORT_REPO');
 const BLOB_PORT = token<BlobPort>('BLOB_PORT');

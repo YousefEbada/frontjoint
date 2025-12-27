@@ -1,4 +1,4 @@
-import { detectContactType } from "shared/utils/detectContactType";
+import { detectContactType } from "../../../../shared/utils/detectContactType";
 import { UserRepoPort } from "../ports/UserRepoPort";
 import { User } from "modules/auth/domain/User";
 

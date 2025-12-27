@@ -1,7 +1,7 @@
 import { FlowValidateInstance } from 'twilio/lib/rest/studio/v2/flowValidate.js';
 import { SessionRepoPort } from '../../../session/application/ports/SessionRepoPort.js';
 import { SessionProgress } from '../../../session/domain/Session.js';
-import { TreatmentRepoPort } from 'modules/treatment-plan/application/ports/TreatmentRepoPort.js';
+import { TreatmentRepoPort } from '../../../treatment-plan/application/ports/TreatmentRepoPort.js';
 
 export class GetPatientDashboard {
   constructor(private repo: SessionRepoPort, private treatmentPlanRepo: TreatmentRepoPort) {}

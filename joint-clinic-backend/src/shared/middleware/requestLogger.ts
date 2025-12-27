@@ -6,7 +6,8 @@ import type { IncomingMessage, ServerResponse } from 'http';
 export const requestLogger = pinoHttp({
     logger,
     autoLogging: {
-        ignore: (req: IncomingMessage) => typeof req.url === 'string' && req.url.startsWith('/health')
+        ignore: (req: IncomingMessage) =>
+            typeof req.url === 'string' && req.url.startsWith('/health')
     },
     genReqId: (req: any, res: any) => {
         const id = req.traceId || req.id || randomUUID();
@@ -27,7 +28,7 @@ export const requestLogger = pinoHttp({
             };
         }
     },
-    customLogLevel: (res: ServerResponse, err: Error) => {
+    customLogLevel: (req: IncomingMessage, res: ServerResponse, err?: Error) => {
         if (err || (res.statusCode && res.statusCode >= 500)) return 'error';
         if (res.statusCode && res.statusCode >= 400) return 'warn';
         return 'info';

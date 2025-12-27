@@ -3,7 +3,7 @@ import { verifyHash } from "../../../../shared/utils/crypto.js";
 import { security } from "../../../../config/security.js";
 import jwt from "jsonwebtoken";
 import { UserRepoPort } from "../ports/UserRepoPort.js";
-import { generateAccessToken, generateRefreshToken } from "shared/utils/generateTokens.js";
+import { generateAccessToken, generateRefreshToken } from "../../../../shared/utils/generateTokens.js";
 
 type VerifyResult =
   | { ok: true }

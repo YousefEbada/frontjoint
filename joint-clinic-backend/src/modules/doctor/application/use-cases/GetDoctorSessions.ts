@@ -1,4 +1,4 @@
-import { BookingRepoPort } from 'modules/booking/application/ports/BookingRepoPort.js';
+import { BookingRepoPort } from '../../../booking/application/ports/BookingRepoPort.js';
 import { SessionRepoPort } from '../../../session/application/ports/SessionRepoPort.js';
 
 export class GetDoctorSessions {
