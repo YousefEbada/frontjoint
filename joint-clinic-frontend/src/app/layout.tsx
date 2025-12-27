@@ -1,5 +1,6 @@
 
 import SmoothScroll from "@/components/molecules/SmoothScroll/SmoothScroll";
+import QueryProvider from "@/providers/QueryProvider";
 import "./globals.css";
 
 import { IBM_Plex_Sans } from "next/font/google";
@@ -20,8 +21,10 @@ export default function RootLayout({
         <meta name="icon" content="#" />
       </head>
       <body className="min-h-screen">
-        <SmoothScroll />
-        {children}
+        <QueryProvider>
+          <SmoothScroll />
+          {children}
+        </QueryProvider>
       </body>
     </html>
   );
