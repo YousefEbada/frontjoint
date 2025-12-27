@@ -80,6 +80,7 @@ export default function CustomDropdown({ items, text, width, onSelect, value }: 
             ${width} 
             bg-white rounded-[40px]
             shadow-lg py-6 z-50
+            max-h-[400px] md:max-h-[600px] overflow-y-scroll overflow-x-hidden
           `}
         >
           <ul className="flex flex-col gap-4 text-center">
@@ -92,7 +93,7 @@ export default function CustomDropdown({ items, text, width, onSelect, value }: 
                   handleSelect(item);
                 }}
                 className={`
-                  text-[24px] cursor-pointer transition select-none
+                  text-[24px] cursor-pointer transition select-none px-4
 
                   ${currentSelection === item
                     ? "sel text-[#7b8a99] scale-105 rounded-full py-2"

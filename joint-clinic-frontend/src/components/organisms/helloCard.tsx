@@ -6,7 +6,7 @@ export default function HelloCard({ onGo, isLoading, error }: { onGo: (contact: 
   const [inputValue, setInputValue] = useState("");
 
   return (
-    <div className="w-full flex md:justify-start md:ml-[4%] sm:justify-center sm:items-center px-4">
+    <div className="w-full max-h-[80vh] flex md:justify-start md:ml-[4%] sm:justify-center sm:items-center px-4">
       <div className="relative w-full max-w-[800px]">
 
         {/* Logo */}
@@ -25,7 +25,7 @@ export default function HelloCard({ onGo, isLoading, error }: { onGo: (contact: 
           className="
             bg-[#fff] rounded-[35px] shadow-lg 
             w-full 
-            h-[70vh]
+            max-h-[90vh]
             md:rounded-[55px] 
             md:w-[860px] md:h-[750px] 
             p-6 md:p-8 

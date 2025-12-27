@@ -17,6 +17,7 @@ import HelloCard from '@/components/organisms/helloCard';
 import Typography from '@/components/atoms/Typography';
 import { useAuthFlow } from '@/hooks/useAuthFlow';
 import { CreatePartialUserInput, CreateFullUserInput } from '@/types/auth';
+import { Country, State } from 'country-state-city';
 
 // sdsd
 // Mock Data for Joints
@@ -100,6 +101,28 @@ const Page = () => {
   const [view, setView] = React.useState<'front' | 'back'>('front');
   const [selectedJoint, setSelectedJoint] = React.useState<string | null>(null);
   const [showInjuryForm, setShowInjuryForm] = React.useState(false); // maybe unused now?
+
+  // Country-City dynamic data
+  const countries = React.useMemo(() => Country.getAllCountries(), []);
+  const countryNames = React.useMemo(() => countries.map(c => c.name), [countries]);
+
+  const selectedCountry = React.useMemo(() =>
+    countries.find(c => c.name === fullData.nationality),
+    [countries, fullData.nationality]
+  );
+
+  const cities = React.useMemo(() =>
+    selectedCountry ? State.getStatesOfCountry(selectedCountry.isoCode) || [] : [],
+    [selectedCountry]
+  );
+  const cityNames = React.useMemo(() => cities.map(c => c.name), [cities]);
+
+  // Reset city when country changes and current city is not in new country
+  React.useEffect(() => {
+    if (cityNames.length > 0 && (!fullData.city || !cityNames.includes(fullData.city))) {
+      setFullData(prev => ({ ...prev, city: cityNames[0] }));
+    }
+  }, [cityNames, fullData.city]);
 
   // Handlers
   const onPartialSubmit = () => {
@@ -570,14 +593,7 @@ const Page = () => {
                               className="absolute top-[50%] translate-y-[-50%] md:right-[20px] right-[30px]"
                             />
                             <CustomDropdown
-                              items={[
-                                "Saudi Arabia",
-                                "United Arab Emirates",
-                                "Egypt",
-                                "Jordan",
-                                "Sudan",
-                                "Kuwait",
-                              ]}
+                              items={countryNames}
                               width="w-full"
                               text="Nationality"
                               value={fullData.nationality}
@@ -593,16 +609,7 @@ const Page = () => {
                               className="absolute top-[50%] translate-y-[-50%] md:right-[20px] right-[30px]"
                             />
                             <CustomDropdown
-                              items={[
-                                "Cairo",
-                                "Alexandria",
-                                "Giza",
-                                "Shubra El-Kheima",
-                                "Port Said",
-                                "Zagazig",
-                                "Riyadh",
-                                "Jeddah"
-                              ]}
+                              items={cityNames}
                               width="w-full"
                               text="City"
                               value={fullData.city}

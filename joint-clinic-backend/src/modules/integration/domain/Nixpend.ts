@@ -58,14 +58,14 @@ export type UpdateType = {
 }
 
 export type BookType = {
-  practitioner: string,
+  doctor_id: string,
   appointment_type: string,
   department: DepartmentType,
   duration: number,
   daily_practitioner_event: string,
   appointment_date: string,
   appointment_time: string,
-  patient: string,
+  patient_id: string,
   company: "Joint Clinic"
   branch?: BranchType,
   package_service_item?: string,

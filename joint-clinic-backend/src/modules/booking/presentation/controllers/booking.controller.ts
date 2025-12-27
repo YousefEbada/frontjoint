@@ -84,7 +84,7 @@ export async function getAvailableSlots(req: Request, res: Response) {
     const { doctorId } = req.params;
     const uc = new GetAvailableSlots(resolve(NIXPEND_PORT), resolve(DOCTOR_REPO));
     const result = await uc.exec(doctorId);
-    if(!result.ok) {
+    if (!result.ok) {
       return res.status(400).json(result);
     }
     return res.status(200).json(result);
