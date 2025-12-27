@@ -50,11 +50,12 @@ export class CreatePatient {
             console.log("CreatePatient.exec] Creating patient with data:", patientData);
             console.log("CreatePatient.exec] Additional createData:", createData);
             // Add optional fields only if they exist
-            if (createData && createData.medicalRecordNumber) patientData.medicalRecordNumber = createData.medicalRecordNumber;
-            if (createData && createData.insuranceId) patientData.insuranceId = createData.insuranceId;
-            if (createData && createData.bloodGroup) patientData.bloodGroup = createData.bloodGroup;
-            if (createData && createData.allergies?.length) patientData.allergies = createData.allergies;
-            if (createData && createData.medicalHistory?.length) patientData.medicalHistory = createData.medicalHistory;
+            // if (createData && createData.medicalRecordNumber) patientData.medicalRecordNumber = createData.medicalRecordNumber;
+            // if (createData && createData.insuranceId) patientData.insuranceId = createData.insuranceId;
+            // if (createData && createData.bloodGroup) patientData.bloodGroup = createData.bloodGroup;
+            // if (createData && createData.allergies?.length) patientData.allergies = createData.allergies;
+            // if (createData && createData.medicalHistory?.length) patientData.medicalHistory = createData.medicalHistory;
+            if (createData && createData.injuryDetails) patientData.injuryDetails = createData.injuryDetails;
             if (createData && createData.notes) patientData.notes = createData.notes;
             
             const newPatient = await this.patientRepo.createPatient(patientData);

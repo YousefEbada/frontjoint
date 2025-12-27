@@ -6,6 +6,7 @@ export class GetAvailableSlots {
     async exec(doctorId: string) {
         try {
           const doctor = await this.doctorRepo.findById(doctorId)
+          console.log("===== doctor ======= ",doctor)
           if(!doctor || !doctor.nixpendId) {
             return {ok: false, error: 'Doctor not found or missing Nixpend ID' };
           }

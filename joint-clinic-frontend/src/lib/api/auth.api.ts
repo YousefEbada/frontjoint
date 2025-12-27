@@ -63,9 +63,9 @@ export const verifyOtp = async (data: VerifyOTPInput) => {
     }
 }
 
-export const createPatient = async (userId: string, data: CreatePatientInput) => {
+export const createPatient = async (data: CreatePatientInput) => {
     try {
-        const response = await api.post('/patient/create', { userId, data })
+        const response = await api.post('/patient/create', data)
         console.log('createPatient response:', response.data)
         return response.data.patient
     } catch (error) {

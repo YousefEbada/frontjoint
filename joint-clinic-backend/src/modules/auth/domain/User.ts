@@ -42,7 +42,6 @@ export interface User {
 
 export interface CreateFullUserRequest {
   userId?: string;
-  contact?: string;
   fullName?: string;
   gender?: string;
   birthdate?: string | Date;

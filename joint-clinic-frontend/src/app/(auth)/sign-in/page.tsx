@@ -66,6 +66,8 @@ const Page = () => {
     handleVerifyOtp,
     handleResendOtp,
     handleCreateFull,
+    handleCreatePatient,
+    userId,
     isLoading,
     error
   } = useAuthFlow();
@@ -101,6 +103,19 @@ const Page = () => {
   const [view, setView] = React.useState<'front' | 'back'>('front');
   const [selectedJoint, setSelectedJoint] = React.useState<string | null>(null);
   const [showInjuryForm, setShowInjuryForm] = React.useState(false); // maybe unused now?
+
+  // Injury Details State
+  const [injuryDetails, setInjuryDetails] = React.useState({
+    affectedArea: '',
+    startDate: undefined as Date | undefined,
+    receivedTreatment: false,
+    painSeverity: 5,
+    howDidInjurHappened: '',
+    painOccasionalOrConstant: 'occasional' as 'occasional' | 'constant',
+    affectDailyActivities: false,
+    additionalNotes: '',
+    medicalReports: [] as string[]
+  });
 
   // Country-City dynamic data
   const countries = React.useMemo(() => Country.getAllCountries(), []);
@@ -428,7 +443,13 @@ const Page = () => {
                     <InjuryDetailsForm
                       jointName={activeJointLabel}
                       onBack={() => setStep(4)}
-                      onContinue={() => alert("Form Submitted! Proceeding...")}
+                      onContinue={() => {
+                        // Set affected area from selected joint and call create patient
+                        handleCreatePatient({
+                          ...injuryDetails,
+                          affectedArea: activeJointLabel
+                        });
+                      }}
                     />
                   </motion.div>
                 </div>
@@ -618,11 +639,19 @@ const Page = () => {
                           </div>
 
                           <input
+                            type="phone"
+                            placeholder="Phone"
+                            value={fullData.phone}
+                            onChange={(e) => setFullData({ ...fullData, phone: e.target.value })}
+                            className="md:w-[28%] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition"
+                          />
+
+                          <input
                             type="text"
                             placeholder="Address"
                             value={fullData.address}
                             onChange={(e) => setFullData({ ...fullData, address: e.target.value })}
-                            className="md:w-[61.5%] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition"
+                            className="md:w-[32%] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition"
                           />
 
                           {/* ---- THIRD ROW: 3 dropdowns ---- */}

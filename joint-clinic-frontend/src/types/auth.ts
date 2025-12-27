@@ -7,10 +7,6 @@ export interface CreatePartialUserInput {
 
 export interface CreateFullUserInput {
     userId?: string;
-    contact?: string;
-    fullName?: string;
-    gender?: string;
-    birthdate?: string | Date;
     email?: string;
     phone?: string;
     identifier?: string;
@@ -44,28 +40,17 @@ export interface VerifyOTPInput {
 }
 
 export interface CreatePatientInput {
-    _id?: string;
-    userId?: string;
-    nixpendId?: string;
-    // Note: Guardian information is accessed through User.guardianInformation via userId reference
-    medicalRecordNumber?: string;
-    insuranceId?: string;
-    bloodGroup?: string;
-    allergies?: string[];
-    medicalHistory?: string[];
-    injuryDetails?: {
+    userId: string,
+    injuryDetails: {
         affectedArea?: string;
-        startDate?: string | Date;
+        startDate?: Date;
         receivedTreatment?: boolean;
         painSeverity?: number; // 0-10 scale
         howDidInjurHappened?: string;
+        painOccasionalOrConstant?: 'occasional' | 'constant';
         affectDailyActivities?: boolean;
         additionalNotes?: string;
         // check this from the report module and how to sync it
         medicalReports?: string[];
     };
-    status?: 'active' | 'inactive';
-    notes?: string;
-    createdAt?: Date;
-    updatedAt?: Date;
 }

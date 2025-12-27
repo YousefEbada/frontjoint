@@ -9,17 +9,16 @@ import { BookingRepoPort } from '../../application/ports/BookingRepoPort.js';
 import { NixpendPort } from '../../../integration/ports/NixpendPorts.js';
 import { GetAvailableSlots } from '../../application/use-cases/GetAvailableSlots.js';
 import { BookType } from '../../../integration/domain/Nixpend.js';
-import { DOCTOR_REPO, PATIENT_REPO, SESSION_REPO } from 'app/container.bindings.js';
+import { DOCTOR_REPO, NIXPEND_ADAPTER, PATIENT_REPO, SESSION_REPO } from 'app/container.bindings.js';
 import { FindBookingById } from '../../application/use-cases/FindBookingById.js';
 import { UpdateBookingStatus } from '../../application/use-cases/UpdateBookingStatus.js';
 
 const BOOKING_REPO = token<BookingRepoPort>('BOOKING_REPO');
-const NIXPEND_PORT = token<NixpendPort>('NIXPEND_PORT');
 
 export async function createBooking(req: Request, res: Response) {
   try {
     const input = CreateBookingSchema.parse(req.body);
-    const uc = new CreateBooking(resolve(BOOKING_REPO), resolve(NIXPEND_PORT), resolve(SESSION_REPO), resolve(PATIENT_REPO));
+    const uc = new CreateBooking(resolve(BOOKING_REPO), resolve(NIXPEND_ADAPTER), resolve(SESSION_REPO), resolve(PATIENT_REPO));
     const result = await uc.exec(input as BookType);
 
     if (!result.ok) {
@@ -48,7 +47,7 @@ export async function cancelBooking(req: Request, res: Response) {
   try {
     const { bookingId } = req.params;
     const cancelData = req.body;
-    const uc = new CancelBooking(resolve(BOOKING_REPO), resolve(NIXPEND_PORT));
+    const uc = new CancelBooking(resolve(BOOKING_REPO), resolve(NIXPEND_ADAPTER));
     const result = await uc.exec(bookingId, cancelData);
 
     if (!result.ok) {
@@ -66,7 +65,7 @@ export async function rescheduleBooking(req: Request, res: Response) {
   try {
     const { bookingId } = req.params;
     const rescheduleData = req.body;
-    const uc = new RescheduleBooking(resolve(BOOKING_REPO), resolve(NIXPEND_PORT));
+    const uc = new RescheduleBooking(resolve(BOOKING_REPO), resolve(NIXPEND_ADAPTER));
     const result = await uc.exec(bookingId, rescheduleData);
 
     if (!result.ok) {
@@ -82,13 +81,21 @@ export async function rescheduleBooking(req: Request, res: Response) {
 export async function getAvailableSlots(req: Request, res: Response) {
   try {
     const { doctorId } = req.params;
-    const uc = new GetAvailableSlots(resolve(NIXPEND_PORT), resolve(DOCTOR_REPO));
+    console.log("===== getAvailableSlots Controller =====");
+    console.log("===== doctorId from params: ", doctorId);
+    console.log("===== doctorId type: ", typeof doctorId);
+
+    const uc = new GetAvailableSlots(resolve(NIXPEND_ADAPTER), resolve(DOCTOR_REPO));
     const result = await uc.exec(doctorId);
+
+    console.log("===== GetAvailableSlots result: ", JSON.stringify(result, null, 2));
+
     if (!result.ok) {
       return res.status(400).json(result);
     }
     return res.status(200).json(result);
   } catch (error) {
+    console.error("===== getAvailableSlots ERROR: ", error);
     res.status(500).json({ ok: false, error: 'Get Available Slots internal server error' });
   }
 }

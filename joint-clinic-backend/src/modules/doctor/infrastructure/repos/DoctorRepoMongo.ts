@@ -1,6 +1,7 @@
 import { Doctor } from "modules/doctor/domain/Doctor.js";
-import { DoctorModel } from "../models/DoctorModel.js"; 
+import { DoctorModel } from "../models/DoctorModel.js";
 import { DoctorRepoPort } from "modules/doctor/application/ports/DoctorRepoPort.js";
+import mongoose, { isValidObjectId } from "mongoose";
 
 export const DoctorRepoMongo: DoctorRepoPort = {
   // Save many practitioners (replace existing ones)
@@ -22,12 +23,30 @@ export const DoctorRepoMongo: DoctorRepoPort = {
     }
 
     const docs = await DoctorModel.find(filter).lean();
-    return docs as Doctor[];
+    return docs as unknown as Doctor[];
   },
 
   async findById(id: string): Promise<Doctor | null> {
-    const doc = await DoctorModel.findOne({ nixpendId: id }).lean();
-    return doc ? (doc as Doctor) : null;
+    console.log("===== findById called with id ======= ", id);
+    console.log("===== id type ======= ", typeof id);
+    console.log("===== id length ======= ", id?.length);
+    console.log("===== is valid ObjectId? ======= ", mongoose.Types.ObjectId.isValid(id));
+
+    // Check if ID is a valid ObjectId format (24 hex characters)
+    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+      console.log("===== Invalid ObjectId, returning null =======");
+      return null;
+    }
+
+    try {
+      const doc = await DoctorModel.findOne({ _id: new mongoose.Types.ObjectId(id) });
+      console.log("===== isValidObjectId(id) ======= ", isValidObjectId(id));
+      console.log("===== doc found ======= ", doc);
+      return doc ? (doc as unknown as Doctor) : null;
+    } catch (error) {
+      console.error("===== Error in findById ======= ", error);
+      return null;
+    }
   },
 
   // Clear the collection

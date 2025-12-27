@@ -48,7 +48,7 @@ const InjuryDetailsForm: React.FC<InjuryDetailsFormProps> = ({ jointName, onBack
 
                     {/* Start Date */}
                     <div className="relative w-full md:col-span-3">
-                        <input type="text" placeholder="When did this injury start?" className="w-full h-[70px] md:h-[80px] px-8 rounded-full border  border-[#0D294D]/30 bg-white/50 backdrop-blur-sm text-[#0D294D] placeholder:text-[#6d7a80] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition text-lg md:text-xl truncate pr-12 hover:bg-white/80 focus:bg-white" />
+                        <input type="date" placeholder="When did this injury start?" className="w-full h-[70px] md:h-[80px] px-8 rounded-full border  border-[#0D294D]/30 bg-white/50 backdrop-blur-sm text-[#0D294D] placeholder:text-[#6d7a80] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition text-lg md:text-xl truncate pr-12 hover:bg-white/80 focus:bg-white" />
                         <FontAwesomeIcon icon={faCaretDown} className="absolute right-8 top-1/2 -translate-y-1/2 text-[#0D294D] pointer-events-none" />
                     </div>
 

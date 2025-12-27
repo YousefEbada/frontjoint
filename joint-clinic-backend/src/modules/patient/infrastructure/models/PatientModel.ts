@@ -18,6 +18,7 @@ const InjuryDetailsSchema = new Schema({
   receivedTreatment: Boolean,
   painSeverity: { type: Number, min: 0, max: 10 },
   howDidInjurHappened: String,
+  painOccasionalOrConstant: { type: String, enum: ['occasional', 'constant'] },
   affectDailyActivities: Boolean,
   additionalNotes: String,
   // check this from the report module and how to sync it
@@ -28,10 +29,10 @@ const PatientSchema = new Schema({
   userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
   // Note: Guardian information is stored in User model and accessed via userId reference
   nixpendId: { type: String, required: true, unique: true },
-  medicalRecordNumber: String,
-  insuranceId: String,
-  bloodGroup: String,
-  allergies: [String],
+  // medicalRecordNumber: String,
+  // insuranceId: String,
+  // bloodGroup: String,
+  // allergies: [String],
   medicalHistory: [String],
   injuryDetails: InjuryDetailsSchema,
   status: { type: String, enum: ['active', 'inactive'], default: 'inactive' },

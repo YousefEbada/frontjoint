@@ -4,11 +4,13 @@ import {
     createPartialUser,
     createFullUser,
     requestOtp,
-    verifyOtp
+    verifyOtp,
+    createPatient
 } from '@/lib/api/auth.api';
 import {
     CreatePartialUserInput,
-    CreateFullUserInput
+    CreateFullUserInput,
+    CreatePatientInput
 } from '@/types/auth';
 
 export const useAuthFlow = () => {
@@ -190,10 +192,28 @@ export const useAuthFlow = () => {
         try {
             await createFullUser({
                 ...data,
-                contact,
                 userId
             });
             setStep(4);
+        } catch (err) {
+            handleError(err);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    // 5. Create Patient (Step 5 -> Navigate to Patient Dashboard)
+    const handleCreatePatient = async (injuryDetails: CreatePatientInput['injuryDetails']) => {
+        setIsLoading(true);
+        clearError();
+        try {
+            console.log('==== Creating patient with:', { userId, injuryDetails });
+            await createPatient({
+                userId,
+                injuryDetails
+            });
+            // Navigate to patient dashboard
+            window.location.href = '/patient/main';
         } catch (err) {
             handleError(err);
         } finally {
@@ -208,11 +228,13 @@ export const useAuthFlow = () => {
         setShowHello,
         isLoading,
         error,
+        userId,
         handleFindUser,
         handleCreatePartial,
         handleVerifyOtp,
         handleResendOtp,
         handleCreateFull,
+        handleCreatePatient,
         contact
     };
 };

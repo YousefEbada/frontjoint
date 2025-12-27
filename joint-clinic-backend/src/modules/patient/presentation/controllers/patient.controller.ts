@@ -74,10 +74,10 @@ export async function updatePatient(req: Request, res: Response) {
 }
 
 export async function createPatient(req: Request, res: Response) {
-    const { userId, data } = req.body;
+    const { userId, injuryDetails } = req.body;
     const uc = new CreatePatient(resolve(PATIENT_REPO), resolve(NIXPEND_ADAPTER), resolve(USER_AUTH_REPO));
     try {
-        const result = await uc.exec(userId, data);
+        const result = await uc.exec(userId, {injuryDetails});
         if (!result.ok) {
             return res.status(400).json(result);
         }

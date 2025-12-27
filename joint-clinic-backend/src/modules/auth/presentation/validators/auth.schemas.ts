@@ -9,10 +9,6 @@ export const CreatePartialUserSchema = z.object({ fullName: z.string().min(1), g
 export const VerifyOtpSchema = z.object({ otpToken: z.string().min(1), code: z.string().length(6) });
 export const CreateFullUserSchema = z.object({
     userId: z.string().min(1).optional(),
-    contact: z.string().min(1).optional(),
-    fullName: z.string().min(1).optional(),
-    gender: z.enum(['Male','Female','male','female']).optional(),
-    birthdate: z.union([z.string().refine(val => dayjs(val,"YYYY-MM-DD",true).isValid(), { message: "Invalid date format, expected YYYY-MM-DD" }).transform(val => dayjs.utc(val).toDate()), z.date()]).optional(),
     email: z.string().email().optional(),
     phone: z.string().min(1).optional(),
     identifier: z.string().min(1).optional(),
@@ -22,4 +18,14 @@ export const CreateFullUserSchema = z.object({
     city: z.string().min(1).optional(),
     maritalStatus: z.string().min(1).optional(),
     speakingLanguages: z.array(z.string().min(1)).optional(),
+    guardianInformation: z.object({
+        guardianName: z.string().optional(),
+        guardianEmail: z.string().optional(),
+        guardianPhone: z.string().optional(),
+        guardianBloodType: z.string().optional(),
+        guardianRelation: z.string().optional(),
+        guardianIdentifier: z.string().optional(),
+        guardianIdentifierType: z.string().optional(),
+        patientCategory: z.string().optional(),
+    }).optional(),
 });

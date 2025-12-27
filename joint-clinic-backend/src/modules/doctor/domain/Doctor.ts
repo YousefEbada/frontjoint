@@ -4,6 +4,7 @@ export interface PractitionerCompany {
 }
 
 export interface Doctor {
+  _id?: string; // MongoDB ObjectId as string
   nixpendId: string; // maps to Nixpend "name" field
   practitionerName: string; // maps to "practitioner_name"
   fullNameArabic?: string; // maps to "full_name_arabic"

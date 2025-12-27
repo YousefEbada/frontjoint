@@ -3,17 +3,18 @@ export interface Patient {
     userId: string;
     nixpendId: string;
     // Note: Guardian information is accessed through User.guardianInformation via userId reference
-    medicalRecordNumber?: string;
-    insuranceId?: string;
-    bloodGroup?: string;
-    allergies?: string[];
-    medicalHistory?: string[];
+    // medicalRecordNumber?: string;
+    // insuranceId?: string;
+    // bloodGroup?: string;
+    // allergies?: string[];
+    // medicalHistory?: string[];
     injuryDetails?: {
         affectedArea?: string;
         startDate?: Date;
         receivedTreatment?: boolean;
         painSeverity?: number; // 0-10 scale
         howDidInjurHappened?: string;
+        painOccasionalOrConstant?: 'occasional' | 'constant';
         affectDailyActivities?: boolean;
         additionalNotes?: string;
         // check this from the report module and how to sync it
