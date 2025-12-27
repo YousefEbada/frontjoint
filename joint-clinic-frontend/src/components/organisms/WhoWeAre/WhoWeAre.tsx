@@ -7,14 +7,14 @@ import "./whoWeAre.css";
 import Profile from "@/components/atoms/icons/Profile";
 import FeatureCard from "@/components/molecules/FeatureCardCom";
 import { color } from "@/lib/constants/colors";
-import { testAuth } from "@/lib/api/doctor.api";
+
 import { useDoctors } from "@/hooks/useDoctors";
 
 gsap.registerPlugin(ScrollTrigger);
 
 function WhoWeAre() {
   const { doctors, loading, error } = useDoctors()
-  
+
   const memberColors = ["#d5ece3", "#167c4f", "#112a4d", "#ee3124", "#fdb515"];
   const memberinfo = doctors?.slice(0, 5).map((doctor: any, index) => ({
     name: doctor.practitionerName,
@@ -75,7 +75,7 @@ function WhoWeAre() {
   };
 
   React.useEffect(() => {
-    testAuth()
+
     const section = sectionRef.current;
     const circle = circleRef.current;
     const title = titleRef.current;
@@ -263,10 +263,10 @@ function WhoWeAre() {
               <Profile
                 fill={member.fill}
                 className={`w-[40px] md:w-[60px] mb-[4px]`}
-              /> 
+              />
 
               <h4 className={`text-[13px] md:text-[20px] max-w-[250px] my-0 text-[#fff] font-bold text-center`}>
-                { member.name}
+                {member.name}
               </h4>
 
               <p className="text-[10px] md:text-[16px] max-w-[100px] mt-2 text-center text-[#fff]">
