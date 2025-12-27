@@ -1,9 +1,9 @@
-import { Patient } from "modules/patient/domain/Patient";
-import { PatientRepoPort } from "../ports/PatientRepoPort";
-import { User } from "modules/auth/domain/User";
-import { UpdateType } from "modules/integration/domain/Nixpend";
-import { UserRepoPort } from "modules/auth/application/ports/UserRepoPort";
-import { NixpendPort } from "modules/integration/ports/NixpendPorts";
+import { Patient } from "modules/patient/domain/Patient.js";
+import { PatientRepoPort } from "../ports/PatientRepoPort.js";
+import { User } from "modules/auth/domain/User.js";
+import { UpdateType } from "modules/integration/domain/Nixpend.js";
+import { UserRepoPort } from "modules/auth/application/ports/UserRepoPort.js";
+import { NixpendPort } from "modules/integration/ports/NixpendPorts.js";
 
 export class UpdatePatient {
     constructor(private patientRepo: PatientRepoPort, private userRepo: UserRepoPort, private nixpendAdapter: NixpendPort) { }

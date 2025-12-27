@@ -1,5 +1,5 @@
-import { UserRepoPort } from "../ports/UserRepoPort";
-import { CreateFullUserRequest, User, UserStatus } from "../../domain/User";
+import { UserRepoPort } from "../ports/UserRepoPort.js";
+import { CreateFullUserRequest, User, UserStatus } from "../../domain/User.js";
 
 type CreateFullUserResult = {
 	ok: true | false;

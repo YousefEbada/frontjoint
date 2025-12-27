@@ -1,5 +1,5 @@
-import { BranchType, DepartmentType } from "modules/integration/domain/Nixpend";
-import { NixpendPort } from "modules/integration/ports/NixpendPorts";
+import { BranchType, DepartmentType } from "modules/integration/domain/Nixpend.js";
+import { NixpendPort } from "modules/integration/ports/NixpendPorts.js";
 
 export class GetPractitioners {
     constructor(private nixpendAdapter: NixpendPort) { }

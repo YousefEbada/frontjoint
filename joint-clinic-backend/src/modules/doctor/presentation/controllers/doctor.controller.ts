@@ -1,11 +1,11 @@
-import { BOOKING_REPO, DOCTOR_REPO, SESSION_REPO } from "app/container.bindings";
+import { BOOKING_REPO, DOCTOR_REPO, SESSION_REPO } from "app/container.bindings.js";
 import { Request, Response } from "express";
-import { FindDoctorById } from "modules/doctor/application/use-cases/FindDoctorById";
-import { resolve } from "app/container";
-import { GetCachedPractitioners } from "modules/doctor/application/use-cases/GetCachedDoctors";
-import { GetDoctorBookings } from "modules/doctor/application/use-cases/GetDoctorBookings";
-import { GetDoctorSessions } from "modules/doctor/application/use-cases/GetDoctorSessions";
-import { GetPatientsByDoctorAndStatus } from "modules/doctor/application/use-cases/GetPatientsByDoctorAndStatus";
+import { FindDoctorById } from "modules/doctor/application/use-cases/FindDoctorById.js";
+import { resolve } from "app/container.js";
+import { GetCachedPractitioners } from "modules/doctor/application/use-cases/GetCachedDoctors.js";
+import { GetDoctorBookings } from "modules/doctor/application/use-cases/GetDoctorBookings.js";
+import { GetDoctorSessions } from "modules/doctor/application/use-cases/GetDoctorSessions.js";
+import { GetPatientsByDoctorAndStatus } from "modules/doctor/application/use-cases/GetPatientsByDoctorAndStatus.js";
 
 export async function findDoctorById(req: Request, res: Response) {
     const doctorId = req.params.id as string;

@@ -1,4 +1,4 @@
-import { Patient } from "modules/patient/domain/Patient";
+import { Patient } from "modules/patient/domain/Patient.js";
 
 export interface PatientRepoPort {
     getPatient(id: string): Promise<Patient | null>;

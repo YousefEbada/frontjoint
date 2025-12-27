@@ -2,7 +2,7 @@ import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 import compression from 'compression';
-import pinoHttp from 'pino-http';
+import {pinoHttp} from 'pino-http';
 import rateLimit from 'express-rate-limit';
 import { env } from '../config/env.js';
 import { mountRoutes } from './routes.js';

@@ -1,4 +1,4 @@
-import { PatientRepoPort } from "../ports/PatientRepoPort";
+import { PatientRepoPort } from "../ports/PatientRepoPort.js";
 
 export class GetPatient {
     constructor(private patientRepo: PatientRepoPort) {}

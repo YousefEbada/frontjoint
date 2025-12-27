@@ -1,6 +1,6 @@
-import { Doctor } from "modules/doctor/domain/Doctor";
-import { DoctorModel } from "../models/DoctorModel"; // your Mongoose schema
-import { DoctorRepoPort } from "modules/doctor/application/ports/DoctorRepoPort";
+import { Doctor } from "modules/doctor/domain/Doctor.js";
+import { DoctorModel } from "../models/DoctorModel.js"; 
+import { DoctorRepoPort } from "modules/doctor/application/ports/DoctorRepoPort.js";
 
 export const DoctorRepoMongo: DoctorRepoPort = {
   // Save many practitioners (replace existing ones)

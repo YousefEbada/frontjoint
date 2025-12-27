@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createTreatmentPlan } from "./controllers/treatmentPlan.controller";
+import { createTreatmentPlan } from "./controllers/treatmentPlan.controller.js";
 
 export const treatmentPlanRoutes = Router()
 

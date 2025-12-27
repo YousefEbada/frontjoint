@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { TreatmentPlanSchema } from "../validators/treat.schemas";
-import { CreateTreatmentPlan } from "modules/treatment-plan/application/use-cases/CreateTreatmentPlan";
-import { resolve } from "app/container";
-import { SESSION_REPO, TREATMENT_PLAN_REPO } from "app/container.bindings";
+import { TreatmentPlanSchema } from "../validators/treat.schemas.js";
+import { CreateTreatmentPlan } from "modules/treatment-plan/application/use-cases/CreateTreatmentPlan.js";
+import { resolve } from "app/container.js";
+import { SESSION_REPO, TREATMENT_PLAN_REPO } from "app/container.bindings.js";
 
 export async function createTreatmentPlan(req: Request, res: Response) {
     try {

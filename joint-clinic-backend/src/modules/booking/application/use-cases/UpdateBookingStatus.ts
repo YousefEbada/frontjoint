@@ -1,5 +1,5 @@
-import { Booking } from "modules/booking/domain/Booking";
-import { BookingRepoPort } from "../ports/BookingRepoPort";
+import { Booking } from "modules/booking/domain/Booking.js";
+import { BookingRepoPort } from "../ports/BookingRepoPort.js";
 
 export class UpdateBookingStatus {
     constructor(private repo: BookingRepoPort) {}

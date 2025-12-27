@@ -1,28 +1,28 @@
-import { TreatmentRepoPort } from "modules/treatment-plan/application/ports/TreatmentRepoPort";
-import { TreatmentPlanModel } from "../models/TreatmentPlanModel";
-import { TreatmentPlan } from "modules/treatment-plan/domain/TreatmentPlan";
+import { TreatmentRepoPort } from "modules/treatment-plan/application/ports/TreatmentRepoPort.js";
+import { TreatmentPlanModel } from "../models/TreatmentPlanModel.js";
+import { TreatmentPlan } from "modules/treatment-plan/domain/TreatmentPlan.js";
 import mongoose from "mongoose";
 
 export const TreatmentRepoMongo: TreatmentRepoPort = {
-    async createTreatmentPlan(plan, options?): Promise<TreatmentPlan> {
+    async createTreatmentPlan(plan: any, options?: { tx?: any }): Promise<TreatmentPlan> {
         const session = options?.tx as mongoose.ClientSession | undefined;
         const createdPlan = new TreatmentPlanModel(plan);
         await createdPlan.save({ session });
         return createdPlan.toObject() as any;
     },
 
-    async findTreatmentPlanById(id): Promise<TreatmentPlan | null> {
+    async findTreatmentPlanById(id: string): Promise<TreatmentPlan | null> {
         const plan = await TreatmentPlanModel.findById(id);
         return plan ? plan.toObject() as any : null;
     },
 
-    async updateTreatmentPlan(id, updates, options?): Promise<TreatmentPlan | null> {
+    async updateTreatmentPlan(id: string, updates: Partial<TreatmentPlan>, options?: { tx?: any }): Promise<TreatmentPlan | null> {
         const session = options?.tx as mongoose.ClientSession | undefined;
         const updatedPlan = await TreatmentPlanModel.findByIdAndUpdate(id, updates, { new: true, session });
         return updatedPlan ? updatedPlan.toObject() as any : null;
     },
 
-    async findActiveTreatmentPlanByPatient(patientId): Promise<TreatmentPlan | null> {
+    async findActiveTreatmentPlanByPatient(patientId: string): Promise<TreatmentPlan | null> {
         const plan = await TreatmentPlanModel.findOne({ patientId, status: 'active' });
         return plan ? plan.toObject() as any : null;
     }

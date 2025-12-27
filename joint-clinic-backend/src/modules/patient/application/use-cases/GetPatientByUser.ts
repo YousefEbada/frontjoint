@@ -1,6 +1,6 @@
-import { Patient } from "modules/patient/domain/Patient";
-import { PatientRepoPort } from "../ports/PatientRepoPort";
-import { GetPatient } from "./GetPatient";
+import { Patient } from "modules/patient/domain/Patient.js";
+import { PatientRepoPort } from "../ports/PatientRepoPort.js";
+import { GetPatient } from "./GetPatient.js";
 
 type GetPatientReturn = {
     ok: true | false;

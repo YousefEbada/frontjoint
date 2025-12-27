@@ -1,5 +1,5 @@
 import nodemailer from "nodemailer";
-import { MailPort } from "./mail.port";
+import { MailPort } from "./mail.port.js";
 
 // Create transporter
 const transporter = nodemailer.createTransport({
@@ -99,7 +99,7 @@ const emailTemplates: Record<string, { subject: string; getHtml: (payload: any) 
 };
 
 export const NodemailerMailAdapter: MailPort = {
-    async send(to, templateId, payload) {
+    async send(to: string, templateId: string, payload: Record<string, any>): Promise<void> {
         console.log(`=== Sending email to ${to} with templateId: "${templateId}" and payload:`, payload);
         
         try {

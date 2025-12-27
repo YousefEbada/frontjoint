@@ -1,4 +1,4 @@
-import { AvailableSlotReturnType, BookType, BranchType, CancelType, DepartmentType, FetchType, RegisterType, RescheduleType, UpdateType } from "../domain/Nixpend";
+import { AvailableSlotReturnType, BookType, BranchType, CancelType, DepartmentType, FetchType, RegisterType, RescheduleType, UpdateType } from "../domain/Nixpend.js";
 
 export interface NixpendPort {
   // patient

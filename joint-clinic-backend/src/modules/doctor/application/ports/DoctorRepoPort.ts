@@ -1,4 +1,4 @@
-import { Doctor } from "modules/doctor/domain/Doctor";
+import { Doctor } from "modules/doctor/domain/Doctor.js";
 
 export interface DoctorRepoPort {
   saveMany(practitioners: any[]): Promise<void>;

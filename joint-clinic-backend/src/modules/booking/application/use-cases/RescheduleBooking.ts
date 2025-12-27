@@ -1,7 +1,7 @@
-import { NixpendPort } from "modules/integration/ports/NixpendPorts";
-import { BookingRepoPort } from "../ports/BookingRepoPort";
-import { RescheduleType } from "modules/integration/domain/Nixpend";
-import { Booking, BookingType } from "modules/booking/domain/Booking";
+import { NixpendPort } from "modules/integration/ports/NixpendPorts.js";
+import { BookingRepoPort } from "../ports/BookingRepoPort.js";
+import { RescheduleType } from "modules/integration/domain/Nixpend.js";
+import { Booking, BookingType } from "modules/booking/domain/Booking.js";
 
 export class RescheduleBooking {
   constructor(private repo: BookingRepoPort, private nixpendRepo: NixpendPort) { }

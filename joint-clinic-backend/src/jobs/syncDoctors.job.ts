@@ -1,5 +1,5 @@
-import { DoctorRepoPort } from "modules/doctor/application/ports/DoctorRepoPort";
-import { NixpendPort } from "modules/integration/ports/NixpendPorts";
+import { DoctorRepoPort } from "modules/doctor/application/ports/DoctorRepoPort.js";
+import { NixpendPort } from "modules/integration/ports/NixpendPorts.js";
 import cron from "node-cron";
 
 export class SyncDoctorJob {
@@ -15,7 +15,7 @@ export class SyncDoctorJob {
                 return;
             }
 
-            const modifiedPracs = practitioners.map(prac => {
+            const modifiedPracs = practitioners.map((prac: any) => {
                 return {
                     nixpendId: prac.name,
                     practitionerName: prac.practitioner_name,

@@ -1,4 +1,4 @@
-import { DoctorRepoPort } from "../ports/DoctorRepoPort";
+import { DoctorRepoPort } from "../ports/DoctorRepoPort.js";
 
 export class GetCachedPractitioners {
   constructor(private doctorRepo: DoctorRepoPort) {}

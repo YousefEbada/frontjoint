@@ -1,4 +1,4 @@
-import { BookingRepoPort } from "modules/booking/application/ports/BookingRepoPort";
+import { BookingRepoPort } from "modules/booking/application/ports/BookingRepoPort.js";
 
 export class GetPatientsByDoctorAndStatus {
     constructor(private bookingRepo: BookingRepoPort) {}

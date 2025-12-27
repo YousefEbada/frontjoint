@@ -1,12 +1,12 @@
-import { resolve } from "app/container";
-import { NIXPEND_ADAPTER, PATIENT_REPO, SESSION_REPO, TREATMENT_PLAN_REPO, USER_AUTH_REPO } from "app/container.bindings";
+import { resolve } from "app/container.js";
+import { NIXPEND_ADAPTER, PATIENT_REPO, SESSION_REPO, TREATMENT_PLAN_REPO, USER_AUTH_REPO } from "app/container.bindings.js";
 import { Request, Response } from "express";
-import { UpdateType } from "modules/integration/domain/Nixpend";
-import { CreatePatient } from "modules/patient/application/use-cases/CreatePatient";
-import { GetPatient } from "modules/patient/application/use-cases/GetPatient";
-import { GetPatientByUser } from "modules/patient/application/use-cases/GetPatientByUser";
-import { GetPatientDashboard } from "modules/patient/application/use-cases/GetPatientDashboard";
-import { UpdatePatient } from "modules/patient/application/use-cases/UpdatePatient";
+import { UpdateType } from "modules/integration/domain/Nixpend.js";
+import { CreatePatient } from "modules/patient/application/use-cases/CreatePatient.js";
+import { GetPatient } from "modules/patient/application/use-cases/GetPatient.js";
+import { GetPatientByUser } from "modules/patient/application/use-cases/GetPatientByUser.js";
+import { GetPatientDashboard } from "modules/patient/application/use-cases/GetPatientDashboard.js";
+import { UpdatePatient } from "modules/patient/application/use-cases/UpdatePatient.js";
 
 export async function getPatientById(req: Request, res: Response) {
     const { patientId } = req.params;

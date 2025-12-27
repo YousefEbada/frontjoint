@@ -1,6 +1,6 @@
-import { RegisterType } from "modules/integration/domain/Nixpend";
-import { PatientRepoPort } from "../../patient/application/ports/PatientRepoPort";
-import { NixpendPort } from "modules/integration/ports/NixpendPorts";
+import { RegisterType } from "modules/integration/domain/Nixpend.js";
+import { PatientRepoPort } from "../../patient/application/ports/PatientRepoPort.js";
+import { NixpendPort } from "modules/integration/ports/NixpendPorts.js";
 
 export class RegisterPatient {
     constructor(private patientRepo: PatientRepoPort, private nixpendAdapter: NixpendPort) { }

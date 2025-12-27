@@ -1,4 +1,4 @@
-import { TreatmentPlan } from "modules/treatment-plan/domain/TreatmentPlan";
+import { TreatmentPlan } from "modules/treatment-plan/domain/TreatmentPlan.js";
 
 export interface RepoTxOptions {
     tx?: any; 

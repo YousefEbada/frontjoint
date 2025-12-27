@@ -1,6 +1,6 @@
-import { detectContactType } from "../../../../shared/utils/detectContactType";
-import { UserRepoPort } from "../ports/UserRepoPort";
-import { User } from "modules/auth/domain/User";
+import { detectContactType } from "../../../../shared/utils/detectContactType.js";
+import { UserRepoPort } from "../ports/UserRepoPort.js";
+import { User } from "modules/auth/domain/User.js";
 
 type FindUserReturn = {
     ok: true | false;

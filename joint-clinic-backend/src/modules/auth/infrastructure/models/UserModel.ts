@@ -1,4 +1,4 @@
-import { GuardianModel } from './GuardianModel';
+import { GuardianModel } from './GuardianModel.js';
 import mongoose, { Schema } from 'mongoose';
 
 const UserSchema = new Schema(

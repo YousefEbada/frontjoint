@@ -1,7 +1,7 @@
-import { resolve } from "app/container";
-import { SESSION_REPO } from "app/container.bindings";
+import { resolve } from "app/container.js";
+import { SESSION_REPO } from "app/container.bindings.js";
 import { Request, Response } from "express";
-import { GetSessionByTreatmentPlan } from "modules/session/application/use-cases/GetSessionByTreatmentPlan";
+import { GetSessionByTreatmentPlan } from "modules/session/application/use-cases/GetSessionByTreatmentPlan.js";
 
 export async function getSessionsByTreatmentPlan(req: Request, res: Response) {
   const { patientId, treatmentPlanId } = req.params

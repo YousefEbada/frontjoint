@@ -1,4 +1,4 @@
-import pinoHttp from 'pino-http';
+import {pinoHttp} from 'pino-http';
 import { logger } from '../logger/index.js';
 import { randomUUID } from 'node:crypto';
 import type { IncomingMessage, ServerResponse } from 'http';
@@ -15,14 +15,14 @@ export const requestLogger = pinoHttp({
         return id;
     },
     serializers: {
-        req(request) {
+        req(request: any) {
             return {
                 id: (request as any).id,
                 method: request.method,
                 url: request.url
             };
         },
-        res(response) {
+        res(response: any) {
             return {
                 statusCode: response.statusCode
             };
