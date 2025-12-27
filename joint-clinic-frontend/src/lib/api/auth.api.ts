@@ -36,12 +36,18 @@ export const createFullUser = async (data: CreateFullUserInput) => {
 }
 
 export const requestOtp = async (data: RequestOTPInput) => {
+    console.log('=== requestOtp API called ===');
+    console.log('Request payload:', JSON.stringify(data, null, 2));
+    console.log('API base URL:', api.defaults.baseURL);
     try {
         const response = await api.post('/auth/otp/request', data)
-        console.log('requestOtp response:', response.data)
+        console.log('requestOtp SUCCESS response:', response.data)
         return response.data
-    } catch (error) {
-        console.error('Error requesting OTP:', (error as any).response?.data || (error as any).message)
+    } catch (error: any) {
+        console.error('requestOtp FAILED:');
+        console.error('- Status:', error.response?.status);
+        console.error('- Data:', error.response?.data);
+        console.error('- Message:', error.message);
         throw error
     }
 }
@@ -59,7 +65,7 @@ export const verifyOtp = async (data: VerifyOTPInput) => {
 
 export const createPatient = async (userId: string, data: CreatePatientInput) => {
     try {
-        const response = await api.post('/patient/create', {userId, data})
+        const response = await api.post('/patient/create', { userId, data })
         console.log('createPatient response:', response.data)
         return response.data.patient
     } catch (error) {

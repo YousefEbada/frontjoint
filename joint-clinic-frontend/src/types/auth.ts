@@ -2,34 +2,34 @@ export interface CreatePartialUserInput {
     fullName: string,
     gender: 'Male' | 'Female' | 'male' | 'female',
     contact: string,
-    birthDate: string
+    birthdate: string
 }
 
 export interface CreateFullUserInput {
-  userId?: string;
-  contact?: string;
-  fullName?: string;
-  gender?: string;
-  birthdate?: string | Date;
-  email?: string;
-  phone?: string;
-  identifier?: string;
-  identifierType?: string;
-  nationality?: string;
-  address?: string;
-  city?: string;
-  maritalStatus?: string;
-  speakingLanguages?: string[];
-  guardianInformation?: {
-    guardianName?: string;
-    guardianEmail?: string;
-    guardianPhone?: string;
-    guardianBloodType?: string;
-    guardianRelation?: string;
-    guardianIdentifier?: string;
-    guardianIdentifierType?: string;
-    patientCategory?: string;
-  };
+    userId?: string;
+    contact?: string;
+    fullName?: string;
+    gender?: string;
+    birthdate?: string | Date;
+    email?: string;
+    phone?: string;
+    identifier?: string;
+    identifierType?: string;
+    nationality?: string;
+    address?: string;
+    city?: string;
+    maritalStatus?: string;
+    speakingLanguages?: string[];
+    guardianInformation?: {
+        guardianName?: string;
+        guardianEmail?: string;
+        guardianPhone?: string;
+        guardianBloodType?: string;
+        guardianRelation?: string;
+        guardianIdentifier?: string;
+        guardianIdentifierType?: string;
+        patientCategory?: string;
+    };
 }
 
 export interface RequestOTPInput {

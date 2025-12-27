@@ -10,18 +10,18 @@ import { MAIL_REPO, OTP_REPO, SMS_REPO } from 'app/container.bindings.js';
 import { USER_AUTH_REPO } from 'app/container.bindings.js';
 
 export async function findUser(req: Request, res: Response) {
-  const { contact } = FindUserSchema.parse(req.query);
-  console.log("CONTACT:", contact);
-  const uc = new FindUserByContact(resolve(USER_AUTH_REPO));
   try {
+    const { contact } = FindUserSchema.parse(req.query);
+    console.log("CONTACT:", contact);
+    const uc = new FindUserByContact(resolve(USER_AUTH_REPO));
     const result = await uc.exec(contact);
     if (!result.ok) {
       return res.status(400).json(result);
     }
     return res.status(200).json(result);
-  } catch (error) { 
+  } catch (error) {
     console.log("Error in findUser controller:", (error as Error).message);
-    return res.status(500).json({ ok: false, message: 'Internal Server Error.' } );
+    return res.status(500).json({ ok: false, message: 'Internal Server Error.' });
   }
 }
 
@@ -37,7 +37,7 @@ export async function createPartialUser(req: Request, res: Response) {
     return res.status(201).json(result);
   } catch (error) {
     console.log("Error in createPartialUser controller:", (error as Error).message);
-    return res.status(500).json({ ok: false, message: 'Internal Server Error.' } );
+    return res.status(500).json({ ok: false, message: 'Internal Server Error.' });
   }
 }
 
@@ -81,7 +81,7 @@ export async function verifyOtp(req: Request, res: Response) {
   try {
     const result = await uc.exec(otpToken, code);
     if (result.ok) {
-      if( 'accessToken' in result && 'refreshToken' in result ) {
+      if ('accessToken' in result && 'refreshToken' in result) {
         // res.cookie('refreshToken', result.refreshToken, {
         //   httpOnly: true,
         //   secure: process.env.NODE_ENV === 'production',
@@ -98,6 +98,6 @@ export async function verifyOtp(req: Request, res: Response) {
     return res.status(status).json(result);
   } catch (error) {
     console.log("Error in verifyOtp controller:", (error as Error).message);
-    return res.status(500).json({ ok: false, message: 'OTP verification failed.' } );
+    return res.status(500).json({ ok: false, message: 'OTP verification failed.' });
   }
 }

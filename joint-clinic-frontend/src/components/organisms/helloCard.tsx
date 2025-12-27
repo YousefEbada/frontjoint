@@ -1,8 +1,10 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Logo from "@/components/atoms/icons/Logo";
 
-export default function HelloCard({ onGo }: { onGo: () => void }) {
+export default function HelloCard({ onGo, isLoading, error }: { onGo: (contact: string) => void; isLoading?: boolean; error?: string | null }) {
+  const [inputValue, setInputValue] = useState("");
+
   return (
     <div className="w-full flex md:justify-start md:ml-[4%] sm:justify-center sm:items-center px-4">
       <div className="relative w-full max-w-[800px]">
@@ -65,10 +67,21 @@ export default function HelloCard({ onGo }: { onGo: () => void }) {
             Let’s get you started. Please enter your phone number or email.
           </p>
 
+          {/* Error */}
+          {error && (
+            <p className="text-red-500 text-center mt-2">
+              enter contact
+            </p>
+          )}
+
           {/* Input */}
           <input
             type="text"
             placeholder="Email Address Or Phone number"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            disabled={isLoading}
+            required={true}
             className="
               w-[90%] 
               md:w-[67%] 
@@ -87,13 +100,15 @@ export default function HelloCard({ onGo }: { onGo: () => void }) {
               focus:border-[#1E5598] 
               focus:ring-2 focus:ring-[#1E5598]/40 
               transition-all duration-300
+              disabled:opacity-60 disabled:cursor-not-allowed
             "
           />
 
           {/* Button */}
           <button
-            onClick={onGo}
-            className="
+            onClick={() => onGo(inputValue)}
+            disabled={isLoading}
+            className={`
               w-[180px] h-[50px] 
               md:w-[220px] md:h-[60px] 
               cursor-pointer 
@@ -105,9 +120,10 @@ export default function HelloCard({ onGo }: { onGo: () => void }) {
               mt-4 
               hover:bg-[#d23229] 
               transition-all duration-300
-            "
+              ${isLoading ? 'opacity-70 cursor-wait' : ''}
+            `}
           >
-            Go
+            {isLoading ? "Loading..." : "Go"}
           </button>
 
         </div>

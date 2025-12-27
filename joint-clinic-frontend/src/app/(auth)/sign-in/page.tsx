@@ -15,6 +15,8 @@ import HelloCard from '@/components/organisms/helloCard';
 // import HelloCard from '@/components/organisms/HelloCard';
 // import DropDown from '@/components/molecules/Dropdown';
 import Typography from '@/components/atoms/Typography';
+import { useAuthFlow } from '@/hooks/useAuthFlow';
+import { CreatePartialUserInput, CreateFullUserInput } from '@/types/auth';
 
 // sdsd
 // Mock Data for Joints
@@ -54,13 +56,73 @@ const JOINTS = {
 
 const Page = () => {
 
-  const [step, setStep] = React.useState(1);
+  const {
+    step,
+    setStep,
+    showHello,
+    handleFindUser,
+    handleCreatePartial,
+    handleVerifyOtp,
+    handleResendOtp,
+    handleCreateFull,
+    isLoading,
+    error
+  } = useAuthFlow();
+
+  // Local Form States
+  const [partialData, setPartialData] = React.useState<Omit<CreatePartialUserInput, 'contact'>>({
+    fullName: '',
+    birthdate: '',
+    gender: 'Male' // default
+  });
+
+  const [otpCode, setOtpCode] = React.useState('');
+
+  const [fullData, setFullData] = React.useState<Omit<CreateFullUserInput, 'contact' | 'userId'>>({
+    email: '',
+    identifier: '',
+    identifierType: 'National ID',
+    nationality: 'Saudi Arabia',
+    city: 'Riyadh',
+    address: '',
+    maritalStatus: 'Single',
+    speakingLanguages: ['Arabic'],
+    guardianInformation: {
+      guardianName: '',
+      guardianPhone: '',
+      guardianIdentifier: '',
+      guardianEmail: '',
+      guardianBloodType: '',
+      patientCategory: '',
+    } // initialize properly
+  });
+
   const [view, setView] = React.useState<'front' | 'back'>('front');
   const [selectedJoint, setSelectedJoint] = React.useState<string | null>(null);
-  const [showInjuryForm, setShowInjuryForm] = React.useState(false);
-  const [activeMarital, setActiveMarital] = React.useState(false);
-  const [activeLanguage, setActiveLanguage] = React.useState(false);
-  const [showHello, setShowHello] = React.useState(true);
+  const [showInjuryForm, setShowInjuryForm] = React.useState(false); // maybe unused now?
+
+  // Handlers
+  const onPartialSubmit = () => {
+    if (!partialData.fullName || !partialData.birthdate) {
+      alert("Please fill all fields");
+      return;
+    }
+    handleCreatePartial(partialData);
+  };
+
+  const onOtpSubmit = () => {
+    if (otpCode.length < 4) { // usually 6
+      alert("Please enter valid code");
+      return;
+    }
+    handleVerifyOtp(otpCode);
+  };
+
+  const onFullSubmit = () => {
+    // Basic validation
+    handleCreateFull(fullData);
+  }
+
 
   /* 
    * Dynamic Zoom Origin Calculation
@@ -158,9 +220,10 @@ const Page = () => {
               className="w-full h-full flex items-center justify-start"
             >
               <HelloCard
-                onGo={() => {
-                  setShowHello(false);
-                  setStep(1);
+                isLoading={isLoading}
+                error={error}
+                onGo={(contact) => {
+                  handleFindUser(contact);
                 }}
               />
             </motion.div>
@@ -380,10 +443,14 @@ const Page = () => {
                           Let’s get you started. Please enter your phone number or email.
                         </p>
 
+                        {error && <p className="text-red-500 mb-4">{error}</p>}
+
                         <div className="inputs flex md:flex-row flex-col justify-center items-center md:gap-[30px] gap-[10px]">
                           <input
                             type="text"
                             placeholder="Full Name"
+                            value={partialData.fullName}
+                            onChange={(e) => setPartialData({ ...partialData, fullName: e.target.value })}
                             className="md:w-[450px] w-full h-[80px] md:text-[24px] text-[18px] px-5 rounded-full border border-[#0D294D] bg-transparent
                                  text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2
                                  focus:ring-[#1E5598]/30 transition"
@@ -391,6 +458,8 @@ const Page = () => {
 
                           <input
                             type="date"
+                            value={partialData.birthdate}
+                            onChange={(e) => setPartialData({ ...partialData, birthdate: e.target.value })}
                             className="md:w-[380px] bg-transparent w-full md:text-[24px] text-[18px] text-center h-[80px] px-5 rounded-full border border-[#0D294D]
                                  bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] outline-none
                                  focus:ring-2 focus:ring-[#1E5598]/30 transition"
@@ -405,6 +474,8 @@ const Page = () => {
                               ]}
                               width="w-[300px]"
                               text="Gender"
+                              value={partialData.gender}
+                              onSelect={(val) => setPartialData({ ...partialData, gender: val as any })}
                             />
                           </div>
                         </div>
@@ -430,15 +501,24 @@ const Page = () => {
                           now we’ll send you a code to verify your phone/email. Please enter the code when it arrives
                         </p>
 
+                        {error && <p className="text-red-500 mb-4">{error}</p>}
+
                         <input
                           type="text"
                           placeholder="Verification Code"
+                          value={otpCode}
+                          onChange={(e) => setOtpCode(e.target.value)}
                           className="md:w-[460px] w-[80%] h-[80px] px-5 md:text-[24px] text-[18px] rounded-full border border-[#0D294D] bg-transparent
                                text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2
                                focus:ring-[#1E5598]/30 transition"
                         />
 
-                        <a href="#" className="md:text-[24px] text-[20px] text-[#1E5598] font-medium underline mt-2">Resend code</a>
+                        <button
+                          onClick={handleResendOtp}
+                          className="md:text-[24px] text-[20px] text-[#1E5598] font-medium underline mt-2 bg-transparent border-none cursor-pointer"
+                        >
+                          Resend code
+                        </button>
                       </motion.div>
                     )}
 
@@ -456,25 +536,30 @@ const Page = () => {
                           Personal Information,
                         </h2>
 
+                        {error && <p className="text-red-500 mb-4 w-full text-center">{error}</p>}
+
                         <p className="md:text-[20px] text-[16px] text-center bg-linear-to-b mt-[14px] mb-[50px] from-[#0D294D] to-[#1E5598]
                                 bg-clip-text text-transparent font-medium w-[80%] leading-relaxed">
                           We need more details about you.
                         </p>
 
-                        <form
-                          action=""
+                        <div
                           className="flex md:flex-row flex-col gap-[30px] flex-wrap justify-center w-full items-center"
                         >
                           {/* ---- FIRST ROW: 3 inputs ---- */}
                           <input
                             type="email"
                             placeholder="Email Address"
+                            value={fullData.email}
+                            onChange={(e) => setFullData({ ...fullData, email: e.target.value })}
                             className="md:w-[39%] w-[90vw] h-[80px] px-5 md:text-[24px] text-[18px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition"
                           />
 
                           <input
                             type="text"
                             placeholder="NID or Iqama ID"
+                            value={fullData.identifier}
+                            onChange={(e) => setFullData({ ...fullData, identifier: e.target.value })}
                             className="md:w-[25%] w-[90vw] h-[80px] px-5 md:text-[24px] text-[18px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition"
                           />
 
@@ -495,6 +580,8 @@ const Page = () => {
                               ]}
                               width="w-full"
                               text="Nationality"
+                              value={fullData.nationality}
+                              onSelect={(val) => setFullData({ ...fullData, nationality: val })}
                             />
                           </div>
 
@@ -513,15 +600,21 @@ const Page = () => {
                                 "Shubra El-Kheima",
                                 "Port Said",
                                 "Zagazig",
+                                "Riyadh",
+                                "Jeddah"
                               ]}
                               width="w-full"
                               text="City"
+                              value={fullData.city}
+                              onSelect={(val) => setFullData({ ...fullData, city: val })}
                             />
                           </div>
 
                           <input
                             type="text"
                             placeholder="Address"
+                            value={fullData.address}
+                            onChange={(e) => setFullData({ ...fullData, address: e.target.value })}
                             className="md:w-[61.5%] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition"
                           />
 
@@ -534,15 +627,14 @@ const Page = () => {
                             />
                             <CustomDropdown
                               items={[
-                                "Saudi Arabia",
-                                "United Arab Emirates",
-                                "Egypt",
-                                "Jordan",
-                                "Sudan",
-                                "Kuwait",
+                                "National ID",
+                                "Iqama",
+                                "Passport"
                               ]}
                               width="w-full"
                               text="Identifier type"
+                              value={fullData.identifierType}
+                              onSelect={(val) => setFullData({ ...fullData, identifierType: val })}
                             />
                           </div>
 
@@ -556,6 +648,8 @@ const Page = () => {
                               items={["Single", "Married", "Divorced", "Widowed"]}
                               width="w-full"
                               text="Marital Status"
+                              value={fullData.maritalStatus}
+                              onSelect={(val) => setFullData({ ...fullData, maritalStatus: val })}
                             />
                           </div>
 
@@ -569,9 +663,11 @@ const Page = () => {
                               items={["English", "Arabic", "Other"]}
                               width="w-full"
                               text="Speaking Language"
+                              value={fullData.speakingLanguages?.[0] || 'Arabic'}
+                              onSelect={(val) => setFullData({ ...fullData, speakingLanguages: [val] })}
                             />
                           </div>
-                        </form>
+                        </div>
 
 
                         <div className="part2 flex flex-col items-center justify-center">
@@ -580,13 +676,31 @@ const Page = () => {
                             The guardian will be taking decision on patient’ behalf in  case that the patient is a minor or
                             can’t make decisions due to medical conditions.
                           </p>
-                          <form action="" className='flex flex-row gap-[30px] flex-wrap justify-center items-center'>
-                            <input type="text" placeholder="Guardian’s Full Name" className="md:w-[48%] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition" />
-                            <input type="text" placeholder="Guardian’s Phone Number" className="md:w-[35%] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition" />
-                            <input type="text" placeholder="Guardian’s NID or Iqama ID" className="md:w-[37%] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition" />
-                            <input type="email" placeholder="Guardian’s Email Address" className="md:w-[46.2%] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition" />
-                            <input type="text" placeholder="Blood Group" className="md:w-[29%] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition" />
-                            <input type="text" placeholder="Patient Category" className="md:w-[29%] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition" />
+                          <div className='flex flex-row gap-[30px] flex-wrap justify-center items-center'>
+                            <input type="text" placeholder="Guardian’s Full Name"
+                              value={fullData.guardianInformation?.guardianName || ''}
+                              onChange={(e) => setFullData({ ...fullData, guardianInformation: { ...fullData.guardianInformation, guardianName: e.target.value } })}
+                              className="md:w-[48%] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition" />
+                            <input type="text" placeholder="Guardian’s Phone Number"
+                              value={fullData.guardianInformation?.guardianPhone || ''}
+                              onChange={(e) => setFullData({ ...fullData, guardianInformation: { ...fullData.guardianInformation, guardianPhone: e.target.value } })}
+                              className="md:w-[35%] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition" />
+                            <input type="text" placeholder="Guardian’s NID or Iqama ID"
+                              value={fullData.guardianInformation?.guardianIdentifier || ''}
+                              onChange={(e) => setFullData({ ...fullData, guardianInformation: { ...fullData.guardianInformation, guardianIdentifier: e.target.value } })}
+                              className="md:w-[37%] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition" />
+                            <input type="email" placeholder="Guardian’s Email Address"
+                              value={fullData.guardianInformation?.guardianEmail || ''}
+                              onChange={(e) => setFullData({ ...fullData, guardianInformation: { ...fullData.guardianInformation, guardianEmail: e.target.value } })}
+                              className="md:w-[46.2%] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition" />
+                            <input type="text" placeholder="Blood Group"
+                              value={fullData.guardianInformation?.guardianBloodType || ''}
+                              onChange={(e) => setFullData({ ...fullData, guardianInformation: { ...fullData.guardianInformation, guardianBloodType: e.target.value } })}
+                              className="md:w-[29%] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition" />
+                            <input type="text" placeholder="Patient Category"
+                              value={fullData.guardianInformation?.patientCategory || ''}
+                              onChange={(e) => setFullData({ ...fullData, guardianInformation: { ...fullData.guardianInformation, patientCategory: e.target.value } })}
+                              className="md:w-[29%] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition" />
                             <div className="relative md:w-[23.5%] w-[90vw] flex items-center justify-center">
                               <input
                                 id="upload"
@@ -602,7 +716,7 @@ const Page = () => {
                                 Upload File
                               </label>
                             </div>
-                          </form>
+                          </div>
                         </div>
                       </motion.div>
                     )}
@@ -615,10 +729,16 @@ const Page = () => {
 
                     <button
                       onClick={() => {
+                        // Back logic handled by hook? Or custom?
+                        // Actually hook just exposes setStep, so we can do it here.
+                        if (showHello) return;
                         if (step === 1) {
-                          setShowHello(true);   // ← ارجع للـ HelloCard
+                          // Go back to Hello
+                          // But we used `setShowHello` from hook. 
+                          // We should probably just reload or reset.
+                          window.location.reload();
                         } else {
-                          setStep(step - 1);     // ← ارجع لصفحة قبلها
+                          setStep(step - 1);
                         }
                       }}
                       className="w-[220px] h-[60px] cursor-pointer py-3 bg-transparent border-[4px]
@@ -632,11 +752,17 @@ const Page = () => {
 
                     {step < 5 && (
                       <button
-                        onClick={() => setStep(step + 1)}
+                        onClick={() => {
+                          if (step === 1) onPartialSubmit();
+                          else if (step === 2) onOtpSubmit();
+                          else if (step === 3) onFullSubmit();
+                          else if (step === 4) setStep(5);
+                        }}
+                        disabled={isLoading}
                         className="w-[220px] h-[60px] cursor-pointer py-3 bg-[#ea392f] text-white rounded-full
                              font-semibold mt-4 hover:bg-transparent hover:text-[#ea392f]
-                             hover:border-[#ea392f] border-[4px] border-[#ea392f] transition-all duration-300">
-                        {step === 4 ? "Submit" : "Continue"}
+                             hover:border-[#ea392f] border-[4px] border-[#ea392f] transition-all duration-300 disabled:opacity-50">
+                        {isLoading ? 'Loading...' : (step === 4 ? "Submit" : "Continue")}
                       </button>
                     )}
 
