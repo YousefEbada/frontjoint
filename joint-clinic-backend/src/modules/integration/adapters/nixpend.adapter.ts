@@ -138,7 +138,7 @@ export const nixpendAdapter: NixpendPort = {
       }
     )
       .then(res => res.json());
-    console.log("\n======= Available Slots Data:", data.response.message);
+    console.log("\n======= Available Slots Data:", data.response.message.length);
     if (data && data.response.message.length > 0) {
       return { data: data.response.message };
     }
