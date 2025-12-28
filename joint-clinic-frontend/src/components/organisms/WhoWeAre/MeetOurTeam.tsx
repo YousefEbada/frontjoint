@@ -5,11 +5,11 @@ import Profile from "@/components/atoms/icons/Profile";
 
 const MeetOurTeam = () => {
   const memberinfo = [
-    { name: "Bryan", major: "BranchChiropractor Aqiq Branch", fill: "#d5ece3" },
-    { name: "Saad Al Omar", major: "Chiropractor Aqiq Branch", fill: "#167c4f" },
-    { name: "Abdallah El Mahya", major: "Physiotherapy Specialist Aqiq Branch", fill: "#112a4d" },
-    { name: "Mohammed Alzahrani", major: "Physiotherapy Specialist Aqiq Branch", fill: "#ee3124" },
-    { name: "Aly El Sennedy", major: "Physiotherapy Specialist Aqiq Branch", fill: "#fdb515" },
+    { imgUrl:"", name: "Bryan", major: "BranchChiropractor Aqiq Branch", fill: "#d5ece3" },
+    { imgUrl:"", name: "Saad Al Omar", major: "Chiropractor Aqiq Branch", fill: "#167c4f" },
+    { imgUrl:"", name: "Abdallah El Mahya", major: "Physiotherapy Specialist Aqiq Branch", fill: "#112a4d" },
+    { imgUrl:"", name: "Mohammed Alzahrani", major: "Physiotherapy Specialist Aqiq Branch", fill: "#ee3124" },
+    { imgUrl:"", name: "Aly El Sennedy", major: "Physiotherapy Specialist Aqiq Branch", fill: "#fdb515" },
   ];
 
   return (

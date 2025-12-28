@@ -7,20 +7,15 @@ import "./whoWeAre.css";
 import Profile from "@/components/atoms/icons/Profile";
 import FeatureCard from "@/components/molecules/FeatureCardCom";
 import { color } from "@/lib/constants/colors";
-
-import { useDoctors } from "@/hooks/useDoctors";
+import Link from "next/link";
+import Image from "next/image";
+import doctorsData from "./doctors.json";
 
 gsap.registerPlugin(ScrollTrigger);
 
 function WhoWeAre() {
-  const { doctors, loading, error } = useDoctors()
-
-  const memberColors = ["#d5ece3", "#167c4f", "#112a4d", "#ee3124", "#fdb515"];
-  const memberinfo = doctors?.slice(0, 5).map((doctor: any, index) => ({
-    name: doctor.practitionerName,
-    major: `${doctor.department} Specialist ${doctor.practitionerCompany?.[0]?.branch || ''} Branch`,
-    fill: memberColors[index % memberColors.length]
-  })) || [];
+  // Use doctors.json data instead of API
+  const memberinfo = doctorsData.doctors.slice(0, 5);
 
 
   const cards = [
@@ -244,7 +239,7 @@ function WhoWeAre() {
         we make every step of your recovery journey easier.
       </p>
       <section
-        className="team_section absolute bottom-[120px] w-[90%] mx-auto flex flex-col items-center justify-center"
+        className="team_section absolute z-10 md:bottom-[120px] bottom-[55%] w-[90%] mx-auto flex flex-col items-center justify-center"
         ref={membersRef}
       >
         <h1 className="text-[40px] md:text-[100px] font-bold font-['IBM_Plex_Sans'] text-[#fff] text-center">
@@ -253,17 +248,22 @@ function WhoWeAre() {
 
         <div
           className={
-            "members translate-y-6 max-w-[1400px] mx-auto grid grid-cols-3 md:grid-cols-5 " +
+            "members md:translate-y-6 translate-y-30 max-w-[1400px] mx-auto grid grid-cols-3 md:grid-cols-5 " +
             // center the whole grid content (useful when last row has fewer items)
             "justify-center justify-items-center gap-[10px] overflow-hidden transition-all"
           }
         >
           {memberinfo.map((member, index) => (
             <div key={index} className="flex flex-col justify-center items-center w-auto mb-4">
-              <Profile
-                fill={member.fill}
-                className={`w-[40px] md:w-[60px] mb-[4px]`}
-              />
+              <div className="w-[50px] md:w-[80px] mb-[4px]">
+                <Image
+                  src={member.imgUrl}
+                  alt={member.name}
+                  width={70}
+                  height={70}
+                  className="w-full h-full object-cover"
+                />
+              </div>
 
               <h4 className={`text-[13px] md:text-[20px] max-w-[250px] my-0 text-[#fff] font-bold text-center`}>
                 {member.name}
@@ -274,6 +274,11 @@ function WhoWeAre() {
               </p>
             </div>
           ))}
+          <Link href="/ourteam" className="col-span-3 md:col-span-5">
+            <button className="bg-[#ee3124] text-[#fff] text-[20px] cursor-pointer border-2 border-transparent hover:bg-[#fff] hover:text-[#ee3124] hover:border-[#ee3124] w-[180px] font-medium px-4 py-2 rounded-full mt-4 transition-all duration-300">
+              View All
+            </button>
+          </Link>
         </div>
       </section>
       <section
