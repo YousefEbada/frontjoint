@@ -80,7 +80,7 @@ export default function DoctorDetailsPage() {
                                 </p>
 
                                 <Link
-                                    href="/book"
+                                    href="/#book"
                                     className="mt-2 bg-[#EE3124] text-white px-5 py-2 rounded-full text-sm font-medium hover:opacity-90 transition"
                                 >
                                     Book Now
