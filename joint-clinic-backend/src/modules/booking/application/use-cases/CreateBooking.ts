@@ -50,8 +50,10 @@ export class CreateBooking {
           return { ok: false, error: 'Session is not available for booking' };
         }
       }
-
-      const res = await this.nixpendRepo.bookAppointment({ ...data });
+      const {doctor_id, patient_id, ...rest} = data
+      const nixpendObj = {practitioner: doctor_id, patient: patient_id, ...rest}
+      // here was ...data
+      const res = await this.nixpendRepo.bookAppointment({ ...nixpendObj });
 
       if (!res?.appointment_id) {
         throw new Error('Failed to book appointment in Nixpend');
@@ -59,8 +61,9 @@ export class CreateBooking {
 
       const booking = await this.bookingRepo.book(
         {
-          patientId: data.patient,
-          doctorId: data.practitioner,
+          // there was patient and practitioner
+          patientId: data.patient_id,
+          doctorId: data.doctor_id,
           branchId: data.branch || undefined,
           eventName: data.daily_practitioner_event,
           appointmentNixpendId: res.appointment_id,
@@ -122,15 +125,23 @@ export class CreateBooking {
       violations.push({ violation: 'Duration should be defined' });
     }
 
-    if (!data.practitioner) {
-      violations.push({ violation: 'Practitioner ID should be defined' });
+    // if (!data.practitioner) {
+    //   violations.push({ violation: 'Practitioner ID should be defined' });
+    // }
+    
+    if (!data.doctor_id) {
+      violations.push({ violation: 'Doctor ID should be defined' });
     }
 
     if (!data.department) {
       violations.push({ violation: 'Department should be defined' });
     }
 
-    if (!data.patient) {
+    // if (!data.patient) {
+    //   violations.push({ violation: 'Patient ID should be defined' });
+    // }
+    
+    if (!data.patient_id) {
       violations.push({ violation: 'Patient ID should be defined' });
     }
 
