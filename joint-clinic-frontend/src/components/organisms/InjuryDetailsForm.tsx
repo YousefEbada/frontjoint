@@ -1,19 +1,50 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import Typography from '@/components/atoms/Typography';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
-import Logo from '@/components/atoms/icons/Logo'; // Import Logo
+import Logo from '@/components/atoms/icons/Logo';
 import CorneredBoxes from '../atoms/CorneredBoxes';
+import CustomDropdown from '@/components/molecules/dropdown';
+
+interface InjuryDetails {
+    startDate?: string;
+    receivedTreatment?: boolean;
+    painSeverity?: number;
+    howDidInjurHappened?: string;
+    painOccasionalOrConstant?: 'occasional' | 'constant';
+    affectDailyActivities?: boolean;
+    additionalNotes?: string;
+    medicalReports?: string[];
+}
 
 interface InjuryDetailsFormProps {
     jointName: string;
     onBack: () => void;
-    onContinue: () => void;
+    onContinue: (details: InjuryDetails) => void;
 }
 
 const InjuryDetailsForm: React.FC<InjuryDetailsFormProps> = ({ jointName, onBack, onContinue }) => {
+    const [formData, setFormData] = useState<InjuryDetails>({});
+    const [files, setFiles] = useState<File[]>([]);
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        // Convert files to file names for now (in a real app, you'd upload and get URLs)
+        const fileNames = files.map(f => f.name);
+        onContinue({ ...formData, medicalReports: fileNames.length > 0 ? fileNames : undefined });
+    };
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files) {
+            setFiles(Array.from(e.target.files));
+        }
+    };
+
+    // Dropdown options
+    const treatmentOptions = ['Yes', 'No'];
+    const severityOptions = ['1 - Minimal', '2', '3', '4', '5 - Moderate', '6', '7', '8', '9', '10 - Severe'];
+    const painTypeOptions = ['Occasional', 'Constant'];
+    const dailyActivitiesOptions = ['Yes', 'No'];
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 200 }}
@@ -24,8 +55,6 @@ const InjuryDetailsForm: React.FC<InjuryDetailsFormProps> = ({ jointName, onBack
         >
             {/* Glassy Container */}
             <CorneredBoxes type="glass" className="w-full origin-bottom p-8 md:p-12 relative overflow-hidden">
-
-                {/* <div className="w-full origin-bottom bg-[#f0f9f6]/95 backdrop-blur-xl border border-white/60 shadow-2xl rounded-[40px] p-8 md:p-12 relative overflow-hidden"> */}
 
                 {/* Logo in Top Right */}
                 <div className="absolute top-8 right-8 md:top-10 md:right-10 opacity-80">
@@ -43,75 +72,138 @@ const InjuryDetailsForm: React.FC<InjuryDetailsFormProps> = ({ jointName, onBack
                     </p>
                 </div>
 
-                {/* Form Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-7 gap-x-8 gap-y-6 place-items-center">
+                {/* Form */}
+                <form onSubmit={handleSubmit}>
+                    {/* Form Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-7 gap-x-8 gap-y-6 place-items-center">
 
-                    {/* Start Date */}
-                    <div className="relative w-full md:col-span-3">
-                        <input type="date" placeholder="When did this injury start?" className="w-full h-[70px] md:h-[80px] px-8 rounded-full border  border-[#0D294D]/30 bg-white/50 backdrop-blur-sm text-[#0D294D] placeholder:text-[#6d7a80] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition text-lg md:text-xl truncate pr-12 hover:bg-white/80 focus:bg-white" />
-                        <FontAwesomeIcon icon={faCaretDown} className="absolute right-8 top-1/2 -translate-y-1/2 text-[#0D294D] pointer-events-none" />
-                    </div>
-
-                    {/* Treatment Before */}
-                    <div className="relative w-full md:col-span-4">
-                        <input type="text" placeholder="Have you received any treatment for this injury before?" className="w-full h-[70px] md:h-[80px] px-8 rounded-full border border-[#0D294D]/30 bg-white/50 backdrop-blur-sm text-[#0D294D] placeholder:text-[#6d7a80] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition text-lg md:text-xl truncate pr-12 hover:bg-white/80 focus:bg-white" />
-                        <FontAwesomeIcon icon={faCaretDown} className="absolute right-8 top-1/2 -translate-y-1/2 text-[#0D294D] pointer-events-none" />
-                    </div>
-
-                    {/* Severity */}
-                    <div className="relative w-full md:col-span-2">
-                        <input type="text" placeholder="How severe is the pain?" className="w-full h-[70px] md:h-[80px] px-8 rounded-full border border-[#0D294D]/30 bg-white/50 backdrop-blur-sm text-[#0D294D] placeholder:text-[#6d7a80] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition text-lg md:text-xl truncate pr-12 hover:bg-white/80 focus:bg-white" />
-                        <FontAwesomeIcon icon={faCaretDown} className="absolute right-8 top-1/2 -translate-y-1/2 text-[#0D294D] pointer-events-none" />
-                    </div>
-
-                    {/* How happened */}
-                    <div className="relative w-full md:col-span-5">
-                        <input type="text" placeholder="How did the injury happen?" className="w-full h-[70px] md:h-[80px] px-8 rounded-full border border-[#0D294D]/30 bg-white/50 backdrop-blur-sm text-[#0D294D] placeholder:text-[#6d7a80] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition text-lg md:text-xl hover:bg-white/80 focus:bg-white" />
-                    </div>
-
-                    {/* Constant/Occasional */}
-                    <div className="relative w-full md:col-span-3">
-                        <input type="text" placeholder="Is the pain constant or occasional?" className="w-full h-[70px] md:h-[80px] px-8 rounded-full border border-[#0D294D]/30 bg-white/50 backdrop-blur-sm text-[#0D294D] placeholder:text-[#6d7a80] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition text-lg md:text-xl truncate pr-12 hover:bg-white/80 focus:bg-white" />
-                        <FontAwesomeIcon icon={faCaretDown} className="absolute right-8 top-1/2 -translate-y-1/2 text-[#0D294D] pointer-events-none" />
-                    </div>
-
-                    {/* Daily Activities */}
-                    <div className="relative w-full md:col-span-4">
-                        <input type="text" placeholder="Does this injury affect your daily activities?" className="w-full h-[70px] md:h-[80px] px-8 rounded-full border border-[#0D294D]/30 bg-white/50 backdrop-blur-sm text-[#0D294D] placeholder:text-[#6d7a80] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition text-lg md:text-xl truncate pr-12 hover:bg-white/80 focus:bg-white" />
-                        <FontAwesomeIcon icon={faCaretDown} className="absolute right-8 top-1/2 -translate-y-1/2 text-[#0D294D] pointer-events-none" />
-                    </div>
-
-                    {/* Anything else - Full Width */}
-                    <div className="relative w-full md:col-span-3">
-                        <input type="text" placeholder="Anything else you'd like your doctor to know?" className="w-full h-[70px] md:h-[80px] px-8 rounded-full border border-[#0D294D]/30 bg-white/50 backdrop-blur-sm text-[#0D294D] placeholder:text-[#6d7a80] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition text-lg md:text-xl hover:bg-white/80 focus:bg-white" />
-                    </div>
-
-                    {/* Upload - Full Width centered */}
-                    <div className="relative w-full md:col-span-4 flex justify-center">
-                        <div className=" w-full h-[70px] md:h-[80px] px-8 rounded-full border border-dashed border-[#0D294D]/50 bg-white/30 backdrop-blur-sm text-[#6d7a80] flex items-center justify-center cursor-pointer hover:bg-white/60 transition text-center group">
-                            <span className="text-lg md:text-xl group-hover:text-[#0D294D] transition-colors">Upload Medical Reports or Scans</span>
+                        {/* Start Date */}
+                        <div className="relative w-full md:col-span-3">
+                            <input
+                                type="date"
+                                required
+                                value={formData.startDate || ''}
+                                onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
+                                placeholder="When did this injury start?"
+                                className="w-full h-[70px] md:h-[80px] px-8 rounded-full border border-[#0D294D]/30 bg-white/50 backdrop-blur-sm text-[#0D294D] placeholder:text-[#6d7a80] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition text-lg md:text-xl truncate pr-12 hover:bg-white/80 focus:bg-white"
+                            />
                         </div>
+
+                        {/* Treatment Before */}
+                        <div className="relative w-full md:col-span-4">
+                            <CustomDropdown
+                                variant="form"
+                                required
+                                items={treatmentOptions}
+                                text="Have you received any treatment before?"
+                                onSelect={(value) => setFormData({ ...formData, receivedTreatment: value === 'Yes' })}
+                                value={formData.receivedTreatment !== undefined ? (formData.receivedTreatment ? 'Yes' : 'No') : undefined}
+                            />
+                        </div>
+
+                        {/* Severity */}
+                        <div className="relative w-full md:col-span-2">
+                            <CustomDropdown
+                                variant="form"
+                                required
+                                items={severityOptions}
+                                text="How severe is the pain?"                            
+                                onSelect={(value) => {
+                                    const severity = parseInt(value.split(' ')[0]);
+                                    setFormData({ ...formData, painSeverity: severity });
+                                }}
+                                value={formData.painSeverity !== undefined ? severityOptions.find(opt => opt.startsWith(String(formData.painSeverity))) : undefined}
+                            />
+                        </div>
+
+                        {/* How happened */}
+                        <div className="relative w-full md:col-span-5">
+                            <input
+                                type="text"
+                                required
+                                value={formData.howDidInjurHappened || ''}
+                                onChange={(e) => setFormData({ ...formData, howDidInjurHappened: e.target.value })}
+                                placeholder="How did the injury happen?"
+                                className="w-full h-[70px] md:h-[80px] px-8 rounded-full border border-[#0D294D]/30 bg-white/50 backdrop-blur-sm text-[#0D294D] placeholder:text-[#6d7a80] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition text-lg md:text-xl hover:bg-white/80 focus:bg-white"
+                            />
+                        </div>
+
+                        {/* Constant/Occasional */}
+                        <div className="relative w-full md:col-span-3">
+                            <CustomDropdown
+                                variant="form"
+                                required
+                                items={painTypeOptions}
+                                text="Is the pain constant or occasional?"
+                                onSelect={(value) => setFormData({ ...formData, painOccasionalOrConstant: value.toLowerCase() as 'occasional' | 'constant' })}
+                                value={formData.painOccasionalOrConstant ? (formData.painOccasionalOrConstant === 'occasional' ? 'Occasional' : 'Constant') : undefined}
+                            />
+                        </div>
+
+                        {/* Daily Activities */}
+                        <div className="relative w-full md:col-span-4">
+                            <CustomDropdown
+                                variant="form"
+                                required
+                                items={dailyActivitiesOptions}
+                                text="Does this injury affect your daily activities?"
+                                onSelect={(value) => setFormData({ ...formData, affectDailyActivities: value === 'Yes' })}
+                                value={formData.affectDailyActivities !== undefined ? (formData.affectDailyActivities ? 'Yes' : 'No') : undefined}
+                            />
+                        </div>
+
+                        {/* Anything else - Full Width */}
+                        <div className="relative w-full md:col-span-3">
+                            <input
+                                type="text"
+                                required
+                                value={formData.additionalNotes || ''}
+                                onChange={(e) => setFormData({ ...formData, additionalNotes: e.target.value })}
+                                placeholder="Anything else you'd like your doctor to know?"
+                                className="w-full h-[70px] md:h-[80px] px-8 rounded-full border border-[#0D294D]/30 bg-white/50 backdrop-blur-sm text-[#0D294D] placeholder:text-[#6d7a80] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition text-lg md:text-xl hover:bg-white/80 focus:bg-white"
+                            />
+                        </div>
+
+                        {/* Upload Medical Reports - Optional */}
+                        <div className="relative w-full md:col-span-4 flex justify-center">
+                            <input
+                                id="medical-report-upload"
+                                type="file"
+                                multiple
+                                accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+                                className="hidden"
+                                onChange={handleFileChange}
+                            />
+                            <label
+                                htmlFor="medical-report-upload"
+                                className="w-full h-[70px] md:h-[80px] px-8 rounded-full border border-dashed border-[#0D294D]/50 bg-white/30 backdrop-blur-sm text-[#6d7a80] flex items-center justify-center cursor-pointer hover:bg-white/60 transition text-center group"
+                            >
+                                <span className="text-lg md:text-xl group-hover:text-[#0D294D] transition-colors">
+                                    {files.length > 0 ? `${files.length} file(s) selected` : 'Upload Medical Reports or Scans (Optional)'}
+                                </span>
+                            </label>
+                        </div>
+
                     </div>
 
-                </div>
+                    {/* Footer Actions */}
+                    <div className="flex justify-center gap-6 mt-12">
+                        <button
+                            type="button"
+                            onClick={onBack}
+                            className="w-[200px] h-[60px] cursor-pointer py-3 bg-white/50 border-2 border-[#ea392f] text-[#ea392f] rounded-full font-semibold hover:bg-[#ea392f] hover:text-white transition-all duration-300 text-lg shadow-sm"
+                        >
+                            Back
+                        </button>
+                        <button
+                            type="submit"
+                            className="w-[200px] h-[60px] cursor-pointer py-3 bg-[#ea392f] text-white rounded-full font-semibold hover:bg-[#d63228] border-2 border-[#ea392f] transition-all duration-300 text-lg shadow-md hover:shadow-lg"
+                        >
+                            Continue
+                        </button>
+                    </div>
+                </form>
 
-                {/* Footer Actions */}
-                <div className="flex justify-center gap-6 mt-12">
-                    <button
-                        onClick={onBack}
-                        className="w-[200px] h-[60px] cursor-pointer py-3 bg-white/50 border-2 border-[#ea392f] text-[#ea392f] rounded-full font-semibold hover:bg-[#ea392f] hover:text-white transition-all duration-300 text-lg shadow-sm"
-                    >
-                        Back
-                    </button>
-                    <button
-                        onClick={onContinue}
-                        className="w-[200px] h-[60px] cursor-pointer py-3 bg-[#ea392f] text-white rounded-full font-semibold hover:bg-[#d63228] border-2 border-[#ea392f] transition-all duration-300 text-lg shadow-md hover:shadow-lg"
-                    >
-                        Continue
-                    </button>
-                </div>
-
-                {/* </div> */}
             </CorneredBoxes>
         </motion.div>
     );

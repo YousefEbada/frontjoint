@@ -443,11 +443,12 @@ const Page = () => {
                     <InjuryDetailsForm
                       jointName={activeJointLabel}
                       onBack={() => setStep(4)}
-                      onContinue={() => {
+                      onContinue={(details) => {
                         // Set affected area from selected joint and call create patient
                         handleCreatePatient({
-                          ...injuryDetails,
-                          affectedArea: activeJointLabel
+                          ...details,
+                          affectedArea: activeJointLabel,
+                          startDate: details.startDate ? new Date(details.startDate) : undefined,
                         });
                       }}
                     />

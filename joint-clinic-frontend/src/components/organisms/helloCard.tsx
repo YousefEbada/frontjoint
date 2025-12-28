@@ -73,58 +73,65 @@ export default function HelloCard({ onGo, isLoading, error }: { onGo: (contact: 
               enter contact
             </p>
           )}
-
-          {/* Input */}
-          <input
-            type="text"
-            placeholder="Email Address Or Phone number"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            disabled={isLoading}
-            required={true}
-            className="
-              w-[90%] 
-              md:w-[67%] 
-              mt-2 
-              px-4 py-3 
-              border rounded-[40px] 
-              outline-none 
-              text-gray-800 
-              text-[15px] 
-              md:text-[20px]
-              border-[#000] 
-              text-center 
-              bg-gradient-to-b from-[#0D294D] to-[#1E5598]
-              bg-clip-text text-transparent 
-              tracking-wide 
-              focus:border-[#1E5598] 
-              focus:ring-2 focus:ring-[#1E5598]/40 
-              transition-all duration-300
-              disabled:opacity-60 disabled:cursor-not-allowed
-            "
-          />
-
-          {/* Button */}
-          <button
-            onClick={() => onGo(inputValue)}
-            disabled={isLoading}
-            className={`
-              w-[180px] h-[50px] 
-              md:w-[220px] md:h-[60px] 
-              cursor-pointer 
-              py-3 
-              bg-[#ea392f] 
-              text-white 
-              rounded-full 
-              font-semibold 
-              mt-4 
-              hover:bg-[#d23229] 
-              transition-all duration-300
-              ${isLoading ? 'opacity-70 cursor-wait' : ''}
-            `}
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              onGo(inputValue);
+            }}
+            className="w-full flex flex-col items-center"
           >
-            {isLoading ? "Loading..." : "Go"}
-          </button>
+            {/* Input */}
+            <input
+              type="text"
+              placeholder="Email Address Or Phone number"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              disabled={isLoading}
+              required
+              className="
+                w-[90%] 
+                md:w-[67%] 
+                mt-2 
+                px-4 py-3 
+                border rounded-[40px] 
+                outline-none 
+                text-gray-800 
+                text-[15px] 
+                md:text-[20px]
+                border-[#000] 
+                text-center 
+                bg-gradient-to-b from-[#0D294D] to-[#1E5598]
+                bg-clip-text text-transparent 
+                tracking-wide 
+                focus:border-[#1E5598] 
+                focus:ring-2 focus:ring-[#1E5598]/40 
+                transition-all duration-300
+                disabled:opacity-60 disabled:cursor-not-allowed
+              "
+            />
+
+            {/* Button */}
+            <button
+              type="submit"
+              disabled={isLoading}
+              className={`
+                w-[180px] h-[50px] 
+                md:w-[220px] md:h-[60px] 
+                cursor-pointer 
+                py-3 
+                bg-[#ea392f] 
+                text-white 
+                rounded-full 
+                font-semibold 
+                mt-4 
+                hover:bg-[#d23229] 
+                transition-all duration-300
+                ${isLoading ? 'opacity-70 cursor-wait' : ''}
+              `}
+            >
+              {isLoading ? "Loading..." : "Go"}
+            </button>
+          </form>
 
         </div>
       </div>
