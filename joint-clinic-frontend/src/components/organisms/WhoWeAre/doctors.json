@@ -1,94 +1,99 @@
 {
-    "doctors": [
-        {
-            "id": "1",
-            "imgUrl": "/saad.jpg",
-            "name": "Saad Al Omar",
-            "major": "Chiropractor",
-            "branch": "Aqiq Branch",
-            "fill": "#167c4f",
-            "qualifications": "4 years of experience\nBachelor's degree - Prince Sattam bin Abdulaziz University",
-            "treatsCases": [
-                "Musculoskeletal injury",
-                "Sport Injury",
-                "Tendon injuries (lower extremity)",
-                "Pre- and post-operative rehabilitation",
-                "Hip and groin Injuries in Athletes",
-                "Muscle Tears (Lower Extremity)",
-                "Knee Osteoarthritis",
-                "Chronic Knee Pain and Patellofemoral pain syndrome (PFPS)",
-                "Shoulder Dislocation and Post-Bankart Repair"
-            ]
-        },
-        {
-            "id": "2",
-            "imgUrl": "/ahmed.jpg",
-            "name": "Ahmed El Sabea",
-            "major": "Chiropractor",
-            "branch": "Aqiq Branch",
-            "fill": "#112a4d",
-            "qualifications": "4 years of experience\nBachelor's degree - Prince Sattam bin Abdulaziz University",
-            "treatsCases": [
-                "Musculoskeletal injury",
-                "Sport Injury",
-                "Tendon injuries (lower extremity)",
-                "Pre- and post-operative rehabilitation",
-                "Hip and groin Injuries in Athletes",
-                "Muscle Tears (Lower Extremity)",
-                "Knee Osteoarthritis",
-                "Chronic Knee Pain and Patellofemoral pain syndrome (PFPS)",
-                "Shoulder Dislocation and Post-Bankart Repair"
-            ]
-        },
-        {
-            "id": "3",
-            "imgUrl": "/fatma.jpg",
-            "name": "Fatma Elhasny",
-            "major": "Physiotherapy Specialist",
-            "branch": "Aqiq Branch",
-            "fill": "#ee3124",
-            "qualifications": "5 years of experience\nMaster's degree - King Saud University",
-            "treatsCases": [
-                "Post-surgical rehabilitation",
-                "Chronic back pain",
-                "Neck pain and cervical disorders",
-                "Sports injury recovery",
-                "Postural correction",
-                "Neurological rehabilitation"
-            ]
-        },
-        {
-            "id": "4",
-            "imgUrl": "/ali.jpg",
-            "name": "Aly El Sennedy",
-            "major": "Physiotherapy Specialist",
-            "branch": "Aqiq Branch",
-            "fill": "#fdb515",
-            "qualifications": "6 years of experience\nDoctor of Physical Therapy - Cairo University",
-            "treatsCases": [
-                "Athletic performance optimization",
-                "ACL reconstruction recovery",
-                "Rotator cuff injuries",
-                "Tennis elbow",
-                "Plantar fasciitis",
-                "Sciatica and lumbar disc herniation"
-            ]
-        },
-        {
-            "id": "5",
-            "imgUrl": "/abdallah.jpg",
-            "name": "Abdullah Al-Muhaya",
-            "major": "Physiotherapy Specialist",
-            "branch": "Aqiq Branch",
-            "fill": "#d5ece3",
-            "qualifications": "3 years of experience\nBachelor's degree - King Abdulaziz University",
-            "treatsCases": [
-                "Pediatric physiotherapy",
-                "Developmental delays",
-                "Muscle weakness",
-                "Balance and coordination issues",
-                "Post-fracture rehabilitation"
-            ]
-        }
-    ]
+  "doctors": [
+    {
+      "id": "1",
+      "imgUrl": "/saad.jpg",
+      "name": "Saad Al Omar",
+      "major": "Chiropractor",
+      "branch": "Aqiq Branch",
+      "fill": "#167c4f",
+      "qualifications": "4 years of experience\nBachelor's degree - Prince Sattam bin Abdulaziz University",
+      "biography": "Saad Al Omar is a licensed chiropractor with over four years of clinical experience in musculoskeletal care. He focuses on restoring mobility, reducing pain, and improving overall functional performance using evidence-based chiropractic and rehabilitation techniques.",
+      "treatsCases": [
+        "Musculoskeletal injury",
+        "Sport Injury",
+        "Tendon injuries (lower extremity)",
+        "Pre- and post-operative rehabilitation",
+        "Hip and groin Injuries in Athletes",
+        "Muscle Tears (Lower Extremity)",
+        "Knee Osteoarthritis",
+        "Chronic Knee Pain and Patellofemoral pain syndrome (PFPS)",
+        "Shoulder Dislocation and Post-Bankart Repair"
+      ]
+    },
+    {
+      "id": "2",
+      "imgUrl": "/ahmed.jpg",
+      "name": "Ahmed El Sabea",
+      "major": "Chiropractor",
+      "branch": "Aqiq Branch",
+      "fill": "#112a4d",
+      "qualifications": "4 years of experience\nBachelor's degree - Prince Sattam bin Abdulaziz University",
+      "biography": "Ahmed El Sabea is an experienced chiropractor specializing in spinal alignment, joint mobility, and pain management. He is committed to helping patients regain function and return to daily activities safely through personalized treatment plans.",
+      "treatsCases": [
+        "Musculoskeletal injury",
+        "Sport Injury",
+        "Tendon injuries (lower extremity)",
+        "Pre- and post-operative rehabilitation",
+        "Hip and groin Injuries in Athletes",
+        "Muscle Tears (Lower Extremity)",
+        "Knee Osteoarthritis",
+        "Chronic Knee Pain and Patellofemoral pain syndrome (PFPS)",
+        "Shoulder Dislocation and Post-Bankart Repair"
+      ]
+    },
+    {
+      "id": "3",
+      "imgUrl": "/fatma.jpg",
+      "name": "Fatma Elhasny",
+      "major": "Physiotherapy Specialist",
+      "branch": "Aqiq Branch",
+      "fill": "#ee3124",
+      "qualifications": "5 years of experience\nMaster's degree - King Saud University",
+      "biography": "Fatma Elhasny is a physiotherapy specialist with a strong background in post-surgical and chronic condition rehabilitation. She combines manual therapy with modern physiotherapy techniques to help patients achieve long-term recovery.",
+      "treatsCases": [
+        "Post-surgical rehabilitation",
+        "Chronic back pain",
+        "Neck pain and cervical disorders",
+        "Sports injury recovery",
+        "Postural correction",
+        "Neurological rehabilitation"
+      ]
+    },
+    {
+      "id": "4",
+      "imgUrl": "/ali.jpg",
+      "name": "Aly El Sennedy",
+      "major": "Physiotherapy Specialist",
+      "branch": "Aqiq Branch",
+      "fill": "#fdb515",
+      "qualifications": "6 years of experience\nDoctor of Physical Therapy - Cairo University",
+      "biography": "Aly El Sennedy is a Doctor of Physical Therapy with extensive experience in sports rehabilitation and advanced orthopedic cases. He works closely with athletes and active individuals to optimize performance and prevent re-injury.",
+      "treatsCases": [
+        "Athletic performance optimization",
+        "ACL reconstruction recovery",
+        "Rotator cuff injuries",
+        "Tennis elbow",
+        "Plantar fasciitis",
+        "Sciatica and lumbar disc herniation"
+      ]
+    },
+    {
+      "id": "5",
+      "imgUrl": "/abdallah.jpg",
+      "name": "Abdullah Al-Muhaya",
+      "major": "Physiotherapy Specialist",
+      "branch": "Aqiq Branch",
+      "fill": "#d5ece3",
+      "qualifications": "3 years of experience\nBachelor's degree - King Abdulaziz University",
+      "biography": "Abdullah Al-Muhaya specializes in pediatric and developmental physiotherapy. He focuses on improving motor skills, strength, and coordination in children and young patients through structured and compassionate rehabilitation programs.",
+      "treatsCases": [
+        "Pediatric physiotherapy",
+        "Developmental delays",
+        "Muscle weakness",
+        "Balance and coordination issues",
+        "Post-fracture rehabilitation"
+      ]
+    }
+  ]
 }
