@@ -21,19 +21,41 @@ export class CreatePatient {
             }
 
             const { fullName, gender, nationality, phone, email } = user;
-            let [firstName, ...lastName] = fullName.split(" ");
-            let sex = gender
-            // check this in the frontend and the DB and frontend
-            let mobile = phone?.replace('+', '').trim();
 
-            console.log("Creating patient for user:", { firstName, lastName: lastName[0], nationality, sex, mobile, email });
+            // Parse name safely
+            const nameParts = (fullName || '').trim().split(" ");
+            const firstName = nameParts[0] || 'Unknown';
+            const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : 'Patient';
+
+            // Map gender to Nixpend format
+            let sex = gender?.toLowerCase() === 'female' ? 'Female' : 'Male';
+
+            // Clean phone number
+            let mobile = phone?.replace(/[^0-9]/g, '').trim() || '';
+
+            // Map nationality - Nixpend requires specific country names
+            let mappedNationality = 'Egypt'; // Default
+            if (nationality) {
+                const nat = nationality.toLowerCase();
+                if (nat.includes('egypt')) mappedNationality = 'Egypt';
+                else if (nat.includes('saudi')) mappedNationality = 'Saudi Arabia';
+                else if (nat.includes('uae') || nat.includes('emirat')) mappedNationality = 'United Arab Emirates';
+                else mappedNationality = nationality;
+            }
+
+            console.log("Creating patient for user:", { firstName, lastName, nationality: mappedNationality, sex, mobile, email });
+
+            // Validate required fields before calling Nixpend
+            if (!firstName || !mobile) {
+                console.error("Missing required fields for Nixpend:", { firstName, mobile });
+                return { ok: false, error: "Missing required fields: first name or phone number" };
+            }
 
             // Then, create patient in Nixpend
             const nixpendPatient = await this.nixpendAdapter.registerPatient({
                 first_name: firstName,
-                last_name: lastName[0],
-                // Handle this from the frontend later
-                nationality: nationality == 'Egyptian' ? 'Egypt' : nationality == 'Saudi' ? 'Saudi Arabia' : "France",
+                last_name: lastName,
+                nationality: mappedNationality,
                 mobile,
                 sex
             });
@@ -57,7 +79,7 @@ export class CreatePatient {
             // if (createData && createData.medicalHistory?.length) patientData.medicalHistory = createData.medicalHistory;
             if (createData && createData.injuryDetails) patientData.injuryDetails = createData.injuryDetails;
             if (createData && createData.notes) patientData.notes = createData.notes;
-            
+
             const newPatient = await this.patientRepo.createPatient(patientData);
             return { ok: true, patient: newPatient };
         } catch (error) {
