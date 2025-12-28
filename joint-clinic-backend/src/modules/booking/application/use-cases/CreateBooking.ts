@@ -50,10 +50,8 @@ export class CreateBooking {
           return { ok: false, error: 'Session is not available for booking' };
         }
       }
-      const {doctor_id, patient_id, ...rest} = data
-      const nixpendObj = {practitioner: doctor_id, patient: patient_id, ...rest}
-      // here was ...data
-      const res = await this.nixpendRepo.bookAppointment({ ...nixpendObj });
+
+      const res = await this.nixpendRepo.bookAppointment({ ...data });
 
       if (!res?.appointment_id) {
         throw new Error('Failed to book appointment in Nixpend');
