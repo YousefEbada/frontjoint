@@ -2,27 +2,43 @@
 import React from "react";
 import DashBoardHeader from "@/components/molecules/DashBoardHeader";
 import Typography from "@/components/atoms/Typography";
-import CorneredBoxes from "@/components/atoms/CorneredBoxes";
 import Link from "next/link";
-import BackTo from "@/components/molecules/BackTo";
 import DashBoardContent from "@/components/atoms/DashBoardContent";
 import ProgressBar from "@/components/atoms/ProgressBar";
+import { usePatient } from "@/hooks/usePatient";
+import { Rectangle } from "react-loadly";
 
 const PatientDetailsPage = ({ params }: { params: { id: string } }) => {
-    // Mock Data - in a real app, fetch based on params.id
+    const { data: patientData, isLoading } = usePatient(params.id);
+
+    // Map API data to UI model or use defaults
     const patient = {
-        name: "Patient Name",
-        status: "Active",
-        injury: "Back Injury",
-        sessions: 16,
-        sessionsCompleted: 5,
-        treatmentLength: "8 Weeks",
-        exercisesCompleted: 12,
-        numExercises: 16,
-        exercisesAssigned: 8,
-        nextAppointment: "Monday, January 2nd 2026 at 8:00 Am",
-        nextExercise: "Exercise 17",
+        name: patientData?.fullName || patientData?.nixpendId || "Patient",
+        status: patientData?.status === 'active' ? "Active" : "Inactive",
+        injury: patientData?.condition || patientData?.injuryDetails?.affectedArea || "Unspecified Injury",
+        // Stats - falling back to defaults if not in API
+        sessions: patientData?.statistics?.sessions || 0,
+        sessionsCompleted: patientData?.statistics?.sessionsCompleted || 0,
+        treatmentLength: patientData?.statistics?.treatmentLength || "N/A",
+        exercisesCompleted: patientData?.statistics?.exercisesCompleted || 0,
+        numExercises: patientData?.statistics?.numExercises || 0,
+        exercisesAssigned: patientData?.statistics?.exercisesAssigned || 0,
+        nextAppointment: patientData?.statistics?.nextAppointment || "No upcoming appointment",
+        nextExercise: patientData?.statistics?.nextExercise || "None",
     };
+
+    if (isLoading) {
+        return (
+            <div className="w-full h-full flex flex-col">
+                <DashBoardHeader therapyName="" nav={false} />
+                <DashBoardContent>
+                    <div className="flex flex-col gap-4 p-8">
+                        <Rectangle width="100%" height="200px" color="#f0f0f0" />
+                    </div>
+                </DashBoardContent>
+            </div>
+        );
+    }
 
     return (
         <>
@@ -55,8 +71,8 @@ const PatientDetailsPage = ({ params }: { params: { id: string } }) => {
                             </div>
                         </div>
 
-                        {/* Progress Bar */}
-                        <ProgressBar percentage={40} className="my-4" />
+                        {/* Progress Bar - Calculation */}
+                        <ProgressBar percentage={patient.numExercises > 0 ? (patient.exercisesCompleted / patient.numExercises) * 100 : 0} className="my-4" />
                     </div>
 
                     {/* Stats Grid */}

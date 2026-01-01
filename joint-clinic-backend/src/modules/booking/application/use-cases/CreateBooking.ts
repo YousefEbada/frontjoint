@@ -59,6 +59,7 @@ export class CreateBooking {
 
       const booking = await this.bookingRepo.book(
         {
+          // it was patient and practitioner before
           patientId: data.patient,
           doctorId: data.practitioner,
           branchId: data.branch || undefined,
@@ -126,6 +127,10 @@ export class CreateBooking {
       violations.push({ violation: 'Practitioner ID should be defined' });
     }
 
+    // if(!data.doctor_id) {
+    //   violations.push({ violation: 'Doctor ID should be defined' });
+    // }
+
     if (!data.department) {
       violations.push({ violation: 'Department should be defined' });
     }
@@ -133,6 +138,10 @@ export class CreateBooking {
     if (!data.patient) {
       violations.push({ violation: 'Patient ID should be defined' });
     }
+
+    // if(!data.patient_id) {
+    //   violations.push({ violation: 'Patient ID should be defined' });
+    // }
 
     return violations.length ? violations : null;
   }

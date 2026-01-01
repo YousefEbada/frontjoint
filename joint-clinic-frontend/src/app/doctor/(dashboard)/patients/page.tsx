@@ -11,22 +11,14 @@ import PatientCard from "@/components/molecules/PatientCard";
 import DashBoardContent from "@/components/atoms/DashBoardContent";
 import { useDoctorPatients } from "@/hooks/useDoctor";
 
-// Mock Data
-// const allPatients = ... (Replaced)
-const allPatients = Array.from({ length: 15 }, (_, i) => ({
-    id: i + 1,
-    name: "Patient Name",
-    injury: "Back injury",
-    status: i % 3 === 0 ? "Inactive" : "Active",
-    statusColor: i % 3 === 0 ? "text-[#8A8A8A]" : "text-[#1C9A55]"
-}));
+// Mock Data removed
 
 const PatientsPage = () => {
     const [activeTab, setActiveTab] = useState<"active" | "all">("active");
     const [searchTerm, setSearchTerm] = useState("");
 
     // TODO: Replace with actual logged-in doctor ID
-    const doctorId = "672ca9029f64264624b45070";
+    const doctorId = "HLC-PRAC-2022-00001";
 
     const statusFilter = activeTab === "active" ? "active" : undefined;
     const { data: patients, isLoading } = useDoctorPatients(doctorId, statusFilter);

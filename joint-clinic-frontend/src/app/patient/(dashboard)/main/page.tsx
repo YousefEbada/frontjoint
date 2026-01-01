@@ -30,7 +30,14 @@ const Page = () => {
     }
   }, []);
 
-  const { dashboardData, hasActiveTreatment, isLoading, error } = usePatientDashboard(patientId);
+  const { data: apiResponse, isLoading, error } = usePatientDashboard(patientId || "");
+  const dashboardData = apiResponse?.data;
+  const hasActiveTreatment = dashboardData?.hasActiveTreatment;
+
+  // Handle error state
+  if (error) {
+    console.error("Dashboard error:", error);
+  }
 
   // Update patientName from dashboard data if available
   useEffect(() => {
@@ -134,7 +141,7 @@ const Page = () => {
         <div className="flex flex-col gap-4">
           <Typography text={dashboardData?.weekSummary || "Week Summary"} variant="heading2" style={{ color: color.secondary }} />
           <div className="flex flex-col gap-2">
-            {dashboardData?.summaryItems?.map((item, index) => (
+            {dashboardData?.summaryItems?.map((item: any, index: number) => (
               <SummaryItem key={index} {...item} />
             )) || (
                 <Typography text="No summary items available" variant="bodyRegular" />

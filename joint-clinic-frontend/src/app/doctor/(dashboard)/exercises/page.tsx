@@ -3,68 +3,30 @@ import React, { useState } from "react";
 import Typography from "@/components/atoms/Typography";
 import SessionCard from "@/components/molecules/sessionCard";
 import DashBoardHeader from "@/components/molecules/DashBoardHeader";
-import CorneredBoxes from "@/components/atoms/CorneredBoxes";
 import SearchInput from "@/components/atoms/searchInput";
 import ScrollableArea from "@/components/atoms/ScrollableArea";
 import PatientCard from "@/components/molecules/PatientCard";
 import Link from "next/link";
 import DashBoardContent from "@/components/atoms/DashBoardContent";
+import { useExercises } from "@/hooks/useExercises";
+import { useDoctorPatients } from "@/hooks/useDoctor";
 
-interface Exercise {
-    id: number;
-    imageSrc: string;
-    title: string;
-    status?: string;
-    minutes?: number;
-}
-
-const exercisesLibrary: Exercise[] = [
-    {
-        id: 1,
-        imageSrc: "/sessionCard.png",
-        title: "Shoulder Rehab",
-        minutes: 15,
-        status: "In Progress",
-    },
-    {
-        id: 2,
-        imageSrc: "/sessionCard.png",
-        title: "Knee Stimulation",
-        minutes: 20,
-        status: "Completed",
-    },
-    {
-        id: 3,
-        imageSrc: "/sessionCard.png",
-        title: "Back Strengthening",
-        minutes: 30,
-        status: "Pending",
-    },
-    {
-        id: 4,
-        imageSrc: "/sessionCard.png",
-        title: "Leg Exercises",
-        minutes: 10,
-        status: "Pending",
-    }
-];
-
-// Mock Data for Patients (Progress View)
-const progressPatients = Array.from({ length: 12 }, (_, i) => ({
-    id: i + 1,
-    name: "Patient Name",
-    injury: "Back injury",
-    status: "Active",
-    statusColor: "text-[#1C9A55]"
-}));
+// Fallback images if none provided
+const DEFAULT_EXERCISE_IMG = "/sessionCard.png";
 
 const ExercisesPage = () => {
     const [activeTab, setActiveTab] = useState<"find" | "progress">("find");
     const [searchTerm, setSearchTerm] = useState("");
 
-    const filteredPatients = progressPatients.filter(p =>
-        p.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    // TODO: Replace with actual logged-in doctor ID
+    const doctorId = "HLC-PRAC-2022-00001";
+
+    const { data: exercises, isLoading: isLoadingExercises } = useExercises();
+    const { data: patients, isLoading: isLoadingPatients } = useDoctorPatients(doctorId, 'active');
+
+    const filteredPatients = patients?.filter(p =>
+        p.fullName.toLowerCase().includes(searchTerm.toLowerCase())
+    ) || [];
 
     return (
         <div className="w-full h-full flex flex-col">
@@ -104,21 +66,28 @@ const ExercisesPage = () => {
                             />
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full pb-8">
-                            {exercisesLibrary.map((exercise) => (
-                                <Link key={exercise.id} href={`/doctor/exercises/video/${exercise.id}`} className="w-full">
-                                    <SessionCard
-                                        id={exercise.id}
-                                        imageSrc={exercise.imageSrc}
-                                        title={exercise.title}
-                                        status={exercise.status}
-                                        minutes={exercise.minutes}
-                                        className="w-full"
-                                        noLink={true}
-                                    />
-                                </Link>
-                            ))}
-                        </div>
+                        {isLoadingExercises ? (
+                            <div className="text-center py-10 text-gray-400">Loading exercises...</div>
+                        ) : (
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full pb-8">
+                                {exercises?.map((exercise) => (
+                                    <Link key={exercise.id} href={`/doctor/exercises/video/${exercise.id}`} className="w-full">
+                                        <SessionCard
+                                            id={exercise.id}
+                                            imageSrc={exercise.imageSrc || DEFAULT_EXERCISE_IMG}
+                                            title={exercise.title}
+                                            status={exercise.status || "Available"}
+                                            minutes={exercise.minutes || 15}
+                                            className="w-full"
+                                            noLink={true}
+                                        />
+                                    </Link>
+                                ))}
+                                {exercises?.length === 0 && (
+                                    <div className="col-span-full text-center py-10 text-gray-400">No exercises found.</div>
+                                )}
+                            </div>
+                        )}
                     </div>
                 ) : (
                     /* Patient Progress View */
@@ -144,14 +113,16 @@ const ExercisesPage = () => {
                         <div className="w-full flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-y-2 md:block md:bg-white md:rounded-[24px] md:shadow-sm md:p-8">
                             <ScrollableArea className="w-full h-full px-2">
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pb-4">
-                                    {filteredPatients.length > 0 ? (
+                                    {isLoadingPatients ? (
+                                        <div className="col-span-full text-center py-10 text-gray-400">Loading patients...</div>
+                                    ) : filteredPatients.length > 0 ? (
                                         filteredPatients.map((patient) => (
-                                            <Link key={patient.id} href={`/doctor/exercises/${patient.id}`} className="w-full">
+                                            <Link key={patient._id} href={`/doctor/exercises/${patient._id}`} className="w-full">
                                                 <PatientCard
-                                                    name={patient.name}
-                                                    injury={patient.injury}
-                                                    status={patient.status}
-                                                    statusColor={patient.statusColor}
+                                                    name={patient.fullName}
+                                                    injury={patient.condition || "No specified injury"}
+                                                    status={patient.status === 'active' ? "Active" : "Inactive"}
+                                                    statusColor={patient.status === 'active' ? "text-[#1C9A55]" : "text-[#8A8A8A]"}
                                                 />
                                             </Link>
                                         ))

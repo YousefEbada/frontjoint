@@ -133,11 +133,19 @@ export const nixpendAdapter: NixpendPort = {
 
   // get available slots
   async getAvailableSlots(practitionerId, company = 'Joint Clinic', fromDate, toDate) {
-    let data = await fetch(`${env.NIXPEND_API_URL}/nis/external/available_slots?practitioner=${practitionerId}&company=${company}` + (fromDate ? `&from_date=${fromDate}` : '') + (toDate ? `&to_date=${toDate}` : ''))
+    let data = await fetch(`${env.NIXPEND_API_URL}/nis/external/available_slots?practitioner=${practitionerId}&company=${company} ${(fromDate ? `&from_date=${fromDate}` : '')} ${(toDate ? `&to_date=${toDate}` : '')}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'token': env.NIXPEND_TOKEN
+        }
+      }
+    )
       .then(res => res.json());
-    console.log("\n======= Available Slots Data:", data);
-    if (data && data.length > 0) {
-      return { data };
+    console.log("\n======= Available Slots Data:", data.response.message.length);
+    if (data && data.response.message.length > 0) {
+      return { data: data.response.message };
     }
     return { data: [] };
   },
@@ -147,7 +155,8 @@ export const nixpendAdapter: NixpendPort = {
     let data = await fetch(`${env.NIXPEND_API_URL}/nis/external/reschedule_appointment`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'token': env.NIXPEND_TOKEN
       },
       body: JSON.stringify({ appointment_id, ...appointment_details, service_unit: "" })
     })
@@ -165,7 +174,8 @@ export const nixpendAdapter: NixpendPort = {
     let data = await fetch(`${env.NIXPEND_API_URL}/nis/external/cancel_appointment`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'token': env.NIXPEND_TOKEN
       },
       body: JSON.stringify(value)
     })

@@ -1,67 +1,82 @@
-import { CreateFullUserInput, CreatePartialUserInput, CreatePatientInput, RequestOTPInput, VerifyOTPInput } from "@/types/auth";
+import {
+  CreateFullUserInput,
+  CreatePartialUserInput,
+  CreatePatientInput,
+  RequestOTPInput,
+  VerifyOTPInput,
+} from "@/types/auth";
 import api from "./axios";
 import { Verify } from "crypto";
 
 export const findUser = async (data: string) => {
-    try {
-        const response = await api.get(`/auth/find?contact=${data}`)
-        console.log('findUser response:', response.data.user)
-        return response.data.user
-    } catch (error) {
-        console.error('Error finding user:', (error as any).message)
-        throw error
-    }
-}
+  try {
+    const response = await api.get(`api/auth/find?contact=${data}`);
+    console.log("findUser response:", response.data.user);
+    return response.data.user;
+  } catch (error) {
+    console.error("Error finding user:", (error as any).message);
+    throw error;
+  }
+};
 
 export const createPartialUser = async (data: CreatePartialUserInput) => {
-    try {
-        const response = await api.post('/auth/create-partial', data)
-        console.log('createPartialUser response:', response.data)
-        return response.data.user
-    } catch (error) {
-        console.error('Error creating partial user:', (error as any).response?.data || (error as any).message)
-        throw error
-    }
-}
+  try {
+    const response = await api.post("/auth/create-partial", data);
+    console.log("createPartialUser response:", response.data);
+    return response.data.user;
+  } catch (error) {
+    console.error(
+      "Error creating partial user:",
+      (error as any).response?.data || (error as any).message
+    );
+    throw error;
+  }
+};
 
 export const createFullUser = async (data: CreateFullUserInput) => {
-    try {
-        const response = await api.post('/auth/create-full', data)
-        console.log('createFullUser response:', response.data)
-        return response.data.user
-    } catch (error) {
-        console.error('Error creating full user:', (error as any).response?.data || (error as any).message)
-        throw error
-    }
-}
+  try {
+    const response = await api.post("/auth/create-full", data);
+    console.log("createFullUser response:", response.data);
+    return response.data.user;
+  } catch (error) {
+    console.error(
+      "Error creating full user:",
+      (error as any).response?.data || (error as any).message
+    );
+    throw error;
+  }
+};
 
 export const requestOtp = async (data: RequestOTPInput) => {
-    console.log('=== requestOtp API called ===');
-    console.log('Request payload:', JSON.stringify(data, null, 2));
-    console.log('API base URL:', api.defaults.baseURL);
-    try {
-        const response = await api.post('/auth/otp/request', data)
-        console.log('requestOtp SUCCESS response:', response.data)
-        return response.data
-    } catch (error: any) {
-        console.error('requestOtp FAILED:');
-        console.error('- Status:', error.response?.status);
-        console.error('- Data:', error.response?.data);
-        console.error('- Message:', error.message);
-        throw error
-    }
-}
+  console.log("=== requestOtp API called ===");
+  console.log("Request payload:", JSON.stringify(data, null, 2));
+  console.log("API base URL:", api.defaults.baseURL);
+  try {
+    const response = await api.post("/auth/otp/request", data);
+    console.log("requestOtp SUCCESS response:", response.data);
+    return response.data;
+  } catch (error: any) {
+    console.error("requestOtp FAILED:");
+    console.error("- Status:", error.response?.status);
+    console.error("- Data:", error.response?.data);
+    console.error("- Message:", error.message);
+    throw error;
+  }
+};
 
 export const verifyOtp = async (data: VerifyOTPInput) => {
-    try {
-        const response = await api.post('/auth/otp/verify', data)
-        console.log('verifyOtp response:', response.data)
-        return response.data
-    } catch (error) {
-        console.error('Error verifying OTP:', (error as any).response?.data || (error as any).message)
-        throw error
-    }
-}
+  try {
+    const response = await api.post("/auth/otp/verify", data);
+    console.log("verifyOtp response:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Error verifying OTP:",
+      (error as any).response?.data || (error as any).message
+    );
+    throw error;
+  }
+};
 
 export const createPatient = async (data: CreatePatientInput) => {
     console.log('=== createPatient API called ===');
@@ -128,7 +143,6 @@ export const createPatient = async (data: CreatePatientInput) => {
 //     })
 // }
 
-
 // ------------ request OTP test -------------
 // export const testAuth = () => {
 //     console.log('Testing requestOtp...')
@@ -138,7 +152,6 @@ export const createPatient = async (data: CreatePatientInput) => {
 //         contact: "aywork73@gmail.com"
 //     })
 // }
-
 
 // ------------ verify OTP test -------------
 // export const testAuth = () => {

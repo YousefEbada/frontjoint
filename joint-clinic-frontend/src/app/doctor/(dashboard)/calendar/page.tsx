@@ -2,28 +2,41 @@
 import React, { useState } from "react";
 import DashBoardHeader from "@/components/molecules/DashBoardHeader";
 import Typography from "@/components/atoms/Typography";
-import CorneredBoxes from "@/components/atoms/CorneredBoxes";
 import SearchInput from "@/components/atoms/searchInput";
 import AppointmentItem from "@/components/molecules/AppointmentItem";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import Link from "next/link";
 import ScrollableArea from "@/components/atoms/ScrollableArea";
 import DashBoardContent from "@/components/atoms/DashBoardContent";
 import Button from "@/components/atoms/Button";
-
-const allBookings = Array.from({ length: 15 }, (_, i) => ({
-  id: i + 1,
-  name: `Patient ${i + 1}`,
-  status: i % 3 === 0 ? "Confirmed" : "Pending",
-  statusColor: i % 3 === 0 ? "text-[#1C9A55]" : "text-[#F5A623]",
-  date: "Nov 2nd 2025 at 8:00 Pm"
-}));
+import { useDoctorBookings } from "@/hooks/useDoctor";
 
 const CalendarPage = () => {
   const [activeTab, setActiveTab] = useState<"upcoming" | "all">("upcoming");
   const [filter, setFilter] = useState<"Today" | "This Week" | "This Month">("Today");
   const [searchTerm, setSearchTerm] = useState("");
+
+  // TODO: Replace with actual logged-in doctor ID
+  const doctorId = "HLC-PRAC-2022-00001";
+
+  // Fetch bookings - fetching 'month' to verify 'all' tab or generic list
+  // Optimization: Could filter by API params based on tab/filter, but for now client-side filtering on fetched list is fine
+  const { data: bookings, isLoading } = useDoctorBookings(doctorId, { period: 'month' });
+
+  const allBookings = bookings?.map(b => ({
+    id: b._id,
+    name: b.patientName || "Unknown Patient",
+    status: b.status.charAt(0).toUpperCase() + b.status.slice(1),
+    statusColor: b.status === 'confirmed' ? "text-[#1C9A55]" : "text-[#F5A623]",
+    // Formatting date like "Nov 2nd 2025 at 8:00 Pm"
+    date: new Date(b.appointmentDate).toLocaleString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true
+    }) + (b.status === 'pending' ? ' (Pending)' : '') // Optional indication
+  })) || [];
+
 
   const filteredBookings = allBookings.filter(b =>
     b.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -95,7 +108,9 @@ const CalendarPage = () => {
 
         <div className="w-full flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-y-2 md:block md:bg-white md:rounded-[24px] md:shadow-sm md:p-8">
           <ScrollableArea className="w-full px-2">
-            {filteredBookings.length > 0 ? (
+            {isLoading ? (
+              <div className="flex items-center justify-center h-40 text-gray-400">Loading bookings...</div>
+            ) : filteredBookings.length > 0 ? (
               filteredBookings.map((apt, index) => (
                 <div key={index} className="md:border-b md:border-gray-300 last:border-0 py-2 md:py-6">
                   <AppointmentItem

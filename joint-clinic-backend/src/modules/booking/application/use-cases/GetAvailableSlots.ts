@@ -11,10 +11,11 @@ export class GetAvailableSlots {
             return {ok: false, error: 'Doctor not found or missing Nixpend ID' };
           }
           const slots = await this.repo.getAvailableSlots(doctor.nixpendId, 'Joint Clinic');
+          console.log("===== slots ======= ",slots.data.length)
           if(!slots.data || slots.data.length === 0) {
             return {ok: false, error: 'No slots available from Nixpend' };
           }
-          return {ok: true, slots};
+          return {ok: true, slots: slots.data};
         } catch (error) {
           return {ok: false, error: 'Error fetching slots from Nixpend' };
         }
