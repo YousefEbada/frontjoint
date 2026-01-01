@@ -69,7 +69,8 @@ const Page = () => {
     handleCreatePatient,
     userId,
     isLoading,
-    error
+    error,
+    contact
   } = useAuthFlow();
 
   // Local Form States
@@ -83,6 +84,7 @@ const Page = () => {
 
   const [fullData, setFullData] = React.useState<Omit<CreateFullUserInput, 'contact' | 'userId'>>({
     email: '',
+    phone: '',
     identifier: '',
     identifierType: 'National ID',
     nationality: 'Saudi Arabia',
@@ -139,6 +141,19 @@ const Page = () => {
     }
   }, [cityNames, fullData.city]);
 
+  // Pre-fill phone or email from contact when entering step 3
+  React.useEffect(() => {
+    if (contact && step === 3) {
+      // Check if contact looks like a phone number (starts with + or digit)
+      const isPhone = /^[\+]?[0-9]/.test(contact);
+      if (isPhone && !fullData.phone) {
+        setFullData(prev => ({ ...prev, phone: contact }));
+      } else if (!isPhone && !fullData.email) {
+        setFullData(prev => ({ ...prev, email: contact }));
+      }
+    }
+  }, [contact, step]);
+
   // Handlers
   const onPartialSubmit = () => {
     if (!partialData.fullName || !partialData.birthdate) {
@@ -157,7 +172,11 @@ const Page = () => {
   };
 
   const onFullSubmit = () => {
-    // Basic validation
+    // Validate required phone field (needed for Nixpend integration)
+    if (!fullData.phone) {
+      alert("Phone number is required");
+      return;
+    }
     handleCreateFull(fullData);
   }
 
@@ -443,6 +462,8 @@ const Page = () => {
                     <InjuryDetailsForm
                       jointName={activeJointLabel}
                       onBack={() => setStep(4)}
+                      isLoading={isLoading}
+                      error={error}
                       onContinue={(details) => {
                         // Set affected area from selected joint and call create patient
                         handleCreatePatient({
@@ -640,8 +661,9 @@ const Page = () => {
                           </div>
 
                           <input
-                            type="phone"
-                            placeholder="Phone"
+                            type="tel"
+                            required
+                            placeholder="Phone *"
                             value={fullData.phone}
                             onChange={(e) => setFullData({ ...fullData, phone: e.target.value })}
                             className="md:w-[28%] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition"

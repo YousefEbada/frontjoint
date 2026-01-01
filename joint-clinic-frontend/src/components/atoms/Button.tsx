@@ -14,9 +14,10 @@ type ButtonProps = {
     onClick?: () => void;
     className?: string;
     active?: boolean;
+    disabled?: boolean;
 };
 
-const Button: React.FC<ButtonProps> = ({ text, variant, onClick, className = "", active = false }) => {
+const Button: React.FC<ButtonProps> = ({ text, variant, onClick, className = "", active = false, disabled = false }) => {
     const variants = {
         primary: `
       text-[#1e5598] bg-transparent border-[#1e5598]
@@ -52,7 +53,8 @@ const Button: React.FC<ButtonProps> = ({ text, variant, onClick, className = "",
 
     return (
         <button
-            onClick={onClick}
+            onClick={disabled ? undefined : onClick}
+            disabled={disabled}
             className={`
         ${ibm.className}
         font-bold
@@ -63,7 +65,7 @@ const Button: React.FC<ButtonProps> = ({ text, variant, onClick, className = "",
         text-[13px] sm:text-[20px] md:text-[22px]
         border md:border-[3px]
         px-2 sm:py-[8px] sm:px-[32px]
-        cursor-pointer
+        ${disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"}
         transition
         leading-[115%]
         m-0

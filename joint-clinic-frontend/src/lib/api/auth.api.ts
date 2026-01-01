@@ -64,12 +64,17 @@ export const verifyOtp = async (data: VerifyOTPInput) => {
 }
 
 export const createPatient = async (data: CreatePatientInput) => {
+    console.log('=== createPatient API called ===');
+    console.log('Request payload:', JSON.stringify(data, null, 2));
     try {
         const response = await api.post('/patient/create', data)
-        console.log('createPatient response:', response.data)
+        console.log('createPatient SUCCESS response:', response.data)
         return response.data.patient
-    } catch (error) {
-        console.error('Error creating patient:', (error as any).response?.data || (error as any).message)
+    } catch (error: any) {
+        console.error('=== createPatient FAILED ===');
+        console.error('- Status:', error.response?.status);
+        console.error('- Response data:', error.response?.data);
+        console.error('- Error message:', error.message);
         throw error
     }
 }

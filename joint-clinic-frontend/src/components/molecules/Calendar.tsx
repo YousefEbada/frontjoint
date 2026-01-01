@@ -10,9 +10,10 @@ const days = Array.from({ length: 7 }).map((_, i) =>
 interface CalendarProps {
   onSelect?: (date: string) => void;
   width?: string;
+  availableDates?: string[]; // Array of dates in YYYY-MM-DD format that are available
 }
 
-const Calendar = ({ onSelect, width }: CalendarProps) => {
+const Calendar = ({ onSelect, width, availableDates }: CalendarProps) => {
   const [currentMonth, setCurrentMonth] = useState(dayjs());
   const [selectedDate, setSelectedDate] = useState(
     dayjs().format("YYYY-MM-DD")
@@ -77,17 +78,24 @@ const Calendar = ({ onSelect, width }: CalendarProps) => {
       {/* Days Grid */}
       <div className="grid grid-cols-7 gap-1 sm:gap-1.5 md:gap-2">
         {calendarDays.map((d, i) => {
-          const isSelected = selectedDate === d.format("YYYY-MM-DD");
+          const dateStr = d.format("YYYY-MM-DD");
+          const isSelected = selectedDate === dateStr;
           const isCurrentMonth = d.month() === currentMonth.month();
+          // If availableDates is provided, only those dates are enabled
+          const isDisabled = availableDates ? !availableDates.includes(dateStr) : false;
 
           return (
             <button
               key={i}
-              onClick={() => handleSelect(d.format("YYYY-MM-DD"))}
+              onClick={() => !isDisabled && handleSelect(dateStr)}
+              disabled={isDisabled}
               className={clsx(
-                "aspect-square flex items-center justify-center rounded-[10px]",
-                isSelected ? "bg-[#9fd5e2]" : "hover:bg-[#e2ecf6]",
-                !isCurrentMonth && "opacity-30"
+                "aspect-square flex items-center justify-center rounded-[10px] text-[10px] sm:text-[11px] md:text-[14px]",
+                isSelected ? "bg-[#9fd5e2] font-semibold" : "",
+                !isSelected && !isDisabled && "hover:bg-[#e2ecf6]",
+                !isCurrentMonth && "opacity-30",
+                isDisabled && isCurrentMonth && "opacity-40 cursor-not-allowed text-gray-400",
+                !isDisabled && "cursor-pointer"
               )}
             >
               {d.date()}

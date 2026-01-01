@@ -6,6 +6,7 @@ import CorneredBoxes from '../atoms/CorneredBoxes';
 import CustomDropdown from '@/components/molecules/dropdown';
 
 interface InjuryDetails {
+    affectedArea?: string;
     startDate?: string;
     receivedTreatment?: boolean;
     painSeverity?: number;
@@ -20,9 +21,11 @@ interface InjuryDetailsFormProps {
     jointName: string;
     onBack: () => void;
     onContinue: (details: InjuryDetails) => void;
+    isLoading?: boolean;
+    error?: string | null;
 }
 
-const InjuryDetailsForm: React.FC<InjuryDetailsFormProps> = ({ jointName, onBack, onContinue }) => {
+const InjuryDetailsForm: React.FC<InjuryDetailsFormProps> = ({ jointName, onBack, onContinue, isLoading = false, error = null }) => {
     const [formData, setFormData] = useState<InjuryDetails>({});
     const [files, setFiles] = useState<File[]>([]);
 
@@ -107,7 +110,7 @@ const InjuryDetailsForm: React.FC<InjuryDetailsFormProps> = ({ jointName, onBack
                                 variant="form"
                                 required
                                 items={severityOptions}
-                                text="How severe is the pain?"                            
+                                text="How severe is the pain?"
                                 onSelect={(value) => {
                                     const severity = parseInt(value.split(' ')[0]);
                                     setFormData({ ...formData, painSeverity: severity });
@@ -186,20 +189,29 @@ const InjuryDetailsForm: React.FC<InjuryDetailsFormProps> = ({ jointName, onBack
 
                     </div>
 
+                    {/* Error Display */}
+                    {error && (
+                        <div className="mt-6 p-4 bg-red-100 border border-red-300 rounded-2xl text-center">
+                            <p className="text-red-600 font-medium">{error}</p>
+                        </div>
+                    )}
+
                     {/* Footer Actions */}
                     <div className="flex justify-center gap-6 mt-12">
                         <button
                             type="button"
                             onClick={onBack}
-                            className="w-[200px] h-[60px] cursor-pointer py-3 bg-white/50 border-2 border-[#ea392f] text-[#ea392f] rounded-full font-semibold hover:bg-[#ea392f] hover:text-white transition-all duration-300 text-lg shadow-sm"
+                            disabled={isLoading}
+                            className="w-[200px] h-[60px] cursor-pointer py-3 bg-white/50 border-2 border-[#ea392f] text-[#ea392f] rounded-full font-semibold hover:bg-[#ea392f] hover:text-white transition-all duration-300 text-lg shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             Back
                         </button>
                         <button
                             type="submit"
-                            className="w-[200px] h-[60px] cursor-pointer py-3 bg-[#ea392f] text-white rounded-full font-semibold hover:bg-[#d63228] border-2 border-[#ea392f] transition-all duration-300 text-lg shadow-md hover:shadow-lg"
+                            disabled={isLoading}
+                            className="w-[200px] h-[60px] cursor-pointer py-3 bg-[#ea392f] text-white rounded-full font-semibold hover:bg-[#d63228] border-2 border-[#ea392f] transition-all duration-300 text-lg shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            Continue
+                            {isLoading ? 'Creating...' : 'Continue'}
                         </button>
                     </div>
                 </form>

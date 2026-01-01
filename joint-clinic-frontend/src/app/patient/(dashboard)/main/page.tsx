@@ -16,16 +16,29 @@ const Page = () => {
   // TODO: Get patientId from auth context or localStorage
   // For now, we'll try to get it from localStorage (set during login/registration)
   const [patientId, setPatientId] = useState<string | null>(null);
+  const [patientName, setPatientName] = useState<string>("Patient");
 
   useEffect(() => {
-    // Try to get patientId from localStorage
+    // Try to get patientId and patientName from localStorage
     const storedPatientId = localStorage.getItem('patientId');
+    const storedPatientName = localStorage.getItem('patientName');
     if (storedPatientId) {
       setPatientId(storedPatientId);
+    }
+    if (storedPatientName) {
+      setPatientName(storedPatientName);
     }
   }, []);
 
   const { dashboardData, hasActiveTreatment, isLoading, error } = usePatientDashboard(patientId);
+
+  // Update patientName from dashboard data if available
+  useEffect(() => {
+    if (dashboardData?.patientName) {
+      setPatientName(dashboardData.patientName);
+      localStorage.setItem('patientName', dashboardData.patientName);
+    }
+  }, [dashboardData?.patientName]);
 
   // Handle loading state
   if (isLoading) {
@@ -49,7 +62,7 @@ const Page = () => {
         <DashBoardContent>
           <div className="flex flex-col sm:flex-row gap-2 items-start sm:items-baseline">
             <Typography text="Welcome," variant="heading1" gradient={true} />
-            <Typography text={dashboardData?.patientName || "Patient"} variant="heading1" style={{ color: color.primary }} />
+            <Typography text={patientName} variant="heading1" style={{ color: color.primary }} />
           </div>
 
           {/* Progress Section with Zero Values */}
@@ -82,7 +95,7 @@ const Page = () => {
 
             <button
               onClick={() => router.push('/patient/booking')}
-              className="px-8 py-4 bg-[#ea392f] text-white rounded-full font-semibold text-lg
+              className="px-8 py-4 bg-[#ea392f] text-white cursor-pointer rounded-full font-semibold text-lg
                          hover:bg-[#d63228] transition-all duration-300 shadow-md hover:shadow-lg
                          transform hover:scale-105"
             >
@@ -101,7 +114,7 @@ const Page = () => {
       <DashBoardContent>
         <div className="flex flex-col sm:flex-row gap-2 items-start sm:items-baseline">
           <Typography text="Welcome Back," variant="heading1" gradient={true} />
-          <Typography text={dashboardData?.patientName || "Patient"} variant="heading1" style={{ color: color.primary }} />
+          <Typography text={patientName} variant="heading1" style={{ color: color.primary }} />
         </div>
 
         {/* Progress Section */}
