@@ -5,26 +5,32 @@ import Typography from "@/components/atoms/Typography";
 import CorneredBoxes from "@/components/atoms/CorneredBoxes";
 import Link from "next/link";
 import DashBoardContent from "@/components/atoms/DashBoardContent";
+import { usePatient } from "@/hooks/usePatient";
 
 const PersonalDetailsPage = ({ params }: { params: { id: string } }) => {
-    // Mock Data
+    const { data: patientData, isLoading } = usePatient(params.id);
+
     const patient = {
-        name: "Patient Name",
-        nationalId: "000000000000000000",
-        status: "Active",
-        statusColor: "text-[#1C9A55]",
-        gender: "Female",
-        dob: "dd/mm/yyyy",
+        name: patientData?.fullName || "Patient Name",
+        nationalId: patientData?.personalDetails?.nationalId || "N/A",
+        status: patientData?.status === 'active' ? "Active" : "Inactive",
+        statusColor: patientData?.status === 'active' ? "text-[#1C9A55]" : "text-[#8A8A8A]",
+        gender: patientData?.personalDetails?.gender || "N/A",
+        dob: patientData?.personalDetails?.dob || "N/A",
         personalDetails: {
-            email: "info@info.com",
-            nationality: "Patient nationality",
-            maritalStatus: "Married",
-            identifierType: "Identifier type",
-            address: "Patient Address, full Address",
-            city: "City",
-            speakingLanguage: "Arabic",
+            email: patientData?.personalDetails?.email || "N/A",
+            nationality: patientData?.personalDetails?.nationality || "N/A",
+            maritalStatus: patientData?.personalDetails?.maritalStatus || "N/A",
+            identifierType: patientData?.personalDetails?.identifierType || "N/A",
+            address: patientData?.personalDetails?.address || "N/A",
+            city: patientData?.personalDetails?.city || "N/A",
+            speakingLanguage: patientData?.personalDetails?.speakingLanguage || "N/A",
         }
     };
+
+    if (isLoading) {
+        return <div className="text-center py-20">Loading personal details...</div>;
+    }
 
     return (
         <div className="w-full h-full flex flex-col">
@@ -87,6 +93,9 @@ const PersonalDetailsPage = ({ params }: { params: { id: string } }) => {
 
                             <div className="flex-1">
                                 {/* Content area is empty in image */}
+                                {patientData?.condition && (
+                                    <Typography text={patientData.condition} variant="bodyRegular" className="text-[#1C9A55]" />
+                                )}
                             </div>
 
                             {/* Back Button */}

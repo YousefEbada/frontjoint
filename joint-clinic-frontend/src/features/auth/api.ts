@@ -7,7 +7,7 @@ import {
 } from './schemas';
 
 // Backend base URL
-const API_URL = 'http://localhost:4000';
+const API_URL = 'https://jointclinic-backend-decqdgfzc9f3bzd6.canadacentral-01.azurewebsites.net/';
 
 const apiClient = axios.create({
     baseURL: API_URL,

@@ -2,29 +2,26 @@
 import React, { useState } from "react";
 import DashBoardHeader from "@/components/molecules/DashBoardHeader";
 import Typography from "@/components/atoms/Typography";
-import CorneredBoxes from "@/components/atoms/CorneredBoxes";
 import SearchInput from "@/components/atoms/searchInput";
 import ScrollableArea from "@/components/atoms/ScrollableArea";
 import PatientCard from "@/components/molecules/PatientCard";
 import Link from "next/link";
 import DashBoardContent from "@/components/atoms/DashBoardContent";
-
-// Mock Data
-const allPatients = Array.from({ length: 15 }, (_, i) => ({
-    id: i + 1,
-    name: "Patient Name",
-    injury: "Back injury",
-    status: i % 3 === 0 ? "Inactive" : "Active",
-    statusColor: i % 3 === 0 ? "text-[#8A8A8A]" : "text-[#1C9A55]"
-}));
+import { useDoctorPatients } from "@/hooks/useDoctor";
 
 const MedicalReportsPage = () => {
     const [searchTerm, setSearchTerm] = useState("");
 
-    const filteredReports = allPatients.filter(r =>
-        r.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        r.injury.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    // TODO: Replace with actual logged-in doctor ID
+    const doctorId = "HLC-PRAC-2022-00001";
+
+    const { data: patients, isLoading } = useDoctorPatients(doctorId);
+
+    // Filter patients based on search
+    const filteredReports = patients?.filter(p =>
+        p.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (p.condition || "").toLowerCase().includes(searchTerm.toLowerCase())
+    ) || [];
 
     return (
         <div className="w-full h-full flex flex-col">
@@ -52,14 +49,16 @@ const MedicalReportsPage = () => {
                 <div className="w-full flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-y-2 md:block md:bg-white md:rounded-[24px] md:shadow-sm md:p-8">
                     <ScrollableArea className="w-full h-full px-2">
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pb-4">
-                            {filteredReports.length > 0 ? (
-                                filteredReports.map((report) => (
-                                    <Link key={report.id} href={`/doctor/reports/${report.id}`} className="w-full">
+                            {isLoading ? (
+                                <div className="col-span-full text-center py-10 text-gray-400">Loading reports...</div>
+                            ) : filteredReports.length > 0 ? (
+                                filteredReports.map((patient) => (
+                                    <Link key={patient._id} href={`/doctor/reports/${patient._id}`} className="w-full">
                                         <PatientCard
-                                            name={report.name}
-                                            injury={report.injury}
-                                            status={report.status}
-                                            statusColor={report.statusColor}
+                                            name={patient.fullName}
+                                            injury={patient.condition || "No specific injury"}
+                                            status={patient.status === 'active' ? "Active" : "Inactive"}
+                                            statusColor={patient.status === 'active' ? "text-[#1C9A55]" : "text-[#8A8A8A]"}
                                         />
                                     </Link>
                                 ))

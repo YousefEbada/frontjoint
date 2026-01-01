@@ -1,8 +1,8 @@
-import axios from 'axios';
+import axios from "axios";
 
 const api = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_BASE_URL
-})
+  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
+});
 
 // api.interceptors.request.use((config): any => {
 //     const token = localStorage.getItem("accessToken");
@@ -13,7 +13,7 @@ const api = axios.create({
 // })
 
 // api.interceptors.response.use(
-//     (response) => response, 
+//     (response) => response,
 //     (error) => {console.log("ERROR From the reponse interceptor:", error)}
 // )
 
