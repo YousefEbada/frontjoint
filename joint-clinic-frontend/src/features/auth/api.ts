@@ -23,7 +23,7 @@ export const authApi = {
     // =========================
     findUser: async (contact: string) => {
         try {
-            const response = await apiClient.get('/api/auth/find', {
+            const response = await apiClient.get('/auth/find', {
                 params: {
                     contact,
                 },
@@ -41,7 +41,7 @@ export const authApi = {
     // =========================
     createPartialUser: async (data: CreatePartialUserDTO) => {
         try {
-            const response = await apiClient.post('/api/auth/create-partial', data);
+            const response = await apiClient.post('/auth/create-partial', data);
             return response.data;
         } catch (error) {
             console.error('createPartialUser error:', error);
@@ -55,7 +55,7 @@ export const authApi = {
     // =========================
     createFullUser: async (data: CreateFullUserDTO) => {
         try {
-            const response = await apiClient.post('/api/auth/create-full', data);
+            const response = await apiClient.post('/auth/create-full', data);
             return response.data;
         } catch (error) {
             console.error('createFullUser error:', error);
@@ -69,7 +69,7 @@ export const authApi = {
     // =========================
     requestOtp: async (data: RequestOtpDTO) => {
         try {
-            const response = await apiClient.post('/api/auth/otp/request', data);
+            const response = await apiClient.post('/auth/otp/request', data);
             return response.data;
         } catch (error) {
             console.error('requestOtp error:', error);
@@ -83,7 +83,7 @@ export const authApi = {
     // =========================
     verifyOtp: async (data: VerifyOtpDTO) => {
         try {
-            const response = await apiClient.post('/api/auth/otp/verify', data);
+            const response = await apiClient.post('/auth/otp/verify', data);
             return response.data;
         } catch (error) {
             console.error('verifyOtp error:', error);

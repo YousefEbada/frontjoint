@@ -12,7 +12,7 @@ export interface Exercise {
 
 export const getExercises = async (): Promise<Exercise[]> => {
   try {
-    const response = await api.get("api/exercises");
+    const response = await api.get("/exercises");
 
     console.log("getExercises response:", response.data);
     return response.data.exercises || [];

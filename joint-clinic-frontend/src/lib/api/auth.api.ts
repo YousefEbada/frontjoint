@@ -10,7 +10,7 @@ import { Verify } from "crypto";
 
 export const findUser = async (data: string) => {
   try {
-    const response = await api.get(`api/auth/find?contact=${data}`);
+    const response = await api.get(`/auth/find?contact=${data}`);
     console.log("findUser response:", response.data.user);
     return response.data.user;
   } catch (error) {

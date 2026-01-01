@@ -8,7 +8,7 @@ import {
 
 export const getDoctors = async (): Promise<Doctor[]> => {
   try {
-    const response = await api.get("api/doctor");
+    const response = await api.get("/doctor");
     console.log("getDoctors response:", response.data.doctors?.slice(0, 5));
     return response.data.doctors || [];
   } catch (error) {
@@ -22,7 +22,7 @@ export const getDoctors = async (): Promise<Doctor[]> => {
 
 export const getDoctorById = async (doctorId: string): Promise<Doctor> => {
   try {
-    const response = await api.get(`api/doctor/${doctorId}`);
+    const response = await api.get(`/doctor/${doctorId}`);
     console.log("getDoctorById response:", response.data);
     return response.data.doctor;
   } catch (error) {
@@ -39,7 +39,7 @@ export const getDoctorBookings = async (
   params?: { period?: "day" | "week" | "month"; date?: Date | string }
 ): Promise<DoctorBooking[]> => {
   try {
-    const response = await api.get(`api/doctor/${doctorId}/bookings`, {
+    const response = await api.get(`/doctor/${doctorId}/bookings`, {
       params,
     });
     console.log("getDoctorBookings response:", response.data);
@@ -58,7 +58,7 @@ export const getDoctorSessions = async (
   params?: { period?: "day" | "week" | "month"; date?: Date | string }
 ): Promise<DoctorSession[]> => {
   try {
-    const response = await api.get(`/api/doctor/${doctorId}/sessions`, {
+    const response = await api.get(`/doctor/${doctorId}/sessions`, {
       params,
     });
     console.log("getDoctorSessions response:", response.data);
@@ -77,7 +77,7 @@ export const getDoctorPatients = async (
   status?: "active" | "inactive"
 ): Promise<DoctorPatient[]> => {
   try {
-    const response = await api.get(`/api/doctor/${doctorId}/patients`, {
+    const response = await api.get(`/doctor/${doctorId}/patients`, {
       params: { status },
     });
     console.log("getDoctorPatients response:", response.data);

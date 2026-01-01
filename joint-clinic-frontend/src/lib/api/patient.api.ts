@@ -79,7 +79,7 @@ export const getPatientDashboard = async (
   patientId: string
 ): Promise<PatientDashboardData> => {
   try {
-    const response = await api.get(`api/patient/${patientId}/dashboard`);
+    const response = await api.get(`/patient/${patientId}/dashboard`);
     console.log("getPatientDashboard response:", response.data);
     return response.data;
   } catch (error) {
@@ -96,7 +96,7 @@ export const getPatientDashboard = async (
  */
 export const getPatientById = async (patientId: string): Promise<Patient> => {
   try {
-    const response = await api.get(`api/patient/${patientId}`);
+    const response = await api.get(`/patient/${patientId}`);
     console.log("getPatientById response:", response.data);
     return response.data.patient;
   } catch (error) {
@@ -113,7 +113,7 @@ export const getPatientById = async (patientId: string): Promise<Patient> => {
  */
 export const getPatientByUserId = async (userId: string): Promise<Patient> => {
   try {
-    const response = await api.get(`api/patient/user/${userId}`);
+    const response = await api.get(`/patient/user/${userId}`);
     console.log("getPatientByUserId response:", response.data);
     return response.data.patient;
   } catch (error) {
@@ -133,7 +133,7 @@ export const updatePatient = async (
   data: Partial<Patient>
 ): Promise<Patient> => {
   try {
-    const response = await api.put(`api/patient/${patientId}`, data);
+    const response = await api.put(`/patient/${patientId}`, data);
     console.log("updatePatient response:", response.data);
     return response.data.patient;
   } catch (error) {
