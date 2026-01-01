@@ -39,7 +39,9 @@ export const getDoctorBookings = async (
   params?: { period?: "day" | "week" | "month"; date?: Date | string }
 ): Promise<DoctorBooking[]> => {
   try {
-    const response = await api.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/doctor/${doctorId}/bookings`, { params });
+    const response = await api.get(`api/doctor/${doctorId}/bookings`, {
+      params,
+    });
     console.log("getDoctorBookings response:", response.data);
     return response.data.bookings || [];
   } catch (error) {
@@ -56,7 +58,9 @@ export const getDoctorSessions = async (
   params?: { period?: "day" | "week" | "month"; date?: Date | string }
 ): Promise<DoctorSession[]> => {
   try {
-    const response = await api.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/doctor/${doctorId}/sessions`, { params });
+    const response = await api.get(`/api/doctor/${doctorId}/sessions`, {
+      params,
+    });
     console.log("getDoctorSessions response:", response.data);
     return response.data.sessions || [];
   } catch (error) {
@@ -73,7 +77,7 @@ export const getDoctorPatients = async (
   status?: "active" | "inactive"
 ): Promise<DoctorPatient[]> => {
   try {
-    const response = await api.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/doctor/${doctorId}/patients`, {
+    const response = await api.get(`/api/doctor/${doctorId}/patients`, {
       params: { status },
     });
     console.log("getDoctorPatients response:", response.data);

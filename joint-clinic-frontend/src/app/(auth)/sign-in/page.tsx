@@ -9,7 +9,7 @@ import { faCaretDown } from '@fortawesome/free-solid-svg-icons'
 import { motion, AnimatePresence, Variants } from "framer-motion"
 import JointMarker from '@/components/molecules/JointMarker';
 import InjuryDetailsForm from '@/components/organisms/InjuryDetailsForm';
-import PaginationDots from '@/components/atoms/paginationlog';
+import PaginationDots from '@/components/atoms/PaginationLog';
 import CustomDropdown from '@/components/molecules/dropdown';
 import HelloCard from '@/components/organisms/helloCard';
 // import HelloCard from '@/components/organisms/HelloCard';
