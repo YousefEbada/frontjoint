@@ -22,8 +22,8 @@ export async function createBooking(req: Request, res: Response) {
 
     // Transform schema fields to match BookType expected by Nixpend
     const bookData: BookType = {
-      patient: input.patient_id,
-      practitioner: input.doctor_id,
+      patient: input.patient,
+      practitioner: input.practitioner,
       company: "Joint Clinic",
       department: input.department as BookType['department'],
       duration: input.duration,

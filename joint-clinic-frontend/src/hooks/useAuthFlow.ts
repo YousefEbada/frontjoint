@@ -212,7 +212,7 @@ export const useAuthFlow = () => {
             // Safer to use a generic type or track it. 
             // For now, let's allow 'register' as it's the primary flow described.
             await handleRequestOtp(userId, contact, 'register');
-            alert('Code resent!');
+            // alert('Code resent!');
         } catch (err) {
             handleError(err);
         } finally {

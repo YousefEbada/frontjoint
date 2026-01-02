@@ -81,6 +81,23 @@ const Page = () => {
   });
 
   const [otpCode, setOtpCode] = React.useState('');
+  const [resendCountdown, setResendCountdown] = React.useState(0);
+
+  // Countdown timer effect for resend OTP
+  React.useEffect(() => {
+    if (resendCountdown > 0) {
+      const timer = setTimeout(() => {
+        setResendCountdown(resendCountdown - 1);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [resendCountdown]);
+
+  const handleResendWithCooldown = () => {
+    if (resendCountdown > 0) return;
+    handleResendOtp();
+    setResendCountdown(30);
+  };
 
   const [fullData, setFullData] = React.useState<Omit<CreateFullUserInput, 'contact' | 'userId'>>({
     email: '',
@@ -580,10 +597,16 @@ const Page = () => {
                         />
 
                         <button
-                          onClick={handleResendOtp}
-                          className="md:text-[24px] text-[20px] text-[#1E5598] font-medium underline mt-2 bg-transparent border-none cursor-pointer"
+                          onClick={handleResendWithCooldown}
+                          disabled={resendCountdown > 0}
+                          className={`md:text-[24px] text-[20px] font-medium mt-2 bg-transparent border-none transition-colors ${resendCountdown > 0
+                              ? 'text-[#ABABAB] cursor-not-allowed'
+                              : 'text-[#1E5598] underline cursor-pointer'
+                            }`}
                         >
-                          Resend code
+                          {resendCountdown > 0
+                            ? `Resend code in ${resendCountdown}s`
+                            : 'Resend code'}
                         </button>
                       </motion.div>
                     )}
