@@ -7,6 +7,7 @@ import { nixpendRoutes } from '../modules/integration/routes.test.js';
 import { doctorRoutes } from '../modules/doctor/presentation/routes.js';
 import { sessionRoutes } from '../modules/session/presentation/routes.js';
 import { treatmentPlanRoutes } from '../modules/treatment-plan/presentation/routes.js';
+import exerciseRoutes from 'modules/exercise/presentation/routes.js';
 
 export function mountRoutes(app: Express) {
   const api = Router();
@@ -18,5 +19,6 @@ export function mountRoutes(app: Express) {
   api.use('/session', sessionRoutes);
   api.use('/treatment', treatmentPlanRoutes);
   api.use('/test/nixpend', nixpendRoutes);
+  api.use('/exercise', exerciseRoutes);
   app.use('/api', api);
 }

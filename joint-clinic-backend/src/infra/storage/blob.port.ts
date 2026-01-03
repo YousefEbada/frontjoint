@@ -1,4 +1,4 @@
 export interface BlobPort {
-  upload(path: string, bytes: Buffer): Promise<{ url: string; etag?: string }>;
+  upload(p_path: string, bytes: Uint8Array, contentType: string): Promise<string>;
   signedUrl(path: string, ttlSeconds: number): Promise<string>;
 }

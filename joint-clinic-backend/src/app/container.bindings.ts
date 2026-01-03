@@ -5,8 +5,8 @@ import { BookingRepoPort } from '../modules/booking/application/ports/BookingRep
 import { BookingRepoMongo } from '../modules/booking/infrastructure/repos/BookingRepoMongo.js';
 import { ReportRepoPort } from '../modules/reports/application/ports/ReportRepoPort.js';
 import { ReportRepoMongo } from '../modules/reports/infrastructure/repos/ReportRepoMongo.js';
-import type { BlobPort } from '../modules/reports/application/infra-ports/BlobPort.js';
-import { blobAzureAdapter } from '../infra/storage/blob.azure.adapter.js';
+import { BlobPort } from 'infra/storage/blob.port.js';
+import { azureBlobAdapter } from '../infra/storage/blob.azure.adapter.js';
 import { UserRepoPort } from '../modules/auth/application/ports/UserRepoPort.js';
 import { UserRepoMongo } from '../modules/auth/infrastructure/repos/UserRepoMongo.js';
 import { MailPort } from 'infra/mail/mail.port.js';
@@ -24,6 +24,8 @@ import { SessionRepoMongo } from '../modules/session/infrastructure/repos/Sessio
 import { TreatmentRepoPort } from '../modules/treatment-plan/application/ports/TreatmentRepoPort.js';
 import { TreatmentRepoMongo } from '../modules/treatment-plan/infrastructure/repos/TreamtentRepoMongo.js';
 import { NodemailerMailAdapter } from 'infra/mail/nodemailer.mail.adapter.js';
+import { ExerciseRepoPort } from 'modules/exercise/application/ports/ExerciseRepoPort.js';
+import { ExerciseRepoMongo } from 'modules/exercise/infrastructure/repos/ExerciseRepoMongo.js';
 
 export const OTP_REPO = token<OTPRepoPort>('OTP_REPO');
 export const BOOKING_REPO = token<BookingRepoPort>('BOOKING_REPO');
@@ -37,12 +39,13 @@ export const DOCTOR_REPO = token<DoctorRepoPort>('DOCTOR_REPO');
 export const NIXPEND_ADAPTER = token<NixpendPort>('NIXPEND_ADAPTER');
 export const SESSION_REPO = token<SessionRepoPort>('SESSION_REPO');
 export const TREATMENT_PLAN_REPO = token<TreatmentRepoPort>('TREATMENT_PLAN_REPO');
+export const EXERCISE_REPO = token<ExerciseRepoPort>('EXERCISE_REPO')
 
 export function bindAll() {
   register(OTP_REPO, OTPRepoMongo);
   register(BOOKING_REPO, BookingRepoMongo);
   register(REPORT_REPO, ReportRepoMongo);
-  register(BLOB_PORT, blobAzureAdapter);
+  register(BLOB_PORT, azureBlobAdapter);
   register(USER_AUTH_REPO, UserRepoMongo);
   // register(MAIL_REPO, twilioMailAdapter);
   register(MAIL_REPO, NodemailerMailAdapter);
@@ -52,4 +55,5 @@ export function bindAll() {
   register(NIXPEND_ADAPTER, nixpendAdapter);
   register(SESSION_REPO, SessionRepoMongo);
   register(TREATMENT_PLAN_REPO, TreatmentRepoMongo);
+  register(EXERCISE_REPO, ExerciseRepoMongo)
 }
