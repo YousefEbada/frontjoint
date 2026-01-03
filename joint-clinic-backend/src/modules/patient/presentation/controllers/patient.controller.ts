@@ -7,6 +7,7 @@ import { GetPatient } from "modules/patient/application/use-cases/GetPatient.js"
 import { GetPatientByUser } from "modules/patient/application/use-cases/GetPatientByUser.js";
 import { GetPatientDashboard } from "modules/patient/application/use-cases/GetPatientDashboard.js";
 import { UpdatePatient } from "modules/patient/application/use-cases/UpdatePatient.js";
+import { GetAllPatients } from "modules/patient/application/use-cases/GetAllPatients.js";
 
 export async function getPatientById(req: Request, res: Response) {
     const { patientId } = req.params;
@@ -25,6 +26,21 @@ export async function getPatientById(req: Request, res: Response) {
         res.status(500).json({ ok: false, error: "Something Went Wrong" });
     }
 }
+
+export async function getAllPatients(req: Request, res: Response) {
+    try {
+        const uc = new GetAllPatients(resolve(PATIENT_REPO));
+        const result = await uc.exec();
+        if (!result.ok) {
+            return res.status(400).json(result);
+        }
+        return res.status(200).json(result);
+    } catch (error) {
+        console.error("[getAllPatients] There is an error in the patient controller", error);
+        return res.status(500).json({ ok: false, error: "Something Went Wrong" });
+    }
+}
+
 
 export async function getPatientByUserId(req: Request, res: Response) {
     const userId = req.params.userId;

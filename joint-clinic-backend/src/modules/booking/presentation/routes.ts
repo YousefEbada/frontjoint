@@ -6,7 +6,8 @@ import {
   rescheduleBooking,
   getAvailableSlots,
   getBookingById,
-  updateBookingStatus
+  updateBookingStatus,
+  getAllBookings
 } from './controllers/booking.controller.js';
 // import { auth } from '../../../shared/middleware/auth.js';
 import { validate } from '../../../shared/middleware/validate.js';
@@ -26,6 +27,7 @@ bookingRoutes.use(bookingLimiter);
 
 // ensure you handle double bookings 
 bookingRoutes.post('/', createBooking);
+bookingRoutes.get('/', getAllBookings)
 bookingRoutes.get('/doctor/:doctorId/slots', getAvailableSlots);
 bookingRoutes.get('/:id', getBookingById);
 bookingRoutes.put('/:id/cancel', cancelBooking);

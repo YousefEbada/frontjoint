@@ -9,6 +9,11 @@ export const BookingRepoMongo: BookingRepoPort = {
     return (doc as any).toObject() as Booking;
   },
 
+  async getAllBookings(): Promise<Booking[]> {
+    const docs = await BookingModel.find().lean();
+    return docs as unknown as Booking[];
+  },
+
   async existsOverlap(doctorId, start, end) {
     const exists = await BookingModel.exists({ doctorId, slotStart: { $lt: end }, slotEnd: { $gt: start } });
     return !!exists;

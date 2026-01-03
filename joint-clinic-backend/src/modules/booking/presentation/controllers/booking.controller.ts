@@ -12,6 +12,7 @@ import { BookType } from '../../../integration/domain/Nixpend.js';
 import { DOCTOR_REPO, NIXPEND_ADAPTER, PATIENT_REPO, SESSION_REPO } from 'app/container.bindings.js';
 import { FindBookingById } from '../../application/use-cases/FindBookingById.js';
 import { UpdateBookingStatus } from '../../application/use-cases/UpdateBookingStatus.js';
+import { GetAllBookings } from 'modules/booking/application/use-cases/GetAllBookings.js';
 
 const BOOKING_REPO = token<BookingRepoPort>('BOOKING_REPO');
 
@@ -43,6 +44,19 @@ export async function createBooking(req: Request, res: Response) {
     return res.status(201).json(result);
   } catch (error) {
     res.status(500).json({ ok: false, error: 'Creating Booking internal server error' });
+  }
+};
+
+export async function getAllBookings(req: Request, res: Response) {
+  try {
+    const uc = new GetAllBookings(resolve(BOOKING_REPO));
+    const result = await uc.exec();
+    if (!result.ok) {
+      return res.status(404).json(result);
+    }
+    return res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ ok: false, error: 'Get All Bookings internal server error' });
   }
 }
 
