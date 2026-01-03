@@ -3,6 +3,7 @@ import {
   getPatientDashboard,
   getPatientById,
   getPatientByUserId,
+  getAllPatients,
 } from "@/lib/api/patient.api";
 
 export const usePatientDashboard = (patientId: string) => {
@@ -26,5 +27,12 @@ export const usePatientByUserId = (userId: string) => {
     queryKey: ["patient-by-user", userId],
     queryFn: () => getPatientByUserId(userId),
     enabled: !!userId,
+  });
+};
+
+export const usePatients = (status?: "active" | "inactive") => {
+  return useQuery({
+    queryKey: ["patients", status],
+    queryFn: () => getAllPatients(status),
   });
 };

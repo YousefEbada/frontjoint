@@ -9,7 +9,7 @@ import BackTo from "@/components/molecules/BackTo";
 import Link from "next/link";
 import PatientCard from "@/components/molecules/PatientCard";
 import DashBoardContent from "@/components/atoms/DashBoardContent";
-import { useDoctorPatients } from "@/hooks/useDoctor";
+import { usePatients } from "@/hooks/usePatient";
 
 // Mock Data removed
 
@@ -17,14 +17,14 @@ const PatientsPage = () => {
     const [activeTab, setActiveTab] = useState<"active" | "all">("active");
     const [searchTerm, setSearchTerm] = useState("");
 
-    // TODO: Replace with actual logged-in doctor ID
-    const doctorId = "HLC-PRAC-2022-00001";
-
+    // Fetch patients with status filter based on active tab
     const statusFilter = activeTab === "active" ? "active" : undefined;
-    const { data: patients, isLoading } = useDoctorPatients(doctorId, statusFilter);
+    const { data: patients, isLoading } = usePatients(statusFilter);
 
     const filteredPatients = patients?.filter(p => {
-        const matchesSearch = p.fullName.toLowerCase().includes(searchTerm.toLowerCase());
+        // Get fullName from userId populated field or from patient directly
+        const patientName = (p as any).userId?.fullName || (p as any).fullName || '';
+        const matchesSearch = patientName.toLowerCase().includes(searchTerm.toLowerCase());
         return matchesSearch;
     }) || [];
 
@@ -72,16 +72,23 @@ const PatientsPage = () => {
                     <ScrollableArea className="w-full h-full px-2">
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pb-4">
                             {filteredPatients.length > 0 ? (
-                                filteredPatients.map((patient, index) => (
-                                    <Link key={patient._id || index} href={`/doctor/patients/${patient._id}`} className="w-full">
-                                        <PatientCard
-                                            name={patient.fullName}
-                                            injury={patient.condition || "No specified injury"}
-                                            status={patient.status === 'active' ? "Active" : "Inactive"}
-                                            statusColor={patient.status === 'active' ? "text-[#1C9A55]" : "text-[#8A8A8A]"}
-                                        />
-                                    </Link>
-                                ))
+                                filteredPatients.map((patient, index) => {
+                                    // Get patient name from populated userId or fallback
+                                    const patientName = (patient as any).userId?.fullName || patient.fullName || 'Unknown Patient';
+                                    // Get injury from injuryDetails or condition
+                                    const injury = patient.injuryDetails?.affectedArea || (patient as any).condition || "No specified injury";
+
+                                    return (
+                                        <Link key={patient._id || index} href={`/doctor/patients/${patient._id}`} className="w-full">
+                                            <PatientCard
+                                                name={patientName}
+                                                injury={injury}
+                                                status={patient.status === 'active' ? "Active" : "Inactive"}
+                                                statusColor={patient.status === 'active' ? "text-[#1C9A55]" : "text-[#8A8A8A]"}
+                                            />
+                                        </Link>
+                                    );
+                                })
                             ) : (
                                 <div className="col-span-full flex items-center justify-center text-gray-400 h-40">
                                     No patients found.
