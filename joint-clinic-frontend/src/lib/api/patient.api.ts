@@ -144,3 +144,24 @@ export const updatePatient = async (
     throw error;
   }
 };
+
+/**
+ * Get all patients with optional status filter
+ */
+export const getAllPatients = async (
+  status?: "active" | "inactive"
+): Promise<Patient[]> => {
+  try {
+    const response = await api.get("/patient", {
+      params: status ? { status } : undefined,
+    });
+    console.log("\n\n???????????????????  getAllPatients response:\n\n", response.data, "\n\n");
+    return response.data.data || [];
+  } catch (error) {
+    console.error(
+      "Error fetching all patients:",
+      (error as any).response?.data || (error as any).message
+    );
+    throw error;
+  }
+};
