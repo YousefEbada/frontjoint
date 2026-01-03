@@ -36,6 +36,8 @@ import { SendMessage } from '../modules/chat/application/use-cases/SendMessage.j
 import { GetChatRooms } from '../modules/chat/application/use-cases/GetChatRooms.js';
 import { GetChatMessages } from '../modules/chat/application/use-cases/GetChatMessages.js';
 import { MarkMessagesAsRead } from '../modules/chat/application/use-cases/MarkMessagesAsRead.js';
+import { TaskRepoPort } from 'modules/admin/application/ports/TaskRepoPort.js';
+import { TaskRepoMongo } from 'modules/admin/infrastructure/repos/TaskRepoMongo.js';
 
 export const OTP_REPO = token<OTPRepoPort>('OTP_REPO');
 export const BOOKING_REPO = token<BookingRepoPort>('BOOKING_REPO');
@@ -53,6 +55,7 @@ export const EXERCISE_REPO = token<ExerciseRepoPort>('EXERCISE_REPO');
 // Chat module tokens
 export const CHAT_ROOM_REPO = token<ChatRoomRepoPort>('CHAT_ROOM_REPO');
 export const CHAT_MESSAGE_REPO = token<ChatMessageRepoPort>('CHAT_MESSAGE_REPO');
+export const TASK_REPO = token<TaskRepoPort>('TASK_REPO');
 
 export function bindAll() {
   register(OTP_REPO, OTPRepoMongo);
@@ -69,12 +72,7 @@ export function bindAll() {
   register(SESSION_REPO, SessionRepoMongo);
   register(TREATMENT_PLAN_REPO, TreatmentRepoMongo);
   register(EXERCISE_REPO, ExerciseRepoMongo);
-  // Chat module registrations
   register(CHAT_ROOM_REPO, ChatRoomRepoMongo);
   register(CHAT_MESSAGE_REPO, ChatMessageRepoMongo);
-  // register('CreateChatRoom', () => new CreateChatRoom(container.get(CHAT_ROOM_REPO)));
-  // register('SendMessage', () => new SendMessage(container.get(CHAT_MESSAGE_REPO), container.get(CHAT_ROOM_REPO)));
-  // register('GetChatRooms', () => new GetChatRooms(container.get(CHAT_ROOM_REPO)));
-  // register('GetChatMessages', () => new GetChatMessages(container.get(CHAT_MESSAGE_REPO), container.get(CHAT_ROOM_REPO)));
-  // register('MarkMessagesAsRead', () => new MarkMessagesAsRead(container.get(CHAT_MESSAGE_REPO), container.get(CHAT_ROOM_REPO)));
+  register(TASK_REPO, TaskRepoMongo);
 }

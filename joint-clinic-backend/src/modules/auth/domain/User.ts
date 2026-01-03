@@ -1,7 +1,7 @@
 import { Schema } from "mongoose";
 import { ObjectId } from "mongoose";
 
-export type Role = 'Patient' | 'Doctor' | 'Admin' | 'Staff';
+export type Role = 'patient' | 'doctor' | 'admin' | 'staff';
 export type Gender = 'Male' | 'Female' | 'male' | 'female';
 export type MaritalStatus = 'Single' | 'Married' | 'Divorced' | 'Widowed';
 export type AccountStatus = 'active' | 'inactive';
