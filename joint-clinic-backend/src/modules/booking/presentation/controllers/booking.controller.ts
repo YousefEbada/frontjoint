@@ -19,7 +19,22 @@ export async function createBooking(req: Request, res: Response) {
   try {
     const input = CreateBookingSchema.parse(req.body);
     const uc = new CreateBooking(resolve(BOOKING_REPO), resolve(NIXPEND_ADAPTER), resolve(SESSION_REPO), resolve(PATIENT_REPO));
-    const result = await uc.exec(input as BookType);
+
+    // Transform schema fields to match BookType expected by Nixpend
+    const bookData: BookType = {
+      patient: input.patient,
+      practitioner: input.practitioner,
+      company: "Joint Clinic",
+      department: input.department as BookType['department'],
+      duration: input.duration,
+      daily_practitioner_event: input.daily_practitioner_event,
+      appointment_date: input.appointment_date,
+      appointment_time: input.appointment_time,
+      appointment_type: input.appointment_type,
+      branch: input.branch as BookType['branch'],
+    };
+
+    const result = await uc.exec(bookData);
 
     if (!result.ok) {
       return res.status(400).json(result);

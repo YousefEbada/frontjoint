@@ -258,7 +258,7 @@ function WhoWeAre() {
               <div className="w-[50px] md:w-[80px] mb-[4px]">
                 <Image
                   src={member.imgUrl}
-                  alt={member.name}
+                  alt={member.practitionerName}
                   width={70}
                   height={70}
                   className="w-full h-full object-cover"
@@ -266,11 +266,11 @@ function WhoWeAre() {
               </div>
 
               <h4 className={`text-[13px] md:text-[20px] max-w-[250px] my-0 text-[#fff] font-bold text-center`}>
-                {member.name}
+                {member.practitionerName}
               </h4>
 
               <p className="text-[10px] md:text-[16px] max-w-[100px] mt-2 text-center text-[#fff]">
-                {member.major}
+                {member.department}
               </p>
             </div>
           ))}

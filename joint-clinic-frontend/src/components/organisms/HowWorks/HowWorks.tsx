@@ -134,7 +134,7 @@ export default function HowWorks() {
       tl.current?.kill();
     };
   }, []);
-
+  
   const goTo = (index: number) => {
     if (!tl.current) return;
 
@@ -162,16 +162,10 @@ export default function HowWorks() {
       <section
         ref={sectionRef}
         id="animated-section"
-        className="
-        relative flex flex-col items-center justify-end sm:justify-start 
-        overflow-hidden
-        pt-16 md:pt-24
-        pb-12 sm:pb-24 md:pb-32
-        w-[33vw] h-[80vh] rounded-[40px]
-      "
-      style={{
-        background: `linear-gradient(to bottom, #ffffff, #edf7fa)`
-      }}
+        className="relative flex flex-col items-center justify-end sm:justify-start overflow-hidden pt-16 md:pt-24 pb-12 sm:pb-24 md:pb-32 w-[33vw] h-[80vh] rounded-[40px]"
+        style={{
+          background: `linear-gradient(to bottom, #ffffff, #edf7fa)`
+        }}
       >
         {/* Circle */}
         <div

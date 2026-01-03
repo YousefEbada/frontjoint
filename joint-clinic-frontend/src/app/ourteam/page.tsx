@@ -9,8 +9,8 @@ export default function OurTeamPage() {
 
   const filteredDoctors = doctorsData.doctors.filter(
     (doctor) =>
-      doctor.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      doctor.major.toLowerCase().includes(searchQuery.toLowerCase())
+      doctor.practitionerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      doctor.department.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -18,7 +18,7 @@ export default function OurTeamPage() {
       <NavBar />
 
       {/* PAGE WRAPPER */}
-      <div className="h-screen bg-gradient-to-b from-[#597b89] to-[#3d5f79] pt-32 px-4 overflow-hidden">
+      <div className="h-screen bg-gradient-to-b from-[#597b89] to-[#3d5f79] pt-32 px-4">
         {/* WHITE CONTAINER (no scroll here) */}
         <div className="max-w-[1400px] mx-auto bg-white rounded-[40px] shadow-2xl h-full flex flex-col">
 
@@ -34,7 +34,7 @@ export default function OurTeamPage() {
                 placeholder="Search By Specialist"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-[220px] px-4 py-2 rounded-full border border-gray-200 bg-gray-50 text-sm text-gray-600 shadow-md focus:outline-none focus:ring-1 focus:ring-[#1E5598] focus:shadow-lg transition"/>
+                className="w-[220px] px-4 py-2 rounded-full border border-gray-200 bg-gray-50 text-sm text-gray-600 shadow-md focus:outline-none focus:ring-1 focus:ring-[#1E5598] focus:shadow-lg transition" />
 
               <Link
                 href="/"
@@ -67,221 +67,159 @@ export default function OurTeamPage() {
             "
             style={{ scrollbarGutter: "stable" }}
           >
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-y-14 gap-x-6 justify-items-center">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-y-14 gap-x-6 justify-items-center pt-4 [&:has(a:hover)>a:not(:hover)]:opacity-40">
               {filteredDoctors.map((doctor) => (
                 <Link
-                  key={doctor.id}
-                  href={`/ourteam/${doctor.id}`}
-                  className="inline-flex flex-col items-center text-center group"
+                  key={doctor.nixpendId}
+                  href={`/ourteam/${doctor.nixpendId}`}
+                  className="inline-flex flex-col items-center text-center group transition-opacity duration-300"
                 >
                   {/* IMAGE */}
-                  <div className="w-[90px] mb-4 border-2 border-transparent group-hover:border-[#1E5598] transition-all">
+                  <div className="w-[90px] mb-4 group-hover:scale-110 transition-all duration-300 group-hover:translate-y-[-5px]">
                     <img
                       src={doctor.imgUrl}
-                      alt={doctor.name}
+                      alt={doctor.practitionerName}
                       className="w-full h-full object-cover"
                     />
                   </div>
 
                   {/* NAME */}
-                  <h3 className="text-[15px] md:text-[25px] font-medium text-[#1E5598] group-hover:text-[#EE3124] transition-colors">
-                    {doctor.name}
+                  <h3 className="text-[15px] md:text-[25px] font-medium text-[#1E5598] group-hover:scale-110 group-hover:translate-y-[-5px] transition-all duration-300">
+                    {doctor.practitionerName}
                   </h3>
 
                   {/* MAJOR */}
                   <p className="text-[12px] md:text-[17px] text-[#1E5598] font-bold">
-                    {doctor.major}
+                    {doctor.department}
                   </p>
 
                   {/* BRANCH */}
                   <p className="text-[11px] md:text-[17px] text-[#1E5598] font-medium">
-                    {doctor.branch}
+                    {doctor.practitionerCompany?.[0]?.branch ?? ""}
                   </p>
                 </Link>
               ))}
               {filteredDoctors.map((doctor) => (
                 <Link
-                  key={doctor.id}
-                  href={`/ourteam/${doctor.id}`}
-                  className="inline-flex flex-col items-center text-center group"
+                  key={doctor.nixpendId}
+                  href={`/ourteam/${doctor.nixpendId}`}
+                  className="inline-flex flex-col items-center text-center group transition-opacity duration-300"
                 >
                   {/* IMAGE */}
-                  <div className="w-[90px] mb-4 border-2 border-transparent group-hover:border-[#1E5598] transition-all">
+                  <div className="w-[90px] mb-4 group-hover:scale-110 transition-all duration-300 group-hover:translate-y-[-5px]">
                     <img
                       src={doctor.imgUrl}
-                      alt={doctor.name}
+                      alt={doctor.practitionerName}
                       className="w-full h-full object-cover"
                     />
                   </div>
 
                   {/* NAME */}
-                  <h3 className="text-[15px] md:text-[25px] font-medium text-[#1E5598] group-hover:text-[#EE3124] transition-colors">
-                    {doctor.name}
+                  <h3 className="text-[15px] md:text-[25px] font-medium text-[#1E5598] group-hover:scale-110 group-hover:translate-y-[-5px] transition-all duration-300">
+                    {doctor.practitionerName}
                   </h3>
 
                   {/* MAJOR */}
                   <p className="text-[12px] md:text-[17px] text-[#1E5598] font-bold">
-                    {doctor.major}
+                    {doctor.department}
                   </p>
 
                   {/* BRANCH */}
                   <p className="text-[11px] md:text-[17px] text-[#1E5598] font-medium">
-                    {doctor.branch}
+                    {doctor.practitionerCompany?.[0]?.branch ?? ""}
                   </p>
                 </Link>
               ))}
               {filteredDoctors.map((doctor) => (
                 <Link
-                  key={doctor.id}
-                  href={`/ourteam/${doctor.id}`}
-                  className="inline-flex flex-col items-center text-center group"
+                  key={doctor.nixpendId}
+                  href={`/ourteam/${doctor.nixpendId}`}
+                  className="inline-flex flex-col items-center text-center group transition-opacity duration-300"
                 >
                   {/* IMAGE */}
-                  <div className="w-[90px] mb-4 border-2 border-transparent group-hover:border-[#1E5598] transition-all">
+                  <div className="w-[90px] mb-4 group-hover:scale-110 transition-all duration-300 group-hover:translate-y-[-5px]">
                     <img
                       src={doctor.imgUrl}
-                      alt={doctor.name}
+                      alt={doctor.practitionerName}
                       className="w-full h-full object-cover"
                     />
                   </div>
 
                   {/* NAME */}
-                  <h3 className="text-[15px] md:text-[25px] font-medium text-[#1E5598] group-hover:text-[#EE3124] transition-colors">
-                    {doctor.name}
+                  <h3 className="text-[15px] md:text-[25px] font-medium text-[#1E5598] group-hover:scale-110 group-hover:translate-y-[-5px] transition-all duration-300">
+                    {doctor.practitionerName}
                   </h3>
 
                   {/* MAJOR */}
                   <p className="text-[12px] md:text-[17px] text-[#1E5598] font-bold">
-                    {doctor.major}
+                    {doctor.department}
                   </p>
 
                   {/* BRANCH */}
                   <p className="text-[11px] md:text-[17px] text-[#1E5598] font-medium">
-                    {doctor.branch}
+                    {doctor.practitionerCompany?.[0]?.branch ?? ""}
                   </p>
                 </Link>
               ))}
               {filteredDoctors.map((doctor) => (
                 <Link
-                  key={doctor.id}
-                  href={`/ourteam/${doctor.id}`}
-                  className="inline-flex flex-col items-center text-center group"
+                  key={doctor.nixpendId}
+                  href={`/ourteam/${doctor.nixpendId}`}
+                  className="inline-flex flex-col items-center text-center group transition-opacity duration-300"
                 >
                   {/* IMAGE */}
-                  <div className="w-[90px] mb-4 border-2 border-transparent group-hover:border-[#1E5598] transition-all">
+                  <div className="w-[90px] mb-4 group-hover:scale-110 transition-all duration-300 group-hover:translate-y-[-5px]">
                     <img
                       src={doctor.imgUrl}
-                      alt={doctor.name}
+                      alt={doctor.practitionerName}
                       className="w-full h-full object-cover"
                     />
                   </div>
 
                   {/* NAME */}
-                  <h3 className="text-[15px] md:text-[25px] font-medium text-[#1E5598] group-hover:text-[#EE3124] transition-colors">
-                    {doctor.name}
+                  <h3 className="text-[15px] md:text-[25px] font-medium text-[#1E5598] group-hover:scale-110 group-hover:translate-y-[-5px] transition-all duration-300">
+                    {doctor.practitionerName}
                   </h3>
 
                   {/* MAJOR */}
                   <p className="text-[12px] md:text-[17px] text-[#1E5598] font-bold">
-                    {doctor.major}
+                    {doctor.department}
                   </p>
 
                   {/* BRANCH */}
                   <p className="text-[11px] md:text-[17px] text-[#1E5598] font-medium">
-                    {doctor.branch}
+                    {doctor.practitionerCompany?.[0]?.branch ?? ""}
                   </p>
                 </Link>
               ))}
               {filteredDoctors.map((doctor) => (
                 <Link
-                  key={doctor.id}
-                  href={`/ourteam/${doctor.id}`}
-                  className="inline-flex flex-col items-center text-center group"
+                  key={doctor.nixpendId}
+                  href={`/ourteam/${doctor.nixpendId}`}
+                  className="inline-flex flex-col items-center text-center group transition-opacity duration-300"
                 >
                   {/* IMAGE */}
-                  <div className="w-[90px] mb-4 border-2 border-transparent group-hover:border-[#1E5598] transition-all">
+                  <div className="w-[90px] mb-4 group-hover:scale-110 transition-all duration-300 group-hover:translate-y-[-5px]">
                     <img
                       src={doctor.imgUrl}
-                      alt={doctor.name}
+                      alt={doctor.practitionerName}
                       className="w-full h-full object-cover"
                     />
                   </div>
 
                   {/* NAME */}
-                  <h3 className="text-[15px] md:text-[25px] font-medium text-[#1E5598] group-hover:text-[#EE3124] transition-colors">
-                    {doctor.name}
+                  <h3 className="text-[15px] md:text-[25px] font-medium text-[#1E5598] group-hover:scale-110 group-hover:translate-y-[-5px] transition-all duration-300">
+                    {doctor.practitionerName}
                   </h3>
 
                   {/* MAJOR */}
                   <p className="text-[12px] md:text-[17px] text-[#1E5598] font-bold">
-                    {doctor.major}
+                    {doctor.department}
                   </p>
 
                   {/* BRANCH */}
                   <p className="text-[11px] md:text-[17px] text-[#1E5598] font-medium">
-                    {doctor.branch}
-                  </p>
-                </Link>
-              ))}
-              {filteredDoctors.map((doctor) => (
-                <Link
-                  key={doctor.id}
-                  href={`/ourteam/${doctor.id}`}
-                  className="inline-flex flex-col items-center text-center group"
-                >
-                  {/* IMAGE */}
-                  <div className="w-[90px] mb-4 border-2 border-transparent group-hover:border-[#1E5598] transition-all">
-                    <img
-                      src={doctor.imgUrl}
-                      alt={doctor.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-
-                  {/* NAME */}
-                  <h3 className="text-[15px] md:text-[25px] font-medium text-[#1E5598] group-hover:text-[#EE3124] transition-colors">
-                    {doctor.name}
-                  </h3>
-
-                  {/* MAJOR */}
-                  <p className="text-[12px] md:text-[17px] text-[#1E5598] font-bold">
-                    {doctor.major}
-                  </p>
-
-                  {/* BRANCH */}
-                  <p className="text-[11px] md:text-[17px] text-[#1E5598] font-medium">
-                    {doctor.branch}
-                  </p>
-                </Link>
-              ))}
-              {filteredDoctors.map((doctor) => (
-                <Link
-                  key={doctor.id}
-                  href={`/ourteam/${doctor.id}`}
-                  className="inline-flex flex-col items-center text-center group"
-                >
-                  {/* IMAGE */}
-                  <div className="w-[90px] mb-4 border-2 border-transparent group-hover:border-[#1E5598] transition-all">
-                    <img
-                      src={doctor.imgUrl}
-                      alt={doctor.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-
-                  {/* NAME */}
-                  <h3 className="text-[15px] md:text-[25px] font-medium text-[#1E5598] group-hover:text-[#EE3124] transition-colors">
-                    {doctor.name}
-                  </h3>
-
-                  {/* MAJOR */}
-                  <p className="text-[12px] md:text-[17px] text-[#1E5598] font-bold">
-                    {doctor.major}
-                  </p>
-
-                  {/* BRANCH */}
-                  <p className="text-[11px] md:text-[17px] text-[#1E5598] font-medium">
-                    {doctor.branch}
+                    {doctor.practitionerCompany?.[0]?.branch ?? ""}
                   </p>
                 </Link>
               ))}

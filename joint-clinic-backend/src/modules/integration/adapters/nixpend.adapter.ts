@@ -17,35 +17,40 @@ export const nixpendAdapter: NixpendPort = {
       console.log("\n======= Found Patient Data:", data);
       return data[0];
     }
-    console.log("\n======= Found Patient Data: No data found", data);
+    console.log("\n======= Found Patient Data: &&&&^ No data found", data);
     return null;
   },
 
   // register patient
   async registerPatient(value: RegisterType) {
-    console.log("[Nixpend] Attempting to register patient:", JSON.stringify(value));
-    console.log("[Nixpend] API URL:", env.NIXPEND_API_URL);
-    console.log("[Nixpend] Token present:", !!env.NIXPEND_TOKEN);
+    const url = `${env.NIXPEND_API_URL}/nis/patient`;
+    const headers = {
+      'Content-Type': 'application/json',
+      'token': env.NIXPEND_TOKEN
+    };
+
+    console.log("\n======= [Nixpend] Registering patient =======");
+    console.log("[Nixpend] URL:", url);
+    console.log("[Nixpend] Token (first 20 chars):", env.NIXPEND_TOKEN?.substring(0, 20) + "...");
+    console.log("[Nixpend] Request body:", JSON.stringify(value, null, 2));
 
     try {
-      const response = await fetch(`${env.NIXPEND_API_URL}/nis/patient`, {
+      const response = await fetch(url, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'token': env.NIXPEND_TOKEN
-        },
+        headers,
         body: JSON.stringify(value)
       });
 
       const data = await response.json();
-      console.log("[Nixpend] Raw response:", JSON.stringify(data));
+      console.log("[Nixpend] HTTP Status:", response.status);
+      console.log("[Nixpend] Response:", JSON.stringify(data, null, 2));
 
       if (data.status === 200) {
-        console.log("[Nixpend] SUCCESS:", data.data);
+        console.log("[Nixpend] SUCCESS - Patient registered");
         return data.data;
       }
 
-      console.error("[Nixpend] FAILED. Status:", data.status, "Response:", JSON.stringify(data));
+      console.log("[Nixpend] FAILED - Response status not 200");
       return null;
     } catch (error: any) {
       console.error("[Nixpend] EXCEPTION:", error.message);
@@ -70,7 +75,7 @@ export const nixpendAdapter: NixpendPort = {
       console.log("\n======= Update Patient Data:", data);
       return data.response.data;
     }
-    console.log("\n======= Update Patient Data: No data found", data);
+    console.log("\n======= Update Patient Data: &&&&^ No data found", data);
     return null;
   },
 
@@ -101,7 +106,7 @@ export const nixpendAdapter: NixpendPort = {
       console.log("\n======= Practitioners Data:", data.length);
       return data;
     }
-    console.log("\n======= Practitioners Data: No data found", data);
+    console.log("\n======= Practitioners Data: &&&&^ No data found", data);
     return null;
   },
 
@@ -182,4 +187,8 @@ export const nixpendAdapter: NixpendPort = {
     }
     return null;
   },
+  // async ivrConfirmAppointment(confirm: '0' | '1' | '2', name: string) { return false; },
+  // async ivrGetPatientAppointment(after, branch) {
+  //   return { data: [] };
+  // },
 };

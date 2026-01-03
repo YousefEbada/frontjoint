@@ -149,6 +149,41 @@ export const useAuthFlow = () => {
             const response = await verifyOtp({ otpToken, code });
             // Response should contain accessToken/refreshToken/user
 
+            // Check if user is already a patient (for login flow)
+            if (isFullProfile && userId) {
+                try {
+                    // Import dynamically to avoid circular dependency
+                    const { getPatientByUserId } = await import('@/lib/api/patient.api');
+                    const patient = await getPatientByUserId(userId);
+
+                    if (patient && patient._id) {
+                        console.log('User is already a patient, redirecting to dashboard');
+                        // Store patient ID and user name for dashboard
+                        localStorage.setItem('patientId', patient._id);
+                        localStorage.setItem('userId', userId);
+
+                        // Get user's first name from findUser result (stored in contact context)
+                        const user = await findUser(contact);
+                        if (user?.fullName) {
+                            const firstName = user.fullName.split(' ')[0];
+                            localStorage.setItem('patientName', firstName);
+                        }
+
+                        // Check for pending booking redirect
+                        const pendingBooking = localStorage.getItem('pendingBooking');
+                        if (pendingBooking) {
+                            window.location.href = '/patient/booking';
+                        } else {
+                            window.location.href = '/patient/main';
+                        }
+                        return;
+                    }
+                } catch (patientErr) {
+                    // Patient not found, continue with normal flow
+                    console.log('Patient not found, continuing with registration flow');
+                }
+            }
+
             // If success, proceed based on profile completion
             if (!isFullProfile) {
                 setStep(3);
@@ -177,7 +212,7 @@ export const useAuthFlow = () => {
             // Safer to use a generic type or track it. 
             // For now, let's allow 'register' as it's the primary flow described.
             await handleRequestOtp(userId, contact, 'register');
-            alert('Code resent!');
+            // alert('Code resent!');
         } catch (err) {
             handleError(err);
         } finally {
@@ -207,15 +242,56 @@ export const useAuthFlow = () => {
         setIsLoading(true);
         clearError();
         try {
-            console.log('==== Creating patient with:', { userId, injuryDetails });
-            await createPatient({
+            console.log('==== handleCreatePatient called ====');
+            console.log('userId:', userId);
+            console.log('injuryDetails:', JSON.stringify(injuryDetails, null, 2));
+
+            if (!userId) {
+                console.error('ERROR: userId is empty!');
+                setError('User ID is missing. Please restart the registration process.');
+                return;
+            }
+
+            const result = await createPatient({
                 userId,
                 injuryDetails
             });
-            // Navigate to patient dashboard
-            window.location.href = '/patient/main';
-        } catch (err) {
-            handleError(err);
+
+            console.log('createPatient result:', result);
+
+            // Store patient info in localStorage for dashboard
+            if (result && result._id) {
+                localStorage.setItem('patientId', result._id);
+            }
+            localStorage.setItem('userId', userId);
+
+            // Get user's first name if available
+            try {
+                const user = await findUser(contact);
+                if (user?.fullName) {
+                    const firstName = user.fullName.split(' ')[0];
+                    localStorage.setItem('patientName', firstName);
+                }
+            } catch (e) {
+                console.log('Could not get user name:', e);
+            }
+
+            // Check for pending booking redirect
+            console.log('Checking for pending booking...');
+            const pendingBooking = localStorage.getItem('pendingBooking');
+            if (pendingBooking) {
+                console.log('Pending booking found, redirecting to /patient/booking');
+                window.location.href = '/patient/booking';
+            } else {
+                console.log('Navigating to /patient/main');
+                window.location.href = '/patient/main';
+            }
+        } catch (err: any) {
+            console.error('handleCreatePatient error:', err);
+            // Extract detailed error message from response
+            const errorMsg = err.response?.data?.error || err.response?.data?.message || err.message || 'Failed to create patient';
+            console.error('Error message to display:', errorMsg);
+            setError(errorMsg);
         } finally {
             setIsLoading(false);
         }

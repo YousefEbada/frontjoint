@@ -21,7 +21,11 @@ interface DashBoardLinkProps {
 
 const DashBoardLink = ({ linkHref, title, Icon, expanded = true, mobileIconOnly = false }: DashBoardLinkProps) => {
     const pathname = usePathname();
-    const isActive = pathname === linkHref;
+    // Use startsWith to match sub-routes (e.g., /patient/exercises/assigned matches /patient/exercises)
+    // Special case: /patient/booking should also match /patient/bookings
+    const isActive = pathname === linkHref ||
+        pathname?.startsWith(linkHref + "/") ||
+        (linkHref === "/patient/booking" && pathname?.startsWith("/patient/bookings"));
     const [isHovered, setHovered] = useState(false);
 
     const colorState = isActive

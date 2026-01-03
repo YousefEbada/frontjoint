@@ -1,38 +1,184 @@
 "use client";
-import React, { useState, useEffect } from "react";
-// import Button from "../atoms/Button";
-
-// import Pagination from "../molecules/Pagination2";
-// import Calendar from "../molecules/Calender";
+import React, { useState, useEffect, useMemo } from "react";
 import Button from "@/components/atoms/Button";
 import Calendar from "@/components/molecules/Calendar";
 import Pagination from "@/components/molecules/Pagination2";
 import CustomSelect from "@/components/atoms/CustomSelect";
 import "./book.css";
-import { authApi } from "@/features/auth/api";
+import doctorsData from "@/components/organisms/WhoWeAre/doctors.json";
+import { useAvailableSlots, usePendingBooking } from "@/hooks/useBooking";
+import { AvailableSlot } from "@/types/booking";
+import dayjs from "dayjs";
+
+// Mock injuries list
+const MOCK_INJURIES = [
+  "Musculoskeletal Injury",
+  "Sport Injury",
+  "Post-surgical Rehabilitation",
+  "Chronic Back Pain",
+  "Neck Pain",
+  "Tendon Injuries",
+  "Knee Osteoarthritis",
+];
+
+// Branch options
+const BRANCHES = ["Alaqiq", "King Salman"] as const;
+type BranchType = (typeof BRANCHES)[number];
+
+interface Doctor {
+  _id: string;
+  nixpendId: string;
+  imgUrl: string;
+  practitionerName: string;
+  fullNameArabic: string;
+  department: string;
+  practitionerCompany: { company: string; branch: string }[];
+}
 
 const Book = () => {
   const [step, setStep] = useState(1);
   const totalSteps = 3;
-  const next = () => step < totalSteps && setStep(step + 1);
-  const back = () => step > 1 && setStep(step - 1);
-  
+
+  // Step 1: Branch selection
+  const [selectedBranch, setSelectedBranch] = useState<BranchType | "">("");
+
+  // Step 2: Injury and Doctor selection
+  const [selectedInjury, setSelectedInjury] = useState<string>("");
+  const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
+
+  // Step 3: Date and Time selection
+  const [selectedDate, setSelectedDate] = useState<string>("");
+  const [selectedSlot, setSelectedSlot] = useState<AvailableSlot | null>(null);
+
+  // Booking state
+  const [bookingSuccess, setBookingSuccess] = useState(false);
+  const [bookingError, setBookingError] = useState<string>("");
+
+  // Get patient ID from localStorage
+  const [patientId, setPatientId] = useState<string>("");
   useEffect(() => {
-    const run = async () => {
-      try {
-        const user = await authApi.findUser("+201096766428");
-        console.log("User:", user);
-      } catch (err) {
-        console.error("Error:", err);
-      }
-    };
-    run();
-    console.log("Test222");
+    const storedPatientId = localStorage.getItem("patientId");
+    if (storedPatientId) {
+      setPatientId(storedPatientId);
+    }
   }, []);
 
-  return (
-    <div id="book" className="min-h-screen w-full flex flex-col items-center justify-start bg-[#edf7f9] pb-10">
+  // Filter doctors by department (Physiotherapy) and selected branch
+  const filteredDoctors = useMemo(() => {
+    if (!selectedBranch) return [];
+    return (doctorsData.doctors as Doctor[]).filter(
+      (doctor) =>
+        doctor.department === "Physiotherapy" &&
+        doctor.practitionerCompany?.some((pc) => pc.branch === selectedBranch)
+    );
+  }, [selectedBranch]);
 
+  // Fetch available slots when doctor is selected
+  const {
+    data: slotsResponse,
+    isLoading: slotsLoading,
+    error: slotsError,
+  } = useAvailableSlots(selectedDoctor?.nixpendId || "");
+
+  // Pending booking hook for auth-based routing
+  const { initiateBooking } = usePendingBooking();
+
+  // Extract unique available dates from slots
+  const availableDates = useMemo(() => {
+    if (!slotsResponse?.ok || !slotsResponse.slots) return [];
+    const dates = new Set<string>();
+    slotsResponse.slots.forEach((slot) => {
+      if (slot.start) {
+        const date = dayjs(slot.start).format("YYYY-MM-DD");
+        dates.add(date);
+      }
+    });
+    return Array.from(dates);
+  }, [slotsResponse]);
+
+  // Filter slots for selected date
+  const slotsForSelectedDate = useMemo(() => {
+    if (!slotsResponse?.ok || !slotsResponse.slots || !selectedDate) return [];
+    return slotsResponse.slots.filter((slot) => {
+      if (!slot.start) return false;
+      return dayjs(slot.start).format("YYYY-MM-DD") === selectedDate;
+    });
+  }, [slotsResponse, selectedDate]);
+
+  // Format time slots for display
+  const timeSlotOptions = useMemo(() => {
+    return slotsForSelectedDate.map((slot) => {
+      if (!slot.start) return "Unknown Time";
+      return dayjs(slot.start).format("h:mm A");
+    });
+  }, [slotsForSelectedDate]);
+
+  const next = () => {
+    if (step === 1 && !selectedBranch) return;
+    if (step === 2 && (!selectedInjury || !selectedDoctor)) return;
+    if (step < totalSteps) setStep(step + 1);
+  };
+
+  const back = () => step > 1 && setStep(step - 1);
+
+  // Handle doctor selection from dropdown
+  const handleDoctorSelect = (doctorName: string) => {
+    const doctor = filteredDoctors.find((d) => d.practitionerName === doctorName);
+    setSelectedDoctor(doctor || null);
+    // Reset date/slot when doctor changes
+    setSelectedDate("");
+    setSelectedSlot(null);
+  };
+
+  // Handle time slot selection
+  const handleSlotSelect = (timeStr: string) => {
+    const slot = slotsForSelectedDate.find((s) => {
+      if (!s.start) return false;
+      return dayjs(s.start).format("h:mm A") === timeStr;
+    });
+    setSelectedSlot(slot || null);
+  };
+
+  // Handle date selection from calendar
+  const handleDateSelect = (date: string) => {
+    setSelectedDate(date);
+    setSelectedSlot(null); // Reset slot when date changes
+  };
+
+  // Handle booking confirmation - saves pending booking and redirects
+  const handleConfirmBooking = () => {
+    if (!selectedDoctor || !selectedSlot || !selectedDate) {
+      setBookingError("Please select a date and time slot.");
+      return;
+    }
+
+    // Save pending booking data and redirect based on auth status
+    initiateBooking({
+      branch: selectedBranch,
+      injury: selectedInjury,
+      doctorNixpendId: selectedDoctor.nixpendId,
+      doctorName: selectedDoctor.practitionerName,
+      selectedDate: selectedDate,
+      selectedTime: dayjs(selectedSlot.start).format("HH:mm"),
+      eventName: selectedSlot.event_name || "",
+      duration: selectedSlot.slot_duration || 30,
+      createdAt: new Date().toISOString(),
+    });
+  };
+
+  // Format confirmation message
+  const confirmationMessage = useMemo(() => {
+    if (!selectedDate || !selectedSlot?.start) return "";
+    const date = dayjs(selectedDate);
+    const time = dayjs(selectedSlot.start).format("h:mm A");
+    return `${date.format("dddd, MMMM D")} ${date.format("YYYY")} at ${time}`;
+  }, [selectedDate, selectedSlot]);
+
+  return (
+    <div
+      id="book"
+      className="min-h-screen w-full flex flex-col items-center justify-start bg-[#edf7f9] pb-10"
+    >
       {/* MAIN CONTAINER */}
       <div
         className="
@@ -45,7 +191,6 @@ const Book = () => {
         py-2 md:py-4
       "
       >
-
         {/* TITLE */}
         <h2
           className="
@@ -60,7 +205,7 @@ const Book = () => {
         </h2>
 
         {/* SUBTEXT */}
-        {(step === 1 || step === 2) && (
+        {(step === 1 || step === 2) && !patientId && (
           <p
             className="
             text-[#afafaf]
@@ -70,7 +215,7 @@ const Book = () => {
           "
           >
             If you are already a member, please{" "}
-            <a href="#" className="text-[#1e5598] underline">
+            <a href="sign-in" className="text-[#1e5598] underline">
               sign in
             </a>{" "}
             first
@@ -90,38 +235,46 @@ const Book = () => {
             ${step === 3 ? "" : "shadow-[0px_20px_60px_rgba(30,85,152,0.15)]"}
           `}
         >
-
-          {/* STEP 1 */}
+          {/* STEP 1: Branch Selection */}
           {step === 1 && (
-            <div className="flex flex-col items-center justify-between  min-h-[300px] sm:min-h-[350px] md:min-h-[400px] gap-5 w-full">
+            <div className="flex flex-col items-center justify-between min-h-[300px] sm:min-h-[350px] md:min-h-[400px] gap-5 w-full">
               <h3 className="text-[22px] sm:text-[28px] md:text-[48px] font-bold bg-gradient-to-b from-[#0D294D] to-[#1E5598] bg-clip-text text-transparent">
                 Choose The Branch
               </h3>
 
-              {/* Large screens: fixed width — Small screens: full width */}
               <div className="w-full flex justify-center">
                 <CustomSelect
-                  items={["Branch", "Branch 1", "Branch 2"]}
+                  items={[...BRANCHES]}
+                  value={selectedBranch || "Branch"}
+                  onChange={(val) => setSelectedBranch(val as BranchType)}
+                  placeholder="Select a branch"
                   width="100%"
                   height="70px"
                   className="md:!w-[600px]"
                 />
               </div>
 
-              <Button text="Next" variant="primary" onClick={next} />
+              <Button
+                text="Next"
+                variant="primary"
+                onClick={next}
+                disabled={!selectedBranch}
+              />
             </div>
           )}
 
-          {/* STEP 2 */}
+          {/* STEP 2: Injury & Doctor Selection */}
           {step === 2 && (
             <div className="flex flex-col items-center gap-6 w-full">
-
               <h3 className="text-[22px] sm:text-[28px] md:text-[48px] font-bold bg-gradient-to-b from-[#0D294D] to-[#1E5598] bg-clip-text text-transparent text-center">
                 Choose The Injury
               </h3>
 
               <CustomSelect
-                items={["Injury", "Injury 1", "Injury 2"]}
+                items={MOCK_INJURIES}
+                value={selectedInjury || "Injury"}
+                onChange={(val) => setSelectedInjury(val)}
+                placeholder="Select an injury type"
                 width="100%"
                 height="70px"
                 className="md:!w-[600px]"
@@ -131,85 +284,177 @@ const Book = () => {
                 Choose The Doctor
               </h3>
 
-              <CustomSelect
-                items={["Doctor", "Doctor 1", "Doctor 2"]}
-                width="100%"
-                height="70px"
-                className="md:!w-[600px]"
-              />
+              {filteredDoctors.length > 0 ? (
+                <CustomSelect
+                  items={filteredDoctors.map((d) => d.practitionerName)}
+                  value={selectedDoctor?.practitionerName || "Doctor"}
+                  onChange={handleDoctorSelect}
+                  placeholder="Select a doctor"
+                  width="100%"
+                  height="70px"
+                  className="md:!w-[600px]"
+                />
+              ) : (
+                <p className="text-[#afafaf] text-[14px] md:text-[18px]">
+                  No doctors available for this branch
+                </p>
+              )}
 
-              <Button text="Next" variant="primary" onClick={next} />
+              <div className="flex gap-4 mt-4">
+                <Button text="Back" variant="secondary" onClick={back} />
+                <Button
+                  text="Next"
+                  variant="primary"
+                  onClick={next}
+                  disabled={!selectedInjury || !selectedDoctor}
+                />
+              </div>
             </div>
           )}
 
-          {/* STEP 3 */}
+          {/* STEP 3: Date & Time Selection */}
           {step === 3 && (
             <div className="w-full flex flex-col lg:flex-row justify-center items-center lg:items-start gap-6 md:gap-16">
-
-              {/* LEFT SIDE */}
-              <div className="left flex flex-col items-center lg:items-start w-[65%]">
+              {/* LEFT SIDE - Calendar */}
+              <div className="left flex flex-col items-center lg:items-start w-full lg:w-[50%]">
                 <h3 className="text-[22px] sm:text-[26px] md:text-[40px] font-bold bg-gradient-to-b from-[#0D294D] to-[#1E5598] bg-clip-text text-transparent text-center lg:text-left">
                   Select the date
                 </h3>
 
-                <p className="ll text-[#afafaf] text-[12px] sm:text-[14px] md:text-[20px] font-medium mb-2 text-center lg:text-left">
-                  If you are already a member, please{" "}
-                  <a href="#" className="text-[#1e5598] underline">sign in</a>{" "}
-                  first
-                </p>
-
-                <div className="flex justify-center lg:justify-start w-full">
-                  <Calendar />
-                </div>
-              </div>
-
-              {/* RIGHT SIDE */}
-              <div className="flex flex-col gap-[30px] w-full items-center lg:items-start">
-
-                <div className="w-full">
-                  <h3 className="text-[22px] sm:text-[26px] md:text-[40px] font-bold bg-gradient-to-b from-[#0D294D] to-[#1E5598] bg-clip-text text-transparent text-center lg:text-left">
-                    Choose your time slot
-                  </h3>
-
-                  <CustomSelect
-                    items={["8:00 AM", "9:00 AM", "10:00 AM"]}
-                    width="100%"
-                    height="70px"
-                    className="md:!w-[500px]"
-                  />
-                </div>
-
-                <div className="text-center lg:text-left flex flex-col gap-[20px]">
-                  <h3 className="text-[22px] sm:text-[26px] md:text-[40px] font-bold bg-gradient-to-b from-[#0D294D] to-[#1E5598] bg-clip-text text-transparent text-center lg:text-left">
-                    Confirm your booking
-                  </h3>
-
-                  <pre className="text-[#1e5598] text-[14px] sm:text-[16px] md:text-[22px] font-bold leading-5 md:leading-6 max-w-[85vw] whitespace-pre-wrap break-words overflow-hidden">
-                    Your session will be on:<span className="text-[#167c4f]">  Monday, January 2nd 2026 at 8:00 AM</span>
-                  </pre>
-
-                  <p className="text-[#9ca3af] leading-7 translate-x-4 text-[12px] sm:text-[14px] md:text-[20px] leading-5 mt-1 max-w-[100%] mx-auto lg:mx-0">
-                    Please note that the bookings can be rescheduled or cancelled at
-                    least 24 hours before the appointment
-                  </p>
-
-                  <div className="mt-3 flex justify-center lg:justify-center">
-                    <Button text="Confirm" variant="primary" />
+                {slotsLoading ? (
+                  <div className="flex items-center justify-center py-10">
+                    <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#1e5598]"></div>
+                    <span className="ml-3 text-[#1e5598]">Loading available dates...</span>
                   </div>
-                </div>
+                ) : slotsError || (slotsResponse && !slotsResponse.ok) ? (
+                  <div className="bg-orange-50 border border-orange-200 rounded-xl p-6 mt-4 text-center">
+                    <p className="text-orange-700 text-[16px] md:text-[20px] font-medium">
+                      🏖️ Dr. {selectedDoctor?.practitionerName} is currently on vacation
+                    </p>
+                    <p className="text-orange-600 text-[14px] md:text-[16px] mt-2">
+                      No available slots at this time. Please try another doctor or check back later.
+                    </p>
+                  </div>
+                ) : availableDates.length === 0 ? (
+                  <div className="bg-gray-50 border border-gray-200 rounded-xl p-6 mt-4 text-center">
+                    <p className="text-gray-600 text-[16px] md:text-[20px]">
+                      No available dates at this time
+                    </p>
+                  </div>
+                ) : (
+                  <div className="flex justify-center lg:justify-start w-full mt-4">
+                    <Calendar
+                      onSelect={handleDateSelect}
+                      availableDates={availableDates}
+                    />
+                  </div>
+                )}
 
+                <div className="mt-4">
+                  <Button text="Back" variant="secondary" onClick={back} />
+                </div>
               </div>
 
+              {/* RIGHT SIDE - Time Slots & Confirmation */}
+              <div className="flex flex-col gap-[30px] w-full lg:w-[50%] items-center lg:items-start">
+                {/* Time Slot Selection */}
+                {selectedDate && slotsForSelectedDate.length > 0 && (
+                  <div className="w-full">
+                    <h3 className="text-[22px] sm:text-[26px] md:text-[40px] font-bold bg-gradient-to-b from-[#0D294D] to-[#1E5598] bg-clip-text text-transparent text-center lg:text-left">
+                      Choose your time slot
+                    </h3>
+
+                    <CustomSelect
+                      items={timeSlotOptions}
+                      value={selectedSlot ? dayjs(selectedSlot.start).format("h:mm A") : ""}
+                      onChange={handleSlotSelect}
+                      placeholder="Select a time"
+                      width="100%"
+                      height="70px"
+                      className="md:!w-[500px] mt-4"
+                    />
+                  </div>
+                )}
+
+                {/* Booking Success Message */}
+                {bookingSuccess && (
+                  <div className="bg-green-50 border border-green-200 rounded-xl p-6 w-full text-center">
+                    <p className="text-green-700 text-[18px] md:text-[24px] font-bold">
+                      ✅ Booking Confirmed!
+                    </p>
+                    <p className="text-green-600 text-[14px] md:text-[18px] mt-2">
+                      Your session has been booked for {confirmationMessage}
+                    </p>
+                    <p className="text-green-500 text-[12px] md:text-[14px] mt-2">
+                      You will receive a confirmation shortly.
+                    </p>
+                  </div>
+                )}
+
+                {/* Booking Error Message */}
+                {bookingError && (
+                  <div className="bg-red-50 border border-red-200 rounded-xl p-4 w-full text-center">
+                    <p className="text-red-600 text-[14px] md:text-[16px]">
+                      ❌ {bookingError}
+                    </p>
+                  </div>
+                )}
+
+                {/* Confirmation Section */}
+                {selectedSlot && !bookingSuccess && (
+                  <div className="text-center lg:text-left flex flex-col gap-[20px] w-full">
+                    <h3 className="text-[22px] sm:text-[26px] md:text-[40px] font-bold bg-gradient-to-b from-[#0D294D] to-[#1E5598] bg-clip-text text-transparent text-center lg:text-left">
+                      Confirm your booking
+                    </h3>
+
+                    <div className="bg-[#f8fafc] rounded-xl p-4 md:p-6">
+                      <p className="text-[#1e5598] text-[14px] sm:text-[16px] md:text-[20px] font-medium">
+                        <span className="text-gray-500">Branch:</span> {selectedBranch}
+                      </p>
+                      <p className="text-[#1e5598] text-[14px] sm:text-[16px] md:text-[20px] font-medium mt-2">
+                        <span className="text-gray-500">Doctor:</span> {selectedDoctor?.practitionerName}
+                      </p>
+                      <p className="text-[#1e5598] text-[14px] sm:text-[16px] md:text-[20px] font-medium mt-2">
+                        <span className="text-gray-500">Date & Time:</span>{" "}
+                        <span className="text-[#167c4f] font-bold">{confirmationMessage}</span>
+                      </p>
+                    </div>
+
+                    <p className="text-[#9ca3af] text-[12px] sm:text-[14px] md:text-[16px] leading-5 mt-1">
+                      Please note that bookings can be rescheduled or cancelled at least 24 hours
+                      before the appointment
+                    </p>
+
+                    {!patientId && (
+                      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                        <p className="text-yellow-700 text-[12px] md:text-[14px]">
+                          ⚠️ Please{" "}
+                          <a href="/sign-in" className="underline font-medium">
+                            sign in
+                          </a>{" "}
+                          to confirm your booking
+                        </p>
+                      </div>
+                    )}
+
+                    <div className="mt-3 flex justify-center lg:justify-start">
+                      <Button
+                        text="Confirm Booking"
+                        variant="primary"
+                        onClick={handleConfirmBooking}
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           )}
-
         </div>
 
         {/* PAGINATION */}
         <div className="mt-4 mb-4">
           <Pagination total={totalSteps} current={step} onChange={setStep} />
         </div>
-
       </div>
     </div>
   );

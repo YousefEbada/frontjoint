@@ -5,6 +5,7 @@ import clsx from "clsx";
 type CustomSelectProps = {
   items: string[];
   onChange?: (value: string) => void;
+  value?: string;
   width?: string;
   height?: string;
   className?: string;
@@ -15,13 +16,17 @@ type CustomSelectProps = {
 export default function CustomSelect({
   items,
   onChange,
+  value,
   width,
   height,
   className,
   size = "large",
   placeholder,
 }: CustomSelectProps) {
-  const [selected, setSelected] = useState(placeholder || items[0]);
+  const [internalSelected, setInternalSelected] = useState(placeholder || items[0]);
+
+  // Use external value if provided (controlled), otherwise use internal state
+  const selected = value !== undefined ? value : internalSelected;
   const [open, setOpen] = useState(false);
 
   const menuRef = useRef<HTMLDivElement | null>(null);
@@ -36,9 +41,9 @@ export default function CustomSelect({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleSelect = (value: string) => {
-    setSelected(value);
-    onChange?.(value);
+  const handleSelect = (val: string) => {
+    setInternalSelected(val);
+    onChange?.(val);
     setOpen(false);
   };
 

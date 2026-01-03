@@ -5,10 +5,10 @@ import Logo from "@/components/atoms/icons/Logo";
 import BookNowButton from "./BookNowButton";
 import { tv } from "tailwind-variants";
 import { color } from "@/lib/constants/colors";
-import { useState, useTransition, startTransition } from "react";
+import { useState, useTransition, startTransition, useEffect } from "react";
 
 const NavBarClasses = tv({
-  base: "fixed top-6 left-1/2 -translate-x-1/2 flex items-center justify-between px-4 sm:px-8 py-3 sm:py-4 w-[95%] sm:w-[90%] md:w-11/12 lg:w-[90%] max-w-7xl rounded-2xl sm:rounded-[53px] transition-all duration-300 z-50",
+  base: "fixed top-6 left-1/2 -translate-x-1/2 flex items-center justify-between px-4 sm:px-8 py-3 sm:py-4 w-[calc(100vw-48px)] rounded-2xl sm:rounded-[53px] transition-all duration-300 z-50",
   variants: {
     type: {
       primary:
@@ -29,6 +29,28 @@ const NavBarClasses = tv({
 export default function NavBar() {
   const [open, setOpen] = useState(false);
   const [isPending, startTrans] = useTransition();
+  const [isPatientLoggedIn, setIsPatientLoggedIn] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    // Check if user is authenticated as patient by checking localStorage
+    const patientId = localStorage.getItem('patientId');
+    const userId = localStorage.getItem('userId');
+    setIsPatientLoggedIn(!!(patientId && userId));
+  }, []);
+
+  useEffect(() => {
+    // Handle scroll to toggle navbar transparency
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+
+    // Check initial scroll position
+    handleScroll();
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const toggleMenu = () => {
     startTrans(() => {
@@ -42,9 +64,10 @@ export default function NavBar() {
     <>
       <nav
         className={NavBarClasses({
-          type: "primary",
-          colors: "dark",
+          type: isScrolled ? "primary" : "transparent",
+          colors: isScrolled ? "dark" : "light",
         })}
+        style={{ width: "93vw" }}
       >
         <div className="hidden md:flex flex-row gap-10 text-lg items-center">
           <Link href="/#who-we-are">Who We Are</Link>
@@ -52,12 +75,20 @@ export default function NavBar() {
           <Link href="/#reviews">Reviews</Link>
           <Link href="/#contact">Contact Us</Link>
           <span className="opacity-50">|</span>
-          <Link href="/sign-in">Login</Link>
+          {isPatientLoggedIn ? ([
+            <Link href="/patient/main">Dashboard</Link>,
+            <Link href="/patient/booking">Appointments</Link>,
+            <Link href="/patient/exercises/assigned">Exercises</Link>,
+            <Link href="/patient/support">Support</Link>
+          ])
+            : (
+              <Link href="/sign-in">Login</Link>
+            )}
         </div>
 
         <div className="flex items-center gap-4 md:hidden">
           <Link href="/">
-            <Logo fill={color.accent} style={{ width: 48 }} />
+            <Logo fill={isScrolled ? color.accent : "#fff"} style={{ width: 48 }} />
           </Link>
         </div>
 
@@ -68,7 +99,7 @@ export default function NavBar() {
 
           <div className="hidden md:block">
             <Link href="/">
-              <Logo fill={color.accent} style={{ width: 110 }} />
+              <Logo fill={isScrolled ? color.accent : "#fff"} style={{ width: 110 }} />
             </Link>
           </div>
 
@@ -116,9 +147,15 @@ export default function NavBar() {
           <Link href="/#contact" onClick={toggleMenu}>
             Contact Us
           </Link>
-          <Link href="/sign-in" onClick={toggleMenu}>
-            Login
-          </Link>
+          {isPatientLoggedIn ? (
+            <Link href="/patient/main" onClick={toggleMenu} className="text-[#1E5598] font-medium">
+              Dashboard
+            </Link>
+          ) : (
+            <Link href="/sign-in" onClick={toggleMenu}>
+              Login
+            </Link>
+          )}
 
           <div className="pt-4">
             <BookNowButton onAfterNavigate={toggleMenu} />

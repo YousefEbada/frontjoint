@@ -9,7 +9,7 @@ import { faCaretDown } from '@fortawesome/free-solid-svg-icons'
 import { motion, AnimatePresence, Variants } from "framer-motion"
 import JointMarker from '@/components/molecules/JointMarker';
 import InjuryDetailsForm from '@/components/organisms/InjuryDetailsForm';
-import PaginationDots from '@/components/atoms/paginationlog';
+import PaginationDots from '@/components/atoms/PaginationLog';
 import CustomDropdown from '@/components/molecules/dropdown';
 import HelloCard from '@/components/organisms/helloCard';
 // import HelloCard from '@/components/organisms/HelloCard';
@@ -18,7 +18,7 @@ import Typography from '@/components/atoms/Typography';
 import { useAuthFlow } from '@/hooks/useAuthFlow';
 import { CreatePartialUserInput, CreateFullUserInput } from '@/types/auth';
 import { Country, State } from 'country-state-city';
-
+// dssd
 // sdsd
 // Mock Data for Joints
 const JOINTS = {
@@ -69,7 +69,8 @@ const Page = () => {
     handleCreatePatient,
     userId,
     isLoading,
-    error
+    error,
+    contact
   } = useAuthFlow();
 
   // Local Form States
@@ -80,9 +81,27 @@ const Page = () => {
   });
 
   const [otpCode, setOtpCode] = React.useState('');
+  const [resendCountdown, setResendCountdown] = React.useState(0);
+
+  // Countdown timer effect for resend OTP
+  React.useEffect(() => {
+    if (resendCountdown > 0) {
+      const timer = setTimeout(() => {
+        setResendCountdown(resendCountdown - 1);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [resendCountdown]);
+
+  const handleResendWithCooldown = () => {
+    if (resendCountdown > 0) return;
+    handleResendOtp();
+    setResendCountdown(30);
+  };
 
   const [fullData, setFullData] = React.useState<Omit<CreateFullUserInput, 'contact' | 'userId'>>({
     email: '',
+    phone: '',
     identifier: '',
     identifierType: 'National ID',
     nationality: 'Saudi Arabia',
@@ -139,6 +158,19 @@ const Page = () => {
     }
   }, [cityNames, fullData.city]);
 
+  // Pre-fill phone or email from contact when entering step 3
+  React.useEffect(() => {
+    if (contact && step === 3) {
+      // Check if contact looks like a phone number (starts with + or digit)
+      const isPhone = /^[\+]?[0-9]/.test(contact);
+      if (isPhone && !fullData.phone) {
+        setFullData(prev => ({ ...prev, phone: contact }));
+      } else if (!isPhone && !fullData.email) {
+        setFullData(prev => ({ ...prev, email: contact }));
+      }
+    }
+  }, [contact, step]);
+
   // Handlers
   const onPartialSubmit = () => {
     if (!partialData.fullName || !partialData.birthdate) {
@@ -157,7 +189,11 @@ const Page = () => {
   };
 
   const onFullSubmit = () => {
-    // Basic validation
+    // Validate required phone field (needed for Nixpend integration)
+    if (!fullData.phone) {
+      alert("Phone number is required");
+      return;
+    }
     handleCreateFull(fullData);
   }
 
@@ -443,6 +479,8 @@ const Page = () => {
                     <InjuryDetailsForm
                       jointName={activeJointLabel}
                       onBack={() => setStep(4)}
+                      isLoading={isLoading}
+                      error={error}
                       onContinue={(details) => {
                         // Set affected area from selected joint and call create patient
                         handleCreatePatient({
@@ -559,10 +597,16 @@ const Page = () => {
                         />
 
                         <button
-                          onClick={handleResendOtp}
-                          className="md:text-[24px] text-[20px] text-[#1E5598] font-medium underline mt-2 bg-transparent border-none cursor-pointer"
+                          onClick={handleResendWithCooldown}
+                          disabled={resendCountdown > 0}
+                          className={`md:text-[24px] text-[20px] font-medium mt-2 bg-transparent border-none transition-colors ${resendCountdown > 0
+                              ? 'text-[#ABABAB] cursor-not-allowed'
+                              : 'text-[#1E5598] underline cursor-pointer'
+                            }`}
                         >
-                          Resend code
+                          {resendCountdown > 0
+                            ? `Resend code in ${resendCountdown}s`
+                            : 'Resend code'}
                         </button>
                       </motion.div>
                     )}
@@ -640,8 +684,9 @@ const Page = () => {
                           </div>
 
                           <input
-                            type="phone"
-                            placeholder="Phone"
+                            type="tel"
+                            required
+                            placeholder="Phone *"
                             value={fullData.phone}
                             onChange={(e) => setFullData({ ...fullData, phone: e.target.value })}
                             className="md:w-[28%] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition"

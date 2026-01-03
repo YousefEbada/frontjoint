@@ -1,35 +1,34 @@
 "use client";
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import DashBoardHeader from "@/components/molecules/DashBoardHeader";
 import Typography from "@/components/atoms/Typography";
 import Link from 'next/link';
 import ReportList from "@/components/organisms/Reports/ReportList";
 import ReportsHistory from "@/components/organisms/Reports/ReportsHistory";
 import DashBoardContent from '@/components/atoms/DashBoardContent';
+import { usePatient, usePatientByUserId } from "@/hooks/usePatient";
 
 const ReportsPage = () => {
   const [activeTab, setActiveTab] = useState<"view" | "history">("view");
+  const [patientId, setPatientId] = useState<string | null>(null);
 
-  const reports = [
-    {
-      id: "1",
-      reportName: "Week 1 Report",
-      status: "Ready" as const,
-      dateInfo: "Uploaded Sep 30"
-    },
-    {
-      id: "2",
-      reportName: "Week 2 Report",
-      status: "Ready" as const,
-      dateInfo: "Uploaded Oct 2nd"
-    },
-    {
-      id: "3",
-      reportName: "Week 3 Report",
-      status: "In progress" as const,
-      dateInfo: "ETA"
+  useEffect(() => {
+    const storedPatientId = localStorage.getItem('patientId');
+    if (storedPatientId) {
+      setPatientId(storedPatientId);
     }
-  ];
+  }, []);
+
+  const { data: patient, isLoading } = usePatient(patientId || "");
+
+  // Map patient medical reports to UI format
+  // Assuming medicalReports is an array of strings (urls or names)
+  const reports = patient?.injuryDetails?.medicalReports?.map((report, index) => ({
+    id: `report-${index}`,
+    reportName: `Report ${index + 1}`, // Fallback name since we only have strings usually
+    status: "Ready" as const,
+    dateInfo: "Available" // We don't have date on the string array
+  })) || [];
 
   return (
     <>
@@ -56,7 +55,13 @@ const ReportsPage = () => {
         {activeTab === "view" ? (
           <>
             <Typography text="Reports" variant="heading2" className="text-[#0D294D] font-bold text-3xl mb-2" />
-            <ReportList reports={reports} type='staff' />
+            {isLoading ? (
+              <Typography text="Loading reports..." variant="bodyRegular" />
+            ) : reports.length > 0 ? (
+              <ReportList reports={reports} type='staff' />
+            ) : (
+              <Typography text="No reports available." variant="bodyRegular" className="mt-4 text-gray-500" />
+            )}
           </>
         ) : (
           <ReportsHistory />

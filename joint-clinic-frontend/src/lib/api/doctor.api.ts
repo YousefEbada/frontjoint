@@ -39,7 +39,9 @@ export const getDoctorBookings = async (
   params?: { period?: "day" | "week" | "month"; date?: Date | string }
 ): Promise<DoctorBooking[]> => {
   try {
-    const response = await api.get(`/doctor/${doctorId}/bookings`, { params });
+    const response = await api.get(`/doctor/${doctorId}/bookings`, {
+      params,
+    });
     console.log("getDoctorBookings response:", response.data);
     return response.data.bookings || [];
   } catch (error) {
@@ -56,7 +58,9 @@ export const getDoctorSessions = async (
   params?: { period?: "day" | "week" | "month"; date?: Date | string }
 ): Promise<DoctorSession[]> => {
   try {
-    const response = await api.get(`/doctor/${doctorId}/sessions`, { params });
+    const response = await api.get(`/doctor/${doctorId}/sessions`, {
+      params,
+    });
     console.log("getDoctorSessions response:", response.data);
     return response.data.sessions || [];
   } catch (error) {

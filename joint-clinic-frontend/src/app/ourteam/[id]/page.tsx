@@ -8,7 +8,7 @@ import doctorsData from "@/components/organisms/WhoWeAre/doctors.json";
 export default function DoctorDetailsPage() {
     const params = useParams();
     const doctor = doctorsData.doctors.find(
-        (d) => String(d.id) === String(params?.id)
+        (d) => String(d.nixpendId) === String(params?.id)
     );
 
     if (!doctor) {
@@ -62,25 +62,25 @@ export default function DoctorDetailsPage() {
                                 <div className="w-[160px] mb-4">
                                     <img
                                         src={doctor.imgUrl}
-                                        alt={doctor.name}
+                                        alt={doctor.practitionerName}
                                         className="w-full h-auto object-cover rounded-md"
                                     />
                                 </div>
 
                                 <h2 className="text-[22px] font-bold text-[#1E5598]">
-                                    {doctor.name}
+                                    {doctor.practitionerName}
                                 </h2>
 
                                 <p className="text-sm text-[#1E5598] font-semibold">
-                                    {doctor.major}
+                                    {doctor.department}
                                 </p>
 
                                 <p className="text-sm text-gray-500 mb-4">
-                                    {doctor.branch}
+                                    {doctor.practitionerCompany?.[0]?.branch ?? ""}
                                 </p>
 
                                 <Link
-                                    href="/#book"
+                                    href={`/#book/${doctor.nixpendId}`}
                                     className="mt-2 bg-[#EE3124] text-white px-5 py-2 rounded-full text-sm font-medium hover:opacity-90 transition"
                                 >
                                     Book Now
@@ -93,7 +93,7 @@ export default function DoctorDetailsPage() {
                                 <span className="absolute left-0 top-0 h-full w-[1px] bg-gray-200" />
 
                                 <h1 className="text-[32px] md:text-[40px] font-bold text-[#1E5598] mb-6">
-                                    {doctor.name}
+                                    {doctor.practitionerName}
                                 </h1>
 
                                 {/* Biography */}
@@ -103,7 +103,7 @@ export default function DoctorDetailsPage() {
                                     </h3>
                                     <p className="text-sm text-gray-600 leading-6 max-w-[700px]">
                                         {doctor.biography ??
-                                            "Qualifications: Bachelor’s degree, several years of clinical experience in physiotherapy and rehabilitation."}
+                                            "Qualifications: Bachelor's degree, several years of clinical experience in physiotherapy and rehabilitation."}
                                     </p>
                                 </section>
 
