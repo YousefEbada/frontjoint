@@ -9,6 +9,7 @@ import { sessionRoutes } from '../modules/session/presentation/routes.js';
 import { treatmentPlanRoutes } from '../modules/treatment-plan/presentation/routes.js';
 import exerciseRoutes from 'modules/exercise/presentation/routes.js';
 import { adminRoutes } from 'modules/admin/presentation/routes.js';
+import chatRoutes from '../modules/chat/presentation/routes.js';
 
 export function mountRoutes(app: Express) {
   const api = Router();
@@ -22,5 +23,6 @@ export function mountRoutes(app: Express) {
   api.use('/test/nixpend', nixpendRoutes);
   api.use('/exercise', exerciseRoutes);
   api.use('/admin', adminRoutes);
+  api.use('/chat', chatRoutes);
   app.use('/api', api);
 }

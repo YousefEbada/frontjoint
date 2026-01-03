@@ -7,6 +7,7 @@ const CompanySchema = new Schema({
 
 const DoctorSchema = new Schema({
   // _id: { type: String },
+  userId: { type: String, required: false, unique: true },
   nixpendId: { type: String, required: true, unique: true }, // maps to "name" field in Nixpend
   practitionerName: { type: String, required: true }, // "practitioner_name"
   fullNameArabic: { type: String }, // "full_name_arabic"

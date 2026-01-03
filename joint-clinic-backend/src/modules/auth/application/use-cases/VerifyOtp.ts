@@ -88,8 +88,8 @@ export class VerifyOtp {
         if (!user.userStatus?.registerOtpVerified) {
           return { ok: false, reason: "register OTP unverified" };
         }
-        const accessToken = generateAccessToken({ userId: subjectRef });
-        const refreshToken = generateRefreshToken({ userId: subjectRef });
+        const accessToken = generateAccessToken({ userId: subjectRef, userType: user.role });
+        const refreshToken = generateRefreshToken({ userId: subjectRef, userType: user.role });
         return { ok: true, accessToken, refreshToken };
         
         // Other types (e.g. "resetPassword", "emailChange", etc.)

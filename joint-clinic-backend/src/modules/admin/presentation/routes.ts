@@ -1,6 +1,6 @@
 import { Router } from "express";
 // import { getAdminDashboard } from "./controllers/admin.controller.js";
-import { updateUserRole } from "./controllers/admin.controller.js";
+import { updateUserRole, updateUser } from "./controllers/admin.controller.js";
 
 export const adminRoutes = Router();
 
@@ -8,3 +8,4 @@ export const adminRoutes = Router();
 // Don't forget middleware for admin authentication/authorization
 
 adminRoutes.post("/update-user-role", updateUserRole);
+adminRoutes.post("/update-user", updateUser)

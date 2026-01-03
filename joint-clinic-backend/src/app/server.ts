@@ -1,4 +1,5 @@
 import express from 'express';
+import { createServer } from 'http';
 import helmet from 'helmet';
 import cors from 'cors';
 import compression from 'compression';
@@ -12,12 +13,17 @@ import { traceId } from '../shared/middleware/traceId.js';
 import { bindAll } from './container.bindings.js';
 import { requestLogger } from '../shared/middleware/requestLogger.js';
 import { StartJobs } from '../jobs/startJobs.js';
+import { ChatSocketService } from '../modules/chat/infrastructure/ChatSocketService.js';
 
 export async function startServer() {
   try {
     bindAll();
 
     const app = express();
+    const httpServer = createServer(app);
+
+    // Initialize Socket.IO for chat
+    const chatSocketService = new ChatSocketService(httpServer);
 
     // --- Middleware ---
     app.use(helmet());
@@ -73,7 +79,10 @@ export async function startServer() {
 
     // --- Start server ---
     const PORT = Number(process.env.PORT) || Number(env.PORT) || 4000;
-    app.listen(PORT, '0.0.0.0', () => console.log(`API running on port ${PORT}`));
+    httpServer.listen(PORT, '0.0.0.0', () => {
+      console.log(`API running on port ${PORT}`);
+      console.log(`Socket.IO chat service initialized`);
+    });
 
     // --- Non-blocking MongoDB & Jobs ---
     connectMongo()
