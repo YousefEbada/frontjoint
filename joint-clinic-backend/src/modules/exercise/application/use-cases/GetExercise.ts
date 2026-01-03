@@ -6,10 +6,20 @@ export class GetExerciseVideo {
   constructor(private blob: BlobPort, private exercise: ExerciseRepoPort) {}
 
   async exec(exerciseId: string) {
-    const exercise = await this.exercise.find(exerciseId);
-    console.log("============ Exercise: ",exercise);
-    if (!exercise) throw new Error("Not found");
+    try {
+      const exercise = await this.exercise.find(exerciseId);
+      console.log("============ Exercise: ",exercise);
+      if (!exercise) {
+        return {ok: false, message: "Exercise not found"};
+      };
 
-    return this.blob.signedUrl((exercise as any).videoBlobName, 30);
+    const url = await this.blob.signedUrl((exercise as any).videoBlobName, 30);
+
+    return {ok: true, data: url};
+    
+    } catch (error) {
+      console.error("============ GetExerciseVideo Error: ",error);
+      return {ok: false, message: "Something went wrong"};
+    }
   }
 }
