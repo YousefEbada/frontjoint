@@ -16,6 +16,7 @@ export class FindUserByContact {
                 return { ok: false, error: 'Contact is required' };
             }
             const contactType = detectContactType(contact);
+            console.log("CONTACT TYPE: ", contactType);
             if (contactType === 'invalid') return { ok: false, user: null, error: 'Invalid contact type' };
             const user = await this.userRepo.findByEmailOrPhone(contactType, contact);
             console.log("TJEHEHHE : ", user)

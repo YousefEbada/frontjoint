@@ -6,7 +6,9 @@ import {
   rescheduleBooking,
   getAvailableSlots,
   getBookingById,
-  updateBookingStatus
+  updateBookingStatus,
+  getAllBookings,
+  getPatientBookings
 } from './controllers/booking.controller.js';
 // import { auth } from '../../../shared/middleware/auth.js';
 import { validate } from '../../../shared/middleware/validate.js';
@@ -21,11 +23,13 @@ const bookingLimiter = rateLimit({
   legacyHeaders: false,
 });
 
-bookingRoutes.use(bookingLimiter);
+// bookingRoutes.use(bookingLimiter);
 // bookingRoutes.use(auth); // Uncomment when auth middleware is ready
 
 // ensure you handle double bookings 
 bookingRoutes.post('/', createBooking);
+bookingRoutes.get('/', getAllBookings);
+bookingRoutes.get('/patient/:patientId', getPatientBookings);
 bookingRoutes.get('/doctor/:doctorId/slots', getAvailableSlots);
 bookingRoutes.get('/:id', getBookingById);
 bookingRoutes.put('/:id/cancel', cancelBooking);

@@ -5,9 +5,9 @@ const UserSchema = new Schema(
   {
     role: {
       type: String,
-      enum: ['Patient', 'Doctor', 'Admin', 'Staff'],
+      enum: ['patient', 'doctor', 'admin', 'staff'],
       required: true,
-      default: 'Patient'
+      default: 'patient'
     },
     fullName: { type: String, required: true },
     // decide for the frontend to send first and last name separately or full name

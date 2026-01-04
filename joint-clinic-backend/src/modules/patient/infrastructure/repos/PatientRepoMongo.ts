@@ -23,6 +23,22 @@ export const PatientRepoMongo: PatientRepoPort = {
         }
     },
 
+    async getAllPatients() {
+        try {
+            console.log("PatientRepoMongo.getAllPatients] Fetching all patients");
+            const patients = await PatientModel.find()
+                .populate({
+                    path: 'userId',
+                    select: 'fullName firstName lastName email phone gender'
+                })
+                .lean();
+            return patients as any as Patient[];
+        } catch (error) {
+            console.error("[PatientRepoMongo.getAllPatients] DB error:", (error as any).message);
+            throw new Error("DATABASE_ERROR");
+        }
+    },
+
     async getPatientByUserId(userId: string) {
         try {
             console.log("PatientRepoMongo.getPatientByUserId] Fetching patient with userId:", userId);

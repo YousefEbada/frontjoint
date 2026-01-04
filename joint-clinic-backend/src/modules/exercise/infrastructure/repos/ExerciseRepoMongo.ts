@@ -15,5 +15,10 @@ export const ExerciseRepoMongo: ExerciseRepoPort = {
     async getAll() {
         const res = await ExerciseModel.find();
         return res;
+    },
+
+    async delete(id) {
+        const res = await ExerciseModel.findByIdAndDelete(id);
+        return res;
     }
 }

@@ -41,5 +41,12 @@ export const UserRepoMongo: UserRepoPort = {
     const updatedUser = await UserModel.findOneAndUpdate({ _id: userId }, { $set: { ...updateData } }, { new: true });
     console.log("User info updated in MongoDB", updatedUser);
     return updatedUser as any as User;
+  },
+
+  async updateUserRole(userId: string, newRole: User['role']): Promise<User | null> {
+    console.log("Updating user role in MongoDB...", newRole);
+    const updatedUser = await UserModel.findOneAndUpdate({ _id: userId }, { $set: { role: newRole } }, { new: true });
+    console.log("User role updated in MongoDB", updatedUser);
+    return updatedUser as any as User;
   }
 }

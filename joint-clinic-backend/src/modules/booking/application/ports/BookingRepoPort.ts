@@ -1,6 +1,7 @@
 import { Booking } from '../../domain/Booking.js';
 export interface BookingRepoPort {
   findById(id: string): Promise<Booking | null>;
+  getAllBookings(): Promise<Booking[]>;
   book(b: Omit<Booking, '_id'|'createdAt'|'updatedAt'|'status'|'reminder24hSent'|'reminder1hSent'>, options?: { tx?: any }): Promise<Booking>;
   reschedule(b: Omit<Partial<Booking>, 'createdAt'|'updatedAt'>, options?: { tx?: any }): Promise<Booking>;
   cancel(b: Booking, options?: { tx?: any }): Promise<Boolean>
