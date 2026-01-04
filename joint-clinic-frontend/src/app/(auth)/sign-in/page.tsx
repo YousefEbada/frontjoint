@@ -82,7 +82,7 @@ const Page = () => {
 
   const [otpCode, setOtpCode] = React.useState('');
   const [resendCountdown, setResendCountdown] = React.useState(0);
-
+  // tatrararar
   // Countdown timer effect for resend OTP
   React.useEffect(() => {
     if (resendCountdown > 0) {
