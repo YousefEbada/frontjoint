@@ -82,7 +82,6 @@ const Page = () => {
 
   const [otpCode, setOtpCode] = React.useState('');
   const [resendCountdown, setResendCountdown] = React.useState(0);
-  // tatrararar
   // Countdown timer effect for resend OTP
   React.useEffect(() => {
     if (resendCountdown > 0) {
@@ -135,7 +134,7 @@ const Page = () => {
     additionalNotes: '',
     medicalReports: [] as string[]
   });
-
+  // hsghahghgsa
   // Country-City dynamic data
   const countries = React.useMemo(() => Country.getAllCountries(), []);
   const countryNames = React.useMemo(() => countries.map(c => c.name), [countries]);
