@@ -13,10 +13,11 @@ interface MessageRowProps {
 
 import Link from "next/link";
 
-const MessageRow = ({ id, name, status, statusColor, dotColor, title, context, time }: MessageRowProps & { id?: number }) => {
+const MessageRow = ({ id, name, status, statusColor, dotColor, title, context, time }: MessageRowProps & { id?: number | string }) => {
     // Assuming route: /doctor/support/chat/[id] - User said "specified patient", usually tracked by ID. 
     // If ID is not passed, fall back or use #. Updating props to accept ID.
-    const href = id ? `/doctor/support/chat/${id}` : "#";
+    // Link to all-messages with query param to open specific chat
+    const href = id ? `/doctor/support/all-messages?id=${id}` : "#";
 
     return (
         <Link href={href} className="w-full">

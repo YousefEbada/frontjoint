@@ -1,48 +1,52 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import DashBoardHeader from "@/components/molecules/DashBoardHeader";
 import Typography from "@/components/atoms/Typography";
-import CorneredBoxes from "@/components/atoms/CorneredBoxes";
 import ChatSidebar from "@/components/organisms/ChatSidebar";
-import ChatWindow from "@/components/organisms/ChatWindow";
+import ChatInterface from "@/components/organisms/ChatInterface";
 import DashBoardContent from "@/components/atoms/DashBoardContent";
-import { useDoctorPatients } from "@/hooks/useDoctor";
+import { useChat } from "@/hooks/useChat";
 
+import { useSearchParams } from "next/navigation";
 
+const AllMessagesPage = () => {
+    const searchParams = useSearchParams();
+    const initialSelectedId = searchParams?.get('id');
 
-const AllMessagesPage = ({ initialSelectedId }: { initialSelectedId?: number }) => {
+    // Fetch rooms from chat hook
+    const { rooms, isLoadingRooms } = useChat();
+
     const [searchTerm, setSearchTerm] = useState("");
-    const [messageInput, setMessageInput] = useState("");
-    const [selectedPatientId, setSelectedPatientId] = useState<number | null>(initialSelectedId || null);
+    const [selectedRoomId, setSelectedRoomId] = useState<string | null>(initialSelectedId);
+    const [userId, setUserId] = useState("");
 
-    // TODO: Replace with actual logged-in doctor ID
-    const doctorId = "HLC-PRAC-2022-00001";
+    // Get doctor/user ID for visual "Me" messages
+    useEffect(() => {
+        const stored = localStorage.getItem('userId') || localStorage.getItem('doctorId');
+        if (stored) setUserId(stored);
+    }, []);
 
-    const { data: realPatients, isLoading } = useDoctorPatients(doctorId);
+    // Transform ChatRooms to Sidebar Snippets
+    const patientsSnippet = useMemo(() => {
+        return rooms.map(room => ({
+            id: room.roomId,
+            name: room.metadata?.patientName || "Unknown Patient",
+            time: new Date(room.updatedAt).toLocaleDateString(), // Simplistic date
+            snippet: room.status === 'active' ? 'Active Conversation' : 'Archived',
+            active: selectedRoomId === room.roomId,
+            dotColor: room.status === 'active' ? "bg-[#1C9A55]" : "bg-gray-400"
+        }));
+    }, [rooms, selectedRoomId]);
 
-    // Transform backend patient data to ChatSidebar expected format
-    const patients = realPatients?.map((p, i) => ({
-        id: i + 1, // Using index-based ID to match local state types if number is expected. Ideally refactor to string ID.
-        realId: p._id, // Store real ID
-        name: p.fullName,
-        time: "1d Ago",
-        snippet: `Latest update on ${p.condition || 'condition'}`,
-        active: selectedPatientId === (i + 1),
-        // Mock status
-        status: i % 2 === 0 ? "Unread" : "Read",
-        dotColor: i % 2 === 0 ? "bg-[#EE3124]" : "bg-[#1C9A55]"
-    })) || [];
+    // Filter
+    const filteredPatients = patientsSnippet.filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
-
-    // Filter patients based on search
-    const filteredPatients = patients.filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase()));
-
-    const handleSelectPatient = (id: number) => {
-        setSelectedPatientId(id);
+    const handleSelectPatient = (id: string | number) => {
+        setSelectedRoomId(String(id));
     };
 
     const handleBackToList = () => {
-        setSelectedPatientId(null);
+        setSelectedRoomId(null);
     }
 
     return (
@@ -52,10 +56,11 @@ const AllMessagesPage = ({ initialSelectedId }: { initialSelectedId?: number }) 
             </DashBoardHeader>
 
             <DashBoardContent>
-                <div className="w-full grid grid-rows-1 grid-cols-1 md:grid-cols-10 overflow-y-auto custom-scrollbar   gap-y-2 md:bg-white md:rounded-[24px] md:shadow-sm md:p-8">
+                <div className="w-full h-full grid grid-rows-1 grid-cols-1 md:grid-cols-10 overflow-hidden md:bg-white md:rounded-[24px] md:shadow-sm md:p-8">
 
-                    <div className="hidden md:block md:col-span-3 h-full border-r border-gray-200 relative">
-                        {isLoading ? (
+                    {/* Sidebar: Visible on desktop, or if no room selected on mobile */}
+                    <div className={`${selectedRoomId ? 'hidden md:block' : 'block'} md:col-span-3 h-full border-r border-gray-200 relative overflow-hidden`}>
+                        {isLoadingRooms ? (
                             <div className="p-4 text-center text-gray-400">Loading chats...</div>
                         ) : (
                             <ChatSidebar
@@ -63,22 +68,30 @@ const AllMessagesPage = ({ initialSelectedId }: { initialSelectedId?: number }) 
                                 searchTerm={searchTerm}
                                 onSearchChange={setSearchTerm}
                                 onSelectPatient={handleSelectPatient}
-                                activePatientId={selectedPatientId}
+                                activePatientId={selectedRoomId}
                                 className="w-full h-full"
                             />
                         )}
                     </div>
 
-                    <div className="w-full h-full md:col-span-7 col-span-1 row-span-1 border-l border-gray-200">
-                        {selectedPatientId ? (
-                            <ChatWindow
-                                messages={[]} // Real chat messages would be fetched here
-                                patientName={patients.find(p => p.id === selectedPatientId)?.name || "Patient"}
-                                messageInput={messageInput}
-                                onInputChange={setMessageInput}
-                                onBack={handleBackToList}
-                                className="w-full"
-                            />
+                    {/* Chat Window: Visible on desktop, or if room IS selected on mobile */}
+                    <div className={`${!selectedRoomId ? 'hidden md:block' : 'block'} w-full h-full md:col-span-7 border-l border-gray-200 overflow-hidden flex flex-col`}>
+                        {selectedRoomId ? (
+                            <div className="flex flex-col h-full">
+                                {/* Back button for mobile */}
+                                <div className="md:hidden p-4 border-b border-gray-100 flex items-center">
+                                    <button onClick={handleBackToList} className="text-[#1E5598] font-bold flex items-center gap-1">
+                                        ← Back
+                                    </button>
+                                </div>
+
+                                <ChatInterface
+                                    roomId={selectedRoomId}
+                                    userId={userId}
+                                    userType="doctor"
+                                    title={filteredPatients.find(p => p.id === selectedRoomId)?.name || "Chat"}
+                                />
+                            </div>
                         ) : (
                             <div className="w-full h-full flex flex-col items-center justify-center bg-gray-50 text-gray-400">
                                 <Typography text="Select a conversation to start chatting" variant="bodyBold" className="text-lg" />
