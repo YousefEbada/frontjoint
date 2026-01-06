@@ -71,13 +71,12 @@ const ExercisesPage = () => {
                         ) : (
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full pb-8">
                                 {exercises?.map((exercise) => (
-                                    <Link key={exercise.id} href={`/doctor/exercises/video/${exercise.id}`} className="w-full">
+                                    <Link key={exercise._id} href={`/doctor/exercises/video/${exercise._id}`} className="w-full">
                                         <SessionCard
-                                            id={exercise.id}
-                                            imageSrc={exercise.imageSrc || DEFAULT_EXERCISE_IMG}
+                                            id={exercise._id}
+                                            imageSrc="/sessionCard.png" // Placeholder image
                                             title={exercise.title}
-                                            status={exercise.status || "Available"}
-                                            minutes={exercise.minutes || 15}
+                                            status={exercise.difficultyLevel ? exercise.difficultyLevel.charAt(0).toUpperCase() + exercise.difficultyLevel.slice(1) : "Available"}
                                             className="w-full"
                                             noLink={true}
                                         />

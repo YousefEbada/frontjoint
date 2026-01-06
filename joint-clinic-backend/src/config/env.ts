@@ -31,9 +31,9 @@ const EnvSchema = z.object({
     RATE_LIMIT_MAX: z.coerce.number().default(120),
     NIXPEND_API_URL: z.string().min(1),
     NIXPEND_TOKEN: z.string().min(1),
-    AZURE_STORAGE_ACCOUNT_NAME: z.string().min(1),
-    AZURE_STORAGE_ACCOUNT_KEY: z.string().min(1),
-    AZURE_STORAGE_CONTAINER_NAME: z.string().min(1),
+    AZURE_STORAGE_ACCOUNT_NAME: z.string().min(1).default('devstoreaccount1'),
+    AZURE_STORAGE_ACCOUNT_KEY: z.string().min(1).default('Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw=='),
+    AZURE_STORAGE_CONTAINER_NAME: z.string().min(1).default('joint-clinic-dev'),
     AZURE_BLOB_CONN: z.string().default('UseDevelopmentStorage=true'),
     AZURE_BLOB_CONTAINER: z.string().default('medical')
 });
