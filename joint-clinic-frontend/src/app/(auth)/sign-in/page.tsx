@@ -134,7 +134,7 @@ const Page = () => {
     additionalNotes: '',
     medicalReports: [] as string[]
   });
-  // hsghahghgsa
+
   // Country-City dynamic data
   const countries = React.useMemo(() => Country.getAllCountries(), []);
   const countryNames = React.useMemo(() => countries.map(c => c.name), [countries]);
