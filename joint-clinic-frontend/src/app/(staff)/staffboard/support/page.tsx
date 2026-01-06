@@ -8,8 +8,11 @@ import Button from '@/components/atoms/Button';
 import RequestItem from '@/components/atoms/RequestItem';
 import DashBoardContent from '@/components/atoms/DashBoardContent';
 
+import { useSupportTickets } from "@/hooks/useSupport";
+
 const SupportPage = () => {
   const [activeTab, setActiveTab] = useState<'call' | 'doctor'>('call');
+  const { tickets, isLoading: loadingTickets } = useSupportTickets();
 
   return (
     <>
@@ -39,11 +42,30 @@ const SupportPage = () => {
             <div className="hidden md:block">
               <Typography text="All Messages" variant="heading2" className="text-[#167C4F]" />
             </div>
-            <RequestItem name="John Doe" status="Done" phone="123-456-7890" department="Cardiology" date="Oct 12th 2025 at 3:00 Pm"/>
-            <RequestItem name="John Doe" status="Opened" phone="123-456-7890" department="Cardiology" date="Oct 12th 2025 at 3:00 Pm"/>
-            <RequestItem name="John Doe" status="Done" phone="123-456-7890" department="Cardiology" date="Oct 12th 2025 at 3:00 Pm"/>
-            <RequestItem name="John Doe" status="Opened" phone="123-456-7890" department="Cardiology" date="Oct 12th 2025 at 3:00 Pm"/>
-            <RequestItem name="John Doe" status="Unread" phone="123-456-7890" department="Cardiology" date="Oct 12th 2025 at 3:00 Pm"/>
+
+            {loadingTickets ? (
+              <div className="text-gray-400 p-4">Loading call requests...</div>
+            ) : tickets.length === 0 ? (
+              <div className="text-gray-400 p-4">No call requests found.</div>
+            ) : (
+              tickets.map(ticket => {
+                let status: "Unread" | "Opened" | "Done" = "Unread";
+                if (ticket.status === 'in_progress') status = "Opened";
+                if (ticket.status === 'resolved' || ticket.status === 'closed') status = "Done";
+
+                return (
+                  <RequestItem
+                    key={ticket._id}
+                    name={ticket.requesterName || "Unknown"}
+                    status={status}
+                    phone={ticket.requesterPhone || "N/A"}
+                    department={ticket.department}
+                    date={new Date(ticket.createdAt).toLocaleDateString()}
+                    onViewDetails={() => console.log('View details', ticket._id)}
+                  />
+                );
+              })
+            )}
           </div>
         </>
 

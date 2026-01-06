@@ -1,3 +1,4 @@
+"use client";
 import DashBoardHeader from "@/components/molecules/DashBoardHeader";
 import Typography from "@/components/atoms/Typography";
 import ProgressBar from "@/components/atoms/ProgressBar";
@@ -7,8 +8,11 @@ import { mockDashboardData as data } from "@/lib/data/dashboardData";
 import PatientRow from "@/components/atoms/PatientRow";
 import PatientCallRow from "@/components/atoms/PatientCallRow";
 import DashBoardContent from "@/components/atoms/DashBoardContent";
+import { useSupportTickets } from "@/hooks/useSupport";
 
 const Page = () => {
+  const { tickets: pendingTickets, isLoading } = useSupportTickets({ status: ['pending', 'in_progress'], limit: 5 });
+
   return (
     <>
       <DashBoardHeader therapyName={data.therapyName} nav={false} />
@@ -26,6 +30,8 @@ const Page = () => {
             <a href="#" className="text-[#1e5598] underline text-[22px] font-medium transition-all duration-300 hover:text-[#4a8528]">View All</a>
           </div>
           <div className="flex flex-col gap-y-3">
+            {/* Note: Appointments integration is separate, keeping mock rows for now or should we fetch? 
+                 Sticking to task: integrate Call Requests. Keeping mock appointments is safer to minimize diff unless asked. */}
             <PatientRow
               name="John Doe"
               status="Confirmed"
@@ -46,25 +52,26 @@ const Page = () => {
         <div className="flex flex-col gap-3">
           <div className="flex flex-row gap-2 justify-between w-full items-center">
             <Typography text="Call Requests" variant="heading2" style={{ color: color.secondary }} />
-            <a href="#" className="text-[#1e5598] underline text-[22px] font-medium transition-all duration-300 hover:text-[#4a8528]">View All</a>
+            <a href="/staffboard/support" className="text-[#1e5598] underline text-[22px] font-medium transition-all duration-300 hover:text-[#4a8528]">View All</a>
           </div>
-          <div>
-            <PatientCallRow 
-              name="John Doe"
-              type="Inquiry"
-              phone="123-456-7890"
-              due="Due Tomorrow"
-              dueColor={color.info}
-              completed={false}
-            />
-            <PatientCallRow
-              name="Anwer maged"
-              type="Inquiry"
-              phone="123-456-7890"
-              due="Due Today"
-              dueColor={color.warning}
-              completed={true}
-            />
+          <div className="flex flex-col gap-3">
+            {isLoading ? (
+              <div className="text-gray-400">Loading requests...</div>
+            ) : pendingTickets.length === 0 ? (
+              <div className="text-gray-400">No pending requests.</div>
+            ) : (
+              pendingTickets.map((ticket) => (
+                <PatientCallRow
+                  key={ticket._id}
+                  name={ticket.requesterName || "Unknown"}
+                  type={ticket.department}
+                  phone={ticket.requesterPhone || "N/A"}
+                  due={ticket.priority === 'high' ? "Urgent" : "Pending"}
+                  dueColor={ticket.priority === 'high' ? color.warning : color.info}
+                  completed={ticket.status === 'resolved'}
+                />
+              ))
+            )}
           </div>
         </div>
       </DashBoardContent>
