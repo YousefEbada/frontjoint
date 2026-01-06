@@ -38,6 +38,9 @@ import { GetChatMessages } from '../modules/chat/application/use-cases/GetChatMe
 import { MarkMessagesAsRead } from '../modules/chat/application/use-cases/MarkMessagesAsRead.js';
 import { TaskRepoPort } from 'modules/admin/application/ports/TaskRepoPort.js';
 import { TaskRepoMongo } from 'modules/admin/infrastructure/repos/TaskRepoMongo.js';
+// Customer support imports
+import { SupportRepoPort } from '../modules/customer-support/application/ports/supportRepoPort.js';
+import { SupportRepoMongo } from '../modules/customer-support/infrastructure/repos/SupportRepoMongo.js';
 
 export const OTP_REPO = token<OTPRepoPort>('OTP_REPO');
 export const BOOKING_REPO = token<BookingRepoPort>('BOOKING_REPO');
@@ -56,6 +59,7 @@ export const EXERCISE_REPO = token<ExerciseRepoPort>('EXERCISE_REPO');
 export const CHAT_ROOM_REPO = token<ChatRoomRepoPort>('CHAT_ROOM_REPO');
 export const CHAT_MESSAGE_REPO = token<ChatMessageRepoPort>('CHAT_MESSAGE_REPO');
 export const TASK_REPO = token<TaskRepoPort>('TASK_REPO');
+export const SUPPORT_REPO = token<SupportRepoPort>('SUPPORT_REPO');
 
 export function bindAll() {
   register(OTP_REPO, OTPRepoMongo);
@@ -75,4 +79,5 @@ export function bindAll() {
   register(CHAT_ROOM_REPO, ChatRoomRepoMongo);
   register(CHAT_MESSAGE_REPO, ChatMessageRepoMongo);
   register(TASK_REPO, TaskRepoMongo);
+  register(SUPPORT_REPO, SupportRepoMongo);
 }
