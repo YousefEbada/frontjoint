@@ -3,6 +3,7 @@ import { resolve } from "app/container.js";
 import { Request, Response } from "express";
 import { CreateTicket } from "modules/customer-support/application/use-cases/CreateTicket.js";
 import { DeleteTicket } from "modules/customer-support/application/use-cases/DeleteTicket.js";
+import { GetTicketById } from "modules/customer-support/application/use-cases/GetTicketById.js";
 import { GetTickets } from "modules/customer-support/application/use-cases/GetTickets.js";
 import { GetTicketsByPatient } from "modules/customer-support/application/use-cases/GetTicketsByPatient.js";
 import { UpdateTicket } from "modules/customer-support/application/use-cases/UpdateTicket.js";
@@ -47,6 +48,21 @@ export async function getSupportTicketsByPatient(req: Request, res: Response) {
         return res.status(200).json(result);
     } catch (error) {
         console.error("Error in getSupportTicketsByPatient controller:", (error as Error).message);
+        return res.status(500).json({ ok: false, message: 'Internal Server Error.' });
+    }
+}
+
+export async function getSupportTicket(req: Request, res: Response) {
+    try {
+        const ticketId = req.params.ticketId;
+        const uc = new GetTicketById(resolve(SUPPORT_REPO));
+        const result = await uc.exec(ticketId);
+        if (!result.ok) {
+            return res.status(400).json(result);
+        }
+        return res.status(200).json(result);
+    } catch (error) { 
+        console.error("Error in getSupportTicket controller:", (error as Error).message);
         return res.status(500).json({ ok: false, message: 'Internal Server Error.' });
     }
 }

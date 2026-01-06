@@ -4,7 +4,8 @@ import {
   getAllSupportTickets,
   getSupportTicketsByPatient,
   updateSupportTicketStatus,
-  deleteSupportTicket
+  deleteSupportTicket,
+  getSupportTicket
 } from "./controllers/support.controller.js";
 import { validate } from "shared/middleware/validate.js";
 import {
@@ -59,6 +60,11 @@ supportRoutes.get(
 );
 
 supportRoutes.get(
+    "/:ticketId",
+    getSupportTicket
+)
+
+supportRoutes.get(
   "/patient/:patientId",
   validate({ 
     params: patientParamsSchema,
@@ -68,7 +74,7 @@ supportRoutes.get(
 );
 
 supportRoutes.put(
-  "/:ticketId/status",
+  "/:ticketId",
   validate({ 
     params: supportTicketParamsSchema,
     body: updateSupportTicketSchema 
