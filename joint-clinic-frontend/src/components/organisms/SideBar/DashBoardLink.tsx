@@ -21,10 +21,12 @@ interface DashBoardLinkProps {
 
 const DashBoardLink = ({ linkHref, title, Icon, expanded = true, mobileIconOnly = false }: DashBoardLinkProps) => {
     const pathname = usePathname();
-    // Use startsWith to match sub-routes (e.g., /patient/exercises/assigned matches /patient/exercises)
+    // Exact match or child route match
+    // Use exact match first, then check if current path is a child of this link
     // Special case: /patient/booking should also match /patient/bookings
     const isActive = pathname === linkHref ||
-        pathname?.startsWith(linkHref + "/") ||
+        (pathname?.startsWith(linkHref + "/") && linkHref !== "/audit") ||
+        (linkHref === "/audit" && pathname === "/audit") ||
         (linkHref === "/patient/booking" && pathname?.startsWith("/patient/bookings"));
     const [isHovered, setHovered] = useState(false);
 

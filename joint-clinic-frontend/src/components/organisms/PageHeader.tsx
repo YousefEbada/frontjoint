@@ -74,7 +74,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
             </div>
 
             {/* Filters: Mobile Order 4, Desktop Order 3 */}
-            <div className="order-4 col-span-2 md:order-3 md:col-span-1 flex flex-row items-center gap-2 overflow-x-auto no-scrollbar">
+            <div className="order-4 col-span-2 md:order-3 md:col-span-1 w-[60vw] flex flex-row flex-wrap items-center gap-2">
                 {filters &&
                     filters.map((filter) => (
                         <Button
@@ -83,7 +83,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
                             variant="primary"
                             active={filter.active ?? true}
                             onClick={filter.onClick}
-                            className="flex-1 sm:flex-none sm:w-[150px] md:w-[170px] m-0 text-[#1e5598]"
+                            className="flex-1 sm:flex-none sm:min-w-[140px] md:min-w-[180px] m-0 text-[#1e5598]"
                         />
                     ))}
             </div>

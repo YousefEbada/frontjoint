@@ -1,81 +1,49 @@
 "use client";
 import DashBoardHeader from "@/components/molecules/DashBoardHeader";
-import Typography from "@/components/atoms/Typography";
-import { color } from "@/lib/constants/colors";
-import { useState } from "react";
 import { mockDashboardData as data } from "@/lib/data/dashboardData";
-import SearchInput from "@/components/atoms/searchInput";
-import SessionCard from "@/components/molecules/sessionCard";
-import Button from "@/components/atoms/Button";
 import DashBoardContent from "@/components/atoms/DashBoardContent";
 import PageHeader from "@/components/organisms/PageHeader";
-
-interface Exercise {
-    id: number;
-    imageSrc: string;
-    title: string;
-    status?: string;
-    minutes?: number;
-}
-
-const exercises: Exercise[] = [
-    {
-        id: 1,
-        imageSrc: "/sessionCard.png",
-        title: "Shoulder Stretch",
-        status: "Pending",
-        minutes: 20,
-    },
-    {
-        id: 2,
-        imageSrc: "/sessionCard.png",
-        title: "Shoulder Stretch",
-        status: "Completed",
-    },
-    {
-        id: 3,
-        imageSrc: "/sessionCard.png",
-        title: "Shoulder Stretch",
-        status: "Completed",
-    },
-    {
-        id: 4,
-        imageSrc: "/sessionCard.png",
-        title: "Shoulder Stretch",
-        status: "Completed",
-    },
-    {
-        id: 5,
-        imageSrc: "/sessionCard.png",
-        title: "Shoulder Stretch",
-        status: "Completed",
-    },
-    {
-        id: 6,
-        imageSrc: "/sessionCard.png",
-        title: "Shoulder Stretch",
-        status: "Completed",
-    },
-];
-
-import UploadWorkout from "./UploadWorkout";
-import SessionVideo from "./SessionVideo";
+import { useExercises } from "@/hooks/useExercises";
+import SessionCard from "@/components/molecules/sessionCard";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const Page = () => {
-    const [activate, setActivate] = useState("Sholders");
-    const [isUploading, setIsUploading] = useState(false);
-    const [activeVideo, setActiveVideo] = useState<Exercise | null>(null);
+    const router = useRouter();
+    const [searchTerm, setSearchTerm] = useState("");
+    const [selectedMuscles, setSelectedMuscles] = useState<string[]>([]);
 
-    // ⛔ If uploading, show UploadWorkout only
-    if (isUploading) {
-        return <UploadWorkout onClose={() => setIsUploading(false)} />;
-    }
+    const { data: exercises, isLoading, isError } = useExercises();
 
-    // ⛔ If viewing video, show SessionVideo only
-    if (activeVideo) {
-        // You might want to pass activeVideo data to SessionVideo later
-        return <SessionVideo onClose={() => setActiveVideo(null)} />;
-    }
+    // Filter exercises based on search and muscle groups
+    const filteredExercises = exercises?.filter(exercise => {
+        const matchesSearch = exercise.title.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesMuscles = selectedMuscles.length === 0 ||
+            selectedMuscles.some(muscle =>
+                exercise.musclesTargeted.some(target =>
+                    target.toLowerCase().includes(muscle.toLowerCase())
+                )
+            );
+        return matchesSearch && matchesMuscles;
+    }) || [];
+
+    const handleFilterToggle = (muscle: string) => {
+        setSelectedMuscles(prev =>
+            prev.includes(muscle)
+                ? prev.filter(m => m !== muscle)
+                : [...prev, muscle]
+        );
+    };
+
+    const handleUploadClick = () => {
+        router.push('/audit/exercises/uploadWorkout');
+    };
+
+    const handleExerciseClick = (exerciseId: string) => {
+        router.push(`/audit/exercises/video/${exerciseId}`);
+    };
+
+    console.log(exercises);
 
     return (
         <>
@@ -84,31 +52,64 @@ const Page = () => {
                 <PageHeader
                     title="Workout Library"
                     searchPlaceholder="Search By Name"
-                    searchValue=""
-                    // onSearchChange={() => {}} // Connect logic later
+                    searchValue={searchTerm}
+                    onSearchChange={setSearchTerm}
                     actionButton={{
                         label: "Upload Video",
-                        onClick: () => setIsUploading(true)
+                        onClick: handleUploadClick
                     }}
                     filters={[
-                        { label: "Shoulder", active: true },
-                        { label: "Arm", active: true },
-                        { label: "Back", active: true }
+                        {
+                            label: "Shoulders",
+                            active: selectedMuscles.includes("Shoulders"),
+                            onClick: () => handleFilterToggle("Shoulders")
+                        },
+                        {
+                            label: "Arms",
+                            active: selectedMuscles.includes("Arms"),
+                            onClick: () => handleFilterToggle("Arms")
+                        },
+                        {
+                            label: "Back",
+                            active: selectedMuscles.includes("Back"),
+                            onClick: () => handleFilterToggle("Back")
+                        },
+                        {
+                            label: "Legs",
+                            active: selectedMuscles.includes("Legs"),
+                            onClick: () => handleFilterToggle("Legs")
+                        },
+                        {
+                            label: "Core",
+                            active: selectedMuscles.includes("Core"),
+                            onClick: () => handleFilterToggle("Core")
+                        }
                     ]}
                 />
 
-                <section className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
-                    {exercises.map((exercise) => (
-                        <SessionCard
-                            key={exercise.id}
-                            imageSrc={exercise.imageSrc}
-                            title={exercise.title}
-                            status={exercise.status}
-                            minutes={exercise.minutes}
-                            onClick={() => setActiveVideo(exercise)}
-                        />
-                    ))}
-                </section>
+                {isLoading ? (
+                    <div className="text-center py-10 text-gray-400">Loading exercises...</div>
+                ) : isError ? (
+                    <div className="text-center py-10 text-red-500">Failed to load exercises</div>
+                ) : (
+                    <section className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
+                        {filteredExercises.length === 0 ? (
+                            <div className="col-span-full text-center py-10 text-gray-400">
+                                No exercises found
+                            </div>
+                        ) : (
+                            filteredExercises.map((exercise) => (
+                                <SessionCard
+                                    key={exercise._id}
+                                    imageSrc="/sessionCard.png"
+                                    title={exercise.title}
+                                    status={exercise.difficultyLevel ? exercise.difficultyLevel.charAt(0).toUpperCase() + exercise.difficultyLevel.slice(1) : "Available"}
+                                    onClick={() => handleExerciseClick(exercise._id)}
+                                />
+                            ))
+                        )}
+                    </section>
+                )}
             </DashBoardContent>
         </>
     );
