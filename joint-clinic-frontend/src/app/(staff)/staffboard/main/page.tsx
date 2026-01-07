@@ -63,7 +63,7 @@ const Page = () => {
               pendingTickets.map((ticket) => (
                 <PatientCallRow
                   key={ticket._id}
-                  name={ticket.requesterName || "Unknown"}
+                  name={ticket.patientName || "Unknown"}
                   type={ticket.department}
                   phone={ticket.requesterPhone || "N/A"}
                   due={ticket.priority === 'high' ? "Urgent" : "Pending"}

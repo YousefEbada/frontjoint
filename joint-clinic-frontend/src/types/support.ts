@@ -1,7 +1,8 @@
 export interface SupportTicket {
   _id: string;
   patientId: string;
-  requesterName?: string;
+  // requesterName was removed in user edits, we use patientName now
+  patientName: string;
   requesterPhone?: string;
   department: "general" | "billing" | "technical" | "medical";
   priority: "low" | "medium" | "high";
@@ -13,11 +14,12 @@ export interface SupportTicket {
 }
 
 export interface CreateSupportTicketRequest {
-  department: string;
-  subject: string;
-  description: string;
-  requesterPhone?: string;
-  priority?: "low" | "medium" | "high";
+  patientId: string;
+  patientName: string;
+  contact: string;
+  inquiryDept: string;
+  whenToCall: string;
+  message: string;
 }
 
 export interface UpdateSupportTicketRequest {

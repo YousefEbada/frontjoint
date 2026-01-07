@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Typography from '@/components/atoms/Typography';
 import DashBoardHeader from "@/components/molecules/DashBoardHeader";
 import ContactForm from "@/components/organisms/ContactForm";
@@ -11,6 +12,7 @@ import DashBoardContent from '@/components/atoms/DashBoardContent';
 import { useSupportTickets } from "@/hooks/useSupport";
 
 const SupportPage = () => {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<'call' | 'doctor'>('call');
   const { tickets, isLoading: loadingTickets } = useSupportTickets();
 
@@ -56,12 +58,12 @@ const SupportPage = () => {
                 return (
                   <RequestItem
                     key={ticket._id}
-                    name={ticket.requesterName || "Unknown"}
+                    name={ticket.patientName || "Unknown"}
                     status={status}
                     phone={ticket.requesterPhone || "N/A"}
                     department={ticket.department}
                     date={new Date(ticket.createdAt).toLocaleDateString()}
-                    onViewDetails={() => console.log('View details', ticket._id)}
+                    onViewDetails={() => router.push(`/staffboard/support/${ticket._id}`)}
                   />
                 );
               })

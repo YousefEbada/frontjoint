@@ -7,7 +7,11 @@ import TextArea from "@/components/atoms/TextArea";
 import ActionButton from "@/components/atoms/ActionButton";
 import { createSupportTicket } from "@/lib/api/support.api";
 
-const ContactForm = () => {
+interface ContactFormProps {
+    buttonText?: string;
+}
+
+const ContactForm = ({ buttonText = "Send" }: ContactFormProps) => {
     const departmentOptions = [
         { value: "general", label: "General Inquiry" },
         { value: "billing", label: "Billing" },
@@ -32,16 +36,28 @@ const ContactForm = () => {
         e.preventDefault();
         if (!form.department || !form.message) return; // Simple validation
 
+        const patientId = localStorage.getItem("patientId");
+        if (!patientId) {
+            alert("No patient ID found. Please log in again.");
+            return;
+        }
+
+        const patientName = localStorage.getItem("patientName") || "Unknown";
+
+        const payload = {
+            patientId: patientId,
+            patientName: patientName,
+            inquiryDept: form.department,
+            whenToCall: new Date().toISOString(),
+            message: `Subject: ${form.subject}\n\n${form.message}`,
+            contact: form.phone
+        };
+        console.log("DEBUG ContactForm sending payload:", payload);
+
         setIsLoading(true);
         setStatus('idle');
         try {
-            await createSupportTicket({
-                department: form.department,
-                subject: form.subject || "Call Request",
-                description: form.message,
-                requesterPhone: form.phone,
-                priority: "medium"
-            });
+            await createSupportTicket(payload);
             setStatus('success');
             setForm({ phone: "", department: "", subject: "", message: "" });
         } catch (error) {
@@ -99,7 +115,7 @@ const ContactForm = () => {
 
                 <div className="flex justify-center md:justify-end mt-2">
                     <ActionButton
-                        text={isLoading ? "Sending..." : "Send"}
+                        text={isLoading ? "Sending..." : buttonText}
                         variant="solid"
                         className="w-auto! px-12! h-auto! py-2!"
                         disabled={isLoading}
