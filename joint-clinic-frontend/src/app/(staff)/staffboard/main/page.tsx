@@ -63,11 +63,13 @@ const Page = () => {
               pendingTickets.map((ticket) => (
                 <PatientCallRow
                   key={ticket._id}
-                  name={typeof ticket.patientId === 'object' ? (ticket.patientId as any).fullName || "Unknown" : "Unknown"}
+                  name={typeof ticket.patientId === 'object' && (ticket.patientId as any).fullName
+                    ? (ticket.patientId as any).fullName
+                    : typeof ticket.patientId === 'string' ? "Patient (" + ticket.patientId.slice(-4) + ")" : "Unknown"}
                   type={ticket.inquiryDept}
                   phone={ticket.contact}
-                  due={"Pending"} // Simplified logic as backend doesn't seem to give priority
-                  dueColor={color.info}
+                  due={ticket.completed ? "Done" : "Pending"}
+                  dueColor={ticket.completed ? color.success : color.warning}
                   completed={ticket.completed}
                 />
               ))
