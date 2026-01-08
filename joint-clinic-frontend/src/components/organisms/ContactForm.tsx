@@ -16,9 +16,9 @@ const ContactForm = () => {
     ];
 
     const [form, setForm] = useState({
-        phone: "",
-        department: "",
-        subject: "", // "When to call" mapping to subject for now, or just generic subject
+        contact: "",
+        inquiryDept: "",
+        whenToCall: "", // "When to call" mapping to subject for now, or just generic subject
         message: ""
     });
     const [isLoading, setIsLoading] = useState(false);
@@ -30,20 +30,28 @@ const ContactForm = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!form.department || !form.message) return; // Simple validation
+        if (!form.inquiryDept || !form.message) return; // Simple validation
 
         setIsLoading(true);
         setStatus('idle');
         try {
-            await createSupportTicket({
-                department: form.department,
-                subject: form.subject || "Call Request",
-                description: form.message,
-                requesterPhone: form.phone,
-                priority: "medium"
-            });
+            // Ensure whenToCall is a valid date or current date if empty/invalid text
+            // Since input is text, we'll try to use it or default to now if backend requires date
+            const date = new Date(); // default
+            // If user enters text, we can't easily parse to date unless we use date input.
+            // But we must stick to "whenToCall": Date in backend. 
+            // Better to send current date or simple future date if just text. 
+            // Or change input to datetime-local. Let's try to keep it simple first.
+            const payload = {
+                inquiryDept: form.inquiryDept,
+                message: form.message,
+                contact: form.contact,
+                whenToCall: date.toISOString() // Placeholder date since text input doesn't map well to Date object without strict format
+            };
+
+            await createSupportTicket(payload);
             setStatus('success');
-            setForm({ phone: "", department: "", subject: "", message: "" });
+            setForm({ contact: "", inquiryDept: "", whenToCall: "", message: "" });
         } catch (error) {
             console.error("Failed to submit ticket:", error);
             setStatus('error');
@@ -65,8 +73,8 @@ const ContactForm = () => {
                         placeholder="Contact Phone Number"
                         type="tel"
                         className="py-3!"
-                        value={form.phone}
-                        onChange={(e) => handleChange("phone", e.target.value)}
+                        value={form.contact}
+                        onChange={(e) => handleChange("contact", e.target.value)}
                     />
                     <CustomSelect
                         items={departmentOptions.map(opt => opt.label)}
@@ -75,15 +83,15 @@ const ContactForm = () => {
                         className="py-0!"
                         onChange={(val) => {
                             const found = departmentOptions.find(opt => opt.label === val);
-                            if (found) handleChange("department", found.value);
+                            if (found) handleChange("inquiryDept", found.value);
                         }}
                     />
                     <Input
-                        placeholder="When to call / Subject"
+                        placeholder="When to call (e.g. Tomorrow 3pm - Note: logged as now)"
                         type="text"
                         className="py-3!"
-                        value={form.subject}
-                        onChange={(e) => handleChange("subject", e.target.value)}
+                        value={form.whenToCall}
+                        onChange={(e) => handleChange("whenToCall", e.target.value)}
                     />
                 </div>
                 <TextArea

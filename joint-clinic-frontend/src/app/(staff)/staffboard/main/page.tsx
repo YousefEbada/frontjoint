@@ -11,7 +11,7 @@ import DashBoardContent from "@/components/atoms/DashBoardContent";
 import { useSupportTickets } from "@/hooks/useSupport";
 
 const Page = () => {
-  const { tickets: pendingTickets, isLoading } = useSupportTickets({ status: ['pending', 'in_progress'], limit: 5 });
+  const { tickets: pendingTickets, isLoading } = useSupportTickets({ completed: false, limit: 5 });
 
   return (
     <>
@@ -63,12 +63,12 @@ const Page = () => {
               pendingTickets.map((ticket) => (
                 <PatientCallRow
                   key={ticket._id}
-                  name={ticket.requesterName || "Unknown"}
-                  type={ticket.department}
-                  phone={ticket.requesterPhone || "N/A"}
-                  due={ticket.priority === 'high' ? "Urgent" : "Pending"}
-                  dueColor={ticket.priority === 'high' ? color.warning : color.info}
-                  completed={ticket.status === 'resolved'}
+                  name={typeof ticket.patientId === 'object' ? (ticket.patientId as any).fullName || "Unknown" : "Unknown"}
+                  type={ticket.inquiryDept}
+                  phone={ticket.contact}
+                  due={"Pending"} // Simplified logic as backend doesn't seem to give priority
+                  dueColor={color.info}
+                  completed={ticket.completed}
                 />
               ))
             )}

@@ -49,17 +49,20 @@ const SupportPage = () => {
               <div className="text-gray-400 p-4">No call requests found.</div>
             ) : (
               tickets.map(ticket => {
-                let status: "Unread" | "Opened" | "Done" = "Unread";
-                if (ticket.status === 'in_progress') status = "Opened";
-                if (ticket.status === 'resolved' || ticket.status === 'closed') status = "Done";
+                // Map boolean completed to status string for UI
+                const status: "Unread" | "Opened" | "Done" = ticket.completed ? "Done" : "Opened";
+                // "Unread" state isn't tracked in backend schema, defaulting to Opened or we can guess.
+                // Let's assume !completed = Opened for now.
+
+                const patientName = typeof ticket.patientId === 'object' ? (ticket.patientId as any).fullName || "Unknown" : "Patient ID: " + ticket.patientId.slice(-4);
 
                 return (
                   <RequestItem
                     key={ticket._id}
-                    name={ticket.requesterName || "Unknown"}
+                    name={patientName}
                     status={status}
-                    phone={ticket.requesterPhone || "N/A"}
-                    department={ticket.department}
+                    phone={ticket.contact}
+                    department={ticket.inquiryDept}
                     date={new Date(ticket.createdAt).toLocaleDateString()}
                     onViewDetails={() => console.log('View details', ticket._id)}
                   />

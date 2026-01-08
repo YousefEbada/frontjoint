@@ -30,6 +30,8 @@ export interface ChatMessage {
   updatedAt: string;
   metadata?: {
     replyTo?: string;
+    edited?: boolean;
+    editedAt?: string;
   };
 }
 

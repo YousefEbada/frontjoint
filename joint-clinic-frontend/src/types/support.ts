@@ -1,34 +1,36 @@
 export interface SupportTicket {
   _id: string;
-  patientId: string;
-  requesterName?: string;
-  requesterPhone?: string;
-  department: "general" | "billing" | "technical" | "medical";
-  priority: "low" | "medium" | "high";
-  status: "pending" | "in_progress" | "resolved" | "closed";
-  subject: string;
-  description: string;
+  patientId:
+    | string
+    | { _id: string; firstName?: string; lastName?: string; fullName?: string }; // Handle potential population
+  contact: string;
+  inquiryDept: string;
+  whenToCall: string; // ISO Date string from backend
+  message: string;
+  completed: boolean;
   createdAt: string;
   updatedAt: string;
+  // status is removed, priority is removed
 }
 
 export interface CreateSupportTicketRequest {
-  department: string;
-  subject: string;
-  description: string;
-  requesterPhone?: string;
-  priority?: "low" | "medium" | "high";
+  contact: string;
+  inquiryDept: string;
+  whenToCall: string; // Date string (ISO)
+  message: string;
 }
 
 export interface UpdateSupportTicketRequest {
-  status?: "pending" | "in_progress" | "resolved" | "closed";
-  priority?: "low" | "medium" | "high";
-  note?: string; // If backend supports notes
+  completed?: boolean;
+  inquiryDept?: string;
+  whenToCall?: string;
+  message?: string;
+  contact?: string;
 }
 
 export interface GetSupportTicketsQuery {
-  status?: string | string[];
-  department?: string;
+  completed?: boolean; // query by completion status
+  inquiryDept?: string; // query by department
   patientId?: string;
   page?: number;
   limit?: number;
