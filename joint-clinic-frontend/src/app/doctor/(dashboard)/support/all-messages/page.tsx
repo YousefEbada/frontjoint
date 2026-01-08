@@ -17,7 +17,7 @@ const AllMessagesPage = () => {
     const { rooms, isLoadingRooms } = useChat();
 
     const [searchTerm, setSearchTerm] = useState("");
-    const [selectedRoomId, setSelectedRoomId] = useState<string | null>(initialSelectedId);
+    const [selectedRoomId, setSelectedRoomId] = useState<string | null>(initialSelectedId ?? null);
     const [userId, setUserId] = useState("");
 
     // Get doctor/user ID for visual "Me" messages
