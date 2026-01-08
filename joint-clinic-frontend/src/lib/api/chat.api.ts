@@ -7,14 +7,14 @@ import {
 } from "@/types/chat";
 
 export const getChatRooms = async (): Promise<ChatRoom[]> => {
-  const response = await api.get("/api/chat/rooms");
+  const response = await api.get("/chat/rooms");
   return response.data.data;
 };
 
 export const createChatRoom = async (
   data: CreateRoomRequest
 ): Promise<ChatRoom> => {
-  const response = await api.post("/api/chat/rooms", data);
+  const response = await api.post("/chat/rooms", data);
   return response.data.data;
 };
 
@@ -27,7 +27,7 @@ export const getChatMessages = async (
   totalCount: number;
   hasMore: boolean;
 }> => {
-  const response = await api.get(`/api/chat/rooms/${roomId}/messages`, {
+  const response = await api.get(`/chat/rooms/${roomId}/messages`, {
     params: { page, limit },
   });
   return response.data.data;
@@ -36,13 +36,13 @@ export const getChatMessages = async (
 export const sendChatMessage = async (
   data: SendMessageRequest
 ): Promise<ChatMessage> => {
-  const response = await api.post("/api/chat/messages", data);
+  const response = await api.post("/chat/messages", data);
   return response.data.data;
 };
 
 export const markMessagesAsRead = async (
   roomId: string
 ): Promise<{ count: number }> => {
-  const response = await api.post(`/api/chat/rooms/${roomId}/mark-read`);
+  const response = await api.post(`/chat/rooms/${roomId}/mark-read`);
   return response.data.data;
 };

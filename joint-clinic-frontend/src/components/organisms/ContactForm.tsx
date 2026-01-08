@@ -7,7 +7,11 @@ import TextArea from "@/components/atoms/TextArea";
 import ActionButton from "@/components/atoms/ActionButton";
 import { createSupportTicket } from "@/lib/api/support.api";
 
-const ContactForm = () => {
+interface ContactFormProps {
+    buttonText?: string;
+}
+
+const ContactForm = ({ buttonText = "Send" }: ContactFormProps) => {
     const departmentOptions = [
         { value: "general", label: "General Inquiry" },
         { value: "billing", label: "Billing" },
@@ -107,7 +111,7 @@ const ContactForm = () => {
 
                 <div className="flex justify-center md:justify-end mt-2">
                     <ActionButton
-                        text={isLoading ? "Sending..." : "Send"}
+                        text={isLoading ? "Sending..." : buttonText}
                         variant="solid"
                         className="w-auto! px-12! h-auto! py-2!"
                         disabled={isLoading}

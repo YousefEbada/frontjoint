@@ -9,7 +9,7 @@ import { useChat } from "@/hooks/useChat";
 
 import { useSearchParams } from "next/navigation";
 
-const AllMessagesPage = () => {
+const AllMessagesContent = () => {
     const searchParams = useSearchParams();
     const initialSelectedId = searchParams?.get('id');
 
@@ -17,7 +17,7 @@ const AllMessagesPage = () => {
     const { rooms, isLoadingRooms } = useChat();
 
     const [searchTerm, setSearchTerm] = useState("");
-    const [selectedRoomId, setSelectedRoomId] = useState<string | null>(initialSelectedId);
+    const [selectedRoomId, setSelectedRoomId] = useState<string | null>(initialSelectedId ?? null);
     const [userId, setUserId] = useState("");
 
     // Get doctor/user ID for visual "Me" messages
@@ -102,6 +102,14 @@ const AllMessagesPage = () => {
                 </div>
             </DashBoardContent>
         </div>
+    );
+};
+
+const AllMessagesPage = () => {
+    return (
+        <React.Suspense fallback={<div className="w-full h-full flex items-center justify-center">Loading...</div>}>
+            <AllMessagesContent />
+        </React.Suspense>
     );
 };
 

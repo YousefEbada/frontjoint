@@ -6,7 +6,7 @@ import {
   GetSupportTicketsQuery,
 } from "@/types/support";
 
-const BASE_URL = "/api/support";
+const BASE_URL = "/support";
 
 export const createSupportTicket = async (
   data: CreateSupportTicketRequest

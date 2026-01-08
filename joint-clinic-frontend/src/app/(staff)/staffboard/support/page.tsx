@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Typography from '@/components/atoms/Typography';
 import DashBoardHeader from "@/components/molecules/DashBoardHeader";
 import ContactForm from "@/components/organisms/ContactForm";
@@ -11,28 +12,13 @@ import DashBoardContent from '@/components/atoms/DashBoardContent';
 import { useSupportTickets } from "@/hooks/useSupport";
 
 const SupportPage = () => {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<'call' | 'doctor'>('call');
   const { tickets, isLoading: loadingTickets } = useSupportTickets();
 
   return (
     <>
-      <DashBoardHeader therapyName="Shoulder Therapy">
-        <div className="flex gap-8 cursor-pointer">
-          <div onClick={() => setActiveTab('call')}>
-            <Typography
-              text="Request call"
-              variant="bodyRegular"
-              className={`font-medium transition-colors ${activeTab === 'call' ? 'text-[#1E5598]' : 'text-[#9CA3AF]'}`}
-            />
-          </div>
-          <div onClick={() => setActiveTab('doctor')}>
-            <Typography
-              text="Request doctor help"
-              variant="bodyRegular"
-              className={`font-medium transition-colors ${activeTab === 'doctor' ? 'text-[#1E5598]' : 'text-[#9CA3AF]'}`}
-            />
-          </div>
-        </div>
+      <DashBoardHeader therapyName="Oct 12, 2025 - 4:00 PM">    
       </DashBoardHeader>
       <DashBoardContent>
 
@@ -64,7 +50,7 @@ const SupportPage = () => {
                     phone={ticket.contact}
                     department={ticket.inquiryDept}
                     date={new Date(ticket.createdAt).toLocaleDateString()}
-                    onViewDetails={() => console.log('View details', ticket._id)}
+                    onViewDetails={() => router.push(`/staffboard/support/${ticket._id}`)}
                   />
                 );
               })
