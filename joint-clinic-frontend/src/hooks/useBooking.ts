@@ -11,7 +11,7 @@ import {
     PendingBookingData,
 } from "@/lib/api/booking.api";
 import { CreateBookingPayload } from "@/types/booking";
-//yuuyuyyuyuvfvfvvf
+//yuuyuyyuyuvfvfvvfsdsds
 export const useAvailableSlots = (
     doctorId: string,
     fromDate?: string,
