@@ -6,7 +6,7 @@ const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
     user: process.env.GOOGLE_USER,
-    pass: process.env.GOOGLE_APP_PASSWORD, 
+    pass: process.env.GOOGLE_APP_PASSWORD,
   },
 });
 
@@ -18,6 +18,13 @@ const emailTemplates: Record<string, { subject: string; getHtml: (payload: any) 
       <h1>Welcome ${payload.name}!</h1>
       <p>Thank you for joining Joint Clinic. We're excited to have you on board.</p>
       <p>If you have any questions, feel free to reach out to us.</p>
+      <hr/>
+      <p>
+      Joint Clinic<br/>
+      Riyadh, Saudi Arabia<br/>
+      support@jointclinic.com
+      </p>
+
     `
   },
   'appointment-confirmation': {
@@ -32,6 +39,12 @@ const emailTemplates: Record<string, { subject: string; getHtml: (payload: any) 
         <li><strong>Doctor:</strong> ${payload.doctorName}</li>
       </ul>
       <p>Please arrive 15 minutes early for check-in.</p>
+      <hr/>
+      <p>
+      Joint Clinic<br/>
+      Riyadh, Saudi Arabia<br/>
+      support@jointclinic.com
+      </p>
     `
   },
   'appointment-reminder': {
@@ -46,6 +59,12 @@ const emailTemplates: Record<string, { subject: string; getHtml: (payload: any) 
         <li><strong>Doctor:</strong> ${payload.doctorName}</li>
       </ul>
       <p>Please arrive 15 minutes early for check-in.</p>
+      <hr/>
+      <p>
+      Joint Clinic<br/>
+      Riyadh, Saudi Arabia<br/>
+      support@jointclinic.com
+      </p>
     `
   },
   'login-otp': {
@@ -55,6 +74,12 @@ const emailTemplates: Record<string, { subject: string; getHtml: (payload: any) 
       <p>Your login verification code is: <strong>${payload.otp}</strong></p>
       <p>This code will expire in 10 minutes.</p>
       <p>If you didn't request this code, please ignore this email.</p>
+      <hr/>
+      <p>
+      Joint Clinic<br/>
+      Riyadh, Saudi Arabia<br/>
+      support@jointclinic.com
+      </p>
     `
   },
   'register-otp': {
@@ -65,6 +90,12 @@ const emailTemplates: Record<string, { subject: string; getHtml: (payload: any) 
       <p><strong>${payload.otp}</strong></p>
       <p>This code will expire in 10 minutes.</p>
       <p>If you didn't create an account, please ignore this email.</p>
+      <hr/>
+      <p>
+      Joint Clinic<br/>
+      Riyadh, Saudi Arabia<br/>
+      support@jointclinic.com
+      </p>
     `
   },
   'report-otp': {
@@ -74,6 +105,12 @@ const emailTemplates: Record<string, { subject: string; getHtml: (payload: any) 
       <p>Your verification code to download the report is: <strong>${payload.otp}</strong></p>
       <p>This code will expire in 10 minutes.</p>
       <p>If you didn't request this report, please ignore this email.</p>
+      <hr/>
+      <p>
+      Joint Clinic<br/>
+      Riyadh, Saudi Arabia<br/>
+      support@jointclinic.com
+      </p>
     `
   },
   'otp': {
@@ -83,6 +120,12 @@ const emailTemplates: Record<string, { subject: string; getHtml: (payload: any) 
       <p>Your verification code is: <strong>${payload.otp}</strong></p>
       <p>This code will expire in ${payload.expiryMinutes || 10} minutes.</p>
       <p>If you didn't request this code, please ignore this email.</p>
+      <hr/>
+      <p>
+      Joint Clinic<br/>
+      Riyadh, Saudi Arabia<br/>
+      support@jointclinic.com
+      </p>
     `
   },
   'password-reset': {
@@ -94,40 +137,46 @@ const emailTemplates: Record<string, { subject: string; getHtml: (payload: any) 
       <p><a href="${payload.resetLink}">Reset Password</a></p>
       <p>This link will expire in 1 hour.</p>
       <p>If you didn't request this, please ignore this email.</p>
+      <hr/>
+      <p>
+      Joint Clinic<br/>
+      Riyadh, Saudi Arabia<br/>
+      support@jointclinic.com
+      </p>
     `
   }
 };
 
 export const NodemailerMailAdapter: MailPort = {
-    async send(to: string, templateId: string, payload: Record<string, any>): Promise<void> {
-        console.log(`=== Sending email to ${to} with templateId: "${templateId}" and payload:`, payload);
-        
-        try {
-            // Get the template
-            const template = emailTemplates[templateId];
-            if (!template) {
-                throw new Error(`Email template "${templateId}" not found`);
-            }
+  async send(to: string, templateId: string, payload: Record<string, any>): Promise<void> {
+    console.log(`=== Sending email to ${to} with templateId: "${templateId}" and payload:`, payload);
 
-            // Prepare email options
-            const mailOptions = {
-                from: `"Joint Clinic" <${process.env.GOOGLE_USER}>`,
-                to,
-                subject: template.subject,
-                html: template.getHtml(payload)
-            };
+    try {
+      // Get the template
+      const template = emailTemplates[templateId];
+      if (!template) {
+        throw new Error(`Email template "${templateId}" not found`);
+      }
 
-            // Send email
-            const result = await transporter.sendMail(mailOptions);
-            console.log('=== Email sent successfully!', {
-                messageId: result.messageId,
-                to,
-                subject: template.subject
-            });
-            
-        } catch (error) {
-            console.error(`=== Error sending email: ${(error as any).message || error}`);
-            throw error; // Re-throw to let the caller handle it
-        }
+      // Prepare email options
+      const mailOptions = {
+        from: `"Joint Clinic" <${process.env.GOOGLE_USER}>`,
+        to,
+        subject: template.subject,
+        html: template.getHtml(payload)
+      };
+
+      // Send email
+      const result = await transporter.sendMail(mailOptions);
+      console.log('=== Email sent successfully!', {
+        messageId: result.messageId,
+        to,
+        subject: template.subject
+      });
+
+    } catch (error) {
+      console.error(`=== Error sending email: ${(error as any).message || error}`);
+      throw error; // Re-throw to let the caller handle it
     }
+  }
 };
