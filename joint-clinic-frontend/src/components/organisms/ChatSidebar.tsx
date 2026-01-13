@@ -4,7 +4,7 @@ import Typography from "@/components/atoms/Typography";
 import ScrollableArea from "../atoms/ScrollableArea";
 
 interface PatientSnippet {
-    id: number;
+    id: string | number;
     name: string;
     time: string;
     snippet: string;
@@ -16,8 +16,8 @@ interface ChatSidebarProps {
     patients: PatientSnippet[];
     searchTerm: string;
     onSearchChange: (value: string) => void;
-    onSelectPatient: (id: number) => void;
-    activePatientId: number | null;
+    onSelectPatient: (id: string | number) => void;
+    activePatientId: string | number | null;
     className?: string; // For responsive visibility control
 }
 

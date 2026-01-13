@@ -1,6 +1,6 @@
 "use client";
 import Typography from "@/components/atoms/Typography";
-type StatusType = "Done" | "Opened" | "Unread";
+type StatusType = "Done" | "Opened" | "Unread" | "Pending";
 
 interface RequestItemProps {
   name: string;
@@ -15,12 +15,14 @@ const statusColor: Record<StatusType, string> = {
   Done: "text-green-600",
   Opened: "text-yellow-500",
   Unread: "text-red-500",
+  Pending: "text-orange-500", // Pending color
 };
 
 const dotColor: Record<StatusType, string> = {
   Done: "bg-green-600",
   Opened: "bg-yellow-500",
   Unread: "bg-red-500",
+  Pending: "bg-orange-500",
 };
 
 export default function RequestItem({

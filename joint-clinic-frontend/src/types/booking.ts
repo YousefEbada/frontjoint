@@ -33,7 +33,7 @@ export interface AvailableSlot {
     price_list: string | null;
     appointment_type: string | null;
 }
-
+// hgsdhgsdhsd
 export interface CreateBookingPayload {
     practitioner: string;
     patient: string;

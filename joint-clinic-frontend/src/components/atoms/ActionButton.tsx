@@ -10,8 +10,9 @@ const ibm = IBM_Plex_Sans({
 interface ActionButtonProps {
     text: string;
     variant?: "solid" | "outline";
-    onClick?: () => void;
+    onClick?: React.MouseEventHandler<HTMLButtonElement>;
     className?: string;
+    disabled?: boolean;
 }
 
 const ActionButton: React.FC<ActionButtonProps> = ({
@@ -19,8 +20,9 @@ const ActionButton: React.FC<ActionButtonProps> = ({
     variant = "solid",
     onClick,
     className = "",
+    disabled = false,
 }) => {
-    const baseStyles = `${ibm.className} h-[40px] px-6 rounded-full text-[14px] font-semibold transition-all duration-300 flex items-center justify-center`;
+    const baseStyles = `${ibm.className} h-[40px] px-6 rounded-full text-[14px] font-semibold transition-all duration-300 flex items-center justify-center ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`;
 
     const variants = {
         solid: "bg-[#1E5598] text-white hover:bg-[#0D294D]",
@@ -31,6 +33,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({
         <button
             className={`${baseStyles} ${variants[variant]} ${className}`}
             onClick={onClick}
+            disabled={disabled}
         >
             {text}
         </button>
