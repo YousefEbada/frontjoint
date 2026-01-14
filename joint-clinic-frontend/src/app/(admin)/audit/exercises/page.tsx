@@ -53,7 +53,7 @@ const Page = () => {
                     title="Workout Library"
                     searchPlaceholder="Search By Name"
                     searchValue={searchTerm}
-                    onSearchChange={setSearchTerm}
+                    onSearchChange={setSearchTerm}                   
                     actionButton={{
                         label: "Upload Video",
                         onClick: handleUploadClick
