@@ -28,20 +28,20 @@ export const useSupportTickets = (
     fetchTickets();
   }, []);
 
-  const updateStatus = async (
+  const toggleComplete = async (
     ticketId: string,
-    status: SupportTicket["status"]
+    completed: boolean
   ) => {
     try {
-      await updateSupportTicketStatus(ticketId, { status });
+      await updateSupportTicketStatus(ticketId, { completed });
       // Optimistic update
       setTickets((prev) =>
-        prev.map((t) => (t._id === ticketId ? { ...t, status } : t))
+        prev.map((t) => (t._id === ticketId ? { ...t, completed } : t))
       );
     } catch (err: any) {
       console.error("Failed to update status", err);
     }
   };
 
-  return { tickets, isLoading, error, refresh: fetchTickets, updateStatus };
+  return { tickets, isLoading, error, refresh: fetchTickets, toggleComplete };
 };
