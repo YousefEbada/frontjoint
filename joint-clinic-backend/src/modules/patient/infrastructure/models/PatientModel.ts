@@ -29,10 +29,7 @@ const PatientSchema = new Schema({
   userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
   // Note: Guardian information is stored in User model and accessed via userId reference
   nixpendId: { type: String, required: true, unique: true },
-  // medicalRecordNumber: String,
-  // insuranceId: String,
-  // bloodGroup: String,
-  // allergies: [String],
+  // exercises: [ExerciseSchema],
   medicalHistory: [String],
   injuryDetails: InjuryDetailsSchema,
   status: { type: String, enum: ['active', 'inactive'], default: 'inactive' },

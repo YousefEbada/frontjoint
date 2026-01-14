@@ -2,6 +2,7 @@ export interface SupportTicket {
     _id?: string;
     ticketId?: string;
     patientId: string;
+    patientName: string;
     contact: string;
     inquiryDept: string;
     whenToCall: Date;

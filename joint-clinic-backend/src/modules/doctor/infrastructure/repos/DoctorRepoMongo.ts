@@ -8,6 +8,7 @@ export const DoctorRepoMongo: DoctorRepoPort = {
   async saveMany(practitioners: Doctor[]): Promise<void> {
     console.log("[DoctorRepoMongo] Saving practitioners:", practitioners);
     const res = await DoctorModel.insertMany(practitioners, { ordered: false });
+    console.log("[DoctorRepoMongo] Saved practitioners:", res);
     return;
   },
 

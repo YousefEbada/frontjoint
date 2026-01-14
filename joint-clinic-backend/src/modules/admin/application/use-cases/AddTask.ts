@@ -6,13 +6,13 @@ export class AddTask {
 
     async exec(taskData: any) {
         try {
-            const user = await this.userRepo.findById(taskData.userId);
-            if (!user) {
-                return { ok: false, message: "admin not found" };
-            }
-            if(!user.role || user.role !== 'admin') {
-                return { ok: false, message: "Only admins can add tasks" };
-            }
+            // const user = await this.userRepo.findById(taskData.userId);
+            // if (!user) {
+            //     return { ok: false, message: "admin not found" };
+            // }
+            // if(!user.role || user.role !== 'admin') {
+            //     return { ok: false, message: "Only admins can add tasks" };
+            // }
             const newTask = await this.taskRepo.add(taskData);
             if (!newTask) {
                 return { ok: false, message: "Failed to add task" };
