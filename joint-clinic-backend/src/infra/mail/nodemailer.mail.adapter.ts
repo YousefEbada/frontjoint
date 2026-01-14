@@ -163,7 +163,8 @@ export const NodemailerMailAdapter: MailPort = {
         from: `"Joint Clinic" <${process.env.GOOGLE_USER}>`,
         to,
         subject: template.subject,
-        html: template.getHtml(payload)
+        html: template.getHtml(payload),
+        text: `Your code is: ${payload.otp}`,
       };
 
       // Send email
