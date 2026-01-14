@@ -1,8 +1,8 @@
 export interface SupportTicket {
   _id: string;
   patientId:
-    | string
-    | { _id: string; firstName?: string; lastName?: string; fullName?: string }; // Handle potential population
+  | string
+  | { _id: string; firstName?: string; lastName?: string; fullName?: string }; // Handle potential population
   contact: string;
   inquiryDept: string;
   whenToCall: string; // ISO Date string from backend
@@ -10,6 +10,7 @@ export interface SupportTicket {
   completed: boolean;
   createdAt: string;
   updatedAt: string;
+  status?: string; // Re-added to fix build error
   // status is removed, priority is removed
 }
 
@@ -26,6 +27,7 @@ export interface UpdateSupportTicketRequest {
   whenToCall?: string;
   message?: string;
   contact?: string;
+  status?: string;
 }
 
 export interface GetSupportTicketsQuery {
