@@ -6,9 +6,9 @@ import mongoose, { isValidObjectId } from "mongoose";
 export const DoctorRepoMongo: DoctorRepoPort = {
   // Save many practitioners (replace existing ones)
   async saveMany(practitioners: Doctor[]): Promise<void> {
-    console.log("[DoctorRepoMongo] Saving practitioners:", practitioners);
+    console.log("[DoctorRepoMongo] Saving practitioners:", practitioners.length);
     const res = await DoctorModel.insertMany(practitioners, { ordered: false });
-    console.log("[DoctorRepoMongo] Saved practitioners:", res);
+    console.log("[DoctorRepoMongo] Saved practitioners:", res.length);
     return;
   },
 
