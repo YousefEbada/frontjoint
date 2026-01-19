@@ -3,6 +3,7 @@ import { z } from 'zod';
 // Support ticket schema for creation
 export const createSupportTicketSchema = z.object({
   patientId: z.string().min(1, "Patient ID is required"),
+  patientName: z.string().min(1, "Patient name is required"),
   contact: z.string().min(1, "Contact information is required"),
   inquiryDept: z.string().min(1, "Inquiry department is required"),
   whenToCall: z.string().datetime("Invalid date format for whenToCall").or(z.date()),

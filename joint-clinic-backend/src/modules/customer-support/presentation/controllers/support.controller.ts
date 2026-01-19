@@ -11,6 +11,7 @@ import { UpdateTicket } from "modules/customer-support/application/use-cases/Upd
 export async function createSupportTicket(req: Request, res: Response) {
     try {
         const body = req.body;
+        console.log("DEBUG SupportController received body:", JSON.stringify(body, null, 2));
         const uc = new CreateTicket(resolve(SUPPORT_REPO));
         const result = await uc.exec(body);
         if (!result.ok) {
@@ -61,7 +62,7 @@ export async function getSupportTicket(req: Request, res: Response) {
             return res.status(400).json(result);
         }
         return res.status(200).json(result);
-    } catch (error) { 
+    } catch (error) {
         console.error("Error in getSupportTicket controller:", (error as Error).message);
         return res.status(500).json({ ok: false, message: 'Internal Server Error.' });
     }

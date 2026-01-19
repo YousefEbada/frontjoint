@@ -35,7 +35,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
     className = "",
 }) => {
     return (
-        <div className={`grid grid-cols-2 gap-4 w-full mb-6 ${className}`}>
+        <div className={`grid grid-cols-[70%_30%] px-[30px] gap-4 grid-rows-2 w-full mb-6 ${className}`}>
             {/* Search: Mobile Order 1, Desktop Order 2 */}
             <div className="order-1 col-span-2 md:order-2 md:col-span-1 md:flex md:justify-end">
                 {(onSearchChange || searchValue !== undefined) && (
@@ -74,7 +74,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
             </div>
 
             {/* Filters: Mobile Order 4, Desktop Order 3 */}
-            <div className="order-4 col-span-2 md:order-3 md:col-span-1 w-[60vw] flex flex-row flex-wrap items-center gap-2">
+            <div className="order-4 col-span-2 md:order-3 md:col-span-1 w-full flex flex-row flex-wrap md:flex-nowrap items-center gap-2">
                 {filters &&
                     filters.map((filter) => (
                         <Button
@@ -83,7 +83,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
                             variant="primary"
                             active={filter.active ?? true}
                             onClick={filter.onClick}
-                            className="flex-1 sm:flex-none sm:min-w-[140px] md:min-w-[180px] m-0 text-[#1e5598]"
+                            className="flex-1 sm:flex-none cursor-pointer sm:min-w-[140px] md:min-w-[180px] m-0 text-[#1e5598]"
                         />
                     ))}
             </div>

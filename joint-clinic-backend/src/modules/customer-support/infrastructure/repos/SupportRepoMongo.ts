@@ -12,8 +12,21 @@ export const SupportRepoMongo: SupportRepoPort = {
         return newTicket as unknown as SupportTicket || null;
     },
 
-    async getSupportTickets() {
-        const tickets = await SupportTicketModel.find().lean();
+    async getSupportTickets(query?: any) {
+        const filter: any = {};
+        if (query?.status) {
+            // Handle array (for $in) or single value
+            filter.status = Array.isArray(query.status) ? { $in: query.status } : query.status;
+        }
+
+        let mongoQuery = SupportTicketModel.find(filter)
+            .sort({ createdAt: -1 });
+
+        if (query?.limit) {
+            mongoQuery = mongoQuery.limit(Number(query.limit));
+        }
+
+        const tickets = await mongoQuery.lean();
         return tickets as unknown as Array<SupportTicket> || null;
     },
 
