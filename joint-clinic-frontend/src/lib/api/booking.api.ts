@@ -84,6 +84,11 @@ export const createBooking = async (
     bookingData: CreateBookingPayload
 ): Promise<BookingResponse> => {
     try {
+        bookingData = {
+            ...bookingData,
+            appointment_time: `${bookingData.appointment_time}:00`,
+        }
+        console.log("createBooking bookingData:", bookingData);
         const response = await api.post("/booking", bookingData);
         console.log("createBooking response:", response.data);
         return response.data;
@@ -94,4 +99,5 @@ export const createBooking = async (
         );
         return { ok: false, error: "Failed to create booking" };
     }
+
 };

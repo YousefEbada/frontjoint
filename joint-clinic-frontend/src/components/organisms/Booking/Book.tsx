@@ -79,7 +79,7 @@ const Book = () => {
     isLoading: slotsLoading,
     error: slotsError,
   } = useAvailableSlots(selectedDoctor?.nixpendId || "");
-
+  console.log("================= slotsResponse:", slotsResponse);
   // Pending booking hook for auth-based routing
   const { initiateBooking } = usePendingBooking();
 
@@ -154,7 +154,7 @@ const Book = () => {
 
     // Save pending booking data and redirect based on auth status
     initiateBooking({
-      branch: selectedBranch,
+      branch: selectedSlot.branch || "",
       injury: selectedInjury,
       doctorNixpendId: selectedDoctor.nixpendId,
       doctorName: selectedDoctor.practitionerName,

@@ -20,13 +20,16 @@ const BookingContent = () => {
     const [bookingSuccess, setBookingSuccess] = useState(false);
     const [bookingError, setBookingError] = useState<string>("");
     const [patientId, setPatientId] = useState<string>("");
+    const [patientNixpendId, setPatientNixpendId] = useState<string>("");
 
     // Load patient ID and refresh pending booking on mount
     useEffect(() => {
         refreshPendingBooking();
         const storedPatientId = localStorage.getItem("patientId");
+        const storedPatientNixpendId = localStorage.getItem("patientNixpendId");
         if (storedPatientId) {
             setPatientId(storedPatientId);
+            setPatientNixpendId(storedPatientNixpendId as any);
         }
     }, [refreshPendingBooking]);
 
@@ -81,17 +84,30 @@ const BookingContent = () => {
             return;
         }
 
+        // Find the slot that matches the selected date and time to get the correct branch
+        const selectedSlot = slotsResponse?.slots?.find((slot) => {
+            if (!slot.start) return false;
+            const slotDate = dayjs(slot.start).format("YYYY-MM-DD");
+            const slotTime = dayjs(slot.start).format("h:mm A");
+            return slotDate === selectedDate && slotTime === `${selectedTime}:00`;
+        });
+        console.log("5%%%%%%%%%%%%%%%%%%%%%%%%%%5%", selectedDate, "ggggggggggggggggggggggg", `${selectedTime}:00`);
+        // if (!selectedSlot) {
+        //     setBookingError("Selected slot is no longer available.");
+        //     return;
+        // }
+        console.log("5%%%%%%%%%%%%%%%%%%%%%%%%%%5%", selectedSlot);
         const bookingData: CreateBookingPayload = {
             practitioner: pendingBooking.doctorNixpendId,
-            patient: patientId,
-            branch: pendingBooking.branch as "Alaqiq" | "King Salman",
+            patient: patientNixpendId,
+            branch: (selectedSlot?.branch || pendingBooking.branch) as "Alaqiq" | "King Salman",
             daily_practitioner_event: pendingBooking.eventName,
-            appointment_date: dayjs(selectedDate).format("MM-DD-YYYY"),
+            appointment_date: dayjs(selectedDate).format("YYYY-MM-DD"),
             appointment_time: selectedTime.includes(":") ?
                 dayjs(`2000-01-01 ${selectedTime}`).format("HH:mm") :
                 selectedTime,
             duration: pendingBooking.duration,
-            appointment_type: "session",
+            appointment_type: "consultation",
             department: "Physiotherapy",
             company: "Joint Clinic",
         };
