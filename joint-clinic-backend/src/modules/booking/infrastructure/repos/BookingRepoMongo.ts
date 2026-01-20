@@ -4,9 +4,11 @@ import { startOfDay, endOfDay } from '../../../../shared/utils/date.js';
 import { Booking } from '../../domain/Booking.js';
 
 export const BookingRepoMongo: BookingRepoPort = {
-  async book(b): Promise<Booking> {
-    const doc = await BookingModel.create({ ...b }, { new: true });
-    return (doc as any).toObject() as Booking;
+  async book(b, options): Promise<Booking> {
+    console.log("[BookingRepoMongo.book] Creating booking:", b);
+    const doc = await BookingModel.create(b);
+    console.log("[BookingRepoMongo.book] Booking created:", doc);
+    return doc.toObject() as unknown as Booking;
   },
 
   async getAllBookings(): Promise<Booking[]> {
@@ -62,7 +64,7 @@ export const BookingRepoMongo: BookingRepoPort = {
       { $lookup: {
           from: "patients",
           localField: "_id",
-          foreignField: "_id",
+          foreignField: "_id", 
         as: "patient"
       }},
       { $unwind: "$patient" },

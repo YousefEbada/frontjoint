@@ -92,8 +92,8 @@ export const PatientRepoMongo: PatientRepoPort = {
             // if (!mongoose.Types.ObjectId.isValid(id)) {
             //     throw new Error("INVALID_ID");
             // }
-            await PatientModel.findByIdAndUpdate(
-                id,
+            await PatientModel.findOneAndUpdate(
+                {nixpendId: id},
                 { status },
                 { session: options?.tx }
             );

@@ -123,12 +123,12 @@ export const nixpendAdapter: NixpendPort = {
     })
       .then(res => res.json()
       )
-    if (typeof data.response === 'string') {
+    if (typeof data.response.appointment_id === 'string') {
       console.log("\n======= The data is String:", data)
       return data.response
     }
     console.log("\n========= The data:", data);
-    return null;
+    return data.response;
   },
 
   // get available slots
