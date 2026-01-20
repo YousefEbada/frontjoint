@@ -103,6 +103,8 @@ export class CreateBooking {
 
       await tx.commit();
 
+      // push notification to rabbitmq here if needed
+
       return { ok: true, booking: createdBooking };
 
     } catch (error) {

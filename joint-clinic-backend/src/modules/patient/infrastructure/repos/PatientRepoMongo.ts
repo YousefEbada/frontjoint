@@ -94,8 +94,8 @@ export const PatientRepoMongo: PatientRepoPort = {
             // }
             await PatientModel.findOneAndUpdate(
                 {nixpendId: id},
-                { status },
-                { session: options?.tx }
+                { status }
+                // { session: options?.tx }
             );
         } catch (error) {
             console.error("[PatientRepoMongo.updatePatientStatus] DB error:", (error as any).message);
