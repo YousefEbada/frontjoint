@@ -5,7 +5,9 @@ import ActionButton from "@/components/atoms/ActionButton";
 import Link from "next/link";
 
 interface BookingItemProps {
+    id: string;
     sessionNumber: number;
+    patientName?: string;
     type: "patient" | "session";
     status: "Confirmed" | "Pending" | "Cancelled";
     date: string;
@@ -15,7 +17,9 @@ interface BookingItemProps {
 }
 
 const BookingItem: React.FC<BookingItemProps> = ({
+    id,
     sessionNumber,
+    patientName,
     type,
     status,
     date,
@@ -28,7 +32,7 @@ const BookingItem: React.FC<BookingItemProps> = ({
             {/* Session Name */}
             <div className="py-3 pl-4 border-r border-b md:border-none border-[#9FD5E2]">
                 <Typography
-                    text={`${type === "patient" ? "Patient" : "Session No"} ${sessionNumber}`}
+                    text={patientName ? patientName : `${type === "patient" ? "Patient" : "Session No"} ${sessionNumber}`}
                     variant="bodyBold"
                     className="text-[#1E5598]"
                 />
@@ -50,7 +54,7 @@ const BookingItem: React.FC<BookingItemProps> = ({
 
             {/* Actions */}
             <div className="hidden md:flex gap-3">
-                <Link href="/staffboard/bookingcancel">
+                <Link href={`${type === "patient" ? `/patient/bookingcancel?id=${id}` : `/staffboard/bookingcancel?id=${id}`}`}>
                     <ActionButton
                         text="Cancel"
                         variant="outline"
@@ -58,9 +62,9 @@ const BookingItem: React.FC<BookingItemProps> = ({
                         className="w-[100px]"
                     />
                 </Link>
-                <Link href="/staffboard/bookingchange">
+                <Link href={`${type === "patient" ? `/patient/bookingchange?id=${id}` : `/staffboard/bookingchange?id=${id}`}`}>
                     <ActionButton
-                        text={`${type === "patient" ? "Change" : "Reschedule"}`}
+                        text={`${type === "patient" ? "Reschedule" : "Change"}`}
                         variant="solid"
                         onClick={onReschedule}
                         className="w-[120px]"

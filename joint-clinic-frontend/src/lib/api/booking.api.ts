@@ -2,7 +2,9 @@ import api from "./axios";
 import {
     AvailableSlotsResponse,
     BookingResponse,
+    CancelBookingPayload,
     CreateBookingPayload,
+    RescheduleBookingPayload,
 } from "@/types/booking";
 
 // Pending booking storage key
@@ -19,6 +21,8 @@ export interface PendingBookingData {
     duration: number;
     createdAt: string;
 }
+
+
 
 // Save pending booking to localStorage
 export const savePendingBooking = (data: PendingBookingData): void => {
@@ -84,6 +88,11 @@ export const createBooking = async (
     bookingData: CreateBookingPayload
 ): Promise<BookingResponse> => {
     try {
+        bookingData = {
+            ...bookingData,
+            appointment_time: `${bookingData.appointment_time}:00`,
+        }
+        console.log("createBooking bookingData:", bookingData);
         const response = await api.post("/booking", bookingData);
         console.log("createBooking response:", response.data);
         return response.data;
@@ -93,5 +102,50 @@ export const createBooking = async (
             (error as any).response?.data || (error as any).message
         );
         return { ok: false, error: "Failed to create booking" };
+    }
+
+};
+
+export const getPatientBookings = async (patientId: string): Promise<any> => {
+    try {
+        const response = await api.get(`/booking/patient/${patientId}`);
+        console.log("getPatientBookings response:", response.data);
+        return response.data;
+    } catch (error) {
+        console.error(
+            "Error fetching patient bookings:",
+            (error as any).response?.data || (error as any).message
+        );
+        return { ok: false, error: "Failed to fetch patient bookings" };
+    }
+};
+
+export const cancelBooking = async (bookingId: string, data: CancelBookingPayload): Promise<any> => {
+    try {
+        const response = await api.put(`/booking/${bookingId}/cancel`, { data });
+        return response.data;
+    } catch (error) {
+        console.error("Error cancelling booking:", error);
+        return { ok: false, error: "Failed to cancel booking" };
+    }
+};
+
+export const rescheduleBooking = async (bookingId: string, data: RescheduleBookingPayload): Promise<any> => {
+    try {
+        const response = await api.put(`/booking/${bookingId}/reschedule`, data);
+        return response.data;
+    } catch (error) {
+        console.error("Error rescheduling booking:", error);
+        return { ok: false, error: "Failed to reschedule booking" };
+    }
+};
+
+export const getBookingById = async (bookingId: string): Promise<any> => {
+    try {
+        const response = await api.get(`/booking/${bookingId}`);
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching booking:", error);
+        return { ok: false, error: "Failed to fetch booking" };
     }
 };

@@ -19,12 +19,13 @@ export class CreateBooking {
     private nixpendRepo: NixpendPort,
     private sessionRepo: SessionRepoPort,
     private patientRepo: PatientRepoPort
-  ) {}
+  ) { }
 
   async exec(
     data: BookType,
     sessionId?: string
   ): Promise<CreateBookingResult> {
+    console.log('CreateBooking.exec called with data:', data, 'and sessionId:', sessionId);
 
     const violations = this.validate(data);
     if (violations) {
@@ -53,34 +54,37 @@ export class CreateBooking {
 
       const res = await this.nixpendRepo.bookAppointment({ ...data });
 
+      console.log('Nixpend booking response:', res);
+
       if (!res?.appointment_id) {
-        throw new Error('Failed to book appointment in Nixpend');
+        throw new Error(res || 'Failed to book appointment with Nixpend');
       }
 
-      const booking = await this.bookingRepo.book(
-        {
-          // it was patient and practitioner before
-          patientId: data.patient,
-          doctorId: data.practitioner,
-          branchId: data.branch || undefined,
-          eventName: data.daily_practitioner_event,
-          appointmentNixpendId: res.appointment_id,
-          appointmentDuration: data.duration,
-          appointmentDate: new Date(data.appointment_date),
-          appointmentTime: data.appointment_time,
-          bookingType: data.appointment_type as BookingType,
-          department: data.department,
-          company: 'Joint Clinic',
-          sessionId: session?._id
-        },
-        { tx: tx.session }
-      );
+      const booking = {
+        // it was patient and practitioner before
+        patientNixpendId: data.patient,
+        doctorNixpendId: data.practitioner,
+        branchId: data.branch || undefined,
+        eventName: data.daily_practitioner_event,
+        appointmentNixpendId: res.appointment_id,
+        appointmentDuration: data.duration,
+        appointmentDate: new Date(data.appointment_date),
+        appointmentTime: data.appointment_time,
+        bookingType: data.appointment_type as BookingType,
+        department: data.department,
+        company: 'Joint Clinic',
+        sessionId: session?._id
+      }
+
+      console.log('Creating booking with data:', booking);
+      const createdBooking = await this.bookingRepo.book(booking,  { tx: tx.session });
+      console.log('Booking created:', createdBooking);
 
       if (session) {
         const updateSession = this.sessionRepo.updateSession(
           session._id,
           {
-            bookingId: booking._id,
+            bookingId: createdBooking._id,
             status: 'confirmed'
           },
           { tx: tx.session }
@@ -89,7 +93,7 @@ export class CreateBooking {
         // should I update patient status to active when booking a session is made?
         // or when i check that the patient attended the session?
         const updatePatient = this.patientRepo.updatePatientStatus(
-          booking.patientId,
+          createdBooking.patientNixpendId,
           'active',
           { tx: tx.session }
         );
@@ -99,7 +103,9 @@ export class CreateBooking {
 
       await tx.commit();
 
-      return { ok: true, booking };
+      // push notification to rabbitmq here if needed
+
+      return { ok: true, booking: createdBooking };
 
     } catch (error) {
       await tx.abort();

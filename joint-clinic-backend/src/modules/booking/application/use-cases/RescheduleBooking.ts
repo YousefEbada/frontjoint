@@ -25,7 +25,7 @@ export class RescheduleBooking {
       // how you will get the id of the booking to be rescheduled
       // whether from the parameter or the data
       const updatedBooking = await this.repo.reschedule({
-        doctorId: data.practitioner,
+        doctorNixpendId: data.practitioner,
         appointmentNixpendId: res.appointment_id,
         department: data.department,
         company: data.company,

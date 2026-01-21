@@ -8,7 +8,27 @@ import BookingList from "@/components/organisms/Bookings/BookingList";
 import Link from "next/link";
 import DashBoardContent from "@/components/atoms/DashBoardContent";
 
+import Calendar from "@/components/molecules/Calendar";
+import { useSearchParams } from "next/navigation";
+import { useState, useEffect } from "react";
+import dayjs from "dayjs";
+
 const Page = () => {
+
+  const searchParams = useSearchParams();
+  const dateParam = searchParams?.get("date");
+
+  // Example logic: if date is provided, maybe we want to filter bookings or just show it
+  // For now, I'll assume we want to highlight "Today" if it's today, or show a custom date text.
+
+  const [selectedDateFilter, setSelectedDateFilter] = useState<string>(dateParam || "Today");
+
+  // Update selectedDateFilter if URL param changes
+  useEffect(() => {
+    if (dateParam) {
+      setSelectedDateFilter(dateParam);
+    }
+  }, [dateParam]);
 
   const bookings = [
     {
@@ -52,9 +72,37 @@ const Page = () => {
             <p className={`text-[18px] md:text-[22px] font-medium`} style={{ color: color.disabled }}>Please note that these bookings are for the upcoming week only</p>
             <div className="flex flex-col sm:flex-row justify-start items-start sm:items-center w-full mt-[20px] gap-4">
               <div className="grid grid-cols-3 md:flex md:flex-nowrap md:flex-row md:justify-start gap-x-0.5  md:gap-6 md:items-center w-full">
-                <Button text="Today" variant="primary" active={true} className="w-full sm:w-[220px] md:w-[185px] m-0  text-[#1e5598]" />
-                <Button text="This Week" variant="primary" active={true} className="w-full sm:w-[220px] md:w-[185px] m-0  text-[#1e5598]" />
-                <Button text="This Month" variant="primary" active={true} className="w-full sm:w-[220px] md:w-[185px] m-0 text-[#1e5598]" />
+                <Button
+                  text="Today"
+                  variant="primary"
+                  active={selectedDateFilter === "Today" || selectedDateFilter === dayjs().format("YYYY-MM-DD")}
+                  className="w-full sm:w-[220px] md:w-[185px] m-0 text-[#1e5598]"
+                  onClick={() => setSelectedDateFilter("Today")}
+                />
+                <Button
+                  text="This Week"
+                  variant="primary"
+                  active={selectedDateFilter === "This Week"}
+                  className="w-full sm:w-[220px] md:w-[185px] m-0 text-[#1e5598]"
+                  onClick={() => setSelectedDateFilter("This Week")}
+                />
+                <Button
+                  text="This Month"
+                  variant="primary"
+                  active={selectedDateFilter === "This Month"}
+                  className="w-full sm:w-[220px] md:w-[185px] m-0 text-[#1e5598]"
+                  onClick={() => setSelectedDateFilter("This Month")}
+                />
+                {/* Optional: Show custom date button if a specific date is selected and it's not today */}
+                {dateParam && dateParam !== dayjs().format("YYYY-MM-DD") && (
+                  <Button
+                    text={dayjs(dateParam).format("MMM D")}
+                    variant="primary"
+                    active={selectedDateFilter === dateParam}
+                    className="w-full sm:w-[220px] md:w-[185px] m-0 text-[#1e5598]"
+                    onClick={() => setSelectedDateFilter(dateParam)}
+                  />
+                )}
               </div>
             </div>
 

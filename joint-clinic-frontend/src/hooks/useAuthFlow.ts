@@ -171,8 +171,10 @@ export const useAuthFlow = () => {
 
           if (patient && patient._id) {
             console.log("User is already a patient, redirecting to dashboard");
+            console.log("patient", patient);
             // Store patient ID and user name for dashboard
             localStorage.setItem("patientId", patient._id);
+            localStorage.setItem("patientNixpendId", patient.nixpendId);
             localStorage.setItem("userId", userId);
 
             // Get user's first name from findUser result (stored in contact context)
