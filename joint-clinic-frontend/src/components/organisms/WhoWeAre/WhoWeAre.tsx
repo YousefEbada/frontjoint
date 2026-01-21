@@ -316,7 +316,7 @@ function WhoWeAre() {
         </div>
       </section>
       <section
-        className="chooseUs text-center absolute w-full flex flex-col justify-center items-center md:bottom-[0px] bottom-[50px]"
+        className="chooseUs text-center absolute w-full flex flex-col justify-center items-center md:bottom-[10px] bottom-[50px]"
         ref={chooseUsRef}
       >
         <h2
@@ -331,7 +331,7 @@ function WhoWeAre() {
 
 
           {/* الكروت */}
-          <div className="cards mx-auto grid md:translate-y-[-20%] justify-center items-center gap-4 md:gap-[60px] w-full grid-cols-2 md:grid-cols-4 sm:grid-cols-2">
+          <div className="cards mx-auto grid lg:translate-y-[-20%] justify-center items-center gap-4 lg:gap-[60px] w-full grid-cols-2 lg:grid-cols-4 sm:grid-cols-2">
             {cards.map((card, index) => (
               <FeatureCard
                 key={index}

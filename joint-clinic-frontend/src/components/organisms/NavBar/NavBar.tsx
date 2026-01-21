@@ -69,7 +69,7 @@ export default function NavBar() {
         })}
         style={{ width: "93vw" }}
       >
-        <div className="hidden md:flex flex-row gap-10 text-lg items-center">
+        <div className="hidden lg:flex flex-row gap-10 text-lg items-center">
           <Link href="/#who-we-are">Who We Are</Link>
           <Link href="/#how-it-works">How it Works</Link>
           <Link href="/#reviews">Reviews</Link>
@@ -86,18 +86,18 @@ export default function NavBar() {
             )}
         </div>
 
-        <div className="flex items-center gap-4 md:hidden">
+        <div className="flex items-center gap-4 lg:hidden">
           <Link href="/">
             <Logo fill={isScrolled ? color.accent : "#fff"} style={{ width: 48 }} />
           </Link>
         </div>
 
         <div className="flex items-center gap-10">
-          <div className="hidden md:block">
+          <div className="hidden lg:block">
             <BookNowButton />
           </div>
 
-          <div className="hidden md:block">
+          <div className="hidden lg:block">
             <Link href="/">
               <Logo fill={isScrolled ? color.accent : "#fff"} style={{ width: 110 }} />
             </Link>
@@ -105,7 +105,7 @@ export default function NavBar() {
 
           <button
             aria-label="menu"
-            className="md:hidden p-2 rounded-md bg-white/10 hover:bg-white/20"
+            className="lg:hidden p-2 rounded-md bg-white/10 hover:bg-white/20"
             onClick={toggleMenu}
           >
             {open ? (
@@ -122,7 +122,7 @@ export default function NavBar() {
       </nav>
 
       <div
-        className={`md:hidden fixed inset-0 z-60 transition-all duration-300 ${open ? "pointer-events-auto" : "pointer-events-none"
+        className={`lg:hidden fixed inset-0 z-60 transition-all duration-300 ${open ? "pointer-events-auto" : "pointer-events-none"
           }`}
       >
         <div
