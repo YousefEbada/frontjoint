@@ -35,9 +35,9 @@ const PageHeader: React.FC<PageHeaderProps> = ({
     className = "",
 }) => {
     return (
-        <div className={`grid grid-cols-[70%_30%] px-[30px] gap-4 grid-rows-2 w-full mb-6 ${className}`}>
+        <div className={`grid grid-cols-17 md:grid-cols-[70%_30%] gap-y-4 grid-rows-2 w-full mb-6 ${className}`}>
             {/* Search: Mobile Order 1, Desktop Order 2 */}
-            <div className="order-1 col-span-2 md:order-2 md:col-span-1 md:flex md:justify-end">
+            <div className="order-1 col-span-17 md:order-2 md:col-span-1 md:flex md:justify-end">
                 {(onSearchChange || searchValue !== undefined) && (
                     <SearchInput
                         value={searchValue}
@@ -47,34 +47,33 @@ const PageHeader: React.FC<PageHeaderProps> = ({
                     />
                 )}
             </div>
-
+            
             {/* Title: Mobile Order 2, Desktop Order 1 */}
-            <div className="order-2 col-span-1 md:order-1 md:col-span-1 flex items-center">
+            <div className="order-2 col-span-8 md:order-1 md:col-span-1 flex items-center">
                 {title && (
                     <Typography
                         text={title}
-                        variant="heading1"
+                        variant={`${window.innerWidth < 768 ? "bodyBold" : "heading1"}`}
                         style={{ color: color.secondary }}
-                        className="text-[20px] sm:text-[28px] md:text-[45px] font-bold"
                     />
                 )}
             </div>
 
             {/* Action Button: Mobile Order 3, Desktop Order 4 */}
-            <div className="order-3 col-span-1 flex justify-end md:order-4 md:col-span-1">
+            <div className="order-3 col-span-9 flex justify-end md:order-4 md:col-span-1">
                 {actionButton && (
                     <Button
                         text={actionButton.label}
-                        variant="fourth"
+                        variant="fifth"
                         active={true}
                         onClick={actionButton.onClick}
-                        className="w-[120px] sm:w-[140px] md:w-[200px] m-0 h-[36px] sm:h-[40px] md:h-[50px] text-[10px] sm:text-[12px] md:text-[18px]"
+                        className="w-[120px] sm:w-[140px] md:w-[200px] m-0 px-0 h-[36px] sm:h-[40px] md:h-[50px] text-[10px] sm:text-[12px] md:text-[18px]"
                     />
                 )}
             </div>
 
             {/* Filters: Mobile Order 4, Desktop Order 3 */}
-            <div className="order-4 col-span-2 md:order-3 md:col-span-1 w-full flex flex-row flex-wrap md:flex-nowrap items-center gap-2">
+            <div className="order-4 col-span-17 md:order-3 md:col-span-1 w-full flex flex-row flex-wrap md:flex-nowrap items-center gap-2">
                 {filters &&
                     filters.map((filter) => (
                         <Button
