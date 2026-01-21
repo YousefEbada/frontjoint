@@ -171,15 +171,30 @@ function WhoWeAre() {
     master.to(members, { autoAlpha: 0, y: -90, duration: 0.5 });
 
     master.to(circle, { opacity: 0, duration: 0.5 }, "<");
-    master.to(
-      redLine,
-      {
-        opacity: 0,
-        duration: 0.6,
-        ease: "power2.out",
-      },
-      "<"
-    );
+    if (window.innerWidth < 768) {
+      master.to(
+        redLine,
+        {
+          opacity: 0,
+          duration: 0.6,
+          ease: "power2.out",
+        },
+        "<"
+      );
+    }
+    else{
+      master.to(
+        redLine,
+        {
+          opacity: 1,
+          y:-300,
+          height: "150px",
+          duration: 0.6,
+          ease: "power2.out",
+        },
+        "<"
+      );
+    }
 
     master.to(leftLine, { opacity: 0, duration: 0.5 });
     master.to(rightLine, { opacity: 0, duration: 0.5 }, "<");
@@ -301,7 +316,7 @@ function WhoWeAre() {
         </div>
       </section>
       <section
-        className="chooseUs text-center absolute w-full flex flex-col justify-center items-center md:bottom-[70px] bottom-[50px]"
+        className="chooseUs text-center absolute w-full flex flex-col justify-center items-center md:bottom-[0px] bottom-[50px]"
         ref={chooseUsRef}
       >
         <h2
