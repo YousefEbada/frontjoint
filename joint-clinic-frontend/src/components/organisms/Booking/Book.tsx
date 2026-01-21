@@ -35,7 +35,11 @@ interface Doctor {
   practitionerCompany: { company: string; branch: string }[];
 }
 
-const Book = () => {
+interface BookProps {
+  redirectPath?: string;
+}
+
+const Book = ({ redirectPath }: BookProps) => {
   const [step, setStep] = useState(1);
   const totalSteps = 3;
 
@@ -153,6 +157,8 @@ const Book = () => {
     }
 
     // Save pending booking data and redirect based on auth status
+    const redirectUrl = redirectPath ? `${redirectPath}?date=${selectedDate}` : undefined;
+
     initiateBooking({
       branch: selectedSlot.branch || "",
       injury: selectedInjury,
@@ -163,7 +169,7 @@ const Book = () => {
       eventName: selectedSlot.event_name || "",
       duration: selectedSlot.slot_duration || 30,
       createdAt: new Date().toISOString(),
-    });
+    }, redirectUrl);
   };
 
   // Format confirmation message
@@ -346,6 +352,7 @@ const Book = () => {
                     <Calendar
                       onSelect={handleDateSelect}
                       availableDates={availableDates}
+                      selectedDate={selectedDate}
                     />
                   </div>
                 )}

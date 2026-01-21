@@ -47,6 +47,27 @@ export interface CreateBookingPayload {
     company?: "Joint Clinic";
 }
 
+export interface RescheduleBookingPayload {
+    practitioner: string,
+    department: string,
+    company: string,
+    appointment_type: string,
+    appointment_date: string,
+    appointment_time: string,
+    daily_practitioner_event: string,
+    service_unit?: string,
+    duration: number,
+    actual_duration: number
+}
+
+export interface CancelBookingPayload {
+    appointment_id: string,
+    cancellation_source: string,
+    cancellation_date: string,
+    cancellation_reason: string,
+    cancelled_by: string
+}
+
 export interface BookingResponse {
     ok: boolean;
     booking?: {

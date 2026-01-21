@@ -19,15 +19,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
 }) => {
   return (
     <div
-      className={`
-        inline-flex items-center
-        rounded-full
-        bg-white
-        px-4 sm:px-5
-        h-[44px] sm:h-[48px]
-        shadow-[0_8px_18px_rgba(0,0,0,0.08)]
-        ${className}
-      `}
+      className={`inline-flex items-center rounded-full bg-white px-4 sm:px-5 h-[44px] sm:h-[48px] shadow-[0_8px_18px_rgba(0,0,0,0.08)] ${className}`}
     >
       {/* search icon */}
       <svg
@@ -60,15 +52,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
         value={value}
         placeholder={placeholder}
         onChange={onChange ? (e) => onChange(e.target.value) : undefined}
-        className="
-          w-full
-          bg-transparent
-          outline-none
-          border-none
-          text-[16px] sm:text-[16px]
-          text-[#000]
-          placeholder:text-[#B3B3B3]
-        "
+        className="w-full bg-transparent outline-none border-none text-[16px] sm:text-[16px] text-[#000] placeholder:text-[#B3B3B3]"
       />
 
       {/* right icon */}

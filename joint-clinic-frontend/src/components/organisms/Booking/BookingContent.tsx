@@ -181,7 +181,7 @@ const BookingContent = () => {
                 <ActionButton
                     text="Back to Dashboard"
                     variant="outline"
-                    onClick={() => router.push("/patient/dashboard")}
+                    onClick={() => router.push("/patient/main")}
                 />
             </div>
         );
@@ -219,6 +219,7 @@ const BookingContent = () => {
                         <Calendar
                             onSelect={setSelectedDate}
                             availableDates={availableDates}
+                            selectedDate={selectedDate}
                         />
                     </div>
                 )}
