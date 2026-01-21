@@ -44,7 +44,8 @@ export async function createBooking(req: Request, res: Response) {
 
     return res.status(201).json(result);
   } catch (error) {
-    res.status(500).json({ ok: false, error: 'Creating Booking internal server error' });
+    console.log("===== createBooking ERROR: ", error);
+    res.status(500).json({ ok: false, error: (error as any) || 'Create Booking internal server error' });
   }
 };
 
@@ -57,7 +58,8 @@ export async function getAllBookings(req: Request, res: Response) {
     }
     return res.status(200).json(result);
   } catch (error) {
-    res.status(500).json({ ok: false, error: 'Get All Bookings internal server error' });
+    console.log("===== getAllBookings ERROR: ", error);
+    res.status(500).json({ ok: false, error: (error as any) || 'Get All Bookings internal server error' });
   }
 }
 
@@ -72,7 +74,7 @@ export async function getPatientBookings(req: Request, res: Response) {
     return res.status(200).json(result);
   } catch (error) {
     console.error("===== getPatientBookings ERROR: ", error);
-    res.status(500).json({ ok: false, error: 'Get Patient Bookings internal server error' });
+    res.status(500).json({ ok: false, error: (error as any) || 'Get Patient Bookings internal server error' });
   }
 }
 
@@ -90,10 +92,10 @@ export async function getPatientBookings(req: Request, res: Response) {
 
 export async function cancelBooking(req: Request, res: Response) {
   try {
-    const { bookingId } = req.params;
+    const { id } = req.params;
     const cancelData = req.body;
     const uc = new CancelBooking(resolve(BOOKING_REPO), resolve(NIXPEND_ADAPTER));
-    const result = await uc.exec(bookingId, cancelData);
+    const result = await uc.exec(id, cancelData);
 
     if (!result.ok) {
       return res.status(400).json(result);
@@ -102,23 +104,25 @@ export async function cancelBooking(req: Request, res: Response) {
     return res.status(200).json(result);
 
   } catch (error) {
-    res.status(500).json({ ok: false, error: 'Cancel Booking internal server error' });
+    console.log("===== cancelBooking ERROR: ", error);
+    res.status(500).json({ ok: false, error: (error as any) || 'Cancel Booking internal server error' });
   }
 }
 
 export async function rescheduleBooking(req: Request, res: Response) {
   try {
-    const { bookingId } = req.params;
+    const { id } = req.params;
     const rescheduleData = req.body;
     const uc = new RescheduleBooking(resolve(BOOKING_REPO), resolve(NIXPEND_ADAPTER));
-    const result = await uc.exec(bookingId, rescheduleData);
+    const result = await uc.exec(id, rescheduleData);
 
     if (!result.ok) {
       return res.status(400).json(result);
     }
     return res.status(200).json(result);
   } catch (error) {
-    res.status(500).json({ ok: false, error: 'Reschedule Booking internal server error' });
+    console.log("===== rescheduleBooking ERROR: ", error);
+    res.status(500).json({ ok: false, error: (error as any) || 'Reschedule Booking internal server error' });
   }
 }
 
@@ -141,15 +145,15 @@ export async function getAvailableSlots(req: Request, res: Response) {
     return res.status(200).json(result);
   } catch (error) {
     console.error("===== getAvailableSlots ERROR: ", error);
-    res.status(500).json({ ok: false, error: 'Get Available Slots internal server error' });
+    res.status(500).json({ ok: false, error: (error as any) || 'Get Available Slots internal server error' });
   }
 }
 
 export async function getBookingById(req: Request, res: Response) {
   try {
-    const { bookingId } = req.params;
+    const { id } = req.params;
     const uc = new FindBookingById(resolve(BOOKING_REPO));
-    const result = await uc.exec(bookingId);
+    const result = await uc.exec(id);
 
     if (!result.ok) {
       return res.status(404).json(result);
@@ -157,22 +161,24 @@ export async function getBookingById(req: Request, res: Response) {
 
     return res.status(200).json(result);
   } catch (error) {
-    res.status(500).json({ ok: false, error: 'Get Booking internal server error' });
+    console.log("===== getBookingById ERROR: ", error);
+    res.status(500).json({ ok: false, error: (error as any) || 'Get Booking internal server error' });
   }
 }
 
 export async function updateBookingStatus(req: Request, res: Response) {
   try {
-    const { bookingId } = req.params;
+    const { id } = req.params;
     // validate status from ZOD
     const { status } = req.body;
     const uc = new UpdateBookingStatus(resolve(BOOKING_REPO));
-    const result = await uc.exec(bookingId, status);
+    const result = await uc.exec(id, status);
     if (!result.ok) {
       return res.status(400).json(result);
     }
     return res.status(200).json(result);
   } catch (error) {
-    res.status(500).json({ ok: false, error: 'Internal server error' });
+    console.log("===== updateBookingStatus ERROR: ", error);
+    res.status(500).json({ ok: false, error: (error as any) || 'Internal server error' });
   }
 }

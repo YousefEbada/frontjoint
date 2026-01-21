@@ -5,8 +5,8 @@ export type BookingType = 'consultation' | 'followUp' | 'emergency' | 'session';
 
 export interface Booking {
   _id: string;
-  patientId: string;
-  doctorId: string;
+  patientNixpendId: string;
+  doctorNixpendId: string;
   branchId?: string;
   sessionId?: string | Schema.Types.ObjectId | null;
   eventName: string;
