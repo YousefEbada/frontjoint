@@ -79,20 +79,20 @@ export const verifyOtp = async (data: VerifyOTPInput) => {
 };
 
 export const createPatient = async (data: CreatePatientInput) => {
-    console.log('=== createPatient API called ===');
-    console.log('Request payload:', JSON.stringify(data, null, 2));
-    try {
-        const response = await api.post('/patient/create', data)
-        console.log('createPatient SUCCESS response:', response.data)
-        return response.data.patient
-    } catch (error: any) {
-        console.error('=== createPatient FAILED ===');
-        console.error('- Status:', error.response?.status);
-        console.error('- Response data:', error.response?.data);
-        console.error('- Error message:', error.message);
-        throw error
-    }
-}
+  console.log("=== createPatient API called ===");
+  console.log("Request payload:", JSON.stringify(data, null, 2));
+  try {
+    const response = await api.post("/patient/create", data);
+    console.log("createPatient SUCCESS response:", response.data);
+    return response.data.patient;
+  } catch (error: any) {
+    console.error("=== createPatient FAILED ===");
+    console.error("- Status:", error.response?.status);
+    console.error("- Response data:", error.response?.data);
+    console.error("- Error message:", error.message);
+    throw error;
+  }
+};
 
 // ------------ find user test -------------
 // export const testAuth = () => {
@@ -154,12 +154,9 @@ export const createPatient = async (data: CreatePatientInput) => {
 // }
 
 // ------------ verify OTP test -------------
+// ------------ verify OTP test ------------- (Cleaned up)
 // export const testAuth = () => {
 //     console.log('Testing verifyOtp...')
-//     verifyOtp({
-//         otpToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0VHlwZSI6InJlZ2lzdGVyIiwic3ViamVjdFJlZiI6IjY5NGM3YzkwNzdmZWYzNTk2NGNlMjc1YSIsImlhdCI6MTc2NjYyNTkyNywiZXhwIjoxNzY2NjI2NTI3fQ.7BkY3Zw6g_Y2UJ2ej3EPuoGcTVLvY4nn6CufjwzUHnI",
-//         code: "400022"
-//     })
 // }
 
 // ------------ create patient test -------------
