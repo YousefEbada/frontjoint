@@ -106,7 +106,7 @@ export const nixpendAdapter: NixpendPort = {
       console.log("\n======= Practitioners Data:", data.length);
       return data;
     }
-    console.log("\n======= Practitioners Data: &&&&^ No data found", data);
+    console.log("\n\n======= Practitioners Data: &&&&^ No data found", data, "\n\n");
     return null;
   },
 
@@ -124,10 +124,10 @@ export const nixpendAdapter: NixpendPort = {
       .then(res => res.json()
       )
     if (typeof data.response.appointment_id === 'string') {
-      console.log("\n======= The data is String:", data)
+      console.log("\n\n======= The data is String:", data, "\n\n");
       return data.response
     }
-    console.log("\n========= The data:", data);
+    console.log("\n\n========= The data:", data, "\n\n");
     return data.response;
   },
 
@@ -152,6 +152,8 @@ export const nixpendAdapter: NixpendPort = {
 
   // reschedule appointment
   async rescheduleAppointment(appointment_id: string, appointment_details: RescheduleType) {
+    console.log("\n\n========= Reschedule Appointment Details:", appointment_details, "\n\n");
+    console.log("\n\n========= Reschedule Appointment ID:", appointment_id, "\n\n");
     let data = await fetch(`${env.NIXPEND_API_URL}/nis/external/reschedule_appointment`, {
       method: 'POST',
       headers: {
@@ -162,7 +164,7 @@ export const nixpendAdapter: NixpendPort = {
     })
       .then(res => res.json()
       )
-    console.log("\n========= Reschedule Appointment Data:", data);
+    console.log("\n\n========= Reschedule Appointment Data:", data, "\n\n");
     if (data && data.appointment_id) {
       return data;
     }
@@ -181,7 +183,7 @@ export const nixpendAdapter: NixpendPort = {
     })
       .then(res => res.json()
       )
-    console.log("\n========= Cancel Appointment Data:", data);
+    console.log("\n\n========= Cancel Appointment Data:", data, "\n\n");
     if (data && data.response.message.status === 'cancelled') {
       return data.response.message;
     }
