@@ -51,8 +51,7 @@ const Page = () => {
             <DashBoardHeader therapyName={data.therapyName} nav={false} dateTime={true} />
             <DashBoardContent>
                 <PageHeader
-                    title="Workout Library"
-                    className="bg-[#f5f]"
+                    title="Workout Library"                    
                     searchPlaceholder="Search By Name"
                     searchValue={searchTerm}
                     onSearchChange={(value) => {
