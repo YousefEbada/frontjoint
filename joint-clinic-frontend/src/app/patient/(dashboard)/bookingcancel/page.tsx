@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import DashBoardHeader from "@/components/molecules/DashBoardHeader";
 import Typography from "@/components/atoms/Typography";
@@ -16,7 +16,7 @@ import AppointmentItem from "@/components/molecules/AppointmentItem";
 // Force dynamic rendering - this page requires authentication
 export const dynamic = 'force-dynamic';
 
-const BookingsPage = () => {
+function BookingCancelContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const bookingId = searchParams?.get("id");
@@ -136,6 +136,18 @@ const BookingsPage = () => {
             </DashBoardContent>
         </>
     );
-};
+}
 
-export default BookingsPage;
+export default function BookingsPage() {
+    return (
+        <Suspense fallback={
+            <DashBoardContent>
+                <div className="flex justify-center items-center h-full">
+                    <Typography text="Loading..." variant="bodyRegular" />
+                </div>
+            </DashBoardContent>
+        }>
+            <BookingCancelContent />
+        </Suspense>
+    );
+}

@@ -10,10 +10,10 @@ import DashBoardContent from "@/components/atoms/DashBoardContent";
 
 import Calendar from "@/components/molecules/Calendar";
 import { useSearchParams } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import dayjs from "dayjs";
 
-const Page = () => {
+function BookingPageContent() {
 
   const searchParams = useSearchParams();
   const dateParam = searchParams?.get("date");
@@ -124,6 +124,18 @@ const Page = () => {
       </DashBoardContent>
     </>
   );
-};
+}
 
-export default Page;
+export default function Page() {
+  return (
+    <Suspense fallback={
+      <DashBoardContent>
+        <div className="flex justify-center items-center h-full">
+          <Typography text="Loading..." variant="bodyRegular" />
+        </div>
+      </DashBoardContent>
+    }>
+      <BookingPageContent />
+    </Suspense>
+  );
+}
