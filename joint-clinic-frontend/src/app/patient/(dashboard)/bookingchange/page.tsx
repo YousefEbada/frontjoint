@@ -16,6 +16,9 @@ import { number } from "framer-motion";
 
 dayjs.extend(advancedFormat);
 
+// Force dynamic rendering - this page requires authentication
+export const dynamic = 'force-dynamic';
+
 const BookingsPage = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -78,10 +81,7 @@ const BookingsPage = () => {
         // API likely expects "HH:mm:ss" or "HH:mm".
         // get the current time in api time format edit api time
         const apiTime = dayjs(`2000-01-01 ${selectedTime}`).format("HH:mm");
-        console.log("ggggggggggggggggggggggggggggggggggg ************** gggggggggggggggggggggggggggggg");
-        console.log(bookingDetails);
-        console.log(selectedDate);
-        console.log(selectedTime);
+
         /*
         actual_duration
 : 

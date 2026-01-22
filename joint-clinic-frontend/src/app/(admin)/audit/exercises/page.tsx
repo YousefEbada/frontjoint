@@ -46,8 +46,6 @@ const Page = () => {
         router.push(`/audit/exercises/video/${exerciseId}`);
     };
 
-    console.log(exercises);
-
     return (
         <>
             <DashBoardHeader therapyName={data.therapyName} nav={false} dateTime={true} />
@@ -58,7 +56,6 @@ const Page = () => {
                     searchPlaceholder="Search By Name"
                     searchValue={searchTerm}
                     onSearchChange={(value) => {
-                        console.log("PageHeader onSearchChange value:", value);
                         setSearchTerm(value);
                     }}
                     actionButton={{
