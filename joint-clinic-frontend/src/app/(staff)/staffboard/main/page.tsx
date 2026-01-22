@@ -10,23 +10,8 @@ import PatientCallRow from "@/components/atoms/PatientCallRow";
 import DashBoardContent from "@/components/atoms/DashBoardContent";
 import { useSupportTickets } from "@/hooks/useSupport";
 
-import React, { useState } from 'react';
-
 const Page = () => {
   const { tickets: pendingTickets, isLoading } = useSupportTickets({ completed: false, limit: 5 });
-  const [patients, setPatients] = useState<Record<string, string>>({});
-
-  React.useEffect(() => {
-    import("@/lib/api/patient.api").then(({ getAllPatients }) => {
-      getAllPatients().then(pList => {
-        const map: Record<string, string> = {};
-        pList.forEach(p => {
-          if (p._id) map[p._id] = p.fullName || p.userId;
-        });
-        setPatients(map);
-      }).catch(err => console.error("Failed to load patients for mapping", err));
-    });
-  }, []);
 
   return (
     <>
@@ -75,26 +60,19 @@ const Page = () => {
             ) : pendingTickets.length === 0 ? (
               <div className="text-gray-400">No pending requests.</div>
             ) : (
-              pendingTickets.map((ticket) => {
-                let patientName = "Unknown";
-                if (typeof ticket.patientId === 'string') {
-                  patientName = patients[ticket.patientId] || `Patient (${ticket.patientId.slice(-4)})`;
-                } else if (typeof ticket.patientId === 'object' && (ticket.patientId as any).fullName) {
-                  patientName = (ticket.patientId as any).fullName;
-                }
-
-                return (
-                  <PatientCallRow
-                    key={ticket._id}
-                    name={patientName}
-                    type={ticket.inquiryDept}
-                    phone={ticket.contact}
-                    due={ticket.completed ? "Done" : "Pending"}
-                    dueColor={ticket.completed ? color.success : color.warning}
-                    completed={ticket.completed}
-                  />
-                );
-              })
+              pendingTickets.map((ticket) => (
+                <PatientCallRow
+                  key={ticket._id}
+                  name={typeof ticket.patientId === 'object' && (ticket.patientId as any).fullName
+                    ? (ticket.patientId as any).fullName
+                    : typeof ticket.patientId === 'string' ? "Patient (" + ticket.patientId.slice(-4) + ")" : "Unknown"}
+                  type={ticket.inquiryDept}
+                  phone={ticket.contact}
+                  due={ticket.completed ? "Done" : "Pending"}
+                  dueColor={ticket.completed ? color.success : color.warning}
+                  completed={ticket.completed}
+                />
+              ))
             )}
           </div>
         </div>

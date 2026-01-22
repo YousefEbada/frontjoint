@@ -19,6 +19,8 @@ export interface CreateSupportTicketRequest {
   inquiryDept: string;
   whenToCall: string; // Date string (ISO)
   message: string;
+  patientId: string;
+  patientName: string;
 }
 
 export interface UpdateSupportTicketRequest {

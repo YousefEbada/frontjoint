@@ -5,7 +5,7 @@ import DashBoardContent from "@/components/atoms/DashBoardContent";
 import PageHeader from "@/components/organisms/PageHeader";
 import { useExercises } from "@/hooks/useExercises";
 import SessionCard from "@/components/molecules/sessionCard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 const Page = () => {
@@ -15,6 +15,11 @@ const Page = () => {
 
     const { data: exercises, isLoading, isError } = useExercises();
 
+    useEffect(() => {
+        console.log("searchTerm changed:", searchTerm);
+    }, [searchTerm]);
+
+    console.log("bbbbbbbbbbbbbbbbbbbbb", searchTerm, "ddddddddddddddddd");
     // Filter exercises based on search and muscle groups
     const filteredExercises = exercises?.filter(exercise => {
         const matchesSearch = exercise.title.toLowerCase().includes(searchTerm.toLowerCase());
@@ -51,9 +56,13 @@ const Page = () => {
             <DashBoardContent>
                 <PageHeader
                     title="Workout Library"
+                    className="bg-[#f5f]"
                     searchPlaceholder="Search By Name"
                     searchValue={searchTerm}
-                    onSearchChange={setSearchTerm}
+                    onSearchChange={(value) => {
+                        console.log("PageHeader onSearchChange value:", value);
+                        setSearchTerm(value);
+                    }}
                     actionButton={{
                         label: "Upload Video",
                         onClick: handleUploadClick

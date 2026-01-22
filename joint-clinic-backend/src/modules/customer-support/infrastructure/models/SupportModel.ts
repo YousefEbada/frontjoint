@@ -11,3 +11,5 @@ const SupportTicketSchema = new Schema({
 }, { timestamps: true })
 
 export const SupportTicketModel = mongoose.model('SupportTicket', SupportTicketSchema);
+
+

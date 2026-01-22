@@ -44,6 +44,9 @@ export const azureBlobAdapter: BlobPort = {
         sharedKeyCredential
       ).toString();
 
-    return `https://${storageAccountName}.blob.core.windows.net/${containerName}/${blobName}?${sasToken}`;
+    // Use the client URL so dev (Azurite) and prod (Azure) both generate valid links.
+    const containerClient = blobServiceClient.getContainerClient(containerName);
+    const blobClient = containerClient.getBlobClient(blobName);
+    return `${blobClient.url}?${sasToken}`;
   }
 };

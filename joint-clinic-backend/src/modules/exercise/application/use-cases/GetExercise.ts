@@ -1,5 +1,4 @@
 import { BlobPort } from "infra/storage/blob.port.js";
-import { ExerciseModel } from "modules/exercise/infrastructure/models/ExerciseModel.js";
 import { ExerciseRepoPort } from "../ports/ExerciseRepoPort.js";
 
 export class GetExerciseVideo {
@@ -10,16 +9,16 @@ export class GetExerciseVideo {
       const exercise = await this.exercise.find(exerciseId);
       console.log("============ Exercise: ",exercise);
       if (!exercise) {
-        return {ok: false, message: "Exercise not found"};
+        return { ok: false, error: "Exercise not found" };
       };
 
     const url = await this.blob.signedUrl((exercise as any).videoBlobName, 30);
 
-    return {ok: true, data: url};
+    return { ok: true, data: url };
     
     } catch (error) {
       console.error("============ GetExerciseVideo Error: ",error);
-      return {ok: false, message: "Something went wrong"};
+      return { ok: false, error: "Something went wrong" };
     }
   }
 }

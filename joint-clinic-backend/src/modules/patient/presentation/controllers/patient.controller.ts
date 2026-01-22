@@ -29,8 +29,9 @@ export async function getPatientById(req: Request, res: Response) {
 
 export async function getAllPatients(req: Request, res: Response) {
     try {
+        const status = req.query.status as "active" | "inactive" | undefined;
         const uc = new GetAllPatients(resolve(PATIENT_REPO));
-        const result = await uc.exec();
+        const result = await uc.exec(status);
         if (!result.ok) {
             return res.status(400).json(result);
         }
@@ -93,7 +94,7 @@ export async function createPatient(req: Request, res: Response) {
     const { userId, injuryDetails } = req.body;
     const uc = new CreatePatient(resolve(PATIENT_REPO), resolve(NIXPEND_ADAPTER), resolve(USER_AUTH_REPO));
     try {
-        const result = await uc.exec(userId, {injuryDetails});
+        const result = await uc.exec(userId, { injuryDetails });
         if (!result.ok) {
             return res.status(400).json(result);
         }
