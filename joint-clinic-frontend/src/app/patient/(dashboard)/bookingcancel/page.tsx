@@ -13,6 +13,9 @@ import dayjs from "dayjs";
 import AppointmentItem from "@/components/molecules/AppointmentItem";
 // import { toast } from "sonner"; 
 
+// Force dynamic rendering - this page requires authentication
+export const dynamic = 'force-dynamic';
+
 const BookingsPage = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -24,7 +27,6 @@ const BookingsPage = () => {
 
     const handleCancel = () => {
         if (!bookingId) return;
-        console.log("jooooooooooooooooooooooooo",bookingDetails);
 
         cancelBooking(
             { id: bookingId, data: { appointment_id: bookingDetails.booking.appointmentNixpendId, cancellation_source: "Patient", cancellation_date: dayjs().format("DD-MM-YYYY"), cancellation_reason: "reason", cancelled_by: "Phone" } },

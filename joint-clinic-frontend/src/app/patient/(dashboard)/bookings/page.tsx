@@ -12,6 +12,9 @@ import BookingList from "@/components/organisms/Bookings/BookingList";
 import BookingStats from "@/components/molecules/BookingStats";
 import DashBoardContent from '@/components/atoms/DashBoardContent';
 
+// Force dynamic rendering - this page requires authentication
+export const dynamic = 'force-dynamic';
+
 const BookingsPage = () => {
     const [patientId, setPatientId] = React.useState<string | null>(null);
 
@@ -25,7 +28,6 @@ const BookingsPage = () => {
     const { data: bookingData, isLoading } = usePatientBookings(patientId || "");
     const bookings = React.useMemo(() => {
         if (!bookingData) return [];
-        console.log("Raw bookingData:", bookingData);
         // Handle case where API returns { bookings: [...] } or { data: [...] }
         const bookingsList = Array.isArray(bookingData) ? bookingData :
             (Array.isArray(bookingData?.bookings) ? bookingData.bookings :
