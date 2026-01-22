@@ -35,6 +35,10 @@ const Button: React.FC<ButtonProps> = ({ text, variant, onClick, className = "",
       text-[#9fd5e2] bg-[#167c4f] border-[#167c4f]
       hover:text-[#1e5598] hover:bg-[#fdb515] hover:border-[#fdb515]
     `,
+        fifth: `
+      text-[#9fd5e2] bg-transparent border-[#167c4f]
+      hover:text-[#9fd5e2] hover:bg-[#167c4f] hover:border-[#167c4f]
+    `,
     };
 
     const hasCustomWidth = className?.includes("w-") || className?.includes("w[");
