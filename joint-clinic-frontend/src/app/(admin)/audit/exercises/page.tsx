@@ -8,6 +8,9 @@ import SessionCard from "@/components/molecules/sessionCard";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
+// Force dynamic rendering - this page requires authentication and user-specific data
+export const dynamic = 'force-dynamic';
+
 const Page = () => {
     const router = useRouter();
     const [searchTerm, setSearchTerm] = useState("");
@@ -15,11 +18,6 @@ const Page = () => {
 
     const { data: exercises, isLoading, isError } = useExercises();
 
-    useEffect(() => {
-        console.log("searchTerm changed:", searchTerm);
-    }, [searchTerm]);
-
-    console.log("bbbbbbbbbbbbbbbbbbbbb", searchTerm, "ddddddddddddddddd");
     // Filter exercises based on search and muscle groups
     const filteredExercises = exercises?.filter(exercise => {
         const matchesSearch = exercise.title.toLowerCase().includes(searchTerm.toLowerCase());

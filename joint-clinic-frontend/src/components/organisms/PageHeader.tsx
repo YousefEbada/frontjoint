@@ -37,6 +37,9 @@ const PageHeader: React.FC<PageHeaderProps> = ({
     const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
+        // Only run in browser environment
+        if (typeof window === "undefined") return;
+
         const mq = window.matchMedia("(max-width: 767px)");
         const update = () => setIsMobile(mq.matches);
         update();
@@ -66,7 +69,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
                     />
                 )}
             </div>
-            
+
             {/* Title: Mobile Order 2, Desktop Order 1 */}
             <div className="order-2 col-span-8 md:order-1 md:col-span-1 flex items-center">
                 {title && (

@@ -83,7 +83,7 @@ const Book = ({ redirectPath }: BookProps) => {
     isLoading: slotsLoading,
     error: slotsError,
   } = useAvailableSlots(selectedDoctor?.nixpendId || "");
-  console.log("================= slotsResponse:", slotsResponse);
+
   // Pending booking hook for auth-based routing
   const { initiateBooking } = usePendingBooking();
 
