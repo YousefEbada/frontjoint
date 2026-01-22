@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 
 const SupportTicketSchema = new Schema({
-    patientId: { type: Schema.Types.ObjectId, required: true },
+    patientId: { type: Schema.Types.ObjectId, ref: 'Patient', required: true },
     patientName: { type: String, required: true }, // Added patientName
     contact: { type: String, required: true },
     inquiryDept: { type: String, required: true },

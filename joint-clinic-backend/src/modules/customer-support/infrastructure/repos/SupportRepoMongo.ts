@@ -20,6 +20,7 @@ export const SupportRepoMongo: SupportRepoPort = {
         }
 
         let mongoQuery = SupportTicketModel.find(filter)
+            .populate('patientId', 'fullName email phoneNumber') // Populate patient details
             .sort({ createdAt: -1 });
 
         if (query?.limit) {
@@ -31,12 +32,16 @@ export const SupportRepoMongo: SupportRepoPort = {
     },
 
     async getsupportTicketsByPatient(patientId: string) {
-        const tickets = await SupportTicketModel.find({ patientId }).lean();
+        const tickets = await SupportTicketModel.find({ patientId })
+            .populate('patientId', 'fullName email phoneNumber')
+            .lean();
         return tickets as unknown as Array<SupportTicket> || null;
     },
 
     async getSupportTicket(id: string) {
-        const ticket = await SupportTicketModel.findOne({ _id: id }).lean();
+        const ticket = await SupportTicketModel.findOne({ _id: id })
+            .populate('patientId', 'fullName email phoneNumber')
+            .lean();
         return ticket as unknown as SupportTicket || null;
     },
 

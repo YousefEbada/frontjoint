@@ -3,6 +3,7 @@ export interface SupportTicket {
   patientId:
   | string
   | { _id: string; firstName?: string; lastName?: string; fullName?: string }; // Handle potential population
+  patientName: string; // Patient name stored directly in the ticket
   contact: string;
   inquiryDept: string;
   whenToCall: string; // ISO Date string from backend
