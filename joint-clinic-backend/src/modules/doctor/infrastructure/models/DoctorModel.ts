@@ -17,7 +17,7 @@ const DoctorSchema = new Schema({
   department: { type: String }, // "department"
   designation: { type: String }, // can be null
   practitionerCompany: [CompanySchema], // array of company/branch
-  priceList: { type: String } // "price_list"
+  priceList: { type: String } // "price_list" 
 
 }, { timestamps: true });
 

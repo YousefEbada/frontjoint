@@ -2,6 +2,7 @@ import { Doctor } from "modules/doctor/domain/Doctor.js";
 import { DoctorModel } from "../models/DoctorModel.js";
 import { DoctorRepoPort } from "modules/doctor/application/ports/DoctorRepoPort.js";
 import mongoose, { isValidObjectId } from "mongoose";
+import { AssignedExercisesModel } from "../models/AssignedExercisesModel.js";
 
 export const DoctorRepoMongo: DoctorRepoPort = {
   // Save many practitioners (replace existing ones)
@@ -47,6 +48,35 @@ export const DoctorRepoMongo: DoctorRepoPort = {
     } catch (error) {
       console.error("===== Error in findById ======= ", error);
       return null;
+    }
+  },
+
+  // Assign an exercise to a patient
+  async assignExercise(doctorNixpendId: string, patientNixpendId: string, exerciseId: string, dueDate?: Date): Promise<any> {
+    try {
+      const doc = await AssignedExercisesModel.create({
+        doctorNixpendId,
+        patientNixpendId,
+        exerciseId,
+        ...(dueDate ? { dueDate: dueDate } : {})
+      });
+      return doc;
+    } catch (error) {
+      console.error("Error assigning exercise:", error);
+      return null
+    }
+  },
+
+  async getAssignedExercises(doctorNixpendId: string, patientNixpendId: string): Promise<any[]> { 
+    try {
+      const docs = await AssignedExercisesModel.find({
+        doctorNixpendId,
+        patientNixpendId
+      }).lean();
+      return docs;
+    } catch (error) {
+      console.error("Error fetching assigned exercises:", error);
+      return [];
     }
   },
 

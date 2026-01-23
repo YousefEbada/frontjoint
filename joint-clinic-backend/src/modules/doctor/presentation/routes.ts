@@ -1,7 +1,7 @@
 import { Router } from "express";
 import rateLimit from "express-rate-limit";
 import express from "express";
-import { findDoctorById, findDoctors, getDoctorBookings, getDoctorSessions, getPatients } from "./controllers/doctor.controller.js";
+import { assignExercisesToPatient, findDoctorById, findDoctors, getAssignedExercises, getDoctorBookings, getDoctorSessions, getPatients } from "./controllers/doctor.controller.js";
 
 const router = express.Router();
 export const doctorRoutes = Router();
@@ -15,6 +15,8 @@ const requestLimiter = rateLimit({
 
 // doctorRoutes.use(requestLimiter);
 
+doctorRoutes.post("/assign-exercise", assignExercisesToPatient);
+doctorRoutes.get("/assigned-exercises/:doctorNixpendId/:patientNixpendId", getAssignedExercises);
 doctorRoutes.get("/:id", findDoctorById);
 doctorRoutes.get("/", findDoctors);
 doctorRoutes.get('/:doctorId/bookings', getDoctorBookings);

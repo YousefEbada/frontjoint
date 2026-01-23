@@ -41,7 +41,6 @@ export async function getAllPatients(req: Request, res: Response) {
     }
 }
 
-
 export async function getPatientByUserId(req: Request, res: Response) {
     const userId = req.params.userId;
     try {
