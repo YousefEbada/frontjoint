@@ -8,9 +8,12 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config): any => {
-  const token = localStorage.getItem("accessToken");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+  // Only access localStorage in browser environment (not during SSR/build)
+  if (typeof window !== "undefined") {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
   }
   return config;
 });

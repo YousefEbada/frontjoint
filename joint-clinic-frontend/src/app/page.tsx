@@ -1,15 +1,12 @@
-import React from "react";
 import { IBM_Plex_Sans } from "next/font/google";
 import Hero from "@/components/organisms/Hero/Hero";
 import WhoWeAre from "@/components/organisms/WhoWeAre/WhoWeAre";
-import MeetOurTeam from "@/components/organisms/WhoWeAre/MeetOurTeam";
 import HorizontalScroll from "@/components/molecules/Horizontal/Horizontal";
 import HowWorks from "@/components/organisms/HowWorks/HowWorks";
 import YourSafety from "@/components/organisms/YourSafety/YourSafety";
 import Book from "@/components/organisms/Booking/Book";
 import WhatOurPatientsSay from "@/components/organisms/WhatOurPatientsSay/WhatOurPatientsSay";
 import Footer from "@/components/organisms/Footer/Footer";
-import { color } from "@/lib/constants/colors";
 
 const ibmPlex = IBM_Plex_Sans({
   subsets: ["latin"],

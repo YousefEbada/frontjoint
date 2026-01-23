@@ -10,7 +10,7 @@ const ibm = IBM_Plex_Sans({
 
 type ButtonProps = {
     text: string;
-    variant: "primary" | "secondary" | "third" | "fourth";
+    variant: "primary" | "secondary" | "third" | "fourth" | "fifth";
     onClick?: () => void;
     className?: string;
     active?: boolean;
@@ -35,6 +35,10 @@ const Button: React.FC<ButtonProps> = ({ text, variant, onClick, className = "",
       text-[#9fd5e2] bg-[#167c4f] border-[#167c4f]
       hover:text-[#1e5598] hover:bg-[#fdb515] hover:border-[#fdb515]
     `,
+        fifth: `
+      text-[#9fd5e2] bg-transparent border-[#167c4f]
+      hover:text-[#9fd5e2] hover:bg-[#167c4f] hover:border-[#167c4f]
+    `,
     };
 
     const hasCustomWidth = className?.includes("w-") || className?.includes("w[");
@@ -49,6 +53,7 @@ const Button: React.FC<ButtonProps> = ({ text, variant, onClick, className = "",
         secondary: "text-[#696969] bg-[#ababab] border-[#ababab]",
         third: "text-[#1e5598] bg-[#fdb515] border-[#fdb515]",
         fourth: "text-[#1e5598] bg-[#fdb515] border-[#fdb515]",
+        fifth: "text-[#9fd5e2] bg-[#167c4f] border-[#167c4f]",
     };
 
     return (

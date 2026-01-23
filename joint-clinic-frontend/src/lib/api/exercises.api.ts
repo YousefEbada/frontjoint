@@ -50,6 +50,15 @@ export const createExercise = async (
   exerciseData: CreateExerciseRequest
 ): Promise<Exercise> => {
   try {
+    console.log("============ FRONTEND: createExercise called with:", {
+      title: exerciseData.title,
+      description: exerciseData.description,
+      musclesTargeted: exerciseData.musclesTargeted,
+      equipmentNeeded: exerciseData.equipmentNeeded,
+      difficultyLevel: exerciseData.difficultyLevel,
+      hasVideo: !!exerciseData.video
+    });
+
     const formData = new FormData();
     formData.append("title", exerciseData.title);
 
@@ -57,19 +66,39 @@ export const createExercise = async (
       formData.append("description", exerciseData.description);
     }
 
-    if (exerciseData.musclesTargeted && exerciseData.musclesTargeted.length > 0) {
-      formData.append("musclesTargeted", JSON.stringify(exerciseData.musclesTargeted));
+    // Always append arrays, even if empty, so backend knows they were sent
+    if (exerciseData.musclesTargeted) {
+      const musclesJson = JSON.stringify(exerciseData.musclesTargeted);
+      console.log("============ FRONTEND: Appending musclesTargeted:", musclesJson, "Length:", exerciseData.musclesTargeted.length);
+      formData.append("musclesTargeted", musclesJson);
+    } else {
+      console.log("============ FRONTEND: musclesTargeted is undefined - not appending");
     }
 
-    if (exerciseData.equipmentNeeded && exerciseData.equipmentNeeded.length > 0) {
-      formData.append("equipmentNeeded", JSON.stringify(exerciseData.equipmentNeeded));
+    if (exerciseData.equipmentNeeded) {
+      const equipmentJson = JSON.stringify(exerciseData.equipmentNeeded);
+      console.log("============ FRONTEND: Appending equipmentNeeded:", equipmentJson, "Length:", exerciseData.equipmentNeeded.length);
+      formData.append("equipmentNeeded", equipmentJson);
+    } else {
+      console.log("============ FRONTEND: equipmentNeeded is undefined - not appending");
     }
 
     if (exerciseData.difficultyLevel) {
+      console.log("============ FRONTEND: Appending difficultyLevel:", exerciseData.difficultyLevel);
       formData.append("difficultyLevel", exerciseData.difficultyLevel);
     }
 
     formData.append("video", exerciseData.video);
+
+    // Log FormData contents
+    console.log("============ FRONTEND: FormData entries:");
+    for (const [key, value] of formData.entries()) {
+      if (value instanceof File) {
+        console.log(`  ${key}: [File] ${value.name}`);
+      } else {
+        console.log(`  ${key}: ${value}`);
+      }
+    }
 
     const response = await api.post("/exercise", formData, {
       headers: {
@@ -77,7 +106,7 @@ export const createExercise = async (
       },
     });
 
-    console.log("createExercise response:", response.data);
+    console.log("============ FRONTEND: createExercise response:", response.data);
 
     if (response.data.ok && response.data.data) {
       return response.data.data;
@@ -86,7 +115,7 @@ export const createExercise = async (
     throw new Error(response.data.error || "Failed to create exercise");
   } catch (error) {
     console.error(
-      "Error creating exercise:",
+      "============ FRONTEND: Error creating exercise:",
       (error as any).response?.data || (error as any).message
     );
     throw error;

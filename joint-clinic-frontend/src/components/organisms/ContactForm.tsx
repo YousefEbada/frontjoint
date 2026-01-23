@@ -50,7 +50,9 @@ const ContactForm = ({ buttonText = "Send" }: ContactFormProps) => {
                 inquiryDept: form.inquiryDept,
                 message: form.message,
                 contact: form.contact,
-                whenToCall: date.toISOString() // Placeholder date since text input doesn't map well to Date object without strict format
+                whenToCall: date.toISOString(), // Placeholder date since text input doesn't map well to Date object without strict format
+                patientId: localStorage.getItem('patientId') || "",
+                patientName: localStorage.getItem('patientName') || ""
             };
 
             await createSupportTicket(payload);

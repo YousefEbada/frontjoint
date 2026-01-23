@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import dayjs from "dayjs";
 import clsx from "clsx";
 
@@ -11,16 +11,29 @@ interface CalendarProps {
   onSelect?: (date: string) => void;
   width?: string;
   availableDates?: string[]; // Array of dates in YYYY-MM-DD format that are available
+  selectedDate?: string;
 }
 
-const Calendar = ({ onSelect, width, availableDates }: CalendarProps) => {
-  const [currentMonth, setCurrentMonth] = useState(dayjs());
-  const [selectedDate, setSelectedDate] = useState(
-    dayjs().format("YYYY-MM-DD")
+const Calendar = ({ onSelect, width, availableDates, selectedDate: controlledDate }: CalendarProps) => {
+  const [currentMonth, setCurrentMonth] = useState(
+    controlledDate ? dayjs(controlledDate) : dayjs()
   );
 
+  const [selectedDate, setSelectedDate] = useState(
+    controlledDate || dayjs().format("YYYY-MM-DD")
+  );
+
+  useEffect(() => {
+    if (controlledDate) {
+      setSelectedDate(controlledDate);
+      setCurrentMonth(dayjs(controlledDate));
+    }
+  }, [controlledDate]);
+
   const handleSelect = (date: string) => {
-    setSelectedDate(date);
+    if (!controlledDate) {
+      setSelectedDate(date);
+    }
     onSelect?.(date);
   };
 

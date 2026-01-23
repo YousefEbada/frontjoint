@@ -50,7 +50,7 @@ const typographyConfig: Record<
     },
     bodyBold: {
         tag: "p",
-        className: "text-[16px] md:text-[18px] lg:text-[20px] font-semibold",
+        className: "text-[14px] md:text-[18px] lg:text-[20px] font-semibold",
     },
     bodyRegular: {
         tag: "p",

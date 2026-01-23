@@ -1,16 +1,59 @@
+"use client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import {
     getAvailableSlots,
     createBooking,
+    getPatientBookings,
+    cancelBooking,
+    rescheduleBooking,
+    getBookingById,
     savePendingBooking,
     getPendingBooking,
     clearPendingBooking,
     isPatientAuthenticated,
     PendingBookingData,
 } from "@/lib/api/booking.api";
-import { CreateBookingPayload } from "@/types/booking";
+
+import { CreateBookingPayload, CancelBookingPayload, RescheduleBookingPayload } from "@/types/booking";
+
+export const usePatientBookings = (patientId: string) => {
+    return useQuery({
+        queryKey: ["patient-bookings", patientId],
+        queryFn: () => getPatientBookings(patientId),
+        enabled: !!patientId,
+    });
+};
+
+export const useBookingDetails = (bookingId: string) => {
+    return useQuery({
+        queryKey: ["booking", bookingId],
+        queryFn: () => getBookingById(bookingId),
+        enabled: !!bookingId,
+    });
+};
+
+export const useCancelBooking = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: ({ id, data }: { id: string; data: CancelBookingPayload }) => cancelBooking(id, data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["patient-bookings"] });
+        },
+    });
+};
+
+export const useRescheduleBooking = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: ({ id, data }: { id: string; data: RescheduleBookingPayload }) => rescheduleBooking(id, data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["patient-bookings"] });
+            queryClient.invalidateQueries({ queryKey: ["booking"] });
+        },
+    });
+};
 
 export const useAvailableSlots = (
     doctorId: string,
@@ -52,19 +95,20 @@ export const usePendingBooking = () => {
     }, []);
 
     // Save booking and redirect based on auth status
-    const initiateBooking = useCallback((bookingData: PendingBookingData) => {
+    const initiateBooking = useCallback((bookingData: PendingBookingData, redirectUrl?: string) => {
         // Save the pending booking data
         savePendingBooking(bookingData);
         setPendingBooking(bookingData);
 
         // Check authentication and redirect
         if (isPatientAuthenticated()) {
-            // User is authenticated, redirect to dashboard booking
-            router.push("/patient/booking");
+            // User is authenticated, redirect to dashboard booking or custom URL
+            router.push(redirectUrl || "/patient/booking");
         } else {
             // User is not authenticated, redirect to sign-in
             // The sign-in flow should redirect to /patient/booking after completion
-            router.push("/sign-in?redirect=/patient/booking");
+            const target = redirectUrl || "/patient/booking";
+            router.push(`/sign-in?redirect=${encodeURIComponent(target)}`);
         }
     }, [router]);
 

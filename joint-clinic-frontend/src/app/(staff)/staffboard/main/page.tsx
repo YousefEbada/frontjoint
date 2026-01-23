@@ -63,9 +63,10 @@ const Page = () => {
               pendingTickets.map((ticket) => (
                 <PatientCallRow
                   key={ticket._id}
-                  name={typeof ticket.patientId === 'object' && (ticket.patientId as any).fullName
-                    ? (ticket.patientId as any).fullName
-                    : typeof ticket.patientId === 'string' ? "Patient (" + ticket.patientId.slice(-4) + ")" : "Unknown"}
+                  name={ticket.patientName ||
+                    (typeof ticket.patientId === 'object' && (ticket.patientId as any).fullName
+                      ? (ticket.patientId as any).fullName
+                      : "Unknown")}
                   type={ticket.inquiryDept}
                   phone={ticket.contact}
                   due={ticket.completed ? "Done" : "Pending"}
@@ -78,6 +79,7 @@ const Page = () => {
         </div>
       </DashBoardContent>
     </>
+
   );
 };
 

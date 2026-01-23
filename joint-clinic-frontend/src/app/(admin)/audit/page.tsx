@@ -8,6 +8,9 @@ import TaskList, { TaskItem } from "../../../components/atoms/tasklist/tasklist"
 import DashBoardContent from "@/components/atoms/DashBoardContent";
 import { getTasks, addTask, updateTask, removeTask } from "@/lib/api/admin.api";
 
+// Force dynamic rendering - this page requires authentication
+export const dynamic = 'force-dynamic';
+
 const Page = () => {
   const [tasks, setTasks] = useState<TaskItem[]>([]);
   const [firstName, setFirstName] = useState("");

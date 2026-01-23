@@ -5,8 +5,11 @@ import DashBoardContent from "@/components/atoms/DashBoardContent";
 import PageHeader from "@/components/organisms/PageHeader";
 import { useExercises } from "@/hooks/useExercises";
 import SessionCard from "@/components/molecules/sessionCard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+
+// Force dynamic rendering - this page requires authentication and user-specific data
+export const dynamic = 'force-dynamic';
 
 const Page = () => {
     const router = useRouter();
@@ -43,17 +46,17 @@ const Page = () => {
         router.push(`/audit/exercises/video/${exerciseId}`);
     };
 
-    console.log(exercises);
-
     return (
         <>
             <DashBoardHeader therapyName={data.therapyName} nav={false} dateTime={true} />
             <DashBoardContent>
                 <PageHeader
-                    title="Workout Library"
+                    title="Workout Library"                    
                     searchPlaceholder="Search By Name"
                     searchValue={searchTerm}
-                    onSearchChange={setSearchTerm}
+                    onSearchChange={(value) => {
+                        setSearchTerm(value);
+                    }}
                     actionButton={{
                         label: "Upload Video",
                         onClick: handleUploadClick

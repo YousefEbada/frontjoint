@@ -42,9 +42,10 @@ const SupportPage = () => {
                 // Name handling: If object, use fullName. If string, try to look it up or show ID.
                 // Since we don't have a patients map yet, using the ID or "Patient" is the fallback.
                 // Ideally we should fetch patient info. For now, let's allow the ID fallback to be more visible or cleaner.
-                const patientName = typeof ticket.patientId === 'object' && (ticket.patientId as any).fullName
-                  ? (ticket.patientId as any).fullName
-                  : "Patient (" + (typeof ticket.patientId === 'string' ? ticket.patientId.slice(-4) : 'Unknown') + ")";
+                const patientName = ticket.patientName ||
+                  (typeof ticket.patientId === 'object' && (ticket.patientId as any).fullName
+                    ? (ticket.patientId as any).fullName
+                    : "Unknown");
 
                 // NOTE: To fix "Unknown", the backend must populate patientId, OR we must fetch the patient list and map it.
                 // Assuming backend might not populate, we could use `getDoctorPatients` if valid, but that requires doctor auth. 

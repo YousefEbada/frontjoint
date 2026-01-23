@@ -10,6 +10,9 @@ import StatsGrid from "@/components/organisms/StatsGrid";
 import { color } from "@/lib/constants/colors";
 import { usePatientDashboard } from "@/hooks/usePatient";
 
+// Force dynamic rendering - this page requires authentication
+export const dynamic = 'force-dynamic';
+
 const Page = () => {
   const router = useRouter();
 
@@ -102,9 +105,7 @@ const Page = () => {
 
             <button
               onClick={() => router.push('/patient/booking')}
-              className="px-8 py-4 bg-[#ea392f] text-white cursor-pointer rounded-full font-semibold text-lg
-                         hover:bg-[#d63228] transition-all duration-300 shadow-md hover:shadow-lg
-                         transform hover:scale-105"
+              className="px-8 py-4 bg-[#ea392f] text-white cursor-pointer rounded-full font-semibold text-lg hover:bg-[#d63228] transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105"
             >
               Book a Session Now
             </button>

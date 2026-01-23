@@ -164,12 +164,46 @@ function WhoWeAre() {
     master.from(leftLine, { opacity: 0, duration: 0.5 });
     master.from(rightLine, { opacity: 0, duration: 0.5 }, "<");
 
-    master.from(members, { opacity: 0, y: 50, duration: 0.5 });
+    master.from(members, { opacity: 0, duration: 0.5 });
 
-    master.to([members, indicator], { opacity: 0, y: -50, duration: 0.5 });
+    // master.to([members, indicator], { opacity: 0, y: -50, duration: 0.5 });
+    // master.to([members, indicator], { opacity: 0, y: -50, duration: 0.5 });
+    master.to(members, { autoAlpha: 0, y: -90, duration: 0.5 });
+
     master.to(circle, { opacity: 0, duration: 0.5 }, "<");
+    if (window.innerWidth < 768) {
+      master.to(
+        redLine,
+        {
+          opacity: 0,
+          duration: 0.6,
+          ease: "power2.out",
+        },
+        "<"
+      );
+    }
+    else{
+      master.to(
+        redLine,
+        {
+          opacity: 1,
+          y:-300,
+          height: "150px",
+          duration: 0.6,
+          ease: "power2.out",
+        },
+        "<"
+      );
+    }
 
-    master.from(chooseUs, { opacity: 0, y: 50, duration: 0.5 });
+    master.to(leftLine, { opacity: 0, duration: 0.5 });
+    master.to(rightLine, { opacity: 0, duration: 0.5 }, "<");
+    master.from([leftDot, rightDot], {
+      opacity: 0,
+      ease: "power2.out",
+    });
+
+    master.from(chooseUs, { autoAlpha: 0, y: 50, duration: 0.5 });
 
     const cardsCount = cards.length;
 
@@ -179,7 +213,6 @@ function WhoWeAre() {
         const progress = this.progress();
         const index = Math.min(Math.floor(progress * cardsCount), cardsCount - 1);
 
-        // 1️⃣ حرّك الخط أولاً
         const redWidth = getRedLineWidth(index);
         gsap.to(redLineMovingRef.current, {
           width: redWidth,
@@ -187,10 +220,9 @@ function WhoWeAre() {
           ease: "power2.out"
         });
 
-        // 2️⃣ وبعدها بفريم React يغير active
         setTimeout(() => {
           setActiveCardIndex(index);
-        }, 0); // ممكن تزود delay لو عايز فرق
+        }, 0);
       },
     });
 
@@ -223,14 +255,14 @@ function WhoWeAre() {
 
       <h2
         ref={titleRef}
-        className="text-[64px] mb-[20px] md:mb-[35px] font-bold text-center text-[#fff]"
+        className="text-[48px] md:text-[64px] mb-[20px] md:mb-[35px] font-bold text-center text-[#fff]"
       >
         Who We Are
       </h2>
 
       <p
         ref={paragraphRef}
-        className="text-[20px] text-center w-[90%] md:w-[70%] font-medium text-[#fff]"
+        className="text-[16px] md:text-[20px] text-center w-[90%] md:w-[70%] font-medium text-[#fff]"
       >
         At Joint Clinic, we believe recovery should be simple, secure, and
         effective. Our team of physiotherapists and specialists combine medical
@@ -239,22 +271,22 @@ function WhoWeAre() {
         we make every step of your recovery journey easier.
       </p>
       <section
-        className="team_section absolute z-10 md:bottom-[120px] bottom-[55%] w-[90%] mx-auto flex flex-col items-center justify-center"
+        className="team_section absolute z-30 md:bottom-[120px] bottom-[120px] w-[90%] h-[50%] sm:h-auto mx-auto flex flex-col items-center justify-center"
         ref={membersRef}
       >
-        <h1 className="text-[40px] md:text-[100px] font-bold font-['IBM_Plex_Sans'] text-[#fff] text-center">
+        <h1 className="text-[40px] md:text-[100px] font-bold font-['IBM_Plex_Sans'] text-[#fff] text-center mb-0">
           Meet Our Team
         </h1>
 
         <div
           className={
-            "members md:translate-y-6 translate-y-30 max-w-[1400px] mx-auto grid grid-cols-3 md:grid-cols-5 " +
-            // center the whole grid content (useful when last row has fewer items)
-            "justify-center justify-items-center gap-[10px] overflow-hidden transition-all"
+            "members md:translate-y-6 translate-y-30 max-w-[1400px] w-full h-fit mx-auto " +
+            "flex gap-[10px] overflow-x-auto snap-x snap-mandatory justify-start touch-pan-x " +
+            "md:grid md:grid-cols-5 md:overflow-visible md:justify-center md:justify-items-center transition-all"
           }
         >
           {memberinfo.map((member, index) => (
-            <div key={index} className="flex flex-col justify-center items-center w-auto mb-4">
+            <div key={index} className="flex flex-col justify-center items-center mb-4 flex-shrink-0 snap-center min-w-[150px] md:min-w-0 w-auto">
               <div className="w-[50px] md:w-[80px] mb-[4px]">
                 <Image
                   src={member.imgUrl}
@@ -274,15 +306,17 @@ function WhoWeAre() {
               </p>
             </div>
           ))}
-          <Link href="/ourteam" className="col-span-3 md:col-span-5">
-            <button className="bg-[#ee3124] text-[#fff] text-[20px] cursor-pointer border-2 border-transparent hover:bg-[#fff] hover:text-[#ee3124] hover:border-[#ee3124] w-[180px] font-medium px-4 py-2 rounded-full mt-4 transition-all duration-300">
+        </div>
+        <div className="flex justify-center w-full mt-4 md:translate-y-6 translate-y-30">
+          <Link href="/ourteam">
+            <button className="bg-[#ee3124] text-[#fff] text-[20px] cursor-pointer border-2 border-transparent hover:bg-[#fff] hover:text-[#ee3124] hover:border-[#ee3124] w-[180px] font-medium px-4 py-2 rounded-full transition-all duration-300">
               View All
             </button>
           </Link>
         </div>
       </section>
       <section
-        className="chooseUs text-center absolute w-full flex flex-col justify-center items-center bottom-[70px]"
+        className="chooseUs text-center absolute w-full flex flex-col justify-center items-center md:bottom-[10px] bottom-[50px]"
         ref={chooseUsRef}
       >
         <h2
@@ -297,7 +331,7 @@ function WhoWeAre() {
 
 
           {/* الكروت */}
-          <div className="cards mx-auto grid md:translate-y-[-20%] justify-center items-center gap-4 md:gap-[60px] w-full grid-cols-2 md:grid-cols-4 sm:grid-cols-2">
+          <div className="cards mx-auto grid lg:translate-y-[-20%] justify-center items-center gap-4 lg:gap-[60px] w-full grid-cols-2 lg:grid-cols-4 sm:grid-cols-2">
             {cards.map((card, index) => (
               <FeatureCard
                 key={index}

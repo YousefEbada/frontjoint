@@ -21,8 +21,12 @@ export const useChat = (activeRoomId?: string) => {
 
   // Initialize Socket
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    if (!token) return;
+    const token =
+      localStorage.getItem("accessToken") || localStorage.getItem("token");
+    if (!token) {
+      console.warn("useChat: No token found");
+      return;
+    }
 
     const newSocket = io(SOCKET_URL, {
       auth: { token },
@@ -41,6 +45,10 @@ export const useChat = (activeRoomId?: string) => {
 
     newSocket.on("error", (err: any) => {
       console.error("Socket error:", err);
+    });
+
+    newSocket.on("connect_error", (err: any) => {
+      console.error("Socket connection error:", err.message);
     });
 
     setSocket(newSocket);
