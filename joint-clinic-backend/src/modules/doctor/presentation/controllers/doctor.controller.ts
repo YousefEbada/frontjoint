@@ -1,4 +1,4 @@
-import { BOOKING_REPO, DOCTOR_REPO, SESSION_REPO } from "app/container.bindings.js";
+import { BOOKING_REPO, DOCTOR_REPO, EXERCISE_REPO, PATIENT_REPO, SESSION_REPO } from "app/container.bindings.js";
 import { Request, Response } from "express";
 import { FindDoctorById } from "modules/doctor/application/use-cases/FindDoctorById.js";
 import { resolve } from "app/container.js";
@@ -6,6 +6,38 @@ import { GetCachedPractitioners } from "modules/doctor/application/use-cases/Get
 import { GetDoctorBookings } from "modules/doctor/application/use-cases/GetDoctorBookings.js";
 import { GetDoctorSessions } from "modules/doctor/application/use-cases/GetDoctorSessions.js";
 import { GetPatientsByDoctorAndStatus } from "modules/doctor/application/use-cases/GetPatientsByDoctorAndStatus.js";
+import { AssignExercisesToPatient } from "modules/doctor/application/use-cases/AssignExercisesToPatient.js";
+import { GetAssignedExercises } from "modules/doctor/application/use-cases/GetAssignedExercises.js";
+
+export async function assignExercisesToPatient(req: Request, res: Response) {
+    const { doctorNixpendId, patientNixpendId, exerciseId, dueDate } = req.body;
+    try {
+        const uc = new AssignExercisesToPatient(resolve(DOCTOR_REPO));
+        const result = await uc.exec(doctorNixpendId, patientNixpendId, exerciseId, dueDate ? new Date(dueDate) : undefined);
+        if (!result.ok) {
+            return res.status(400).json(result);
+        }
+        return res.status(200).json(result);
+    } catch (error) {
+        console.error("Error in assignExercisesToPatient controller:", (error as Error).message);
+        return res.status(500).json({ ok: false, message: "Assign Exercises to Patient controller Internal server error" });
+    }
+}
+
+export async function getAssignedExercises(req: Request, res: Response) {
+    const { doctorNixpendId, patientNixpendId } = req.params;
+    try {
+        const uc = new GetAssignedExercises(resolve(DOCTOR_REPO));
+        const result = await uc.exec(doctorNixpendId, patientNixpendId);
+        if (!result.ok) {
+            return res.status(404).json(result);
+        }
+        return res.status(200).json(result);
+    } catch (error) {
+        console.error("Error in getAssignedExercises controller:", (error as Error).message);
+        return res.status(500).json({ ok: false, message: "Get Assigned Exercises controller Internal server error" });
+    }
+}
 
 export async function findDoctorById(req: Request, res: Response) {
     const doctorId = req.params.id as string;

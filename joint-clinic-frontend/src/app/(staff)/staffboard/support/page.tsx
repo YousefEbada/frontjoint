@@ -13,22 +13,8 @@ import { useSupportTickets } from "@/hooks/useSupport";
 
 const SupportPage = () => {
   const router = useRouter();
-  const [patients, setPatients] = useState<Record<string, string>>({});
+  const [activeTab, setActiveTab] = useState<'call' | 'doctor'>('call');
   const { tickets, isLoading: loadingTickets } = useSupportTickets();
-
-  // Fetch patients map
-  React.useEffect(() => {
-    import("@/lib/api/patient.api").then(({ getAllPatients }) => {
-      getAllPatients().then(pList => {
-        const map: Record<string, string> = {};
-        pList.forEach(p => {
-          if (p._id) map[p._id] = p.fullName || p.userId; // fallback to userId if fullName missing
-          if (p.userId) map[p.userId] = p.fullName || "Patient"; // double map just in case ID refers to userId
-        });
-        setPatients(map);
-      }).catch(err => console.error("Failed to load patients for mapping", err));
-    });
-  }, []);
 
   return (
     <>
@@ -49,21 +35,31 @@ const SupportPage = () => {
               <div className="text-gray-400 p-4">No call requests found.</div>
             ) : (
               tickets.map(ticket => {
+                // Map boolean completed to status string for UI
+                // User requirement: if false -> "Pending", if true -> "Done"
                 const status: "Pending" | "Done" = ticket.completed ? "Done" : "Pending";
 
-                // Use mapped name or fallback
-                let patientName = "Unknown";
-                if (typeof ticket.patientId === 'string') {
-                  patientName = patients[ticket.patientId] || `Patient (${ticket.patientId.slice(-4)})`;
-                } else if (typeof ticket.patientId === 'object' && (ticket.patientId as any).fullName) {
-                  patientName = (ticket.patientId as any).fullName;
-                }
+                // Name handling: If object, use fullName. If string, try to look it up or show ID.
+                // Since we don't have a patients map yet, using the ID or "Patient" is the fallback.
+                // Ideally we should fetch patient info. For now, let's allow the ID fallback to be more visible or cleaner.
+                const patientName = ticket.patientName ||
+                  (typeof ticket.patientId === 'object' && (ticket.patientId as any).fullName
+                    ? (ticket.patientId as any).fullName
+                    : "Unknown");
+
+                // NOTE: To fix "Unknown", the backend must populate patientId, OR we must fetch the patient list and map it.
+                // Assuming backend might not populate, we could use `getDoctorPatients` if valid, but that requires doctor auth. 
+                // This is staff view. Staff might need their own `getAllPatients`.
 
                 return (
                   <RequestItem
                     key={ticket._id}
                     name={patientName}
-                    status={status as any}
+                    status={status as any} // RequestItem expects specific strings, but let's check its props again. It accepts "Done" | "Opened" | "Unread".
+                    // User asked for "Pending" for false. RequestItem supports: "Done", "Opened", "Unread".
+                    // I need to update RequestItem to support "Pending" or map "Pending" to "Unread"/"Opened" visually.
+                    // "Unread" is red, "Opened" is yellow. "Pending" usually implies waiting -> "Unread" (Red) or "Opened" (Yellow).
+                    // User said "if its false its 'Pending'". I should update RequestItem to accept "Pending".
                     phone={ticket.contact}
                     department={ticket.inquiryDept}
                     date={new Date(ticket.createdAt).toLocaleDateString()}

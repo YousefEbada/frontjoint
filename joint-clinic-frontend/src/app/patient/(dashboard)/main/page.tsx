@@ -10,6 +10,9 @@ import StatsGrid from "@/components/organisms/StatsGrid";
 import { color } from "@/lib/constants/colors";
 import { usePatientDashboard } from "@/hooks/usePatient";
 
+// Force dynamic rendering - this page requires authentication
+export const dynamic = 'force-dynamic';
+
 const Page = () => {
   const router = useRouter();
 

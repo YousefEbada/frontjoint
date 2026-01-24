@@ -11,6 +11,7 @@ type CustomSelectProps = {
   className?: string;
   size?: "small" | "large";
   placeholder?: string;
+  disabled?: boolean;
 };
 
 export default function CustomSelect({
@@ -22,6 +23,7 @@ export default function CustomSelect({
   className,
   size = "large",
   placeholder,
+  disabled = false,
 }: CustomSelectProps) {
   const [internalSelected, setInternalSelected] = useState(placeholder || items[0]);
 
@@ -62,7 +64,8 @@ export default function CustomSelect({
       {/* BUTTON */}
       <button
         type="button"
-        onClick={() => setOpen(!open)}
+        disabled={disabled}
+        onClick={() => !disabled && setOpen(!open)}
         className={clsx(
           "bg-[#fff] !text-[#1e5598]",
           isSmall ? "rounded-[30px] border border-gray-200" : "rounded-[30px] sm:rounded-[40px] md:rounded-[50px]",

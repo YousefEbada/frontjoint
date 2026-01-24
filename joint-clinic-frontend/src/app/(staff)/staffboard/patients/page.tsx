@@ -2,32 +2,52 @@
 import React, { useState } from "react";
 import DashBoardHeader from "@/components/molecules/DashBoardHeader";
 import Typography from "@/components/atoms/Typography";
-import CorneredBoxes from "@/components/atoms/CorneredBoxes";
 import SearchInput from "@/components/atoms/searchInput";
 import ScrollableArea from "@/components/atoms/ScrollableArea";
-import BackTo from "@/components/molecules/BackTo";
 import Link from "next/link";
 import PatientCard from "@/components/molecules/PatientCard";
 import DashBoardContent from "@/components/atoms/DashBoardContent";
+import { usePatients } from "@/hooks/usePatient";
+import { Patient } from "@/lib/api/patient.api";
 
-// Mock Data
-const allPatients = Array.from({ length: 15 }, (_, i) => ({
-    id: i + 1,
-    name: "Patient Name",
-    injury: "Back injury",
-    status: i % 3 === 0 ? "Inactive" : "Active",
-    statusColor: i % 3 === 0 ? "text-[#8A8A8A]" : "text-[#1C9A55]"
-}));
+import { useRouter, useSearchParams } from "next/navigation";
 
 const PatientsPage = () => {
-    const [activeTab, setActiveTab] = useState<"active" | "all">("active");
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const statusParam = searchParams?.get("status");
+
+    const [activeTab, setActiveTabState] = useState<"active" | "all">(
+        (statusParam === "all" ? "all" : "active")
+    );
     const [searchTerm, setSearchTerm] = useState("");
 
-    const filteredPatients = allPatients.filter(p => {
-        const matchesSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesTab = activeTab === "active" ? p.status === "Active" : true;
-        return matchesSearch && matchesTab;
+    const setActiveTab = (tab: "active" | "all") => {
+        setActiveTabState(tab);
+        const params = new URLSearchParams(searchParams ? searchParams.toString() : "");
+        if (tab === "active") {
+            params.set("status", "active");
+        } else {
+            params.set("status", "all");
+        }
+        router.push(`?${params.toString()}`);
+    };
+
+    // Fetch patients based on active tab
+    // When activeTab is "all", we pass undefined to fetch all patients
+    const { data: patients = [], isLoading } = usePatients(activeTab === "active" ? "active" : undefined);
+
+    const filteredPatients = patients.filter((p: Patient) => {
+        // Handle name extraction safely. 
+        // Note: p.userId might be an object if populated, so we cast to any to access fullName
+        const name = (p.userId as any)?.fullName || p.fullName || "Unknown";
+        const matchesSearch = name.toLowerCase().includes(searchTerm.toLowerCase());
+        return matchesSearch;
     });
+
+    const getStatusColor = (status?: string) => {
+        return status === "active" ? "text-[#1C9A55]" : "text-[#8A8A8A]";
+    };
 
     return (
         <div className="w-full h-full flex flex-col">
@@ -71,24 +91,31 @@ const PatientsPage = () => {
 
                 <div className="w-full flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-y-2 md:block md:bg-white md:rounded-[24px] md:shadow-sm md:p-8">
                     <ScrollableArea className="w-full h-full px-2">
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pb-4">
-                            {filteredPatients.length > 0 ? (
-                                filteredPatients.map((patient, index) => (
-                                    <Link key={index} href={`/staffboard/patients/${patient.id}`} className="w-full">
-                                        <PatientCard
-                                            name={patient.name}
-                                            injury={patient.injury}
-                                            status={patient.status}
-                                            statusColor={patient.statusColor}
-                                        />
-                                    </Link>
-                                ))
-                            ) : (
-                                <div className="col-span-full flex items-center justify-center text-gray-400 h-40">
-                                    No patients found.
-                                </div>
-                            )}
-                        </div>
+                        {isLoading ? (
+                            <div className="flex items-center justify-center h-40">Loading...</div>
+                        ) : (
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pb-4">
+                                {filteredPatients.length > 0 ? (
+                                    filteredPatients.map((patient: Patient) => {
+                                        const name = (patient.userId as any)?.fullName || patient.fullName || "Unknown";
+                                        return (
+                                            <Link key={patient._id} href={`/staffboard/patients/${patient._id}`} className="w-full">
+                                                <PatientCard
+                                                    name={name}
+                                                    injury={patient.injuryDetails?.affectedArea || "Unknown"}
+                                                    status={patient.status || "inactive"}
+                                                    statusColor={getStatusColor(patient.status)}
+                                                />
+                                            </Link>
+                                        );
+                                    })
+                                ) : (
+                                    <div className="col-span-full flex items-center justify-center text-gray-400 h-40">
+                                        No patients found.
+                                    </div>
+                                )}
+                            </div>
+                        )}
                     </ScrollableArea>
                 </div>
             </DashBoardContent>

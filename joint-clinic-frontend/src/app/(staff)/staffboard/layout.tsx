@@ -17,7 +17,7 @@ export default function StaffLayout({
     const navItems = [
         { href: "/staffboard/main", icon: Profile, title: "Dashboard" },
         { href: "/staffboard/booking", icon: Calendar, title: "Booking" },
-        { href: "/staffboard/patients", icon: Clients, title: "Clients" },
+        { href: "/staffboard/patients?status=active", icon: Clients, title: "Clients" },
         { href: "/staffboard/reports", icon: Report, title: "Medical Reports" },
         { href: "/staffboard/support", icon: Support, title: "Support" },
     ];

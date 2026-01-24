@@ -19,7 +19,7 @@ export default function DoctorLayout({
     const navItems = [
         { href: "/doctor/overview", icon: Profile, title: "Overview" },
         { href: "/doctor/calendar", icon: Calendar, title: "Calendar" },
-        { href: "/doctor/patients", icon: Patients, title: "Patients" },
+        { href: "/doctor/patients?status=active", icon: Patients, title: "Patients" },
         { href: "/doctor/exercises", icon: Exercise, title: "Exercises" },
         { href: "/doctor/reports", icon: Report, title: "Medical Reports" },
         { href: "/doctor/ai-assistant", icon: AiAssistant, title: "AI Assistant" },

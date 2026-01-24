@@ -23,10 +23,12 @@ export const PatientRepoMongo: PatientRepoPort = {
         }
     },
 
-    async getAllPatients() {
+    async getAllPatients(status?: "active" | "inactive") {
         try {
-            console.log("PatientRepoMongo.getAllPatients] Fetching all patients");
-            const patients = await PatientModel.find()
+            console.log("PatientRepoMongo.getAllPatients] Fetching all patients", status ? `with status: ${status}` : "");
+            const query = status ? { status } : {};
+            console.log(" >>> EXECUTING MONGO QUERY:", JSON.stringify(query));
+            const patients = await PatientModel.find(query)
                 .populate({
                     path: 'userId',
                     select: 'fullName firstName lastName email phone gender'
@@ -93,7 +95,7 @@ export const PatientRepoMongo: PatientRepoPort = {
             //     throw new Error("INVALID_ID");
             // }
             await PatientModel.findOneAndUpdate(
-                {nixpendId: id},
+                { nixpendId: id },
                 { status }
                 // { session: options?.tx }
             );

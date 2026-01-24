@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useMemo, Suspense } from "react";
+import React, { useState, useMemo, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import DashBoardHeader from "@/components/molecules/DashBoardHeader";
 import Typography from "@/components/atoms/Typography";
@@ -15,7 +15,10 @@ import advancedFormat from "dayjs/plugin/advancedFormat";
 
 dayjs.extend(advancedFormat);
 
-const BookingChangeContent = () => {
+// Force dynamic rendering - this page requires authentication
+export const dynamic = 'force-dynamic';
+
+function BookingChangeContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const bookingId = searchParams?.get("id");
@@ -77,10 +80,7 @@ const BookingChangeContent = () => {
         // API likely expects "HH:mm:ss" or "HH:mm".
         // get the current time in api time format edit api time
         const apiTime = dayjs(`2000-01-01 ${selectedTime}`).format("HH:mm");
-        console.log("ggggggggggggggggggggggggggggggggggg ************** gggggggggggggggggggggggggggggg");
-        console.log(bookingDetails);
-        console.log(selectedDate);
-        console.log(selectedTime);
+
         /*
         actual_duration
         : 
@@ -271,18 +271,18 @@ const BookingChangeContent = () => {
             </DashBoardContent>
         </>
     );
-};
+}
 
-const BookingsPage = () => {
+export default function BookingsPage() {
     return (
         <Suspense fallback={
             <DashBoardContent>
-                <div className="flex justify-center items-center h-full"> <Typography text="Loading contents..." variant="bodyRegular" /> </div>
+                <div className="flex justify-center items-center h-full">
+                    <Typography text="Loading..." variant="bodyRegular" />
+                </div>
             </DashBoardContent>
         }>
             <BookingChangeContent />
         </Suspense>
     );
-};
-
-export default BookingsPage;
+}

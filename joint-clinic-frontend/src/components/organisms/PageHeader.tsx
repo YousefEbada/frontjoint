@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SearchInput from "@/components/atoms/searchInput";
 import Typography from "@/components/atoms/Typography";
 import Button from "@/components/atoms/Button";
@@ -34,6 +34,28 @@ const PageHeader: React.FC<PageHeaderProps> = ({
     filters,
     className = "",
 }) => {
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        // Only run in browser environment
+        if (typeof window === "undefined") return;
+
+        const mq = window.matchMedia("(max-width: 767px)");
+        const update = () => setIsMobile(mq.matches);
+        update();
+
+        // Support older browsers that don't have addEventListener on MediaQueryList
+        if (typeof mq.addEventListener === "function") {
+            mq.addEventListener("change", update);
+            return () => mq.removeEventListener("change", update);
+        }
+
+        // eslint-disable-next-line deprecation/deprecation
+        mq.addListener(update);
+        // eslint-disable-next-line deprecation/deprecation
+        return () => mq.removeListener(update);
+    }, []);
+
     return (
         <div className={`grid grid-cols-17 md:grid-cols-[70%_30%] gap-y-4 grid-rows-2 w-full mb-6 ${className}`}>
             {/* Search: Mobile Order 1, Desktop Order 2 */}
@@ -47,13 +69,13 @@ const PageHeader: React.FC<PageHeaderProps> = ({
                     />
                 )}
             </div>
-            
+
             {/* Title: Mobile Order 2, Desktop Order 1 */}
             <div className="order-2 col-span-8 md:order-1 md:col-span-1 flex items-center">
                 {title && (
                     <Typography
                         text={title}
-                        variant={`${typeof window !== 'undefined' && window.innerWidth < 768 ? "bodyBold" : "heading1"}`}
+                        variant={isMobile ? "bodyBold" : "heading1"}
                         style={{ color: color.secondary }}
                     />
                 )}

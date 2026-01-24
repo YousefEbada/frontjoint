@@ -143,12 +143,16 @@ function WhoWeAre() {
       ease: "power3.inOut",
     });
 
-    master.from([leftDot, rightDot], {
-      opacity: 0,
-      x: (i) => (i === 0 ? "+=100" : "-=100"),
-      duration: 0.6,
-      ease: "power2.out",
-    });
+    master.from(
+      [leftDot, rightDot],
+      {
+        opacity: 0,
+        x: (i) => (i === 0 ? "+=100" : "-=100"),
+        duration: 0.6,
+        ease: "power2.out",
+      },
+      "<"
+    );
 
     master.from(
       redLine,
@@ -161,8 +165,18 @@ function WhoWeAre() {
       "<"
     );
 
-    master.from(leftLine, { opacity: 0, duration: 0.5 });
-    master.from(rightLine, { opacity: 0, duration: 0.5 }, "<");
+    master.from(
+      leftLine,
+      { opacity: 0, duration: 0.5 },
+      "<"
+    );
+
+    master.from(
+      rightLine,
+      { opacity: 0, duration: 0.5 },
+      "<"
+    );
+
 
     master.from(members, { opacity: 0, duration: 0.5 });
 
@@ -182,12 +196,12 @@ function WhoWeAre() {
         "<"
       );
     }
-    else{
+    else {
       master.to(
         redLine,
         {
           opacity: 1,
-          y:-300,
+          y: -300,
           height: "150px",
           duration: 0.6,
           ease: "power2.out",

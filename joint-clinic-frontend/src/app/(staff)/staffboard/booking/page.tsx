@@ -13,7 +13,7 @@ import { useSearchParams } from "next/navigation";
 import { useState, useEffect, Suspense } from "react";
 import dayjs from "dayjs";
 
-const BookingContent = () => {
+function BookingPageContent() {
 
   const searchParams = useSearchParams();
   const dateParam = searchParams?.get("date");
@@ -124,20 +124,18 @@ const BookingContent = () => {
       </DashBoardContent>
     </>
   );
-};
+}
 
-const Page = () => {
+export default function Page() {
   return (
     <Suspense fallback={
       <DashBoardContent>
         <div className="flex justify-center items-center h-full">
-          <Typography text="Loading contents..." variant="bodyRegular" />
+          <Typography text="Loading..." variant="bodyRegular" />
         </div>
       </DashBoardContent>
     }>
-      <BookingContent />
+      <BookingPageContent />
     </Suspense>
   );
-};
-
-export default Page;
+}

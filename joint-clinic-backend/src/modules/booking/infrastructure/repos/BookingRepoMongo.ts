@@ -12,7 +12,25 @@ export const BookingRepoMongo: BookingRepoPort = {
   },
 
   async getAllBookings(): Promise<Booking[]> {
-    const docs = await BookingModel.find().lean();
+    const docs = await BookingModel.aggregate([
+      { $lookup: {
+          from: "patients",
+          localField: "patientNixpendId",
+          foreignField: "nixpendId",
+          as: "patient"
+      }},
+      { $unwind: { path: "$patient", preserveNullAndEmptyArrays: true } },
+      { $lookup: {
+          from: "users",
+          localField: "patient.userId",
+          foreignField: "_id",
+          as: "user"
+      }},
+      { $unwind: { path: "$user", preserveNullAndEmptyArrays: true } },
+      { $addFields: {
+          patientName: "$user.fullName"
+      }}
+    ]);
     return docs as unknown as Booking[];
   },
 
@@ -40,15 +58,54 @@ export const BookingRepoMongo: BookingRepoPort = {
   },
 
   async findById(id: string): Promise<Booking | null> {
-    const doc = await BookingModel.findById(id).lean();
-    if (!doc) {
+    const docs = await BookingModel.aggregate([
+      { $match: { _id: require('mongodb').ObjectId.isValid(id) ? new (require('mongodb').ObjectId)(id) : id } },
+      { $lookup: {
+          from: "patients",
+          localField: "patientNixpendId",
+          foreignField: "nixpendId",
+          as: "patient"
+      }},
+      { $unwind: { path: "$patient", preserveNullAndEmptyArrays: true } },
+      { $lookup: {
+          from: "users",
+          localField: "patient.userId",
+          foreignField: "_id",
+          as: "user"
+      }},
+      { $unwind: { path: "$user", preserveNullAndEmptyArrays: true } },
+      { $addFields: {
+          patientName: "$user.fullName"
+      }},
+      { $limit: 1 }
+    ]);
+    if (!docs || docs.length === 0) {
       return null;
     }
-    return doc as unknown as Booking;
+    return docs[0] as unknown as Booking;
   },
 
   async findBookingsByPatient(patientId: string): Promise<Booking[]> {
-    const docs = await BookingModel.find({ patientId }).lean();
+    const docs = await BookingModel.aggregate([
+      { $match: { patientNixpendId: patientId } },
+      { $lookup: {
+          from: "patients",
+          localField: "patientNixpendId",
+          foreignField: "nixpendId",
+          as: "patient"
+      }},
+      { $unwind: { path: "$patient", preserveNullAndEmptyArrays: true } },
+      { $lookup: {
+          from: "users",
+          localField: "patient.userId",
+          foreignField: "_id",
+          as: "user"
+      }},
+      { $unwind: { path: "$user", preserveNullAndEmptyArrays: true } },
+      { $addFields: {
+          patientName: "$user.fullName"
+      }}
+    ]);
     return docs as unknown as Booking[];
   },
   
@@ -88,31 +145,107 @@ export const BookingRepoMongo: BookingRepoPort = {
   },
 
   async findBookingsByDoctor(doctorId: string): Promise<Booking[]> {
-    const docs = await BookingModel.find({ doctorId }).lean();
+    const docs = await BookingModel.aggregate([
+      { $match: { doctorNixpendId: doctorId } },
+      { $lookup: {
+          from: "patients",
+          localField: "patientNixpendId",
+          foreignField: "nixpendId",
+          as: "patient"
+      }},
+      { $unwind: { path: "$patient", preserveNullAndEmptyArrays: true } },
+      { $lookup: {
+          from: "users",
+          localField: "patient.userId",
+          foreignField: "_id",
+          as: "user"
+      }},
+      { $unwind: { path: "$user", preserveNullAndEmptyArrays: true } },
+      { $addFields: {
+          patientName: "$user.fullName"
+      }}
+    ]);
     return docs as unknown as Booking[];
   },
   
   async findBookingsByDoctorAndDay(doctorId, day) {
-    const docs = await BookingModel.find({ doctorId, slotStart: { $gte: startOfDay(day) }, slotEnd: { $lte: endOfDay(day) } }).lean();
+    const docs = await BookingModel.aggregate([
+      { $match: { doctorNixpendId: doctorId, slotStart: { $gte: startOfDay(day) }, slotEnd: { $lte: endOfDay(day) } } },
+      { $lookup: {
+          from: "patients",
+          localField: "patientNixpendId",
+          foreignField: "nixpendId",
+          as: "patient"
+      }},
+      { $unwind: { path: "$patient", preserveNullAndEmptyArrays: true } },
+      { $lookup: {
+          from: "users",
+          localField: "patient.userId",
+          foreignField: "_id",
+          as: "user"
+      }},
+      { $unwind: { path: "$user", preserveNullAndEmptyArrays: true } },
+      { $addFields: {
+          patientName: "$user.fullName"
+      }}
+    ]);
     return docs as any;
   },
 
   async findBookingsByDoctorAndWeek(doctorId: string, weekStart: Date): Promise<Booking[]> {
     const weekEnd = new Date(weekStart);
     weekEnd.setDate(weekEnd.getDate() + 7);
-    const docs = await BookingModel.find({
-      doctorId,
-      appointmentDate: { $gte: weekStart, $lt: weekEnd }
-    }).lean();
+    const docs = await BookingModel.aggregate([
+      { $match: {
+          doctorNixpendId: doctorId,
+          appointmentDate: { $gte: weekStart, $lt: weekEnd }
+      }},
+      { $lookup: {
+          from: "patients",
+          localField: "patientNixpendId",
+          foreignField: "nixpendId",
+          as: "patient"
+      }},
+      { $unwind: { path: "$patient", preserveNullAndEmptyArrays: true } },
+      { $lookup: {
+          from: "users",
+          localField: "patient.userId",
+          foreignField: "_id",
+          as: "user"
+      }},
+      { $unwind: { path: "$user", preserveNullAndEmptyArrays: true } },
+      { $addFields: {
+          patientName: "$user.fullName"
+      }}
+    ]);
     return docs as unknown as Booking[];
   },
 
   async findBookingsByDoctorAndMonth(doctorId: string, monthStart: Date): Promise<Booking[]> {
     const monthEnd = new Date(monthStart.getFullYear(), monthStart.getMonth() + 1, 0);
-    const docs = await BookingModel.find({
-      doctorId,
-      appointmentDate: { $gte: monthStart, $lte: monthEnd }
-    }).lean();
+    const docs = await BookingModel.aggregate([
+      { $match: {
+          doctorNixpendId: doctorId,
+          appointmentDate: { $gte: monthStart, $lte: monthEnd }
+      }},
+      { $lookup: {
+          from: "patients",
+          localField: "patientNixpendId",
+          foreignField: "nixpendId",
+          as: "patient"
+      }},
+      { $unwind: { path: "$patient", preserveNullAndEmptyArrays: true } },
+      { $lookup: {
+          from: "users",
+          localField: "patient.userId",
+          foreignField: "_id",
+          as: "user"
+      }},
+      { $unwind: { path: "$user", preserveNullAndEmptyArrays: true } },
+      { $addFields: {
+          patientName: "$user.fullName"
+      }}
+    ]);
     return docs as unknown as Booking[];
   }
 };

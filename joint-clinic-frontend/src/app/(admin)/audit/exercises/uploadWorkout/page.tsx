@@ -70,6 +70,15 @@ const UploadWorkout = () => {
     const handleSubmit = () => {
         if (!validateForm()) return;
 
+        console.log("============ UPLOAD PAGE: Submitting with:", {
+            title: title.trim(),
+            description: description.trim() || undefined,
+            selectedMuscles: selectedMuscles,
+            selectedEquipment: selectedEquipment,
+            difficulty: difficulty,
+            hasVideo: !!videoFile
+        });
+
         createExercise({
             title: title.trim(),
             description: description.trim() || undefined,

@@ -11,22 +11,16 @@ const BASE_URL = "/support";
 export const createSupportTicket = async (
   data: CreateSupportTicketRequest
 ): Promise<SupportTicket> => {
+  // Backend expects 'requesterPhone' etc in body
   const response = await api.post(BASE_URL, data);
-  // Support controller returns json(result). result = { ok: boolean, data: ... }
-  if (response.data && !response.data.ok && response.data.error) {
-    throw new Error(response.data.error);
-  }
-  return response.data.data;
+  return response.data.ticket || response.data.data;
 };
 
 export const getAllSupportTickets = async (
   query?: GetSupportTicketsQuery
 ): Promise<SupportTicket[]> => {
   const response = await api.get(BASE_URL, { params: query });
-  if (response.data && !response.data.ok && response.data.error) {
-    throw new Error(response.data.error);
-  }
-  return response.data.data || [];
+  return response.data.tickets || response.data.data || [];
 };
 
 export const getSupportTicketsByPatient = async (
@@ -36,10 +30,7 @@ export const getSupportTicketsByPatient = async (
   const response = await api.get(`${BASE_URL}/patient/${patientId}`, {
     params: query,
   });
-  if (response.data && !response.data.ok && response.data.error) {
-    throw new Error(response.data.error);
-  }
-  return response.data.data || [];
+  return response.data.tickets || response.data.data || [];
 };
 
 export const updateSupportTicketStatus = async (
@@ -47,15 +38,16 @@ export const updateSupportTicketStatus = async (
   data: UpdateSupportTicketRequest
 ): Promise<SupportTicket> => {
   const response = await api.put(`${BASE_URL}/${ticketId}`, data);
-  if (response.data && !response.data.ok && response.data.error) {
-    throw new Error(response.data.error);
-  }
-  return response.data.data;
+  return response.data.ticket || response.data.data;
 };
 
 export const deleteSupportTicket = async (ticketId: string): Promise<void> => {
-  const response = await api.delete(`${BASE_URL}/${ticketId}`);
-  if (response.data && !response.data.ok && response.data.error) {
-    throw new Error(response.data.error);
-  }
+  await api.delete(`${BASE_URL}/${ticketId}`);
+};
+
+export const getSupportTicketById = async (
+  ticketId: string
+): Promise<SupportTicket> => {
+  const response = await api.get(`${BASE_URL}/${ticketId}`);
+  return response.data.ticket || response.data.data;
 };
