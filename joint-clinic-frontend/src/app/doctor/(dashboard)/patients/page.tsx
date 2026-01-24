@@ -17,7 +17,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 // Mock Data removed
 
-const PatientsPage = () => {
+const PatientsContent = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const statusParam = searchParams?.get("status");
@@ -121,6 +121,14 @@ const PatientsPage = () => {
                 </div>
             </DashBoardContent>
         </div>
+    );
+};
+
+const PatientsPage = () => {
+    return (
+        <React.Suspense fallback={<div className="flex items-center justify-center h-full">Loading...</div>}>
+            <PatientsContent />
+        </React.Suspense>
     );
 };
 

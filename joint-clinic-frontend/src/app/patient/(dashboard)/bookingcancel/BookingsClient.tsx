@@ -12,7 +12,7 @@ import Button from "@/components/atoms/Button";
 import { useBookingDetails, useCancelBooking } from "@/hooks/useBooking";
 import dayjs from "dayjs";
 
-const BookingsClient = () => {
+const BookingsClientContent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const bookingId = searchParams?.get("id") ?? "";
@@ -99,6 +99,18 @@ const BookingsClient = () => {
         </div>
       </DashBoardContent>
     </>
+  );
+};
+
+const BookingsClient = () => {
+  return (
+    <React.Suspense fallback={
+      <DashBoardContent>
+        <Typography text="Loading contents..." variant="bodyRegular" />
+      </DashBoardContent>
+    }>
+      <BookingsClientContent />
+    </React.Suspense>
   );
 };
 
