@@ -21,15 +21,18 @@ const BookingContent = () => {
     const [bookingError, setBookingError] = useState<string>("");
     const [patientId, setPatientId] = useState<string>("");
     const [patientNixpendId, setPatientNixpendId] = useState<string>("");
+    const [patientName, setPatientName] = useState<string>("");
 
     // Load patient ID and refresh pending booking on mount
     useEffect(() => {
         refreshPendingBooking();
         const storedPatientId = localStorage.getItem("patientId");
         const storedPatientNixpendId = localStorage.getItem("patientNixpendId");
+        const storedPatientName = localStorage.getItem("patientName");
         if (storedPatientId) {
             setPatientId(storedPatientId);
             setPatientNixpendId(storedPatientNixpendId as any);
+            setPatientName(storedPatientName || "");
         }
     }, [refreshPendingBooking]);
 
@@ -110,6 +113,7 @@ const BookingContent = () => {
             appointment_type: "consultation",
             department: "Physiotherapy",
             company: "Joint Clinic",
+            patient_name: patientName,
         };
 
         createBooking(bookingData, {

@@ -3,6 +3,7 @@ import { SupportTicket, GetSupportTicketsQuery } from "@/types/support";
 import {
   getAllSupportTickets,
   updateSupportTicketStatus,
+  getSupportTicketById,
 } from "@/lib/api/support.api";
 
 export const useSupportTickets = (
@@ -44,4 +45,29 @@ export const useSupportTickets = (
   };
 
   return { tickets, isLoading, error, refresh: fetchTickets, updateStatus };
+};
+
+export const useSupportTicket = (ticketId: string) => {
+  const [ticket, setTicket] = useState<SupportTicket | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchTicket = async () => {
+    if (!ticketId) return;
+    setIsLoading(true);
+    try {
+      const data = await getSupportTicketById(ticketId);
+      setTicket(data);
+    } catch (err: any) {
+      setError(err.message || "Failed to fetch ticket");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTicket();
+  }, [ticketId]);
+
+  return { ticket, isLoading, error, refresh: fetchTicket };
 };

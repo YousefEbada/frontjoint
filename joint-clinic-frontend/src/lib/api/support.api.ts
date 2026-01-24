@@ -44,3 +44,10 @@ export const updateSupportTicketStatus = async (
 export const deleteSupportTicket = async (ticketId: string): Promise<void> => {
   await api.delete(`${BASE_URL}/${ticketId}`);
 };
+
+export const getSupportTicketById = async (
+  ticketId: string
+): Promise<SupportTicket> => {
+  const response = await api.get(`${BASE_URL}/${ticketId}`);
+  return response.data.ticket || response.data.data;
+};

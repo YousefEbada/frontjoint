@@ -77,7 +77,7 @@ export class CreateBooking {
       }
 
       console.log('Creating booking with data:', booking);
-      const createdBooking = await this.bookingRepo.book(booking,  { tx: tx.session });
+      const createdBooking = await this.bookingRepo.book(booking, { tx: tx.session });
       console.log('Booking created:', createdBooking);
 
       if (session) {

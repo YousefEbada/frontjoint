@@ -7,11 +7,21 @@ import TextArea from "@/components/atoms/TextArea";
 import ActionButton from "@/components/atoms/ActionButton";
 import { createSupportTicket } from "@/lib/api/support.api";
 
-interface ContactFormProps {
-    buttonText?: string;
+export interface ContactFormValues {
+    contact: string;
+    inquiryDept: string;
+    whenToCall: string;
+    message: string;
 }
 
-const ContactForm = ({ buttonText = "Send" }: ContactFormProps) => {
+interface ContactFormProps {
+    buttonText?: string;
+    initialValues?: ContactFormValues;
+    readOnly?: boolean;
+    onSubmit?: (values: any) => Promise<void>;
+}
+
+const ContactForm = ({ buttonText = "Send", initialValues, readOnly = false, onSubmit }: ContactFormProps) => {
     const departmentOptions = [
         { value: "general", label: "General Inquiry" },
         { value: "billing", label: "Billing" },
@@ -19,12 +29,19 @@ const ContactForm = ({ buttonText = "Send" }: ContactFormProps) => {
         { value: "medical", label: "Medical Question" },
     ];
 
-    const [form, setForm] = useState({
+    const [form, setForm] = useState(initialValues || {
         contact: "",
         inquiryDept: "",
         whenToCall: "", // "When to call" mapping to subject for now, or just generic subject
         message: ""
     });
+
+    // Update form if initialValues change
+    React.useEffect(() => {
+        if (initialValues) {
+            setForm(initialValues);
+        }
+    }, [initialValues]);
     const [isLoading, setIsLoading] = useState(false);
     const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
@@ -34,30 +51,32 @@ const ContactForm = ({ buttonText = "Send" }: ContactFormProps) => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!form.inquiryDept || !form.message) return; // Simple validation
 
         setIsLoading(true);
         setStatus('idle');
         try {
-            // Ensure whenToCall is a valid date or current date if empty/invalid text
-            // Since input is text, we'll try to use it or default to now if backend requires date
-            const date = new Date(); // default
-            // If user enters text, we can't easily parse to date unless we use date input.
-            // But we must stick to "whenToCall": Date in backend. 
-            // Better to send current date or simple future date if just text. 
-            // Or change input to datetime-local. Let's try to keep it simple first.
-            const payload = {
-                inquiryDept: form.inquiryDept,
-                message: form.message,
-                contact: form.contact,
-                whenToCall: date.toISOString(), // Placeholder date since text input doesn't map well to Date object without strict format
-                patientId: localStorage.getItem('patientId') || "",
-                patientName: localStorage.getItem('patientName') || ""
-            };
+            if (onSubmit) {
+                await onSubmit(form);
+            } else {
+                if (!form.inquiryDept || !form.message) return; // Simple validation
 
-            await createSupportTicket(payload);
+                // Ensure whenToCall is a valid date or current date if empty/invalid text
+                // Since input is text, we'll try to use it or default to now if backend requires date
+                const date = new Date(); // default
+
+                const payload = {
+                    inquiryDept: form.inquiryDept,
+                    message: form.message,
+                    contact: form.contact,
+                    whenToCall: date.toISOString(), // Placeholder date since text input doesn't map well to Date object without strict format
+                    patientId: localStorage.getItem('patientId') || "",
+                    patientName: localStorage.getItem('patientName') || ""
+                };
+
+                await createSupportTicket(payload);
+                setForm({ contact: "", inquiryDept: "", whenToCall: "", message: "" });
+            }
             setStatus('success');
-            setForm({ contact: "", inquiryDept: "", whenToCall: "", message: "" });
         } catch (error) {
             console.error("Failed to submit ticket:", error);
             setStatus('error');
@@ -81,6 +100,7 @@ const ContactForm = ({ buttonText = "Send" }: ContactFormProps) => {
                         className="py-3!"
                         value={form.contact}
                         onChange={(e) => handleChange("contact", e.target.value)}
+                        disabled={readOnly}
                     />
                     <CustomSelect
                         items={departmentOptions.map(opt => opt.label)}
@@ -91,6 +111,8 @@ const ContactForm = ({ buttonText = "Send" }: ContactFormProps) => {
                             const found = departmentOptions.find(opt => opt.label === val);
                             if (found) handleChange("inquiryDept", found.value);
                         }}
+                        disabled={readOnly}
+                        value={departmentOptions.find(opt => opt.value === form.inquiryDept)?.label}
                     />
                     <Input
                         placeholder="When to call (e.g. Tomorrow 3pm - Note: logged as now)"
@@ -98,6 +120,7 @@ const ContactForm = ({ buttonText = "Send" }: ContactFormProps) => {
                         className="py-3!"
                         value={form.whenToCall}
                         onChange={(e) => handleChange("whenToCall", e.target.value)}
+                        disabled={readOnly}
                     />
                 </div>
                 <TextArea
@@ -106,6 +129,7 @@ const ContactForm = ({ buttonText = "Send" }: ContactFormProps) => {
                     className="h-full md:h-40 py-4!"
                     value={form.message}
                     onChange={(e) => handleChange("message", e.target.value)}
+                    disabled={readOnly}
                 />
 
                 {status === 'success' && <p className="text-green-600 text-sm text-center">Request sent successfully!</p>}

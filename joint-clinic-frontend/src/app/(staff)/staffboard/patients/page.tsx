@@ -10,9 +10,28 @@ import DashBoardContent from "@/components/atoms/DashBoardContent";
 import { usePatients } from "@/hooks/usePatient";
 import { Patient } from "@/lib/api/patient.api";
 
+import { useRouter, useSearchParams } from "next/navigation";
+
 const PatientsPage = () => {
-    const [activeTab, setActiveTab] = useState<"active" | "all">("active");
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const statusParam = searchParams?.get("status");
+
+    const [activeTab, setActiveTabState] = useState<"active" | "all">(
+        (statusParam === "all" ? "all" : "active")
+    );
     const [searchTerm, setSearchTerm] = useState("");
+
+    const setActiveTab = (tab: "active" | "all") => {
+        setActiveTabState(tab);
+        const params = new URLSearchParams(searchParams ? searchParams.toString() : "");
+        if (tab === "active") {
+            params.set("status", "active");
+        } else {
+            params.set("status", "all");
+        }
+        router.push(`?${params.toString()}`);
+    };
 
     // Fetch patients based on active tab
     // When activeTab is "all", we pass undefined to fetch all patients

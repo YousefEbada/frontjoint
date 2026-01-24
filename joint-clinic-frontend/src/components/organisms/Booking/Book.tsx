@@ -373,9 +373,8 @@ const Book = ({ redirectPath }: BookProps) => {
 
                     <CustomSelect
                       items={timeSlotOptions}
-                      value={selectedSlot ? dayjs(selectedSlot.start).format("h:mm A") : ""}
+                      value={selectedSlot ? dayjs(selectedSlot.start).format("h:mm A") : "Select a time"}
                       onChange={handleSlotSelect}
-                      placeholder="Select a time"
                       width="100%"
                       height="70px"
                       className="md:!w-[500px] mt-4"
