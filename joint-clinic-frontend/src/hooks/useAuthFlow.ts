@@ -174,7 +174,9 @@ export const useAuthFlow = () => {
             console.log("patient", patient);
             // Store patient ID and user name for dashboard
             localStorage.setItem("patientId", patient._id);
-            localStorage.setItem("patientNixpendId", patient.nixpendId);
+            if (patient.nixpendId) {
+              localStorage.setItem("patientNixpendId", patient.nixpendId);
+            }
             localStorage.setItem("userId", userId);
 
             // Get user's first name from findUser result (stored in contact context)
@@ -283,6 +285,9 @@ export const useAuthFlow = () => {
       // Store patient info in localStorage for dashboard
       if (result && result._id) {
         localStorage.setItem("patientId", result._id);
+        if (result.nixpendId) {
+          localStorage.setItem("patientNixpendId", result.nixpendId);
+        }
       }
       localStorage.setItem("userId", userId);
 
