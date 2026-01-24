@@ -12,7 +12,6 @@ import Button from "@/components/atoms/Button";
 import { useBookingDetails, useRescheduleBooking, useAvailableSlots } from "@/hooks/useBooking";
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
-import { number } from "framer-motion";
 
 dayjs.extend(advancedFormat);
 
@@ -84,29 +83,29 @@ function BookingChangeContent() {
 
         /*
         actual_duration
-: 
-30
-appointment_date
-: 
-"24-01-2026"
-appointment_time
-: 
-"13:00"
-appointment_type
-: 
-"Consultation"
-company
-: 
-"Joint Clinic"
-department
-: 
-"Physiotherapy"
-duration
-: 
-30
-service_unit
-: 
-""
+        : 
+        30
+        appointment_date
+        : 
+        "24-01-2026"
+        appointment_time
+        : 
+        "13:00"
+        appointment_type
+        : 
+        "Consultation"
+        company
+        : 
+        "Joint Clinic"
+        department
+        : 
+        "Physiotherapy"
+        duration
+        : 
+        30
+        service_unit
+        : 
+        ""
         */
         rescheduleBooking(
             {

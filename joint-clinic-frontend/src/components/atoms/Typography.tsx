@@ -30,35 +30,35 @@ const typographyConfig: Record<
 > = {
     display1: {
         tag: "h1",
-        className: "text-[60px] md:text-[80px] lg:text-[120px] font-bold",
+        className: "text-[36px] sm:text-[48px] md:text-[64px] lg:text-[96px] font-bold",
     },
     display2: {
         tag: "h2",
-        className: "text-[45px] md:text-[60px] lg:text-[90px] font-semibold",
+        className: "text-[28px] sm:text-[36px] md:text-[48px] lg:text-[72px] font-semibold",
     },
     heading1: {
         tag: "h2",
-        className: "text-[32px] md:text-[48px] lg:text-[60px] font-semibold",
+        className: "text-[24px] sm:text-[30px] md:text-[40px] lg:text-[56px] font-semibold",
     },
     heading2: {
         tag: "h2",
-        className: "text-[24px] md:text-[32px] lg:text-[40px] font-medium",
+        className: "text-[20px] sm:text-[24px] md:text-[30px] lg:text-[36px] font-medium",
     },
     subheader: {
         tag: "p",
-        className: "text-[20px] md:text-[24px] lg:text-[30px] font-medium",
+        className: "text-[16px] sm:text-[18px] md:text-[22px] lg:text-[28px] font-medium",
     },
     bodyBold: {
         tag: "p",
-        className: "text-[14px] md:text-[18px] lg:text-[20px] font-semibold",
+        className: "text-[13px] sm:text-[15px] md:text-[17px] lg:text-[19px] font-semibold",
     },
     bodyRegular: {
         tag: "p",
-        className: "text-[14px] md:text-[16px] lg:text-[18px] font-normal",
+        className: "text-[13px] sm:text-[15px] md:text-[16px] lg:text-[18px] font-normal",
     },
     bodySmall: {
         tag: "p",
-        className: "text-[12px] md:text-[14px] font-normal",
+        className: "text-[11px] sm:text-[13px] font-normal",
     },
 };
 
