@@ -53,7 +53,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
                 {title && (
                     <Typography
                         text={title}
-                        variant={`${window.innerWidth < 768 ? "bodyBold" : "heading1"}`}
+                        variant={`${typeof window !== 'undefined' && window.innerWidth < 768 ? "bodyBold" : "heading1"}`}
                         style={{ color: color.secondary }}
                     />
                 )}

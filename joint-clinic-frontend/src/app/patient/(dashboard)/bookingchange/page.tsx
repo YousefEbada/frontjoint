@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import DashBoardHeader from "@/components/molecules/DashBoardHeader";
 import Typography from "@/components/atoms/Typography";
@@ -12,11 +12,10 @@ import Button from "@/components/atoms/Button";
 import { useBookingDetails, useRescheduleBooking, useAvailableSlots } from "@/hooks/useBooking";
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
-import { number } from "framer-motion";
 
 dayjs.extend(advancedFormat);
 
-const BookingsPage = () => {
+const BookingChangeContent = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const bookingId = searchParams?.get("id");
@@ -84,29 +83,29 @@ const BookingsPage = () => {
         console.log(selectedTime);
         /*
         actual_duration
-: 
-30
-appointment_date
-: 
-"24-01-2026"
-appointment_time
-: 
-"13:00"
-appointment_type
-: 
-"Consultation"
-company
-: 
-"Joint Clinic"
-department
-: 
-"Physiotherapy"
-duration
-: 
-30
-service_unit
-: 
-""
+        : 
+        30
+        appointment_date
+        : 
+        "24-01-2026"
+        appointment_time
+        : 
+        "13:00"
+        appointment_type
+        : 
+        "Consultation"
+        company
+        : 
+        "Joint Clinic"
+        department
+        : 
+        "Physiotherapy"
+        duration
+        : 
+        30
+        service_unit
+        : 
+        ""
         */
         rescheduleBooking(
             {
@@ -271,6 +270,18 @@ service_unit
                 </div>
             </DashBoardContent>
         </>
+    );
+};
+
+const BookingsPage = () => {
+    return (
+        <Suspense fallback={
+            <DashBoardContent>
+                <div className="flex justify-center items-center h-full"> <Typography text="Loading contents..." variant="bodyRegular" /> </div>
+            </DashBoardContent>
+        }>
+            <BookingChangeContent />
+        </Suspense>
     );
 };
 

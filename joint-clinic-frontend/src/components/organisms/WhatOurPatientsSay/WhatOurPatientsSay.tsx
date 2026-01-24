@@ -6,6 +6,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import CorneredBoxes from "@/components/atoms/CorneredBoxes";
 import { color } from "@/lib/constants/colors";
+import Typography from "@/components/atoms/Typography";
 
 export default function WhatOurPatientsSay() {
   const wrapperRef = useRef(null);
@@ -67,17 +68,12 @@ export default function WhatOurPatientsSay() {
       >
         <OutlinedCircle className="w-[300px] md:w-[400px]" />
 
-        <h1
-          className="
-            absolute w-[200px] md:w-[400px]
-            sm:text-[30px] md:text-[50px] lg:text-[70px] text-[30px]
-            font-bold
-            mt-2 text-center
-          "
+        <Typography
+          variant="heading1"
+          className="absolute w-[200px] md:w-[400px] font-bold mt-2 text-center"
           style={{ color: color.success }}
-        >
-          What Our Patients Say
-        </h1>
+          text="What Our Patients Say"
+        />
       </div>
 
       {/* Cards Track */}
@@ -102,7 +98,6 @@ export default function WhatOurPatientsSay() {
           pb-4
           h-[80%]
           self-end
-          
         "
       >
         {testimonials.map((t, i) => {
@@ -131,25 +126,22 @@ export default function WhatOurPatientsSay() {
                 h-[120px] sm:h-[140px] md:h-[160px] lg:h-[180px]                
               `}
             >
-              <p
-                className="
-                  text-[14px] sm:text-[16px] md:text-[18px] lg:text-[20px]
-                  font-bold leading-snug mb-2 font-medium text-center 
-                "
+              <Typography
+                variant="bodyBold"
+                className="font-bold leading-snug mb-2 text-center"
                 style={{ color: color.success }}
-              >
-                {t.comment}
-              </p>
+                text={t.comment}
+              />
 
-              <h3
-                className="
-                  text-black
-                  sm:text-[14px]
-                  leading-relaxed md:text-[29px]
-                "
-              >
-                <span className="font-bold">{t.name}, </span>{t.role}
-              </h3>
+              <Typography
+                variant="subheader"
+                className="text-black leading-relaxed"
+                text={
+                  <>
+                    <span className="font-bold">{t.name}, </span>{t.role}
+                  </>
+                }
+              />
             </CorneredBoxes>
           );
         })}
