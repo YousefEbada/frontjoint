@@ -19,7 +19,7 @@ const ReportsPage = () => {
     }
   }, []);
 
-  const { data: patient, isLoading } = usePatient(patientId || "");
+  const { data: patient } = usePatient(patientId || "");
 
   // Map patient medical reports to UI format
   // Assuming medicalReports is an array of strings (urls or names)
@@ -55,9 +55,7 @@ const ReportsPage = () => {
         {activeTab === "view" ? (
           <>
             <Typography text="Reports" variant="heading2" className="text-[#0D294D] font-bold text-3xl mb-2" />
-            {isLoading ? (
-              <Typography text="Loading reports..." variant="bodyRegular" />
-            ) : reports.length > 0 ? (
+            {reports.length > 0 ? (
               <ReportList reports={reports} type='staff' />
             ) : (
               <Typography text="No reports available." variant="bodyRegular" className="mt-4 text-gray-500" />

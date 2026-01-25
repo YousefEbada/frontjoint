@@ -15,7 +15,7 @@ const MedicalReportsPage = () => {
     // TODO: Replace with actual logged-in doctor ID
     const doctorId = "HLC-PRAC-2022-00001";
 
-    const { data: patients, isLoading } = useDoctorPatients(doctorId);
+    const { data: patients } = useDoctorPatients(doctorId);
 
     // Filter patients based on search
     const filteredReports = patients?.filter(p =>
@@ -49,9 +49,7 @@ const MedicalReportsPage = () => {
                 <div className="w-full flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-y-2 md:block md:bg-white md:rounded-[24px] md:shadow-sm md:p-8">
                     <ScrollableArea className="w-full h-full px-2">
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pb-4">
-                            {isLoading ? (
-                                <div className="col-span-full text-center py-10 text-gray-400">Loading reports...</div>
-                            ) : filteredReports.length > 0 ? (
+                            {filteredReports.length > 0 ? (
                                 filteredReports.map((patient) => (
                                     <Link key={patient._id} href={`/doctor/reports/${patient._id}`} className="w-full">
                                         <PatientCard

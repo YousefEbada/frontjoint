@@ -8,13 +8,13 @@ const schema = new Schema({
   patientNixpendId: { type: String, required: true },
   doctorNixpendId: { type: String, required: true },
   branchId: { type: String, required: false },
-  sessionId: { type: String,  required: false },
+  sessionId: { type: String, required: false },
   eventName: { type: String, required: true },
   appointmentNixpendId: { type: String, required: true, unique: true },
   appointmentDate: { type: Date, required: true },
   appointmentTime: { type: String, required: true },
   slotStart: { type: Date, required: false },
-  slotEnd: { type: Date, required: false },   
+  slotEnd: { type: Date, required: false },
   appointmentDuration: { type: Number, required: true },
   department: { type: String, required: true },
   company: { type: String, required: true, default: 'Joint Clinic' },
@@ -22,6 +22,6 @@ const schema = new Schema({
   reminder24hSent: { type: Boolean, default: false },
   reminder1hSent: { type: Boolean, default: false },
   status: { type: String, enum: ['confirmed', 'rescheduled', 'cancelled', 'noShow', 'inProgress', 'pending'], default: 'confirmed' }
-}, { timestamps: true });     
+}, { timestamps: true });
 
 export const BookingModel = mongoose.model('Booking', schema);

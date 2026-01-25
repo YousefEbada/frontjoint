@@ -55,11 +55,7 @@ const Page = () => {
             <a href="/staffboard/support" className="text-[#1e5598] underline text-[22px] font-medium transition-all duration-300 hover:text-[#4a8528]">View All</a>
           </div>
           <div className="flex flex-col gap-3">
-            {isLoading ? (
-              <div className="text-gray-400">Loading requests...</div>
-            ) : pendingTickets.length === 0 ? (
-              <div className="text-gray-400">No pending requests.</div>
-            ) : (
+            {(
               pendingTickets.map((ticket) => (
                 <PatientCallRow
                   key={ticket._id}

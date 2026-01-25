@@ -11,7 +11,7 @@ import { Rectangle, LineGroup } from "react-loadly";
 const OverviewPage = () => {
   // TODO: Replace with actual logged-in doctor ID
   const doctorId = "HLC-PRAC-2022-00001";
-  const [firstName, setFirstName] = useState("Doctor");
+  const [firstName, setFirstName] = useState("");
 
   useEffect(() => {
     const storedName = localStorage.getItem("doctorName");
@@ -20,13 +20,13 @@ const OverviewPage = () => {
     }
   }, []);
 
-  const { data: doctor, isLoading: isLoadingDoctor } = useDoctor(doctorId);
-  const { data: bookings, isLoading: isLoadingBookings } = useDoctorBookings(doctorId, {
+  const { data: doctor } = useDoctor(doctorId);
+  const { data: bookings } = useDoctorBookings(doctorId, {
     period: 'day',
     date: new Date().toISOString()
   });
   // Fetch active patients for "Exercise Assigns" suggestion list
-  const { data: patients, isLoading: isLoadingPatients } = useDoctorPatients(doctorId, 'active');
+  const { data: patients } = useDoctorPatients(doctorId, 'active');
 
   const appointments = bookings?.map(b => ({
     id: b._id,
@@ -65,31 +65,14 @@ const OverviewPage = () => {
         </div>
 
         {/* Section 1: Today's appointments */}
-        {isLoadingBookings ? (
-          <div className="w-full">
-            <LineGroup
-              count={3}
-              lineHeight="60px"
-              lineWidth="100%"
-              spacing="10px"
-              color="#EAF2FF"
-              secondaryColor="#FFFFFF"
-            />
-          </div>
-        ) : (
-          <AppointmentList appointments={appointments} />
-        )}
+        <AppointmentList appointments={appointments} />
 
         <hr className="border-t border-[#EAF2FF] w-full" />
 
         {/* Section 2: Exercise Assigns */}
-        {isLoadingPatients ? (
-          <div className="w-full mt-6">
-            <LineGroup count={2} lineHeight="60px" lineWidth="100%" color="#EAF2FF" />
-          </div>
-        ) : (
-          <ExerciseAssignList assigns={assigns} />
-        )}
+
+        <ExerciseAssignList assigns={assigns} />
+
       </DashBoardContent>
     </>
   );

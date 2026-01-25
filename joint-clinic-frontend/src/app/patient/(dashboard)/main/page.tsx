@@ -19,7 +19,7 @@ const Page = () => {
   // TODO: Get patientId from auth context or localStorage
   // For now, we'll try to get it from localStorage (set during login/registration)
   const [patientId, setPatientId] = useState<string | null>(null);
-  const [patientName, setPatientName] = useState<string>("Patient");
+  const [patientName, setPatientName] = useState<string>("");
 
   useEffect(() => {
     // Try to get patientId and patientName from localStorage
@@ -33,7 +33,7 @@ const Page = () => {
     }
   }, []);
 
-  const { data: apiResponse, isLoading, error } = usePatientDashboard(patientId || "");
+  const { data: apiResponse, error } = usePatientDashboard(patientId || "");
   const dashboardData = apiResponse?.data;
   const hasActiveTreatment = dashboardData?.hasActiveTreatment;
 
@@ -51,18 +51,18 @@ const Page = () => {
   }, [dashboardData?.patientName]);
 
   // Handle loading state
-  if (isLoading) {
-    return (
-      <>
-        <DashBoardHeader therapyName="Loading..." nav={false} dateTime={true} />
-        <DashBoardContent>
-          <div className="flex items-center justify-center h-64">
-            <Typography text="Loading dashboard..." variant="bodyRegular" />
-          </div>
-        </DashBoardContent>
-      </>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <>
+  //       <DashBoardHeader therapyName="Loading..." nav={false} dateTime={true} />
+  //       <DashBoardContent>
+  //         <div className="flex items-center justify-center h-64">
+  //           <Typography text="Loading dashboard..." variant="bodyRegular" />
+  //         </div>
+  //       </DashBoardContent>
+  //     </>
+  //   );
+  // }
 
   // Handle no active treatment (first time patient)
   if (!hasActiveTreatment) {
@@ -72,7 +72,7 @@ const Page = () => {
         <DashBoardContent>
           <div className="flex flex-col sm:flex-row gap-2 items-start sm:items-baseline">
             <Typography text="Welcome," variant="heading1" gradient={true} />
-            <Typography text={patientName} variant="heading1" style={{ color: color.primary }} />
+            <Typography text={`${patientName}`} variant="heading1" style={{ color: color.primary }} />
           </div>
 
           {/* Progress Section with Zero Values */}
