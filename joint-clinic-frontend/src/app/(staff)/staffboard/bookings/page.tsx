@@ -1,3 +1,4 @@
+"use client";
 import React from 'react'
 import dayjs from 'dayjs';
 import { useAllBookings } from '@/hooks/useBooking';
@@ -11,7 +12,7 @@ import PatientRow from '@/components/atoms/PatientRow';
 import DashBoardContent from '@/components/atoms/DashBoardContent';
 
 const BookingsPage = () => {
-    const { data: bookings, isLoading } = useAllBookings();
+    const { data: bookings } = useAllBookings();
 
     const getStatusColor = (status: string) => {
         switch (status.toLowerCase()) {
@@ -44,9 +45,7 @@ const BookingsPage = () => {
                 </div>
 
                 <div className="w-full h-full flex flex-col gap-y-3 md:bg-white md:rounded-[20px] md:shadow-[0px_10px_30px_10px_rgba(0,0,0,0.08)] md:p-5 md:overflow-y-auto md:custom-scrollbar">
-                    {isLoading ? (
-                        <div className="flex justify-center p-4">Loading bookings...</div>
-                    ) : bookings && bookings.length > 0 ? (
+                    {bookings && bookings.length > 0 ? (
                         bookings.map((booking: any) => (
                             <div key={booking._id}>
                                 <PatientRow
