@@ -4,7 +4,22 @@ import {
   getPatientById,
   getPatientByUserId,
   getAllPatients,
+  getActivePatients,
 } from "@/lib/api/patient.api";
+
+
+
+export const usePatients = (status?: "active" | "inactive") => {
+  return useQuery({
+    queryKey: ["patients", status],
+    queryFn: () => {
+      if (status === 'active') {
+        return getActivePatients();
+      }
+      return getAllPatients(status);
+    },
+  });
+};
 
 export const usePatientDashboard = (patientId: string) => {
   return useQuery({
@@ -30,9 +45,4 @@ export const usePatientByUserId = (userId: string) => {
   });
 };
 
-export const usePatients = (status?: "active" | "inactive") => {
-  return useQuery({
-    queryKey: ["patients", status],
-    queryFn: () => getAllPatients(status),
-  });
-};
+

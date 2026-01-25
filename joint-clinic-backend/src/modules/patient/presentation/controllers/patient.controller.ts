@@ -8,6 +8,7 @@ import { GetPatientByUser } from "modules/patient/application/use-cases/GetPatie
 import { GetPatientDashboard } from "modules/patient/application/use-cases/GetPatientDashboard.js";
 import { UpdatePatient } from "modules/patient/application/use-cases/UpdatePatient.js";
 import { GetAllPatients } from "modules/patient/application/use-cases/GetAllPatients.js";
+import { GetActivePatients } from "modules/patient/application/use-cases/GetActivePatients.js";
 
 export async function getPatientById(req: Request, res: Response) {
     const { patientId } = req.params;
@@ -92,13 +93,27 @@ export async function createPatient(req: Request, res: Response) {
     const { userId, injuryDetails } = req.body;
     const uc = new CreatePatient(resolve(PATIENT_REPO), resolve(NIXPEND_ADAPTER), resolve(USER_AUTH_REPO));
     try {
-        const result = await uc.exec(userId, {injuryDetails});
+        const result = await uc.exec(userId, { injuryDetails });
         if (!result.ok) {
             return res.status(400).json(result);
         }
         return res.status(201).json(result);
     } catch (error) {
         console.error("[createPatient] There is an error in the patient controller", error);
+        return res.status(500).json({ ok: false, error: "Something Went Wrong" });
+    }
+}
+
+export async function getActivePatients(req: Request, res: Response) {
+    try {
+        const uc = new GetActivePatients(resolve(PATIENT_REPO));
+        const result = await uc.exec();
+        if (!result.ok) {
+            return res.status(400).json(result);
+        }
+        return res.status(200).json(result);
+    } catch (error) {
+        console.error("[getActivePatients] There is an error in the patient controller", error);
         return res.status(500).json({ ok: false, error: "Something Went Wrong" });
     }
 }

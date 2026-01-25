@@ -13,30 +13,17 @@ import { usePatients } from "@/hooks/usePatient";
 
 // Mock Data removed
 
-import { useRouter, useSearchParams } from "next/navigation";
+
 
 // Mock Data removed
 
 const PatientsContent = () => {
-    const router = useRouter();
-    const searchParams = useSearchParams();
-    const statusParam = searchParams?.get("status");
-
-    // Initialize activeTab based on URL param, default to 'active'
-    const [activeTab, setActiveTabState] = useState<"active" | "all">(
-        (statusParam === "all" ? "all" : "active")
-    );
+    // Initialize activeTab to 'active' by default
+    const [activeTab, setActiveTabState] = useState<"active" | "all">("active");
     const [searchTerm, setSearchTerm] = useState("");
 
     const setActiveTab = (tab: "active" | "all") => {
         setActiveTabState(tab);
-        const params = new URLSearchParams(searchParams ? searchParams.toString() : "");
-        if (tab === "active") {
-            params.set("status", "active");
-        } else {
-            params.set("status", "all");
-        }
-        router.push(`?${params.toString()}`);
     };
 
     // Fetch patients with status filter based on active tab

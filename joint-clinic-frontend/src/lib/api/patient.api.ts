@@ -165,3 +165,19 @@ export const getAllPatients = async (
     throw error;
   }
 };
+/**
+ * Get active patients
+ */
+export const getActivePatients = async (): Promise<Patient[]> => {
+  try {
+    const response = await api.get("/patient/active");
+    console.log("getActivePatients response:", response.data);
+    return response.data.data || [];
+  } catch (error) {
+    console.error(
+      "Error fetching active patients:",
+      (error as any).response?.data || (error as any).message
+    );
+    throw error;
+  }
+};

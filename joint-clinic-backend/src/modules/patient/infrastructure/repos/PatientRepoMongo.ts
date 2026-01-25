@@ -39,6 +39,22 @@ export const PatientRepoMongo: PatientRepoPort = {
         }
     },
 
+    async getActivePatients() {
+        try {
+            console.log("PatientRepoMongo.getActivePatients] Fetching active patients");
+            const patients = await PatientModel.find({ status: 'active' })
+                .populate({
+                    path: 'userId',
+                    select: 'fullName firstName lastName email phone gender'
+                })
+                .lean();
+            return patients as any as Patient[];
+        } catch (error) {
+            console.error("[PatientRepoMongo.getActivePatients] DB error:", (error as any).message);
+            throw new Error("DATABASE_ERROR");
+        }
+    },
+
     async getPatientByUserId(userId: string) {
         try {
             console.log("PatientRepoMongo.getPatientByUserId] Fetching patient with userId:", userId);
@@ -93,7 +109,7 @@ export const PatientRepoMongo: PatientRepoPort = {
             //     throw new Error("INVALID_ID");
             // }
             await PatientModel.findOneAndUpdate(
-                {nixpendId: id},
+                { nixpendId: id },
                 { status }
                 // { session: options?.tx }
             );
