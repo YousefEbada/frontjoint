@@ -1,10 +1,10 @@
 import { PatientRepoPort } from "../ports/PatientRepoPort.js";
 
 export class GetAllPatients {
-    constructor(private patientRepo: PatientRepoPort) { }
-    async exec(status?: "active" | "inactive") {
+    constructor(private patientRepo: PatientRepoPort) {}
+    async exec() {
         try {
-            const patients = await this.patientRepo.getAllPatients(status);
+            const patients = await this.patientRepo.getAllPatients();
             if (!patients) {
                 return { ok: false, error: 'No patients found' };
             }

@@ -1,6 +1,7 @@
 import { BOOKING_REPO, DOCTOR_REPO, EXERCISE_REPO, PATIENT_REPO, SESSION_REPO } from "app/container.bindings.js";
 import { Request, Response } from "express";
 import { FindDoctorById } from "modules/doctor/application/use-cases/FindDoctorById.js";
+import { FindDoctorByNixpendId } from "modules/doctor/application/use-cases/FindDoctorByNixpendId.js";
 import { resolve } from "app/container.js";
 import { GetCachedPractitioners } from "modules/doctor/application/use-cases/GetCachedDoctors.js";
 import { GetDoctorBookings } from "modules/doctor/application/use-cases/GetDoctorBookings.js";
@@ -56,8 +57,29 @@ export async function findDoctorById(req: Request, res: Response) {
 
 export async function findDoctors(req: Request, res: Response) {
     try {
+        const { id, nixpendId } = req.query;
+
+        if (id) {
+            const uc = new FindDoctorById(resolve(DOCTOR_REPO));
+            const result = await uc.execute(id as string);
+            if (!result.ok) {
+                return res.status(404).json(result);
+            }
+            return res.status(200).json(result);
+        }
+
+        if (nixpendId) {
+            const uc = new FindDoctorByNixpendId(resolve(DOCTOR_REPO));
+            const result = await uc.execute(nixpendId as string);
+            if (!result.ok) {
+                return res.status(404).json(result);
+            }
+            return res.status(200).json(result);
+        }
+
         const uc = new GetCachedPractitioners(resolve(DOCTOR_REPO));
         const result = await uc.exec();
+
         if (!result.ok) {
             return res.status(404).json(result);
         }
@@ -65,6 +87,26 @@ export async function findDoctors(req: Request, res: Response) {
     } catch (error) {
         console.error("Error in findDoctors controller:", (error as Error).message);
         return res.status(500).json({ ok: false, message: "Find Doctors controller Internal server error" });
+    }
+}
+
+export async function findDoctorByNixpendId(req: Request, res: Response) {
+    const nixpendId = (req.params.nixpendId || req.query.nixpendId) as string;
+
+    if (!nixpendId) {
+        return res.status(400).json({ ok: false, error: "Nixpend ID is required" });
+    }
+
+    try {
+        const uc = new FindDoctorByNixpendId(resolve(DOCTOR_REPO))
+        const result = await uc.execute(nixpendId);
+        if (!result.ok) {
+            return res.status(404).json(result);
+        }
+        return res.status(200).json(result);
+    } catch (error) {
+        console.error("Error in findDoctorByNixpendId controller:", (error as Error).message);
+        return res.status(500).json({ ok: false, message: "Find DoctorByNixpendId controller Internal server error" });
     }
 }
 

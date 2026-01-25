@@ -56,7 +56,14 @@ const BookingContent = () => {
         const dates = new Set<string>();
         slotsResponse.slots.forEach((slot) => {
             if (slot.start) {
-                dates.add(dayjs(slot.start).format("YYYY-MM-DD"));
+                // Check capacity if fields are present
+                const isFull = (slot.appointment_count !== null && slot.event_capacity !== null)
+                    ? slot.appointment_count >= slot.event_capacity
+                    : false;
+
+                if (!isFull) {
+                    dates.add(dayjs(slot.start).format("YYYY-MM-DD"));
+                }
             }
         });
         return Array.from(dates);
@@ -66,7 +73,17 @@ const BookingContent = () => {
     const timeSlotsForDate = useMemo(() => {
         if (!slotsResponse?.ok || !slotsResponse.slots || !selectedDate) return [];
         return slotsResponse.slots
-            .filter((slot) => slot.start && dayjs(slot.start).format("YYYY-MM-DD") === selectedDate)
+            .filter((slot) => {
+                if (!slot.start) return false;
+                const isSameDay = dayjs(slot.start).format("YYYY-MM-DD") === selectedDate;
+
+                // Check capacity
+                const isFull = (slot.appointment_count !== null && slot.event_capacity !== null)
+                    ? slot.appointment_count >= slot.event_capacity
+                    : false;
+
+                return isSameDay && !isFull;
+            })
             .map((slot) => dayjs(slot.start).format("h:mm A"));
     }, [slotsResponse, selectedDate]);
 
@@ -104,7 +121,7 @@ const BookingContent = () => {
             practitioner: pendingBooking.doctorNixpendId,
             patient: patientNixpendId,
             branch: (selectedSlot?.branch || pendingBooking.branch) as "Alaqiq" | "King Salman",
-            daily_practitioner_event: pendingBooking.eventName,
+            daily_practitioner_event: selectedSlot?.event_name || pendingBooking.eventName,
             appointment_date: dayjs(selectedDate).format("YYYY-MM-DD"),
             appointment_time: selectedTime.includes(":") ?
                 dayjs(`2000-01-01 ${selectedTime}`).format("HH:mm") :
@@ -267,7 +284,7 @@ const BookingContent = () => {
                 {/* Error Message */}
                 {bookingError && (
                     <div className="bg-red-50 border border-red-200 rounded-lg p-4 w-full max-w-[500px]">
-                        <Typography text={`❌ ${bookingError}`} variant="bodyRegular" className="text-red-600" />
+                        <div className="text-red-600 text-sm" dangerouslySetInnerHTML={{ __html: `❌ ${bookingError}` }} />
                     </div>
                 )}
 

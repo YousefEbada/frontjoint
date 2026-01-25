@@ -31,9 +31,9 @@ export class CreatePatient {
             // Then, create patient in Nixpend
             const nixpendPatient = await this.nixpendAdapter.registerPatient({
                 first_name: firstName,
-                last_name: lastName.length > 0 ? lastName.join(" ") : firstName,
+                last_name: lastName[0],
                 // Handle this from the frontend later
-                nationality: nationality === 'Egyptian' ? 'Egypt' : (nationality === 'Saudi' || nationality === 'Saudi Arabia') ? 'Saudi Arabia' : nationality,
+                nationality: nationality == 'Egyptian' ? 'Egypt' : nationality == 'Saudi' ? 'Saudi Arabia' : "France",
                 mobile,
                 sex
             });
@@ -57,7 +57,7 @@ export class CreatePatient {
             // if (createData && createData.medicalHistory?.length) patientData.medicalHistory = createData.medicalHistory;
             if (createData && createData.injuryDetails) patientData.injuryDetails = createData.injuryDetails;
             if (createData && createData.notes) patientData.notes = createData.notes;
-
+            
             const newPatient = await this.patientRepo.createPatient(patientData);
             return { ok: true, patient: newPatient };
         } catch (error) {

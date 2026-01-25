@@ -6,7 +6,6 @@ const schema = new Schema({
   // branchId: { type: Schema.Types.ObjectId, ref: "Branch", required: false },
   // sessionId: { type: Schema.Types.ObjectId, ref: "Session", required: false },
   patientNixpendId: { type: String, required: true },
-  patientName: { type: String, required: true },
   doctorNixpendId: { type: String, required: true },
   branchId: { type: String, required: false },
   sessionId: { type: String,  required: false },

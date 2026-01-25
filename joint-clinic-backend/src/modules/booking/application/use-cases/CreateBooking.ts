@@ -57,7 +57,21 @@ export class CreateBooking {
       console.log('Nixpend booking response:', res);
 
       if (!res?.appointment_id) {
-        throw new Error(res || 'Failed to book appointment with Nixpend');
+        let errorMessage = 'Failed to book appointment with Nixpend';
+
+        if (typeof res === 'string') {
+          errorMessage = res;
+        } else if (res && res.error) {
+          errorMessage = res.error;
+        } else if (res && typeof res === 'object') {
+          // If it is just an object without explicit error field, try to stringify
+          errorMessage = JSON.stringify(res);
+        }
+
+        // Sanitize HTML tags
+        errorMessage = errorMessage.replace(/<[^>]*>?/gm, '');
+
+        throw new Error(errorMessage);
       }
 
       const booking = {
@@ -110,7 +124,7 @@ export class CreateBooking {
     } catch (error) {
       await tx.abort();
       console.error('Booking failed:', error);
-      return { ok: false, error: 'Exception occurred during booking' };
+      return { ok: false, error: error instanceof Error ? error.message : 'Exception occurred during booking' };
     }
   }
 

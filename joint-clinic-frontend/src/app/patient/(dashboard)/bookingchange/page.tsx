@@ -114,7 +114,7 @@ function BookingChangeContent() {
                     department: bookingDetails?.booking?.department,
                     company: bookingDetails?.booking?.company,
                     appointment_type: capitalizeFirstLetter(bookingDetails?.booking?.bookingType),
-                    appointment_date: dayjs(selectedDate).format("MM-DD-YYYY"),
+                    appointment_date: dayjs(selectedDate).format("YYYY-MM-DD"),
                     appointment_time: apiTime,
                     daily_practitioner_event: bookingDetails?.booking?.eventName,
                     service_unit: "",

@@ -42,7 +42,7 @@ const BookingsPage = () => {
                 <Link href="/staffboard/booking">
                     <Typography text="Upcoming Bookings" variant="bodyRegular" className="text-gray-400 font-medium hover:text-[#1e5598] transition-colors" />
                 </Link>
-                <Typography text="My Bookings" variant="bodyRegular" className="text-[#1e5598] font-medium" />
+                <Typography text="All Bookings" variant="bodyRegular" className="text-[#1e5598] font-medium" />
             </DashBoardHeader>
 
             <DashBoardContent>

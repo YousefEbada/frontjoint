@@ -29,24 +29,24 @@ export const DoctorRepoMongo: DoctorRepoPort = {
   },
 
   async findById(id: string): Promise<Doctor | null> {
-    console.log("===== findById called with id ======= ", id);
-    console.log("===== id type ======= ", typeof id);
-    console.log("===== id length ======= ", id?.length);
-    // console.log("===== is valid ObjectId? ======= ", mongoose.Types.ObjectId.isValid(id));
-
-    // // Check if ID is a valid ObjectId format (24 hex characters)
-    // if (!id || !mongoose.Types.ObjectId.isValid(id)) {
-    //   console.log("===== Invalid ObjectId, returning null =======");
-    //   return null;
-    // }
-
     try {
-      const doc = await DoctorModel.findOne({ nixpendId: id }).lean();
-      // console.log("===== isValidObjectId(id) ======= ", isValidObjectId(id));
-      console.log("===== doc found ======= ", doc);
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+        return null;
+      }
+      const doc = await DoctorModel.findById(id).lean();
       return doc ? (doc as unknown as Doctor) : null;
     } catch (error) {
       console.error("===== Error in findById ======= ", error);
+      return null;
+    }
+  },
+
+  async findByNixpendId(id: string): Promise<Doctor | null> {
+    try {
+      const doc = await DoctorModel.findOne({ nixpendId: id }).lean();
+      return doc ? (doc as unknown as Doctor) : null;
+    } catch (error) {
+      console.error("===== Error in findByNixpendId ======= ", error);
       return null;
     }
   },
@@ -67,7 +67,7 @@ export const DoctorRepoMongo: DoctorRepoPort = {
     }
   },
 
-  async getAssignedExercises(doctorNixpendId: string, patientNixpendId: string): Promise<any[]> { 
+  async getAssignedExercises(doctorNixpendId: string, patientNixpendId: string): Promise<any[]> {
     try {
       const docs = await AssignedExercisesModel.find({
         doctorNixpendId,

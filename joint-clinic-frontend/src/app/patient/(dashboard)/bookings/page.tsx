@@ -26,6 +26,9 @@ const BookingsPage = () => {
     }, []);
 
     const { data: bookingData, isLoading } = usePatientBookings(patientId || "");
+
+
+
     const bookings = React.useMemo(() => {
         if (!bookingData) return [];
         // Handle case where API returns { bookings: [...] } or { data: [...] }

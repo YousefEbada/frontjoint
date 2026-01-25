@@ -90,3 +90,19 @@ export const getDoctorPatients = async (
     throw error;
   }
 };
+
+export const findDoctorByNixpendId = async (nixpendId: string): Promise<Doctor> => {
+  try {
+    const response = await api.get(`/doctor/nixpend`, {
+      params: { nixpendId }
+    });
+    console.log("findDoctorByNixpendId response:", response.data);
+    return response.data.doctor;
+  } catch (error) {
+    console.error(
+      "Error fetching doctor by Nixpend ID:",
+      (error as any).response?.data || (error as any).message
+    );
+    throw error;
+  }
+};

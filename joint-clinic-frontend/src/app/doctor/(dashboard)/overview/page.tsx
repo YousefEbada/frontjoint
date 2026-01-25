@@ -1,4 +1,5 @@
 "use client";
+import { useState, useEffect } from "react";
 import DashBoardHeader from "@/components/molecules/DashBoardHeader";
 import Typography from "@/components/atoms/Typography";
 import DashBoardContent from "@/components/atoms/DashBoardContent";
@@ -10,6 +11,14 @@ import { Rectangle, LineGroup } from "react-loadly";
 const OverviewPage = () => {
   // TODO: Replace with actual logged-in doctor ID
   const doctorId = "HLC-PRAC-2022-00001";
+  const [firstName, setFirstName] = useState("Doctor");
+
+  useEffect(() => {
+    const storedName = localStorage.getItem("doctorName");
+    if (storedName) {
+      setFirstName(storedName.split(" ")[0]);
+    }
+  }, []);
 
   const { data: doctor, isLoading: isLoadingDoctor } = useDoctor(doctorId);
   const { data: bookings, isLoading: isLoadingBookings } = useDoctorBookings(doctorId, {
@@ -48,22 +57,11 @@ const OverviewPage = () => {
             variant="heading1"
             style={{ color: "#0D294D", fontWeight: "bold", fontSize: "32px" }}
           />
-          {isLoadingDoctor ? (
-            <div style={{ paddingTop: "8px" }}>
-              <Rectangle
-                width="200px"
-                height="40px"
-                color="#EAF2FF"
-                borderRadius="8px"
-              />
-            </div>
-          ) : (
-            <Typography
-              text={doctor?.practitionerName || "Doctor"}
-              variant="heading1"
-              style={{ color: "#9FD5E2", fontWeight: "bold", fontSize: "32px" }}
-            />
-          )}
+          <Typography
+            text={firstName}
+            variant="heading1"
+            style={{ color: "#9FD5E2", fontWeight: "bold", fontSize: "32px" }}
+          />
         </div>
 
         {/* Section 1: Today's appointments */}

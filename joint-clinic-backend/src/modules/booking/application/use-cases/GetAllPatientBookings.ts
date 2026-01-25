@@ -2,17 +2,17 @@ import { PatientRepoPort } from "modules/patient/application/ports/PatientRepoPo
 import { BookingRepoPort } from "../ports/BookingRepoPort.js";
 
 export class GetAllPatientBookings {
-  constructor(
-    private bookingRepo: BookingRepoPort,
-    private patientRepo: PatientRepoPort
-  ) {}
+    constructor(
+        private bookingRepo: BookingRepoPort,
+        private patientRepo: PatientRepoPort
+    ) { }
     async exec(patientId: string) {
         try {
             const patient = await this.patientRepo.getPatient(patientId);
-            if (!patient) {
-                return { ok: false, error: 'Patient not found' };
+            if (!patient || !patient.nixpendId) {
+                return { ok: false, error: 'Patient or Patient Nixpend ID not found' };
             }
-            const bookings = await this.bookingRepo.findBookingsByPatient(patientId);
+            const bookings = await this.bookingRepo.findBookingsByPatient(patient.nixpendId);
             if (!bookings) {
                 return { ok: false, error: 'No bookings found for this patient' };
             }

@@ -12,6 +12,7 @@ import {
   CreateFullUserInput,
   CreatePatientInput,
 } from "@/types/auth";
+import { findDoctorByNixpendId } from "@/lib/api/doctor.api";
 
 export const useAuthFlow = () => {
   const [step, setStep] = useState(1);
@@ -40,6 +41,28 @@ export const useAuthFlow = () => {
     clearError();
     try {
       setContact(inputContact);
+
+      // Check for Doctor Nixpend ID
+      if (inputContact.toUpperCase().startsWith("HLC")) {
+        console.log("Detected Doctor Nixpend ID");
+        try {
+          const doctor = await findDoctorByNixpendId(inputContact);
+          if (doctor && doctor._id) {
+            localStorage.setItem("doctorId", doctor._id);
+            if (doctor.nixpendId) localStorage.setItem("doctorNixpendId", doctor.nixpendId);
+            if (doctor.practitionerName) localStorage.setItem("doctorName", doctor.practitionerName);
+
+            window.location.href = "/doctor/overview";
+            return;
+          }
+        } catch (docErr) {
+          console.error("Doctor login failed", docErr);
+          setError("Doctor not found with this Nixpend ID");
+          setIsLoading(false);
+          return;
+        }
+      }
+
       console.log("Calling findUser API...");
       const user = await findUser(inputContact);
       console.log("findUser result:", user);
