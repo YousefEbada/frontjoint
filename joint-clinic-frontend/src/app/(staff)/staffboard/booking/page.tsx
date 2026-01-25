@@ -10,16 +10,14 @@ import DashBoardContent from "@/components/atoms/DashBoardContent";
 
 import Calendar from "@/components/molecules/Calendar";
 import { useSearchParams } from "next/navigation";
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, Suspense, useMemo } from "react";
 import dayjs from "dayjs";
+import { useStaffBookings } from "@/hooks/useBooking";
 
 function BookingPageContent() {
 
   const searchParams = useSearchParams();
   const dateParam = searchParams?.get("date");
-
-  // Example logic: if date is provided, maybe we want to filter bookings or just show it
-  // For now, I'll assume we want to highlight "Today" if it's today, or show a custom date text.
 
   const [selectedDateFilter, setSelectedDateFilter] = useState<string>(dateParam || "Today");
 
@@ -30,32 +28,24 @@ function BookingPageContent() {
     }
   }, [dateParam]);
 
-  const bookings = [
-    {
-      id: "1",
-      sessionNumber: 1,
-      type: "patient" as const,
-      status: "Confirmed" as const,
-      date: "Oct 13",
-      time: "2:00 Pm"
-    },
-    {
-      id: "2",
-      sessionNumber: 2,
-      type: "patient" as const,
-      status: "Pending" as const,
-      date: "Nov 2",
-      time: "8:00 Pm"
-    },
-    {
-      id: "3",
-      sessionNumber: 3,
-      type: "patient" as const,
-      status: "Pending" as const,
-      date: "Jan 2",
-      time: "8:00 Pm"
-    }
-  ];
+  const period: 'today' | 'week' | 'month' = useMemo(() => {
+    if (selectedDateFilter === "This Month") return 'month';
+    if (selectedDateFilter === "This Week") return 'week';
+    return 'today';
+  }, [selectedDateFilter]);
+
+  const { data: bookingData, isLoading } = useStaffBookings(period);
+
+  const bookings = bookingData?.map((b: any, index: number) => ({
+    id: b._id,
+    sessionNumber: index + 1, // Mock or derive if available
+    type: "patient" as const, // b.bookingType?
+    patientName: b.patientName || "Unknown Patient",
+    status: b.status.charAt(0).toUpperCase() + b.status.slice(1),
+    date: dayjs(b.appointmentDate).format("MMM D"),
+    time: b.appointmentTime
+  })) || [];
+
   return (
     <>
       <DashBoardHeader therapyName="Shoulder Therapy">
@@ -119,7 +109,7 @@ function BookingPageContent() {
           </div>
         </div>
         <div className="w-full h-full md:bg-white md:rounded-[20px] md:shadow-[0px_10px_30px_10px_rgba(0,0,0,0.08)] md:p-5 md:overflow-y-auto md:custom-scrollbar">
-          <BookingList bookings={bookings} />
+          {isLoading ? <div>Loading...</div> : <BookingList bookings={bookings} />}
         </div>
       </DashBoardContent>
     </>

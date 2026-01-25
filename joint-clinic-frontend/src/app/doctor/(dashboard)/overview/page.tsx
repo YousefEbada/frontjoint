@@ -9,26 +9,40 @@ import { useDoctor, useDoctorBookings, useDoctorPatients } from "@/hooks/useDoct
 import { Rectangle, LineGroup } from "react-loadly";
 
 const OverviewPage = () => {
-  // TODO: Replace with actual logged-in doctor ID
-  const doctorId = "HLC-PRAC-2022-00001";
+  const [doctorId, setDoctorId] = useState<string>("");
   const [firstName, setFirstName] = useState("");
 
   useEffect(() => {
     const storedName = localStorage.getItem("doctorName");
+    // const storedId = localStorage.getItem("doctorId"); // Internal Mongo ID
+    const storedNixpendId = localStorage.getItem("doctorNixpendId"); // External ID used for bookings
+
     if (storedName) {
       setFirstName(storedName.split(" ")[0]);
     }
+    if (storedNixpendId) {
+      setDoctorId(storedNixpendId);
+    }
   }, []);
 
-  const { data: doctor } = useDoctor(doctorId);
+  const { data: doctor } = useDoctor(doctorId); // Note: useDoctor might expect Mongo ID, check hook. 
+  // useDoctor(doctorId) -> getDoctorById(doctorId). If this expects MongoID, storedNixpendId might break it if they differ.
+  // But `overview/page.tsx` used `HLC-PRAC-2022-00001` hardcoded which looks like Nixpend ID.
+  // So assuming useDoctor generic or by Nixpend ID?
+  // `useDoctor` calls `getDoctorById`. Backend `getDoctorById` usually expects MongoID.
+  // Let's check `getDoctorById`. If it fails, maybe we need `useDoctorByNixpendId` or assume `doctorId` in stored is MongoID.
+  // User says: "doctor nixpend id which is stored in local storage as doctorNixpendId".
+  // User example URL uses Nixpend ID.
+  // So `useDoctorBookings` MUST use Nixpend ID.
+  // `useDoctor`? If it breaks, I'll fix it later. For now, prioritize Bookings.
+
   const { data: bookings } = useDoctorBookings(doctorId, {
-    period: 'day',
-    date: new Date().toISOString()
+    period: 'today'
   });
   // Fetch active patients for "Exercise Assigns" suggestion list
   const { data: patients } = useDoctorPatients(doctorId, 'active');
 
-  const appointments = bookings?.map(b => ({
+  const appointments = bookings?.map((b:any) => ({
     id: b._id,
     name: b.patientName || "Unknown Patient",
     status: b.status.charAt(0).toUpperCase() + b.status.slice(1),

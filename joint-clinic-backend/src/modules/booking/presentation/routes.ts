@@ -9,7 +9,8 @@ import {
   updateBookingStatus,
   getAllBookings,
   getPatientBookings,
-  getDoctorBookings
+  getDoctorBookings,
+  getStaffBookings
 } from './controllers/booking.controller.js';
 // import { auth } from '../../../shared/middleware/auth.js';
 import { validate } from '../../../shared/middleware/validate.js';
@@ -32,6 +33,7 @@ bookingRoutes.post('/', createBooking);
 bookingRoutes.get('/', getAllBookings);
 bookingRoutes.get('/patient/:patientId', getPatientBookings);
 bookingRoutes.get('/doctor/:doctorId/bookings/:period', getDoctorBookings);
+bookingRoutes.get('/bookings/:period', getStaffBookings);
 bookingRoutes.get('/doctor/:doctorId/slots', getAvailableSlots);
 bookingRoutes.get('/:id', getBookingById);
 bookingRoutes.put('/:id/cancel', cancelBooking);

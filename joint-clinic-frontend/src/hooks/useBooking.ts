@@ -13,6 +13,8 @@ import {
     getPendingBooking,
     clearPendingBooking,
     isPatientAuthenticated,
+    getStaffBookings,
+    getAllBookings,
     PendingBookingData,
 } from "@/lib/api/booking.api";
 
@@ -31,6 +33,22 @@ export const useBookingDetails = (bookingId: string) => {
         queryKey: ["booking", bookingId],
         queryFn: () => getBookingById(bookingId),
         enabled: !!bookingId,
+    });
+};
+
+export const useStaffBookings = (period: 'today' | 'week' | 'month') => {
+    return useQuery({
+        queryKey: ["staff-bookings", period],
+        queryFn: () => getStaffBookings(period),
+    });
+};
+
+
+
+export const useAllBookings = () => {
+    return useQuery({
+        queryKey: ["all-bookings"],
+        queryFn: getAllBookings,
     });
 };
 

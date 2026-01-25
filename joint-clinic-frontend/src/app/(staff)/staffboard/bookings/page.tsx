@@ -1,4 +1,6 @@
 import React from 'react'
+import dayjs from 'dayjs';
+import { useAllBookings } from '@/hooks/useBooking';
 import DashBoardHeader from "@/components/molecules/DashBoardHeader";
 import Typography from "@/components/atoms/Typography";
 import Link from 'next/link';
@@ -9,32 +11,16 @@ import PatientRow from '@/components/atoms/PatientRow';
 import DashBoardContent from '@/components/atoms/DashBoardContent';
 
 const BookingsPage = () => {
-    const bookings = [
-        {
-            id: "1",
-            sessionNumber: 5,
-            type: "patient" as const,
-            status: "Confirmed" as const,
-            date: "Oct 13th 2025",
-            time: "2:00 Pm"
-        },
-        {
-            id: "2",
-            sessionNumber: 6,
-            type: "patient" as const,
-            status: "Pending" as const,
-            date: "Nov 2nd 2025",
-            time: "8:00 Pm"
-        },
-        {
-            id: "3",
-            sessionNumber: 7,
-            type: "patient" as const,
-            status: "Pending" as const,
-            date: "Jan 2nd 2025",
-            time: "8:00 Pm"
+    const { data: bookings, isLoading } = useAllBookings();
+
+    const getStatusColor = (status: string) => {
+        switch (status.toLowerCase()) {
+            case 'confirmed': return 'text-[#1C9A55]';
+            case 'pending': return 'text-[#fdb515]';
+            case 'cancelled': return 'text-red-500';
+            default: return 'text-gray-500';
         }
-    ];
+    };
 
     return (
         <>
@@ -58,12 +44,23 @@ const BookingsPage = () => {
                 </div>
 
                 <div className="w-full h-full flex flex-col gap-y-3 md:bg-white md:rounded-[20px] md:shadow-[0px_10px_30px_10px_rgba(0,0,0,0.08)] md:p-5 md:overflow-y-auto md:custom-scrollbar">
-                    {Array.from({ length: 8 }).map((_, index) => (
-                        <div key={index}>
-                            <PatientRow name="John Doe" status="Pending" statusColor="text-[#fdb515]" date="Oct 12 - 3:00 Pm" />
-                            <hr className='hidden md:block w-full h-[1px] bg-gray-200 my-2' />
-                        </div>
-                    ))}
+                    {isLoading ? (
+                        <div className="flex justify-center p-4">Loading bookings...</div>
+                    ) : bookings && bookings.length > 0 ? (
+                        bookings.map((booking: any) => (
+                            <div key={booking._id}>
+                                <PatientRow
+                                    name={booking.patientName || "Unknown Patient"}
+                                    status={booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}
+                                    statusColor={getStatusColor(booking.status)}
+                                    date={`${dayjs(booking.appointmentDate).format('MMM D')} - ${booking.appointmentTime}`}
+                                />
+                                <hr className='hidden md:block w-full h-[1px] bg-gray-200 my-2' />
+                            </div>
+                        ))
+                    ) : (
+                        <div className="flex justify-center p-4">No bookings found.</div>
+                    )}
                 </div>
             </DashBoardContent>
         </>

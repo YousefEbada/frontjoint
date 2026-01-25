@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DashBoardHeader from "@/components/molecules/DashBoardHeader";
 import Typography from "@/components/atoms/Typography";
 import SearchInput from "@/components/atoms/searchInput";
@@ -14,14 +14,33 @@ const CalendarPage = () => {
   const [filter, setFilter] = useState<"Today" | "This Week" | "This Month">("Today");
   const [searchTerm, setSearchTerm] = useState("");
 
-  // TODO: Replace with actual logged-in doctor ID
-  const doctorId = "HLC-PRAC-2022-00001";
+  const [doctorId, setDoctorId] = useState<string>("");
 
-  // Fetch bookings - fetching 'month' to verify 'all' tab or generic list
-  // Optimization: Could filter by API params based on tab/filter, but for now client-side filtering on fetched list is fine
-  const { data: bookings, isLoading } = useDoctorBookings(doctorId, { period: 'month' });
+  useEffect(() => {
+    const storedNixpendId = localStorage.getItem("doctorNixpendId");
+    if (storedNixpendId) {
+      setDoctorId(storedNixpendId);
+    }
+  }, []);
 
-  const allBookings = bookings?.map(b => ({
+  const periodMap: Record<string, "today" | "week" | "month"> = {
+    "Today": "today",
+    "This Week": "week",
+    "This Month": "month"
+  };
+
+  const period = activeTab === 'all' ? 'month' : (periodMap[filter] || 'today');
+  // If 'all' tab, maybe fetch 'month' or create new 'all' API? 
+  // User didn't ask for 'all' API, just 3 APIs. 
+  // Re-using 'month' for 'all' or default to 'month' is reasonable fallback or I can fetch multiple.
+  // Converting 'all' to 'month' for now as placeholder or keep 'all' if backend supports it (it doesn't yet).
+  // Actually, for "All Bookings" tab, maybe we should fetch 'month' or just show empty if no API?
+  // Let's map 'all' -> 'month' for now to show something, or user might want `getAllBookings`?
+  // `useDoctorBookings` expects today/week/month.
+
+  const { data: bookings, isLoading } = useDoctorBookings(doctorId, { period: period as any });
+
+  const allBookings = bookings?.map((b:any) => ({
     id: b._id,
     name: b.patientName || "Unknown Patient",
     status: b.status.charAt(0).toUpperCase() + b.status.slice(1),
@@ -38,7 +57,7 @@ const CalendarPage = () => {
   })) || [];
 
 
-  const filteredBookings = allBookings.filter(b =>
+  const filteredBookings = allBookings.filter((b:any) =>
     b.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -111,7 +130,7 @@ const CalendarPage = () => {
             {isLoading ? (
               <div className="flex items-center justify-center h-40 text-gray-400">Loading bookings...</div>
             ) : filteredBookings.length > 0 ? (
-              filteredBookings.map((apt, index) => (
+              filteredBookings.map((apt:any, index:number) => (
                 <div key={index} className="md:border-b md:border-gray-300 last:border-0 py-2 md:py-6">
                   <AppointmentItem
                     name={apt.name}

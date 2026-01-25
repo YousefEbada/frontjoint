@@ -2,10 +2,10 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   getDoctors,
   getDoctorById,
-  getDoctorBookings,
   getDoctorSessions,
   getDoctorPatients,
 } from "@/lib/api/doctor.api";
+import { getDoctorBookings } from "@/lib/api/booking.api";
 
 export const useDoctors = () => {
   return useQuery({
@@ -24,11 +24,19 @@ export const useDoctor = (doctorId: string) => {
 
 export const useDoctorBookings = (
   doctorId: string,
-  params?: { period?: "day" | "week" | "month"; date?: Date | string }
+  params?: { period?: "today" | "week" | "month" | "day"; date?: Date | string }
 ) => {
+  const periodMap: Record<string, 'today' | 'week' | 'month'> = {
+    'day': 'today',
+    'today': 'today',
+    'week': 'week',
+    'month': 'month'
+  };
+  const apiPeriod = params?.period ? periodMap[params.period] || 'today' : 'today';
+
   return useQuery({
-    queryKey: ["doctor-bookings", doctorId, params],
-    queryFn: () => getDoctorBookings(doctorId, params),
+    queryKey: ["doctor-bookings", doctorId, apiPeriod],
+    queryFn: () => getDoctorBookings(doctorId, apiPeriod),
     enabled: !!doctorId,
   });
 };

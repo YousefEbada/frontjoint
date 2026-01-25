@@ -2,6 +2,7 @@ import api from "./axios";
 import {
     AvailableSlotsResponse,
     BookingResponse,
+    Booking,
     CancelBookingPayload,
     CreateBookingPayload,
     RescheduleBookingPayload,
@@ -147,5 +148,73 @@ export const getBookingById = async (bookingId: string): Promise<any> => {
     } catch (error) {
         console.error("Error fetching booking:", error);
         return { ok: false, error: "Failed to fetch booking" };
+    }
+};
+
+export const getDoctorBookings = async (
+    doctorId: string,
+    period: 'today' | 'week' | 'month'
+): Promise<Booking[]> => {
+    try {
+        const response = await api.get(`/booking/doctor/${doctorId}/bookings/${period}`);
+        console.log(`getDoctorBookings (${period}) response:`, response.data);
+        // The API returns { ok: true, data: [...] }. 
+        // Our hook expects just the array or potentially the response wrapper depending on usage.
+        // Existing hooks seem to return response.data which is { ok: true, data: ... }.
+        // Let's return response.data.data directly if standard, OR return response.data and let hook handle accessing .data.
+        // Looking at other APIs:
+        // `getAvailableSlots` returns response.data (AvailableSlotsResponse).
+        // `getAllPatients` returns response.data.data.
+        // `getPatientBookings` returns response.data.
+        // Let's return response.data to be safe and consistent with hook usage `data: doctorBookings` then `doctorBookings.data`.
+        // But `overview/page.tsx` does:
+        // `const { data: bookings } = useDoctorBookings(...)`
+        // `const appointments = bookings?.map(...)` -> implies `bookings` is the array.
+        // So `useDoctorBookings` should return the array?
+        // Let's see `useDoctorBookings` in `useDoctor.ts`:
+        // `queryFn: () => getDoctorBookings(doctorId, params)`
+        // If query returns object, `data` is that object.
+        // If page accesses `bookings.length` or maps, `bookings` MUST be array.
+        // So API should return array?
+        // Or Hook selector?
+        // Let's return `response.data.data` if available, or empty array.
+        return response.data.data || [];
+    } catch (error) {
+        console.error(
+            `Error fetching doctor bookings (${period}):`,
+            (error as any).response?.data || (error as any).message
+        );
+        return [];
+    }
+};
+
+export const getStaffBookings = async (
+    period: 'today' | 'week' | 'month'
+): Promise<Booking[]> => {
+    try {
+        const response = await api.get(`/booking/bookings/${period}`);
+        console.log(`getStaffBookings (${period}) response:`, response.data);
+        return response.data.data || [];
+    } catch (error) {
+        console.error(
+            `Error fetching staff bookings (${period}):`,
+            (error as any).response?.data || (error as any).message
+        );
+        return [];
+    }
+};
+
+export const getAllBookings = async (): Promise<Booking[]> => {
+    try {
+        const response = await api.get(`/booking`);
+        console.log("getAllBookings response:", response.data);
+        // API /booking returns { ok: true, data: [...] } from getAllBookings controller
+        return response.data.data || [];
+    } catch (error) {
+        console.error(
+            "Error fetching all bookings:",
+            (error as any).response?.data || (error as any).message
+        );
+        return [];
     }
 };

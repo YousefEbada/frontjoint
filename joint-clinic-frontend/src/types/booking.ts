@@ -69,23 +69,26 @@ export interface CancelBookingPayload {
     cancelled_by: string
 }
 
+export interface Booking {
+    _id: string;
+    patientId: string;
+    doctorId: string;
+    branchId?: string;
+    eventName: string;
+    appointmentNixpendId: string;
+    appointmentDate: string;
+    appointmentTime: string;
+    appointmentDuration: number;
+    bookingType: string;
+    status: string;
+    department: string;
+    company: string;
+    patientName?: string; // Added as it is used in overview/page.tsx
+}
+
 export interface BookingResponse {
     ok: boolean;
-    booking?: {
-        _id: string;
-        patientId: string;
-        doctorId: string;
-        branchId?: string;
-        eventName: string;
-        appointmentNixpendId: string;
-        appointmentDate: string;
-        appointmentTime: string;
-        appointmentDuration: number;
-        bookingType: string;
-        status: string;
-        department: string;
-        company: string;
-    };
+    booking?: Booking;
     error?: string;
     violations?: { violation: string }[];
 }
