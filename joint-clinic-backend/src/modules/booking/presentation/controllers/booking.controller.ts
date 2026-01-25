@@ -14,6 +14,7 @@ import { FindBookingById } from '../../application/use-cases/FindBookingById.js'
 import { UpdateBookingStatus } from '../../application/use-cases/UpdateBookingStatus.js';
 import { GetAllBookings } from 'modules/booking/application/use-cases/GetAllBookings.js';
 import { GetAllPatientBookings } from 'modules/booking/application/use-cases/GetAllPatientBookings.js';
+import { GetDoctorBookings } from 'modules/booking/application/use-cases/GetDoctorBookings.js';
 
 const BOOKING_REPO = token<BookingRepoPort>('BOOKING_REPO');
 
@@ -179,6 +180,27 @@ export async function updateBookingStatus(req: Request, res: Response) {
     return res.status(200).json(result);
   } catch (error) {
     console.log("===== updateBookingStatus ERROR: ", error);
+    res.status(500).json({ ok: false, error: (error as any) || 'Internal server error' });
+  }
+}
+
+export async function getDoctorBookings(req: Request, res: Response) {
+  try {
+    const { doctorId, period } = req.params;
+
+    if (!['today', 'week', 'month'].includes(period)) {
+      return res.status(400).json({ ok: false, error: 'Invalid period. Must be today, week, or month.' });
+    }
+
+    const uc = new GetDoctorBookings(resolve(BOOKING_REPO));
+    const result = await uc.exec(doctorId, period as 'today' | 'week' | 'month');
+
+    if (!result.ok) {
+      return res.status(400).json(result);
+    }
+    return res.status(200).json(result);
+  } catch (error) {
+    console.error("===== getDoctorBookings ERROR: ", error);
     res.status(500).json({ ok: false, error: (error as any) || 'Internal server error' });
   }
 }

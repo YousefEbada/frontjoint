@@ -8,7 +8,8 @@ import {
   getBookingById,
   updateBookingStatus,
   getAllBookings,
-  getPatientBookings
+  getPatientBookings,
+  getDoctorBookings
 } from './controllers/booking.controller.js';
 // import { auth } from '../../../shared/middleware/auth.js';
 import { validate } from '../../../shared/middleware/validate.js';
@@ -30,6 +31,7 @@ const bookingLimiter = rateLimit({
 bookingRoutes.post('/', createBooking);
 bookingRoutes.get('/', getAllBookings);
 bookingRoutes.get('/patient/:patientId', getPatientBookings);
+bookingRoutes.get('/doctor/:doctorId/bookings/:period', getDoctorBookings);
 bookingRoutes.get('/doctor/:doctorId/slots', getAvailableSlots);
 bookingRoutes.get('/:id', getBookingById);
 bookingRoutes.put('/:id/cancel', cancelBooking);
