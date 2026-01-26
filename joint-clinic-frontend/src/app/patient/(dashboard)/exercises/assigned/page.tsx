@@ -69,15 +69,16 @@ const AssignedPage = () => {
                         </div>
                     ) : assignedList.length > 0 ? (
                         assignedList.map((exercise) => (
-                            <SessionCard
-                                key={exercise.id}
-                                id={exercise.exerciseId} // Pass actual exercise ID for navigation/details
-                                imageSrc={exercise.imageSrc}
-                                title={exercise.title}
-                                status={exercise.status}
-                                minutes={exercise.minutes}
-                                className="w-full"
-                            />
+                            <div key={exercise.id} style={{ cursor: "pointer" }} onClick={() => window.location.href = `/patient/exercises/${exercise.exerciseId}`}>
+                                <SessionCard
+                                    id={exercise.exerciseId}
+                                    imageSrc={exercise.imageSrc}
+                                    title={exercise.title}
+                                    status={exercise.status}
+                                    minutes={exercise.minutes}
+                                    className="w-full"
+                                />
+                            </div>
                         ))
                     ) : (
                         <div className="col-span-3 text-center py-8">

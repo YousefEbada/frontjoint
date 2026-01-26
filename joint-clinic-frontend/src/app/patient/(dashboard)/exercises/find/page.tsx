@@ -26,6 +26,11 @@ export default function FindExercisesPage() {
         ex.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
+    // Add click handler to navigate
+    const handleExerciseClick = (id: string) => {
+        window.location.href = `/patient/exercises/${id}`;
+    };
+
     return (
         <main className="w-full h-full flex flex-col gap-8 p-4 md:p-8 overflow-y-auto custom-scrollbar">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -62,7 +67,7 @@ export default function FindExercisesPage() {
                         <Typography text="Loading exercises..." variant="bodyRegular" className="text-gray-500" />
                     </div>
                 ) : (
-                    <ExerciseGrid exercises={filteredExercises} />
+                    <ExerciseGrid exercises={filteredExercises} onExerciseClick={handleExerciseClick} />
                 )}
             </section>
         </main>
