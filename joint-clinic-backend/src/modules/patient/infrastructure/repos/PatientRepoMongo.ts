@@ -117,5 +117,20 @@ export const PatientRepoMongo: PatientRepoPort = {
             console.error("[PatientRepoMongo.updatePatientStatus] DB error:", (error as any).message);
             throw new Error("DATABASE_ERROR");
         }
+    },
+    async getPatientsByDoctor(doctorNixpendId: string) {
+        try {
+            console.log("PatientRepoMongo.getPatientsByDoctor] Fetching patients for doctor:", doctorNixpendId);
+            const patients = await PatientModel.find({ doctorNixpendId })
+                .populate({
+                    path: 'userId',
+                    select: 'fullName firstName lastName email phone gender'
+                })
+                .lean();
+            return patients as any as Patient[];
+        } catch (error) {
+            console.error("[PatientRepoMongo.getPatientsByDoctor] DB error:", (error as any).message);
+            throw new Error("DATABASE_ERROR");
+        }
     }
 };

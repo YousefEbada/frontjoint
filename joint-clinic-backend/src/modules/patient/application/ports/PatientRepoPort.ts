@@ -8,4 +8,5 @@ export interface PatientRepoPort {
     updatePatient(id: string, data: Partial<Patient>): Promise<Patient | null>;
     createPatient(data: Partial<Patient>): Promise<Patient>;
     updatePatientStatus(id: string, status: Patient['status'], options?: { tx?: any }): Promise<void>;
+    getPatientsByDoctor(doctorNixpendId: string): Promise<Patient[]>;
 }

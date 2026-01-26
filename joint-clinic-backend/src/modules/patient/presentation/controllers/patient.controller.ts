@@ -9,6 +9,7 @@ import { GetPatientDashboard } from "modules/patient/application/use-cases/GetPa
 import { UpdatePatient } from "modules/patient/application/use-cases/UpdatePatient.js";
 import { GetAllPatients } from "modules/patient/application/use-cases/GetAllPatients.js";
 import { GetActivePatients } from "modules/patient/application/use-cases/GetActivePatients.js";
+import { GetPatientsByDoctor } from "modules/patient/application/use-cases/GetPatientsByDoctor.js";
 
 export async function getPatientById(req: Request, res: Response) {
     const { patientId } = req.params;
@@ -114,6 +115,22 @@ export async function getActivePatients(req: Request, res: Response) {
         return res.status(200).json(result);
     } catch (error) {
         console.error("[getActivePatients] There is an error in the patient controller", error);
+        return res.status(500).json({ ok: false, error: "Something Went Wrong" });
+    }
+}
+
+export async function getPatientsByDoctor(req: Request, res: Response) {
+    const { doctorNixpendId } = req.params;
+    try {
+        const uc = new GetPatientsByDoctor(resolve(PATIENT_REPO));
+        const result = await uc.exec(doctorNixpendId);
+        if (result.ok) {
+            return res.status(200).json(result);
+        } else {
+            return res.status(400).json(result);
+        }
+    } catch (error) {
+        console.error("[getPatientsByDoctor] There is an error in the patient controller", error);
         return res.status(500).json({ ok: false, error: "Something Went Wrong" });
     }
 }
