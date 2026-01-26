@@ -3,36 +3,39 @@ import React from "react";
 import Typography from "@/components/atoms/Typography";
 import { color } from "@/lib/constants/colors";
 import SessionCard from "@/components/molecules/sessionCard";
-import { useExercises } from "@/hooks/useExercises";
+import { useAssignedExercises } from "@/hooks/useExercises";
+import { useState, useEffect } from "react";
 
-interface Exercise {
-    id: number;
-    imageSrc: string;
-    title: string;
-    status?: string;
-    minutes?: number;
-}
-
-// const assignedExercises: Exercise[] = [];
-
-// Watchlist feature removed as no API exists yet
-// const watchListExercises: Exercise[] = [];
+// ... (keep interface Exercise if useful, or adapt)
 
 const AssignedPage = () => {
-    const { data: exercises, isLoading } = useExercises();
+    const [patientId, setPatientId] = useState<string>("");
 
-    // In a real app, we would filter by "Assigned" vs "Watchlist"
-    // For now, we'll just show all fetched exercises in the "Assigned" section
-    // and keep the watchlist as mock or empty since we don't have that API yet.
+    useEffect(() => {
+        const storedId = localStorage.getItem("patientId");
+        if (storedId) {
+            setPatientId(storedId);
+        }
+    }, []);
 
-    // Map API exercises to UI format
-    const assignedList = exercises?.map((ex: any) => ({
-        id: ex.id,
-        imageSrc: ex.imageSrc || "/sessionCard.png",
-        title: ex.title,
-        status: ex.status || "Pending",
-        minutes: ex.minutes || 15
-    })) || [];
+    const { data: exercises, isLoading } = useAssignedExercises(patientId);
+
+    // Filter Logic: The API returns assignments.
+    // Ensure we handle the structure correctly. Populated exercise is in `exerciseId` field usually.
+    // Check backend repo: `populate('exerciseId')`.
+    // So `ex` is { _id: assignmentId, exerciseId: { title, ... }, status: ... }
+
+    const assignedList = exercises?.map((assignment: any) => {
+        const exDetail = assignment.exerciseId || {};
+        return {
+            id: assignment._id, // Use assignment ID or exercise ID? Key should be unique.
+            exerciseId: exDetail._id,
+            imageSrc: "/sessionCard.png", // Video thumb or default
+            title: exDetail.title || "Untitled Exercise",
+            status: assignment.status || "Pending", // Assignment status
+            minutes: exDetail.duration || 15 // If duration exists
+        };
+    }) || [];
 
     return (
         <main className="w-full h-full flex flex-col gap-12 p-4 md:p-8 overflow-y-auto custom-scrollbar">
@@ -46,9 +49,10 @@ const AssignedPage = () => {
                             variant="heading2"
                             style={{ color: color.secondary, fontWeight: "bold", fontSize: "32px" }}
                         />
+                        {/* TODO: specific last assigned date */}
                         <div className="flex items-center gap-2 mb-2">
                             <span className="text-[#1E5598] text-lg">Last Assign was:</span>
-                            <span className="text-[#1C9A55] text-lg font-medium">3 days ago</span>
+                            <span className="text-[#1C9A55] text-lg font-medium">Recently</span>
                         </div>
                     </div>
                     <Typography
@@ -67,7 +71,7 @@ const AssignedPage = () => {
                         assignedList.map((exercise) => (
                             <SessionCard
                                 key={exercise.id}
-                                id={exercise.id}
+                                id={exercise.exerciseId} // Pass actual exercise ID for navigation/details
                                 imageSrc={exercise.imageSrc}
                                 title={exercise.title}
                                 status={exercise.status}

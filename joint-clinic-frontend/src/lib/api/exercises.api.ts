@@ -192,17 +192,38 @@ export const deleteExercise = async (id: string): Promise<void> => {
 // Assign exercise to patient (keeping existing functionality)
 export const assignExercise = async (
   patientId: string,
-  exerciseId: string
+  exerciseId: string,
+  doctorNixpendId: string
 ): Promise<void> => {
   try {
     const response = await api.post(`/exercise/assign`, {
       patientId,
       exerciseId,
+      doctorNixpendId
     });
     console.log("assignExercise response:", response.data);
   } catch (error) {
     console.error(
       "Error assigning exercise:",
+      (error as any).response?.data || (error as any).message
+    );
+    throw error;
+  }
+};
+
+// Get assigned exercises for a patient
+export const getAssignedExercises = async (patientId: string): Promise<any[]> => {
+  try {
+    const response = await api.get(`/exercise/assigned/${patientId}`);
+    console.log("getAssignedExercises response:", response.data);
+
+    if (response.data.ok && response.data.data) {
+      return response.data.data;
+    }
+    return [];
+  } catch (error) {
+    console.error(
+      "Error fetching assigned exercises:",
       (error as any).response?.data || (error as any).message
     );
     throw error;

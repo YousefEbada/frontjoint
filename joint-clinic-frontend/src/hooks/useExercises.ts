@@ -6,6 +6,7 @@ import {
   getExerciseVideo,
   deleteExercise,
   assignExercise,
+  getAssignedExercises,
   Exercise,
   CreateExerciseRequest,
 } from "@/lib/api/exercises.api";
@@ -92,13 +93,25 @@ export const useAssignExercise = () => {
     mutationFn: ({
       patientId,
       exerciseId,
+      doctorNixpendId,
     }: {
       patientId: string;
       exerciseId: string;
-    }) => assignExercise(patientId, exerciseId),
+      doctorNixpendId: string;
+    }) => assignExercise(patientId, exerciseId, doctorNixpendId),
     onSuccess: () => {
       // Invalidate relevant queries
       queryClient.invalidateQueries({ queryKey: ["exercises"] });
+      queryClient.invalidateQueries({ queryKey: ["assigned-exercises"] });
     },
+  });
+};
+
+// Get assigned exercises
+export const useAssignedExercises = (patientId: string) => {
+  return useQuery({
+    queryKey: ["assigned-exercises", patientId],
+    queryFn: () => getAssignedExercises(patientId),
+    enabled: !!patientId,
   });
 };

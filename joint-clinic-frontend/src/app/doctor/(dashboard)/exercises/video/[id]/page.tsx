@@ -7,8 +7,9 @@ import Link from "next/link";
 import CustomSelect from "@/components/atoms/CustomSelect";
 import DashBoardContent from "@/components/atoms/DashBoardContent";
 import BackTo from "@/components/molecules/BackTo";
+// ... imports
 import { useExerciseById, useExerciseVideo, useAssignExercise } from "@/hooks/useExercises";
-import { useDoctorPatients } from "@/hooks/useDoctor";
+import { usePatientsByDoctor } from "@/hooks/useDoctor";
 
 import { useParams } from "next/navigation";
 
@@ -18,15 +19,29 @@ const ExerciseVideoPage = () => {
     const [selectedPatientId, setSelectedPatientId] = useState<string>("");
     const [assignmentSuccess, setAssignmentSuccess] = useState(false);
 
-    // TODO: Replace with actual logged-in doctor ID from auth context
-    const doctorId = "HLC-PRAC-2022-00001";
+    // Get doctor ID from local storage
+    const [doctorNixpendId, setDoctorNixpendId] = useState<string>("");
+
+    React.useEffect(() => {
+        const storedId = localStorage.getItem("doctorNixpendId");
+        if (storedId) {
+            setDoctorNixpendId(storedId);
+        }
+    }, []);
 
     const { data: exercise, isLoading: isLoadingExercise } = useExerciseById(id);
     const { data: videoUrl, isLoading: isLoadingVideo } = useExerciseVideo(id);
-    const { data: patients, isLoading: isLoadingPatients } = useDoctorPatients(doctorId, 'active');
+    // Use new hook
+    const { data: patients, isLoading: isLoadingPatients } = usePatientsByDoctor(doctorNixpendId);
     const { mutate: assignExercise, isPending: isAssigning } = useAssignExercise();
 
-    const patientOptions = patients?.map(p => p.fullName) || [];
+    const patientNames = patients?.map(p => {
+        // Handle populated userId object
+        if (typeof p.userId === 'object' && p.userId !== null && 'fullName' in p.userId) {
+            return (p.userId as any).fullName;
+        }
+        return "Unknown Name";
+    }) || [];
 
     const handleAssign = () => {
         if (!selectedPatientId) {
@@ -34,15 +49,28 @@ const ExerciseVideoPage = () => {
             return;
         }
 
-        const selectedPatient = patients?.find(p => p.fullName === selectedPatientId);
+        // Find patient by name from populated user data
+        const selectedPatient = patients?.find(p => {
+            if (typeof p.userId === 'object' && p.userId !== null && 'fullName' in p.userId) {
+                return (p.userId as any).fullName === selectedPatientId;
+            }
+            return false;
+        });
+
         if (!selectedPatient) {
             alert("Invalid patient selection");
             return;
         }
 
+        if (!doctorNixpendId) {
+            alert("Doctor ID not found. Please log in again.");
+            return;
+        }
+
         assignExercise({
             patientId: selectedPatient._id,
-            exerciseId: id
+            exerciseId: id,
+            doctorNixpendId: doctorNixpendId
         }, {
             onSuccess: () => {
                 setAssignmentSuccess(true);
@@ -98,7 +126,7 @@ const ExerciseVideoPage = () => {
                                             }}
                                         >
                                             Your browser does not support the video tag.
-                                        </video>                                        
+                                        </video>
                                     </div>
                                 ) : (
                                     <div className="w-full h-full bg-gray-200 rounded-[20px] flex items-center justify-center">
@@ -153,7 +181,7 @@ const ExerciseVideoPage = () => {
                                             <p className="text-gray-400">Loading patients...</p>
                                         ) : (
                                             <CustomSelect
-                                                items={patientOptions}
+                                                items={patientNames}
                                                 placeholder="Patient Name"
                                                 className="w-full"
                                                 size="small"

@@ -26,7 +26,7 @@ export interface PatientDashboardData {
 
 export interface Patient {
   _id: string;
-  userId: string;
+  userId: string | { _id: string; fullName: string; email?: string; phone?: string; gender?: string };
   nixpendId: string;
   injuryDetails?: {
     affectedArea?: string;
@@ -177,6 +177,22 @@ export const getActivePatients = async (): Promise<Patient[]> => {
   } catch (error) {
     console.error(
       "Error fetching active patients:",
+      (error as any).response?.data || (error as any).message
+    );
+    throw error;
+  }
+};
+
+/**
+ * Get patients by doctor ID
+ */
+export const getPatientsByDoctor = async (doctorNixpendId: string): Promise<Patient[]> => {
+  try {
+    const response = await api.get(`/patient/doctor/${doctorNixpendId}`);
+    return response.data.data;
+  } catch (error) {
+    console.error(
+      "Error fetching patients by doctor:",
       (error as any).response?.data || (error as any).message
     );
     throw error;

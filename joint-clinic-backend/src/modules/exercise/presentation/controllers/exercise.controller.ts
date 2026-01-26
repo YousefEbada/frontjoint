@@ -7,6 +7,8 @@ import { CreateExercise } from "modules/exercise/application/use-cases/CreateExe
 import { DeleteExercise } from "modules/exercise/application/use-cases/DeleteExercise.js";
 import { GetAllExercises } from "modules/exercise/application/use-cases/GetAllExercises.js";
 import { GetExerciseVideo } from "modules/exercise/application/use-cases/GetExercise.js";
+import { AssignExercise } from "modules/exercise/application/use-cases/AssignExercise.js";
+import { GetAssignedExercises } from "modules/exercise/application/use-cases/GetAssignedExercises.js";
 
 export const createExercise = async (req: Request, res: Response) => {
   try {
@@ -73,6 +75,37 @@ export const deleteExercise = async (req: Request, res: Response) => {
     return res.status(200).json(result);
   } catch (error) {
     console.error("============ deleteExercise Controller Error: ", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+export const assignExercise = async (req: Request, res: Response) => {
+  try {
+    const uc = new AssignExercise(resolve(EXERCISE_REPO));
+    const result = await uc.exec(req.body);
+
+    if (!result.ok) {
+      return res.status(400).json(result);
+    }
+    return res.status(200).json(result);
+  } catch (error) {
+    console.error("============ assignExercise Controller Error: ", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+export const getAssignedExercises = async (req: Request, res: Response) => {
+  const { patientId } = req.params;
+  try {
+    const uc = new GetAssignedExercises(resolve(EXERCISE_REPO));
+    const result = await uc.exec(patientId);
+
+    if (!result.ok) {
+      return res.status(400).json(result);
+    }
+    return res.status(200).json(result);
+  } catch (error) {
+    console.error("============ getAssignedExercises Controller Error: ", error);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };

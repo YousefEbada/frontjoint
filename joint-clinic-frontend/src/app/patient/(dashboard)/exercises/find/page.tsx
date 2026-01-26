@@ -5,56 +5,24 @@ import SearchInput from "@/components/atoms/searchInput";
 import ExerciseGrid from "@/components/organisms/ExerciseGrid/ExerciseGrid";
 import { color } from "@/lib/constants/colors";
 
-const allExercises = [
-    {
-        id: 101,
-        imageSrc: "/sessionCard.png",
-        title: "Session Number 3",
-        status: "Completed",
-        minutes: 5
-    },
-    {
-        id: 102,
-        imageSrc: "/sessionCard.png",
-        title: "Session Number 3",
-        minutes: 5,
-        status: "Pending",
-    },
-    {
-        id: 103,
-        imageSrc: "/sessionCard.png",
-        title: "Session Number 3",
-        minutes: 5,
-        status: "Pending",
-    },
-    {
-        id: 104,
-        imageSrc: "/sessionCard.png",
-        title: "Session Number 3",
-        minutes: 5,
-        status: "Pending",
-    },
-    {
-        id: 105,
-        imageSrc: "/sessionCard.png",
-        title: "Session Number 3",
-        minutes: 5,
-        status: "Pending",
-    },
-    {
-        id: 106,
-        imageSrc: "/sessionCard.png",
-        title: "Session Number 3",
-        minutes: 5,
-        status: "Pending",
-    }
-];
+import { useExercises } from "@/hooks/useExercises";
+// All exercises removed, fetching from API now
 
 export default function FindExercisesPage() {
     const [searchTerm, setSearchTerm] = useState("");
+    const { data: exercises, isLoading } = useExercises();
 
-    // Filter Logic placeholder
-    const filteredExercises = allExercises.filter(ex =>
+    // Map Backend Data to UI Model
+    const allExercisesList = exercises?.map((ex: any) => ({
+        id: ex._id,
+        imageSrc: "/sessionCard.png",
+        title: ex.title,
+        status: "Available", // Or derived status if needed
+        minutes: 15 // Mock minutes if not in DB
+    })) || [];
+
+    // Filter Logic
+    const filteredExercises = allExercisesList.filter(ex =>
         ex.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
@@ -89,7 +57,13 @@ export default function FindExercisesPage() {
             </div>
 
             <section className="flex flex-col gap-4">
-                <ExerciseGrid exercises={filteredExercises} />
+                {isLoading ? (
+                    <div className="flex justify-center p-8">
+                        <Typography text="Loading exercises..." variant="bodyRegular" className="text-gray-500" />
+                    </div>
+                ) : (
+                    <ExerciseGrid exercises={filteredExercises} />
+                )}
             </section>
         </main>
     );

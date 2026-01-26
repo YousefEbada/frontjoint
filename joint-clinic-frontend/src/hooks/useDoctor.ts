@@ -5,6 +5,7 @@ import {
   getDoctorSessions,
   getDoctorPatients,
 } from "@/lib/api/doctor.api";
+import { getPatientsByDoctor } from "@/lib/api/patient.api";
 import { getDoctorBookings } from "@/lib/api/booking.api";
 
 export const useDoctors = () => {
@@ -60,5 +61,13 @@ export const useDoctorPatients = (
     queryKey: ["doctor-patients", doctorId, status],
     queryFn: () => getDoctorPatients(doctorId, status),
     enabled: !!doctorId,
+  });
+};
+
+export const usePatientsByDoctor = (doctorNixpendId: string | undefined) => {
+  return useQuery({
+    queryKey: ["doctor-patients-nixpend", doctorNixpendId],
+    queryFn: () => getPatientsByDoctor(doctorNixpendId!),
+    enabled: !!doctorNixpendId,
   });
 };
