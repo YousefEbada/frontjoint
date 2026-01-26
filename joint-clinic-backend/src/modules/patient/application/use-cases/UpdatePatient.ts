@@ -30,7 +30,8 @@ export class UpdatePatient {
             "allergies",
             "medicalHistory",
             "injuryDetails",
-            "notes"
+            "notes",
+            "doctorNixpendId"
         ],
         nixpend: [
             "occupation",
@@ -57,9 +58,9 @@ export class UpdatePatient {
 
         // If phone changes, sync to nixpend mobile
         if (data.phone !== undefined) {
-            nixpendFields.mobile = data.phone; 
+            nixpendFields.mobile = data.phone;
         }
-        
+
         // Split fields dynamically based on DOMAIN_MAP
         for (const key of Object.keys(data)) {
             const value = data[key as keyof typeof data];

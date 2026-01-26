@@ -54,7 +54,8 @@ export type UpdateType = {
   address?: string,
   marital_status_2?: 'Single' | 'Married' | 'Divorced' | 'Widow',
   mobile?: string,
-  second_mobile_number?: string
+  second_mobile_number?: string,
+  doctorNixpendId?: string
 }
 
 export type BookType = {
@@ -131,19 +132,19 @@ export type AvailableSlotReturnType = {
 }
 
 export type RescheduleType = {
-    practitioner: string,
-    department: DepartmentType,
-    company: string,
-    appointment_type: string,
-    // "mm-dd-yyyy"
-    appointment_date: string,
-    // "HH:MM"
-    appointment_time: string,
-    daily_practitioner_event: string,
-    service_unit?: string,
-    duration: number,
-    actual_duration: number
-  }
+  practitioner: string,
+  department: DepartmentType,
+  company: string,
+  appointment_type: string,
+  // "mm-dd-yyyy"
+  appointment_date: string,
+  // "HH:MM"
+  appointment_time: string,
+  daily_practitioner_event: string,
+  service_unit?: string,
+  duration: number,
+  actual_duration: number
+}
 
 export type BranchType = "Alaqiq" | "King Salman" | "others"
 

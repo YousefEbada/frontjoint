@@ -25,6 +25,7 @@ export const patientSchema = z.object({
   medicalHistory: z.array(z.string()).optional(),
   injuryDetails: injuryDetailsSchema,
   status: z.enum(['active', 'inactive']).optional(),
+  doctorNixpendId: z.string().optional(),
   notes: z.string().optional(),
 });
 
@@ -35,9 +36,10 @@ export const patientSchema = z.object({
 // export const createPatientSchema = patientSchema.omit({ userId: true });
 
 // // Update patient schema (all fields optional except identifiers)
-// export const updatePatientSchema = patientSchema.partial().required({ 
+// export const updatePatientSchema = patientSchema.partial().required({
 //   userId: true,
-//   nixpendId: true 
+//   nixpendId: true,
+//   doctorNixpendId: true
 // });
 
 // // Patient query/filter schema

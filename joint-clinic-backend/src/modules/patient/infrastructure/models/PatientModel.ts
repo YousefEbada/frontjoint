@@ -33,6 +33,7 @@ const PatientSchema = new Schema({
   medicalHistory: [String],
   injuryDetails: InjuryDetailsSchema,
   status: { type: String, enum: ['active', 'inactive'], default: 'inactive' },
+  doctorNixpendId: { type: String, required: false },
   notes: String
 }, { timestamps: true });
 

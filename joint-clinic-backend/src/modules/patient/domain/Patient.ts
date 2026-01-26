@@ -21,6 +21,7 @@ export interface Patient {
         medicalReports?: string[];
     };
     status?: 'active' | 'inactive';
+    doctorNixpendId?: string;
     notes?: string;
     createdAt?: Date;
     updatedAt?: Date;

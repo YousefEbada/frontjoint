@@ -9,6 +9,7 @@ import Typography from "@/components/atoms/Typography";
 import Divider from "@/components/atoms/Divider";
 import { usePendingBooking, useCreateBooking, useAvailableSlots } from "@/hooks/useBooking";
 import { CreateBookingPayload } from "@/types/booking";
+import { updatePatient } from "@/lib/api/patient.api";
 
 const BookingContent = () => {
     const router = useRouter();
@@ -134,8 +135,23 @@ const BookingContent = () => {
         };
 
         createBooking(bookingData, {
-            onSuccess: (response) => {
+            onSuccess: async (response) => {
                 if (response.ok) {
+                    // Assign doctor to patient
+                    try {
+                        console.log("Updating patient doctor with:", {
+                            patientId,
+                            doctorNixpendId: pendingBooking.doctorNixpendId
+                        });
+                        await updatePatient(patientId, {
+                            doctorNixpendId: pendingBooking.doctorNixpendId
+                        });
+                        console.log("Doctor assigned to patient successfully");
+                    } catch (err) {
+                        console.error("Failed to assign doctor to patient:", err);
+                        // Optional: show a warning or perform rollback, but proceeding for now as booking is created
+                    }
+
                     setBookingSuccess(true);
                     setBookingError("");
                     cancelPendingBooking();

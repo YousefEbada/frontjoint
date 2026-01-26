@@ -40,6 +40,7 @@ export interface Patient {
     medicalReports?: string[];
   };
   status?: "active" | "inactive";
+  doctorNixpendId?: string;
   notes?: string;
   // Extended properties for details pages (optional as they may not be in all responses)
   personalDetails?: {

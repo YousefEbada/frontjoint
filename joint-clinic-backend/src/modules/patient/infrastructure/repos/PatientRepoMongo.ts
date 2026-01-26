@@ -81,7 +81,7 @@ export const PatientRepoMongo: PatientRepoPort = {
             //     return null; // let use-case decide
             // }
             const patient = await PatientModel.findOneAndUpdate(
-                { userId: id },
+                { _id: id },
                 { $set: data },
                 { new: true, lean: true }
             );
