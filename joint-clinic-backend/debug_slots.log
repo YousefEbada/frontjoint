@@ -1,0 +1,6 @@
+
+Time: 2026-01-26T16:12:43.822Z
+URL: https://dev-api.nixpend.com/nis/external/available_slots?practitioner=HLC-PRAC-2024-00021&company=Joint+Clinic&from_date=2026-01-26&to_date=2026-02-25
+Status: 200
+Body: {"response":{"msg":"invalid credentials","data":null}}
+----------------------------------------

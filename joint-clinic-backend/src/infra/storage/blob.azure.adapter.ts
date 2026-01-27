@@ -19,6 +19,12 @@ export const azureBlobAdapter: BlobPort = {
     const containerClient =
       blobServiceClient.getContainerClient(containerName);
 
+    // Create container if it implies existence is optional, otherwise just try to create
+    // Simplest approach: createIfNotExists
+    await containerClient.createIfNotExists({
+      access: 'blob' // Public read access for blobs if needed, or 'container', or remove for private
+    });
+
     const blockBlobClient =
       containerClient.getBlockBlobClient(blobName);
 

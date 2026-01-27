@@ -16,6 +16,7 @@ import { GetAllBookings } from 'modules/booking/application/use-cases/GetAllBook
 import { GetAllPatientBookings } from 'modules/booking/application/use-cases/GetAllPatientBookings.js';
 import { GetDoctorBookings } from 'modules/booking/application/use-cases/GetDoctorBookings.js';
 import { GetStaffBookings } from 'modules/booking/application/use-cases/GetStaffBookings.js';
+import { fixedNixpendAdapter } from '../../infrastructure/adapters/FixedNixpendAdapter.js';
 
 const BOOKING_REPO = token<BookingRepoPort>('BOOKING_REPO');
 
@@ -132,12 +133,16 @@ export async function rescheduleBooking(req: Request, res: Response) {
 export async function getAvailableSlots(req: Request, res: Response) {
   try {
     const { doctorId } = req.params;
+    const { from, to } = req.query;
+
     console.log("===== getAvailableSlots Controller =====");
     console.log("===== doctorId from params: ", doctorId);
-    console.log("===== doctorId type: ", typeof doctorId);
+    console.log("===== query params: ", { from, to });
 
-    const uc = new GetAvailableSlots(resolve(NIXPEND_ADAPTER), resolve(DOCTOR_REPO));
-    const result = await uc.exec(doctorId);
+
+    // Using FixedNixpendAdapter to handle URL encoding correctness without modifying the integration module
+    const uc = new GetAvailableSlots(fixedNixpendAdapter, resolve(DOCTOR_REPO));
+    const result = await uc.exec(doctorId, from as string, to as string);
 
     // console.log("===== GetAvailableSlots result: ", JSON.stringify(result, null, 2));
 

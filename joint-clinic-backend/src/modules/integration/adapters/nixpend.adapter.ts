@@ -133,6 +133,7 @@ export const nixpendAdapter: NixpendPort = {
 
   // get available slots
   async getAvailableSlots(practitionerId, company = 'Joint Clinic', fromDate, toDate) {
+    console.log("\n\n======= Practitioner ID:", practitionerId, "\n\n");
     let data = await fetch(`${env.NIXPEND_API_URL}/nis/external/available_slots?practitioner=${practitionerId}&company=${company} ${(fromDate ? `&from_date=${fromDate}` : '')} ${(toDate ? `&to_date=${toDate}` : '')}`,
       {
         method: 'GET',
@@ -142,7 +143,7 @@ export const nixpendAdapter: NixpendPort = {
         }
       }
     )
-      .then(res => res.json());
+    .then(res => res.json());
     console.log("\n======= Available Slots Data:", data.response.message.length);
     if (data && data.response.message.length > 0) {
       return { data: data.response.message };
@@ -152,8 +153,8 @@ export const nixpendAdapter: NixpendPort = {
 
   // reschedule appointment
   async rescheduleAppointment(appointment_id: string, appointment_details: RescheduleType) {
-    console.log("\n\n========= Reschedule Appointment Details:", appointment_details, "\n\n");
-    console.log("\n\n========= Reschedule Appointment ID:", appointment_id, "\n\n");
+    console.log("\n\n\n\n\n\n========= Reschedule Appointment Details:", appointment_details, "\n\n");
+    console.log("\n\n\n\n\n\n========= Reschedule Appointment ID:", appointment_id, "\n\n");
     let data = await fetch(`${env.NIXPEND_API_URL}/nis/external/reschedule_appointment`, {
       method: 'POST',
       headers: {
@@ -164,7 +165,7 @@ export const nixpendAdapter: NixpendPort = {
     })
       .then(res => res.json()
       )
-    console.log("\n\n========= Reschedule Appointment Data:", data, "\n\n");
+    console.log("\n\n\n\n\n========= Reschedule Appointment Data:", data, "\n\n\n\n\n");
     if (data && data.appointment_id) {
       return data;
     }

@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 // Stub: parse user from JWT or session. For now anonymous.
 export function auth(req: Request, res: Response, next: NextFunction) {
   const token = req.headers.authorization?.split(' ')[1];
+  console.log("\n\n\n\n %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Token:", token, "\n\n\n\n %%%%%%%%%%%%%%%%%%%%%");
   if (token) {
     const jwtSecret = process.env.JWT_ACCESS_TOKEN_SECRET as string;
     try {

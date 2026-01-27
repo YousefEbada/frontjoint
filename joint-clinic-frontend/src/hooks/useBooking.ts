@@ -44,7 +44,6 @@ export const useStaffBookings = (period: 'today' | 'week' | 'month') => {
 };
 
 
-
 export const useAllBookings = () => {
     return useQuery({
         queryKey: ["all-bookings"],

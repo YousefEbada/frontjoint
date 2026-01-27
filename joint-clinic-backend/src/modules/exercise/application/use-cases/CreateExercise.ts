@@ -7,6 +7,9 @@ export class CreateExercise {
   async exec(input: {
     title: string;
     description?: string;
+    musclesTargeted?: string[];
+    equipmentNeeded?: string[];
+    difficultyLevel?: string;
     file: {
       originalname: string;
       buffer: Buffer;
@@ -26,7 +29,10 @@ export class CreateExercise {
       const res = await this.exercise.create({
         title: input.title,
         description: input.description,
-        videoBlobName: blobName
+        videoBlobName: blobName,
+        musclesTargeted: input.musclesTargeted,
+        equipmentNeeded: input.equipmentNeeded,
+        difficultyLevel: input.difficultyLevel
       });
 
       console.log("============ Created Exercise: ", res);
@@ -37,9 +43,9 @@ export class CreateExercise {
 
       return { ok: true, data: res };
 
-    } catch (error) {
+    } catch (error: any) {
       console.error("============ CreateExercise Error: ", error);
-      return { ok: false, message: "Something went wrong" };
+      return { ok: false, message: error.message || "Something went wrong", error: JSON.stringify(error) };
     }
   }
 }

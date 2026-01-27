@@ -12,11 +12,17 @@ import { GetAssignedExercises } from "modules/exercise/application/use-cases/Get
 
 export const createExercise = async (req: Request, res: Response) => {
   try {
+    console.log("============ createExercise Controller - Body:", JSON.stringify(req.body, null, 2));
+    console.log("============ createExercise Controller - File:", req.file ? "File exists" : "No file");
+
     const uc = new CreateExercise(resolve(BLOB_PORT), resolve(EXERCISE_REPO));
 
     const result = await uc.exec({
       title: req.body.title,
       description: req.body.description,
+      musclesTargeted: req.body.musclesTargeted ? JSON.parse(req.body.musclesTargeted) : [],
+      equipmentNeeded: req.body.equipmentNeeded ? JSON.parse(req.body.equipmentNeeded) : [],
+      difficultyLevel: req.body.difficultyLevel,
       file: req.file!
     });
 

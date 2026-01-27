@@ -133,7 +133,7 @@ const BookingContent = () => {
             company: "Joint Clinic",
             patient_name: patientName,
         };
-
+        console.log("Booking Data:", bookingData);
         createBooking(bookingData, {
             onSuccess: async (response) => {
                 if (response.ok) {

@@ -1,12 +1,11 @@
 "use client";
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { io, Socket } from "socket.io-client";
-import { ChatRoom, ChatMessage, SendMessageRequest } from "@/types/chat";
+import { ChatRoom, ChatMessage } from "@/types/chat";
 import {
   getChatRooms,
   getChatMessages,
   sendChatMessage,
-  createChatRoom,
 } from "@/lib/api/chat.api";
 
 const SOCKET_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:4000";
@@ -67,7 +66,7 @@ export const useChat = (activeRoomId?: string) => {
 
       // Join all rooms in socket
       if (socket && data.length > 0) {
-        const roomIds = data.map((r) => r.roomId);
+        const roomIds = data.map((r: ChatRoom) => r.roomId);
         socket.emit("rooms:join", { roomIds });
       }
     } catch (error) {
