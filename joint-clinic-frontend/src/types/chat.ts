@@ -38,6 +38,7 @@ export interface ChatMessage {
 export interface CreateRoomRequest {
   patientId: string;
   doctorId: string;
+  accessToken: string;
   metadata?: {
     patientName?: string;
     doctorName?: string;

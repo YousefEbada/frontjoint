@@ -22,6 +22,9 @@ const ChatInterface = ({ roomId, userId, title = "Chat" }: ChatInterfaceProps) =
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
 
+    console.log("ChatInterface - userId:", userId);
+    console.log("Messages:", messages);
+
     const handleSend = async () => {
         if (!inputText.trim()) return;
         await sendMessage(inputText);
@@ -51,6 +54,7 @@ const ChatInterface = ({ roomId, userId, title = "Chat" }: ChatInterfaceProps) =
                 ) : (
                     messages.map((msg) => {
                         const isMe = msg.senderId === userId;
+                        console.log(`Message ID: ${msg._id}, Sender ID: ${msg.senderId}, Is Me: ${isMe}`);
                         return (
                             <div key={msg._id} className={`flex w-full ${isMe ? "justify-end" : "justify-start"}`}>
                                 <div className={`max-w-[80%] md:max-w-[60%] flex flex-col ${isMe ? "items-end" : "items-start"}`}>

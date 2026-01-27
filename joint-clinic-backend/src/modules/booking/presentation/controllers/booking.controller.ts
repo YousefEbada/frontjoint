@@ -129,7 +129,7 @@ export async function rescheduleBooking(req: Request, res: Response) {
   }
 }
 
-// i should make this real time
+// // i should make this real time
 export async function getAvailableSlots(req: Request, res: Response) {
   try {
     const { doctorId } = req.params;
@@ -156,9 +156,32 @@ export async function getAvailableSlots(req: Request, res: Response) {
   }
 }
 
+// export async function getAvailableSlots(req: Request, res: Response) {
+//   try {
+//     const { doctorId } = req.params;
+//     console.log("===== getAvailableSlots Controller =====");
+//     console.log("===== doctorId from params: ", doctorId);
+//     console.log("===== doctorId type: ", typeof doctorId);
+
+//     const uc = new GetAvailableSlots(resolve(NIXPEND_ADAPTER), resolve(DOCTOR_REPO));
+//     const result = await uc.exec(doctorId);
+
+//     // console.log("===== GetAvailableSlots result: ", JSON.stringify(result, null, 2));
+
+//     if (!result.ok) {
+//       return res.status(400).json(result);
+//     }
+//     return res.status(200).json(result);
+//   } catch (error) {
+//     console.error("===== getAvailableSlots ERROR: ", error);
+//     res.status(500).json({ ok: false, error: (error as any) || 'Get Available Slots internal server error' });
+//   }
+// }
+
 export async function getBookingById(req: Request, res: Response) {
   try {
     const { id } = req.params;
+    console.log("===== getBookingById Controller =====, id: ", id);
     const uc = new FindBookingById(resolve(BOOKING_REPO));
     const result = await uc.exec(id);
 
@@ -191,15 +214,16 @@ export async function updateBookingStatus(req: Request, res: Response) {
 }
 
 export async function getDoctorBookings(req: Request, res: Response) {
+  console.log("\n\n\n\n===== getDoctorBookings Controller =====\n\n\n\n");
   try {
     const { doctorId, period } = req.params;
 
-    if (!['today', 'week', 'month'].includes(period)) {
-      return res.status(400).json({ ok: false, error: 'Invalid period. Must be today, week, or month.' });
+    if (!['today', 'week', 'month', 'all'].includes(period)) {
+      return res.status(400).json({ ok: false, error: 'Invalid period. Must be today, week, month, or all.' });
     }
 
     const uc = new GetDoctorBookings(resolve(BOOKING_REPO));
-    const result = await uc.exec(doctorId, period as 'today' | 'week' | 'month');
+    const result = await uc.exec(doctorId, period as 'today' | 'week' | 'month' | 'all');
 
     if (!result.ok) {
       return res.status(400).json(result);
@@ -215,12 +239,12 @@ export async function getStaffBookings(req: Request, res: Response) {
   try {
     const { period } = req.params;
 
-    if (!['today', 'week', 'month'].includes(period)) {
-      return res.status(400).json({ ok: false, error: 'Invalid period. Must be today, week, or month.' });
+    if (!['today', 'week', 'month', 'all'].includes(period)) {
+      return res.status(400).json({ ok: false, error: 'Invalid period. Must be today, week, month, or all.' });
     }
 
     const uc = new GetStaffBookings(resolve(BOOKING_REPO));
-    const result = await uc.exec(period as 'today' | 'week' | 'month');
+    const result = await uc.exec(period as 'today' | 'week' | 'month' | 'all');
 
     if (!result.ok) {
       return res.status(400).json(result);

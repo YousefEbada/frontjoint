@@ -6,21 +6,37 @@ import { useChat } from "@/hooks/useChat";
 import { createChatRoom } from "@/lib/api/chat.api";
 import DoctorDetails from "@/components/molecules/DoctorDetails";
 import ActionButton from "@/components/atoms/ActionButton";
+import { findDoctorByNixpendId } from "@/lib/api/doctor.api";
 
 const RequestDoctorHelp = () => {
     const { rooms, isLoadingRooms, refreshRooms } = useChat();
     const [activeRoomId, setActiveRoomId] = useState<string | null>(null);
     const [userId, setUserId] = useState<string>("");
     const [patientId, setPatientId] = useState<string>("");
+    const [userAccessToken, setUserAccessToken] = useState<string | null>(null);
+    const [doctorNixpendId, setDoctorNixpendId] = useState<string | null>(null);
+    const [doctorName, setDoctorName] = useState<string>("Dr. Smith");
 
     // Hardcoded default doctor for now (simulating assigned doctor)
-    const DEFAULT_DOCTOR_ID = "HLC-PRAC-2022-00001";
+    // const DEFAULT_DOCTOR_ID = "HLC-PRAC-2022-00001";
 
     useEffect(() => {
+        const doctorNixpendId = localStorage.getItem('doctorNixpendId');
+        const userAccessToken = localStorage.getItem('accessToken');
         const storedUserId = localStorage.getItem('userId');
         const storedPatientId = localStorage.getItem('patientId');
         if (storedUserId) setUserId(storedUserId);
         if (storedPatientId) setPatientId(storedPatientId);
+        if (userAccessToken) setUserAccessToken(userAccessToken);
+        if (doctorNixpendId) setDoctorNixpendId(doctorNixpendId);
+        async function getDoctorName(id: string) {
+            const doctorName = await findDoctorByNixpendId(id);
+            setDoctorName(doctorName.practitionerName);
+        }
+
+        if (doctorNixpendId) {
+            getDoctorName(doctorNixpendId);
+        }
     }, []);
 
     useEffect(() => {
@@ -32,14 +48,15 @@ const RequestDoctorHelp = () => {
     }, [rooms]);
 
     const handleStartChat = async () => {
-        if (!patientId || !DEFAULT_DOCTOR_ID) return;
+        if (!patientId || !doctorNixpendId) return;
         try {
             await createChatRoom({
                 patientId,
-                doctorId: DEFAULT_DOCTOR_ID,
+                doctorId: doctorNixpendId,
+                accessToken: userAccessToken || "",
                 metadata: {
                     patientName: localStorage.getItem('patientName') || "Patient",
-                    doctorName: "Dr. Smith" // Placeholder
+                    doctorName: doctorName
                 }
             });
             refreshRooms();
@@ -64,7 +81,7 @@ const RequestDoctorHelp = () => {
                             Loading chat...
                         </div>
                     ) : activeRoomId ? (
-                        <ChatInterface roomId={activeRoomId} userId={userId} userType="patient" title="Dr. Smith" />
+                        <ChatInterface roomId={activeRoomId} userId={userId} userType="patient" title={`Dr. ${doctorName}`} />
                     ) : (
                         <div className="flex flex-col h-full items-center justify-center bg-white rounded-[30px] border border-gray-200 p-8 text-center shadow-sm">
                             <Typography text="No active chat found." variant="bodyBold" className="mb-4 text-gray-600" />

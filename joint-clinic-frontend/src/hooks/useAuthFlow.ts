@@ -46,11 +46,13 @@ export const useAuthFlow = () => {
       if (inputContact.toUpperCase().startsWith("HLC")) {
         console.log("Detected Doctor Nixpend ID");
         try {
-          const doctor = await findDoctorByNixpendId(inputContact);
+          const doctor = await findUser(inputContact);
+          console.log("findUser (Doctor) result:", doctor);
           if (doctor && doctor._id) {
             localStorage.setItem("doctorId", doctor._id);
             if (doctor.nixpendId) localStorage.setItem("doctorNixpendId", doctor.nixpendId);
             if (doctor.practitionerName) localStorage.setItem("doctorName", doctor.practitionerName);
+            if (doctor.accessToken) localStorage.setItem("accessToken", doctor.accessToken);
 
             window.location.href = "/doctor/overview";
             return;

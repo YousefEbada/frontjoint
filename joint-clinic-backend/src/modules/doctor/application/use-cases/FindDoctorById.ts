@@ -4,7 +4,8 @@ export class FindDoctorById {
     constructor(private doctorRepo: DoctorRepoPort) { }
     async execute(id: string) {
         try {
-            const doctor = await this.doctorRepo.findById(id);
+            const doctor = await this.doctorRepo.findByNixpendId(id);
+            console.log("\n\n===== FindDoctorById Use Case =====, doctor: ", doctor, "\n\n");
             if (!doctor) {
                 return { ok: false, error: 'Doctor Not Found' }
             }

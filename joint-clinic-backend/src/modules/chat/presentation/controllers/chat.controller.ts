@@ -24,6 +24,7 @@ export class ChatController {
             if (!user) {
                 throw new HttpError(401, 'Unauthorized');
             }
+            console.log("Getting chat rooms for user:", user);
 
             const uc = new GetChatRooms(resolve(CHAT_ROOM_REPO));
             const result = await uc.exec(user.id, user.userType);
@@ -41,6 +42,8 @@ export class ChatController {
     // POST /api/chat/rooms
     static async createRoom(req: Request, res: Response): Promise<void> {
         try {
+            console.log("Creating chat room with body:", req.body);
+            console.log("User from request:", (req as any).user);
             const user = (req as any).user;
             if (!user) {
                 throw new HttpError(401, 'Unauthorized');
@@ -49,26 +52,26 @@ export class ChatController {
             const validatedData = createRoomSchema.parse(req.body);
             
             // Determine user type and validate access
-            let patientId: string, doctorId: string;
+            let patientId: string, doctorNixpendId: string;
             
             if (user.userType === 'patient') {
-                if (validatedData.patientId !== user.id) {
-                    throw new HttpError(403, 'Cannot create room for another patient');
-                }
+                // if (validatedData.patientId !== user.id) {
+                //     throw new HttpError(403, 'Cannot create room for another patient');
+                // }
                 patientId = user.id;
-                doctorId = validatedData.doctorId;
+                doctorNixpendId = validatedData.doctorNixpendId;
             } else if (user.userType === 'doctor') {
-                if (validatedData.doctorId !== user.id) {
+                if (validatedData.doctorNixpendId !== user.id) {
                     throw new HttpError(403, 'Cannot create room for another doctor');
                 }
                 patientId = validatedData.patientId;
-                doctorId = user.id;
+                doctorNixpendId = user.id;
             } else {
                 throw new HttpError(403, 'Invalid user type');
             }
 
             const createChatRoom = new CreateChatRoom(resolve(CHAT_ROOM_REPO));
-            const result = await createChatRoom.exec(patientId, doctorId, validatedData.metadata);
+            const result = await createChatRoom.exec(patientId, doctorNixpendId, validatedData.metadata);
             
             if (!result.ok) {
                 throw new HttpError(400, result.error || 'Failed to create room');
@@ -82,6 +85,7 @@ export class ChatController {
 
     // GET /api/chat/rooms/:roomId/messages
     static async getMessages(req: Request, res: Response): Promise<void> {
+        console.log("Getting chat messages with params:", req.params, "and query:", req.query);
         try {
             const user = (req as any).user;
             if (!user) {
@@ -120,6 +124,8 @@ export class ChatController {
             if (!user) {
                 throw new HttpError(401, 'Unauthorized');
             }
+            console.log("User sending message:", user);
+            console.log("Request body for sending message:", req.body);
 
             const validatedData = sendMessageSchema.parse(req.body);
 

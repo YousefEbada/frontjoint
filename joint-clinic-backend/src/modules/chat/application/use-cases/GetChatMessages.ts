@@ -17,7 +17,8 @@ export class GetChatMessages {
     ): Promise<{ ok: boolean; data?: { messages: ChatMessage[]; totalCount: number; hasMore: boolean }; error?: string }> {
         try {
             // Verify user is participant in the room
-            const room = await this.chatRoomRepo.getRoomById(roomId);
+            // const room = await this.chatRoomRepo.getRoomById(roomId);
+            const room = await this.chatRoomRepo.getRoomById('cfb63251-7870-4175-8473-152e8e458ce1');
             if (!room) {
                 return { ok: false, error: 'Chat room not found' };
             }

@@ -22,7 +22,8 @@ const AllMessagesContent = () => {
 
     // Get doctor/user ID for visual "Me" messages
     useEffect(() => {
-        const stored = localStorage.getItem('userId') || localStorage.getItem('doctorId');
+        const stored = localStorage.getItem('userId') || localStorage.getItem('doctorNixpendId');
+        console.log("Stored User ID:", stored);
         if (stored) setUserId(stored);
     }, []);
 

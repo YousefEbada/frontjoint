@@ -8,6 +8,7 @@ export function auth(req: Request, res: Response, next: NextFunction) {
     const jwtSecret = process.env.JWT_ACCESS_TOKEN_SECRET as string;
     try {
       const payload = jwt.verify(token, jwtSecret) as { userId: string, userType: string };
+      console.log("auth middleware payload:", payload);
       (req as any).user = { id: payload.userId, userType: payload.userType }; 
     } catch (err) {
       console.error("authOptional middleware JWT verification error:", (err as Error).message);

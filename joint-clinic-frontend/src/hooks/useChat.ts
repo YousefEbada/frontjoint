@@ -2,188 +2,163 @@
 import { useEffect, useState, useCallback } from "react";
 import { io, Socket } from "socket.io-client";
 import { ChatRoom, ChatMessage } from "@/types/chat";
-import {
-  getChatRooms,
-  getChatMessages,
-  sendChatMessage,
-} from "@/lib/api/chat.api";
+import { getChatRooms, getChatMessages } from "@/lib/api/chat.api";
 
-const SOCKET_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:4000";
+const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:4000";
 
 export const useChat = (activeRoomId?: string) => {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [rooms, setRooms] = useState<ChatRoom[]>([]);
+  const [token, setToken] = useState<string | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [isConnected, setIsConnected] = useState(false);
   const [isLoadingRooms, setIsLoadingRooms] = useState(false);
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
-  const [isConnected, setIsConnected] = useState(false);
 
-  // Initialize Socket
-  useEffect(() => {
-    const token =
-      localStorage.getItem("accessToken") || localStorage.getItem("token");
-    if (!token) {
-      console.warn("useChat: No token found");
-      return;
-    }
+  /* -------------------- SOCKET INIT -------------------- */
+  useEffect((): any => {
+    const token = localStorage.getItem("accessToken");
+    if (!token) return undefined;
+    setToken(token);
 
-    const newSocket = io(SOCKET_URL, {
+    const s = io(SOCKET_URL, {
       auth: { token },
-      transports: ["websocket", "polling"], // fallback
+      transports: ["websocket"],
     });
 
-    newSocket.on("connect", () => {
-      console.log("Socket connected:", newSocket.id);
+    s.on("connect", () => {
+      console.log("Socket connected:", s.id);
       setIsConnected(true);
     });
 
-    newSocket.on("disconnect", () => {
-      console.log("Socket disconnected");
+    s.on("disconnect", () => {
       setIsConnected(false);
     });
 
-    newSocket.on("error", (err: any) => {
-      console.error("Socket error:", err);
+    s.on("connect_error", (err) => {
+      console.error("Socket error:", err.message);
     });
 
-    newSocket.on("connect_error", (err: any) => {
-      console.error("Socket connection error:", err.message);
+    s.on("message:error", (err) => {
+      console.error("Message error:", err);
     });
 
-    setSocket(newSocket);
-
-    return () => {
-      newSocket.disconnect();
-    };
+    setSocket(s);
+    return () => s.disconnect();
   }, []);
 
-  // Fetch Rooms on Mount or Socket Connect
+  /* -------------------- ROOMS -------------------- */
   const fetchRooms = useCallback(async () => {
     setIsLoadingRooms(true);
     try {
-      const data = await getChatRooms();
+      const data = await getChatRooms({ accessToken: token });
+      console.log("Fetched chat rooms:", data);
       setRooms(data);
 
-      // Join all rooms in socket
-      if (socket && data.length > 0) {
-        const roomIds = data.map((r: ChatRoom) => r.roomId);
-        socket.emit("rooms:join", { roomIds });
+      if (socket && data.length) {
+        socket.emit("rooms:join", {
+          roomIds: data.map((r) => r.roomId),
+        });
       }
-    } catch (error) {
-      console.error("Failed to fetch rooms:", error);
     } finally {
       setIsLoadingRooms(false);
     }
-  }, [socket]);
+  }, [socket, token]);
 
   useEffect(() => {
-    if (isConnected) {
-      fetchRooms();
-    }
+    if (isConnected) fetchRooms();
   }, [isConnected, fetchRooms]);
 
-  // Fetch Messages when activeRoomId changes
+  /* -------------------- MESSAGES (HISTORY) -------------------- */
   useEffect(() => {
     if (!activeRoomId) {
       setMessages([]);
       return;
     }
 
-    const loadMessages = async () => {
+    const load = async () => {
       setIsLoadingMessages(true);
       try {
-        // Fetch first page
         const res = await getChatMessages(activeRoomId);
-        // Messages usually come newest-first or oldest-first?
-        // Typically chat UIs want oldest-first (render top down) or newest-first (render bottom up).
-        // Let's assume standard API sort (usually newest first for pagination, so we reverse for display).
-        // We'll verify sorting later. For now, we set them.
-        setMessages(res.messages.reverse());
-      } catch (error) {
-        console.error("Failed to fetch messages:", error);
+        setMessages(res.messages);
       } finally {
         setIsLoadingMessages(false);
       }
     };
 
-    loadMessages();
+    load();
   }, [activeRoomId]);
 
-  // Listen for new messages
+  /* -------------------- REALTIME EVENTS -------------------- */
   useEffect(() => {
     if (!socket) return;
 
-    const handleNewMessage = (msg: ChatMessage) => {
-      console.log("New message received:", msg);
-      // Append if it belongs to current room
-      if (activeRoomId && msg.roomId === activeRoomId) {
-        setMessages((prev) => [...prev, msg]);
-      }
-      // Also update lastMessage in rooms list?
-      // (Optional enhancement)
+    const onMessage = (msg: ChatMessage) => {
+      if (msg.roomId !== activeRoomId) return;
+
+      setMessages((prev) =>
+        prev.find((m) => m._id === msg._id) ? prev : [...prev, msg]
+      );
     };
 
-    socket.on("message:received", handleNewMessage);
-
+    socket.on("message:received", onMessage);
     return () => {
-      socket.off("message:received", handleNewMessage);
+      socket.off("message:received", onMessage);
     };
   }, [socket, activeRoomId]);
 
-  // Send Message Wrapper
-  const sendMessage = async (
+  /* -------------------- SEND MESSAGE (SOCKET) -------------------- */
+  const sendMessage = (
     content: string,
     type: "text" | "image" | "file" = "text",
-    fileUrl?: string
+    fileData?: {
+      fileUrl: string;
+      fileName: string;
+      fileSize: number;
+      mimeType: string;
+    }
   ) => {
-    if (!activeRoomId) return;
+    if (!socket || !activeRoomId) return;
 
-    try {
-      // Optimistic update? Or wait for response?
-      // "API returns the message object".
-      const result = await sendChatMessage({
-        roomId: activeRoomId,
-        messageType: type,
-        content,
-        fileUrl,
-      });
-      // We append immediately?
-      // If the socket also emits 'message:received' for the sender, we might get duplicate.
-      // Usually sender gets response, others get socket event.
-      // OR server broadcasts to everyone including sender.
-      // Safest: Append result from API. If socket event comes with same ID, dedupe logic (or rely on React key).
+    socket.emit("message:send", {
+      roomId: activeRoomId,
+      messageType: type,
+      content,
+      fileData,
+    });
+  };
 
-      // Let's assume server broadcasts to ALL in room. So we might NOT need to append manually if socket is fast.
-      // But for responsiveness, append manually.
-
-      setMessages((prev) => {
-        // simple dedupe check by ID
-        if (prev.find((m) => m._id === result._id)) return prev;
-        return [...prev, result];
-      });
-
-      return result;
-    } catch (error) {
-      console.error("Failed to send message:", error);
-      throw error;
+  /* -------------------- TYPING -------------------- */
+  const startTyping = () => {
+    if (socket && activeRoomId) {
+      socket.emit("typing:start", { roomId: activeRoomId });
     }
   };
 
-  const joinRoom = (roomIds: string[]) => {
-    if (socket) {
-      socket.emit("rooms:join", { roomIds });
+  const stopTyping = () => {
+    if (socket && activeRoomId) {
+      socket.emit("typing:stop", { roomId: activeRoomId });
+    }
+  };
+
+  /* -------------------- READ RECEIPTS -------------------- */
+  const markAsRead = () => {
+    if (socket && activeRoomId) {
+      socket.emit("messages:mark-read", { roomId: activeRoomId });
     }
   };
 
   return {
     socket,
-    isConnected,
     rooms,
     messages,
+    isConnected,
     isLoadingRooms,
     isLoadingMessages,
     sendMessage,
+    startTyping,
+    stopTyping,
+    markAsRead,
     refreshRooms: fetchRooms,
-    joinRoom,
   };
 };

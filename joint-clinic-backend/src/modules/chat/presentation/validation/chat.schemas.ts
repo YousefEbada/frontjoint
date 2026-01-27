@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const createRoomSchema = z.object({
     patientId: z.string().min(1, 'Patient ID is required'),
-    doctorId: z.string().min(1, 'Doctor ID is required'),
+    doctorNixpendId: z.string().min(1, 'Doctor Nixpend ID is required'),
     metadata: z.object({
         patientName: z.string().optional(),
         doctorName: z.string().optional(),

@@ -2,6 +2,8 @@ import { BookingRepoPort } from '../../application/ports/BookingRepoPort.js';
 import { BookingModel } from '../models/BookingModel.js';
 import { startOfDay, endOfDay } from '../../../../shared/utils/date.js';
 import { Booking } from '../../domain/Booking.js';
+import dayjs from 'dayjs';
+import { Types } from 'mongoose';
 
 export const BookingRepoMongo: BookingRepoPort = {
   async book(b, options): Promise<Booking> {
@@ -64,8 +66,9 @@ export const BookingRepoMongo: BookingRepoPort = {
   },
 
   async findById(id: string): Promise<Booking | null> {
+    console.log("[BookingRepoMongo.findById] Finding booking by ID:", id);
     const docs = await BookingModel.aggregate([
-      { $match: { _id: require('mongodb').ObjectId.isValid(id) ? new (require('mongodb').ObjectId)(id) : id } },
+      { $match: { _id: new Types.ObjectId(id) } },
       {
         $lookup: {
           from: "patients",
@@ -94,6 +97,7 @@ export const BookingRepoMongo: BookingRepoPort = {
     if (!docs || docs.length === 0) {
       return null;
     }
+    console.log("[BookingRepoMongo.findById] Found booking:", docs[0]);
     return docs[0] as unknown as Booking;
   },
 
@@ -197,8 +201,20 @@ export const BookingRepoMongo: BookingRepoPort = {
   },
 
   async findBookingsByDoctorAndDay(doctorId, day) {
+    // 1. Get the date boundaries as actual Date objects
+    const start = startOfDay(day); 
+    const end = endOfDay(day);
+
+    console.log(`\n\n\nSearching between: ${start.toISOString()} and ${end.toISOString()} \n\n\n`);
+
     const docs = await BookingModel.aggregate([
-      { $match: { doctorNixpendId: doctorId, slotStart: { $gte: startOfDay(day) }, slotEnd: { $lte: endOfDay(day) } } },
+      { 
+        $match: { 
+          doctorNixpendId: doctorId, 
+          slotStart: { $gte: start }, 
+          slotEnd: { $lte: end } 
+        } 
+      },
       {
         $lookup: {
           from: "patients",
@@ -223,8 +239,9 @@ export const BookingRepoMongo: BookingRepoPort = {
         }
       }
     ]);
-    return docs as any;
-  },
+    
+    return docs;
+},
 
   async findBookingsByDoctorAndWeek(doctorId: string, weekStart: Date): Promise<Booking[]> {
     const weekEnd = new Date(weekStart);

@@ -11,6 +11,7 @@ import { Verify } from "crypto";
 export const findUser = async (data: string) => {
   try {
     const response = await api.get(`/auth/find?contact=${data}`);
+    console.log("findUser called with contact:", response);
     console.log("findUser response:", response.data.user);
     return response.data.user;
   } catch (error) {

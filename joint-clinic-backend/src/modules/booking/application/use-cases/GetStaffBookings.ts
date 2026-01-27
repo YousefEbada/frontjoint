@@ -4,7 +4,7 @@ import { startOfDay, startOfWeek, startOfMonth } from "../../../../shared/utils/
 export class GetStaffBookings {
     constructor(private bookingRepo: BookingRepoPort) { }
 
-    async exec(period: 'today' | 'week' | 'month') {
+    async exec(period: 'today' | 'week' | 'month' | 'all' = 'all') {
         try {
             const now = new Date();
             let bookings;
@@ -18,6 +18,9 @@ export class GetStaffBookings {
                     break;
                 case 'month':
                     bookings = await this.bookingRepo.findBookingsByMonth(startOfMonth(now));
+                    break;
+                case 'all':
+                    bookings = await this.bookingRepo.getAllBookings();
                     break;
                 default:
                     return { ok: false, error: 'Invalid period' };

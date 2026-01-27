@@ -6,14 +6,14 @@ import { FindUserByContact } from '../../application/use-cases/FindUserByContact
 import { CreatePartialUser } from '../../application/use-cases/CreatePartialUser.js';
 import { CreateFullUser } from '../../application/use-cases/CreateFullUser.js';
 import { resolve } from '../../../../app/container.js';
-import { MAIL_REPO, OTP_REPO, SMS_REPO } from 'app/container.bindings.js';
+import { DOCTOR_REPO, MAIL_REPO, OTP_REPO, SMS_REPO } from 'app/container.bindings.js';
 import { USER_AUTH_REPO } from 'app/container.bindings.js';
 
 export async function findUser(req: Request, res: Response) {
   try {
     const { contact } = FindUserSchema.parse(req.query);
     console.log("CONTACT:", contact);
-    const uc = new FindUserByContact(resolve(USER_AUTH_REPO));
+    const uc = new FindUserByContact(resolve(USER_AUTH_REPO), resolve(DOCTOR_REPO));
     const result = await uc.exec(contact);
     if (!result.ok) {
       return res.status(400).json(result);

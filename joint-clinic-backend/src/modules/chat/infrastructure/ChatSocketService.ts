@@ -24,14 +24,18 @@ export class ChatSocketService {
     private typingUsers = new Map<string, TypingStatus[]>(); // roomId -> TypingStatus[]
 
     constructor(httpServer: HttpServer) {
+        const corsOrigins = (env.CORS_ORIGINS || '')
+            .split(',')
+            .map(s => s.trim())
+            .filter(Boolean);
+
         this.io = new Server(httpServer, {
             cors: {
-                origin: (env.CORS_ORIGINS || '').split(',').map(s => s.trim()).filter(Boolean),
+                origin: corsOrigins.length ? corsOrigins : true,
                 methods: ['GET', 'POST'],
                 credentials: false
             }
         });
-
         this.setupMiddleware();
         this.setupEventHandlers();
     }
@@ -42,22 +46,30 @@ export class ChatSocketService {
             try {
                 console.log('Socket handshake auth:', socket.handshake.auth);
                 const token = socket.handshake.auth.token || socket.handshake.headers.authorization?.replace('Bearer ', '');
-                
-                if (!token) {   
+
+                if (!token) {
                     return next(new Error('Authentication token missing'));
                 }
 
                 const decoded = jwt.verify(token, env.JWT_ACCESS_TOKEN_SECRET) as any;
                 console.log('Decoded token:', decoded);
-                
-                // Validate user data
-                if (!decoded.userId || !decoded.userType || !['patient', 'doctor'].includes(decoded.userType)) {
+
+                const userId =
+                    decoded.userId ||
+                    decoded.doctorNixpendId ||
+                    decoded.patientId ||
+                    decoded.id ||
+                    decoded.sub;
+
+                const userType = decoded.userType;
+
+                if (!userId || !userType || !['patient', 'doctor'].includes(userType)) {
                     return next(new Error('Invalid token payload'));
                 }
 
                 socket.user = {
-                    id: decoded.userId,
-                    userType: decoded.userType,
+                    id: userId,
+                    userType: userType,
                     email: decoded.email
                 };
 
@@ -74,7 +86,7 @@ export class ChatSocketService {
             if (!socket.user) return;
 
             console.log(`User ${socket.user.id} (${socket.user.userType}) connected`);
-            
+
             this.handleUserConnection(socket);
             this.handleJoinRooms(socket);
             this.handleSendMessage(socket);
@@ -114,7 +126,7 @@ export class ChatSocketService {
                 // Verify user has access to these rooms
                 const getChatRooms = new GetChatRooms(resolve(CHAT_ROOM_REPO));
                 const result = await getChatRooms.exec(socket.user.id, socket.user.userType);
-                
+
                 if (!result.ok || !result.data) return;
 
                 const userRoomIds = result.data.map((room: any) => room.roomId);
@@ -180,8 +192,8 @@ export class ChatSocketService {
                 );
 
                 if (!result.ok || !result.data) {
-                    socket.emit('message:error', { 
-                        error: result.error || 'Failed to send message' 
+                    socket.emit('message:error', {
+                        error: result.error || 'Failed to send message'
                     });
                     return;
                 }
@@ -216,7 +228,7 @@ export class ChatSocketService {
             };
 
             this.updateTypingStatus(typingStatus);
-            
+
             socket.to(`room:${data.roomId}`).emit('typing:update', {
                 roomId: data.roomId,
                 userId: socket.user.id,
@@ -230,7 +242,7 @@ export class ChatSocketService {
             if (!socket.user) return;
 
             this.removeTypingStatus(data.roomId, socket.user.id);
-            
+
             socket.to(`room:${data.roomId}`).emit('typing:update', {
                 roomId: data.roomId,
                 userId: socket.user.id,
@@ -301,21 +313,21 @@ export class ChatSocketService {
     private updateTypingStatus(status: TypingStatus): void {
         const roomTyping = this.typingUsers.get(status.roomId) || [];
         const existingIndex = roomTyping.findIndex(t => t.userId === status.userId);
-        
+
         if (existingIndex >= 0) {
             roomTyping[existingIndex] = status;
         } else {
             roomTyping.push(status);
         }
-        
+
         this.typingUsers.set(status.roomId, roomTyping);
-        
+
         // Clean up old typing statuses (older than 30 seconds)
         const now = new Date().getTime();
-        const cleanedTyping = roomTyping.filter(t => 
+        const cleanedTyping = roomTyping.filter(t =>
             now - t.timestamp.getTime() < 30000
         );
-        
+
         if (cleanedTyping.length !== roomTyping.length) {
             this.typingUsers.set(status.roomId, cleanedTyping);
         }
@@ -324,7 +336,7 @@ export class ChatSocketService {
     private removeTypingStatus(roomId: string, userId: string): void {
         const roomTyping = this.typingUsers.get(roomId);
         if (!roomTyping) return;
-        
+
         const filtered = roomTyping.filter(t => t.userId !== userId);
         this.typingUsers.set(roomId, filtered);
     }
