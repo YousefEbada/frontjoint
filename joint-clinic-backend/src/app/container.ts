@@ -10,3 +10,4 @@ export function resolve<T>(token: Token<T>): T {
   return v as T;
 }
 export function token<T>(name: string) { return name as Token<T>; }
+//
