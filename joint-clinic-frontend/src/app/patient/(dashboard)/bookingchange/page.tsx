@@ -223,9 +223,8 @@ function BookingChangeContent() {
                             items={timeSlots.length > 0 ? timeSlots : ["No slots available"]}
                             width="90%"
                             height="100px"
-                            value={selectedTime}
-                            onChange={setSelectedTime}
-                            placeholder="Select Time"
+                            value={selectedTime || "Select Time"}
+                            onChange={setSelectedTime}                            
                         />
 
                         <Typography

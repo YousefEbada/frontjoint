@@ -30,6 +30,7 @@ export default function NavBar() {
   const [open, setOpen] = useState(false);
   const [isPending, startTrans] = useTransition();
   const [isPatientLoggedIn, setIsPatientLoggedIn] = useState(false);
+  const [isDoctorLoggedIn, setIsDoctorLoggedIn] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -37,6 +38,10 @@ export default function NavBar() {
     const patientId = localStorage.getItem('patientId');
     const userId = localStorage.getItem('userId');
     setIsPatientLoggedIn(!!(patientId && userId));
+
+    // Check if user is authenticated as doctor by checking localStorage
+    const doctorId = localStorage.getItem('doctorId');
+    setIsDoctorLoggedIn(!!doctorId);
   }, []);
 
   useEffect(() => {
@@ -76,14 +81,20 @@ export default function NavBar() {
           <Link href="/#contact">Contact Us</Link>
           <span className="opacity-50">|</span>
           {isPatientLoggedIn ? ([
-            <Link href="/patient/main">Dashboard</Link>,
-            <Link href="/patient/booking">Appointments</Link>,
-            <Link href="/patient/exercises/assigned">Exercises</Link>,
-            <Link href="/patient/support">Support</Link>
+            <Link key="dashboard" href="/patient/main">Dashboard</Link>,
+            <Link key="appointments" href="/patient/booking">Appointments</Link>,
+            <Link key="exercises" href="/patient/exercises/assigned">Exercises</Link>,
+            <Link key="support" href="/patient/support">Support</Link>
           ])
-            : (
-              <Link href="/sign-in">Login</Link>
-            )}
+            : isDoctorLoggedIn ? ([
+              <Link key="account" href="/doctor/overview">My Account</Link>,
+              <Link key="calendar" href="/doctor/calendar">Appointments</Link>,
+              <Link key="doc-exercises" href="/doctor/exercises">Exercises</Link>,
+              <Link key="reports" href="/doctor/reports">Reports</Link>
+            ])
+              : (
+                <Link href="/sign-in">Login</Link>
+              )}
         </div>
 
         <div className="flex items-center gap-4 lg:hidden">
@@ -151,6 +162,21 @@ export default function NavBar() {
             <Link href="/patient/main" onClick={toggleMenu} className="text-[#1E5598] font-medium">
               Dashboard
             </Link>
+          ) : isDoctorLoggedIn ? (
+            <>
+              <Link href="/doctor/overview" onClick={toggleMenu} className="text-[#1E5598] font-medium">
+                My Account
+              </Link>
+              <Link href="/doctor/calendar" onClick={toggleMenu} className="text-[#1E5598] font-medium">
+                Appointments
+              </Link>
+              <Link href="/doctor/exercises" onClick={toggleMenu} className="text-[#1E5598] font-medium">
+                Exercises
+              </Link>
+              <Link href="/doctor/reports" onClick={toggleMenu} className="text-[#1E5598] font-medium">
+                Reports
+              </Link>
+            </>
           ) : (
             <Link href="/sign-in" onClick={toggleMenu}>
               Login

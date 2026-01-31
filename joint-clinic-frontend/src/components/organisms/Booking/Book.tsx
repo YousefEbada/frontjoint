@@ -378,6 +378,7 @@ const Book = ({ redirectPath }: BookProps) => {
                       width="100%"
                       height="70px"
                       className="md:!w-[500px] mt-4"
+                      dropdownMaxHeight="260px"
                     />
                   </div>
                 )}

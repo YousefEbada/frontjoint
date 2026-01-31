@@ -12,9 +12,10 @@ interface DropdownProps {
   value?: string;
   variant?: 'default' | 'form';
   required?: boolean;
+  maxHeight?: string;
 }
 
-export default function CustomDropdown({ items, text, width, onSelect, value, variant = 'default', required = false }: DropdownProps) {
+export default function CustomDropdown({ items, text, width, onSelect, value, variant = 'default', required = false, maxHeight }: DropdownProps) {
   const [open, setOpen] = useState(false);
   const [internalSelected, setInternalSelected] = useState<string>(text);
 
@@ -73,18 +74,19 @@ export default function CustomDropdown({ items, text, width, onSelect, value, va
 
   const dropdownStyles = variant === 'form'
     ? `
-        absolute top-[80px] md:top-[90px] left-1/2 -translate-x-1/2 
+        absolute top-[80px] md:top-[90px] left-0
         w-full
         bg-white rounded-[20px]
-        shadow-lg py-4 pl-4 pr-[10px] z-50
-        max-h-[250px] md:max-h-[300px] custom-scrollbar overflow-y-scroll overflow-x-hidden
+        shadow-lg z-50
+        custom-scrollbar overflow-y-auto overflow-x-hidden
+        py-4
       `
     : `
-        absolute top-[90px] left-[50px] -translate-x-1/2
+        absolute top-[90px]
         ${width} 
         bg-white rounded-[40px]
         shadow-lg py-6 z-50
-        max-h-[400px] md:max-h-[600px] overflow-y-auto overflow-x-hidden
+        overflow-y-auto overflow-x-hidden
       `;
 
   const itemStyles = variant === 'form'
@@ -132,9 +134,10 @@ export default function CustomDropdown({ items, text, width, onSelect, value, va
       {open && (
         <div
           onMouseDown={(e) => e.stopPropagation()}
-          className={dropdownStyles}
+          className={`${dropdownStyles} custom-scrollbar flex flex-col`}
+          style={{ maxHeight: maxHeight || (variant === 'form' ? '300px' : '600px') }}
         >
-          <ul className="flex flex-col gap-2 text-center">
+          <ul className="flex flex-col gap-2 w-full">
             {items.map((item, i) => (
               <li
                 key={i}
@@ -144,7 +147,7 @@ export default function CustomDropdown({ items, text, width, onSelect, value, va
                   handleSelect(item);
                 }}
                 className={`
-                  ${itemStyles} cursor-pointer transition select-none px-4 py-2
+                  ${itemStyles} cursor-pointer transition select-none px-4 py-2 w-full text-center flex justify-center items-center
 
                   ${currentSelection === item
                     ? "sel text-[#848d98] relative font-medium"

@@ -176,6 +176,14 @@ const Page = () => {
       alert("Please fill all fields");
       return;
     }
+
+    // Validation: Check if full name has at least 2 words
+    const nameParts = partialData.fullName.trim().split(/\s+/);
+    if (nameParts.length < 2) {
+      alert("Invalid full name. Please enter your full name (First and Last name).");
+      return;
+    }
+
     handleCreatePartial(partialData);
   };
 
@@ -522,7 +530,7 @@ const Page = () => {
                         </h2>
 
                         <p className="text-center bg-linear-to-b from-[#0D294D] to-[#1E5598] bg-clip-text text-transparent mt-3 mb-8 font-medium md:text-[20px] text-[15px] w-[80%] leading-relaxed">
-                          Let’s get you started. Please enter your phone number or email.
+                          Let’s create your account. Can you tell us your full name and date of birth?
                         </p>
 
                         {error && <p className="text-red-500 mb-4">{error}</p>}
@@ -558,6 +566,7 @@ const Page = () => {
                               text="Gender"
                               value={partialData.gender}
                               onSelect={(val) => setPartialData({ ...partialData, gender: val as any })}
+                              maxHeight="200px"
                             />
                           </div>
                         </div>
@@ -599,8 +608,8 @@ const Page = () => {
                           onClick={handleResendWithCooldown}
                           disabled={resendCountdown > 0}
                           className={`md:text-[24px] text-[20px] font-medium mt-2 bg-transparent border-none transition-colors ${resendCountdown > 0
-                              ? 'text-[#ABABAB] cursor-not-allowed'
-                              : 'text-[#1E5598] underline cursor-pointer'
+                            ? 'text-[#ABABAB] cursor-not-allowed'
+                            : 'text-[#1E5598] underline cursor-pointer'
                             }`}
                         >
                           {resendCountdown > 0
@@ -662,6 +671,7 @@ const Page = () => {
                               width="w-full"
                               text="Nationality"
                               value={fullData.nationality}
+                              maxHeight="280px"
                               onSelect={(val) => setFullData({ ...fullData, nationality: val })}
                             />
                           </div>
@@ -678,6 +688,7 @@ const Page = () => {
                               width="w-full"
                               text="City"
                               value={fullData.city}
+                              maxHeight="280px"
                               onSelect={(val) => setFullData({ ...fullData, city: val })}
                             />
                           </div>
@@ -715,6 +726,7 @@ const Page = () => {
                               width="w-full"
                               text="Identifier type"
                               value={fullData.identifierType}
+                              maxHeight="280px"
                               onSelect={(val) => setFullData({ ...fullData, identifierType: val })}
                             />
                           </div>
@@ -730,6 +742,7 @@ const Page = () => {
                               width="w-full"
                               text="Marital Status"
                               value={fullData.maritalStatus}
+                              maxHeight="280px"
                               onSelect={(val) => setFullData({ ...fullData, maritalStatus: val })}
                             />
                           </div>
@@ -745,6 +758,7 @@ const Page = () => {
                               width="w-full"
                               text="Speaking Language"
                               value={fullData.speakingLanguages?.[0] || 'Arabic'}
+                              maxHeight="280px"
                               onSelect={(val) => setFullData({ ...fullData, speakingLanguages: [val] })}
                             />
                           </div>

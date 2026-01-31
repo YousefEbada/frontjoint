@@ -12,6 +12,7 @@ type CustomSelectProps = {
   size?: "small" | "large";
   placeholder?: string;
   disabled?: boolean;
+  dropdownMaxHeight?: string;
 };
 
 export default function CustomSelect({
@@ -24,6 +25,7 @@ export default function CustomSelect({
   size = "large",
   placeholder,
   disabled = false,
+  dropdownMaxHeight,
 }: CustomSelectProps) {
   const [internalSelected, setInternalSelected] = useState(placeholder || items[0]);
 
@@ -110,29 +112,41 @@ export default function CustomSelect({
             "bg-[#fff]",
             isSmall ? "rounded-[20px] border border-gray-200" : "rounded-[20px] sm:rounded-[24px] md:rounded-[32px]",
             isSmall ? "shadow-lg" : "shadow-[0px_12px_45px_rgba(30,85,152,0.18)]",
+            "z-50",
             "overflow-hidden",
-            "z-50"
+            "py-2",
+            "px-[10px]"
           )}
           style={{ width: finalWidth }}
         >
-          {items.map((item, i) => (
-            <button
-              key={i}
-              type="button"
-              onClick={() => handleSelect(item)}
-              className={clsx(
-                "block w-full",
-                isSmall ? "text-[16px] py-2" : "text-[14px] sm:text-[16px] md:text-[26px] lg:text-[28px] py-3 sm:py-4 md:py-6",
-                "text-[#1e5598]",
-                "font-medium",
-                isSmall ? "text-left px-4" : "text-center",
-                "hover:bg-[#eaf2ff]",
-                "transition-all duration-200"
-              )}
-            >
-              {item}
-            </button>
-          ))}
+          <div
+            className={clsx(
+              "w-full px-[20px]",
+              "custom-scrollbar",
+              dropdownMaxHeight ? "overflow-y-auto" : "overflow-hidden"
+            )}
+            style={{ maxHeight: dropdownMaxHeight }}
+          >
+            {items.map((item, i) => (
+              <button
+                key={i}
+                type="button"
+                onClick={() => handleSelect(item)}
+                className={clsx(
+                  "block w-full",
+                  isSmall ? "text-[16px] py-2" : "text-[14px] sm:text-[16px] md:text-[26px] lg:text-[28px] py-3 sm:py-4 md:py-6",
+                  "text-[#1e5598]",
+                  "font-medium",
+                  isSmall ? "text-left px-4" : "text-center",
+                  "hover:bg-[#eaf2ff]",
+                  "transition-all duration-200",
+                  "rounded-lg"
+                )}
+              >
+                {item}
+              </button>
+            ))}
+          </div>
         </div>
       )}
     </div>

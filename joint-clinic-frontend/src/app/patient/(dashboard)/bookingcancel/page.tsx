@@ -98,10 +98,11 @@ function BookingCancelContent() {
                     />
                     <CustomSelect
                         items={["Scheduling conflict", "Health issue", "Other"]}
-                        value={reason}
+                        value={reason || "Select Reason"}
                         onChange={setReason}
                         className="w-full sm:w-[90%] md:w-[400px] lg:w-[500px]"
-                        placeholder="Select Reason"
+                        dropdownMaxHeight="180px"
+                        // placeholder="Select Reason"
                     />
                     <div className="flex flex-col items-center px-2 sm:px-4 md:px-0">
                         <h3 className="text-[22px] text-base sm:text-lg md:text-[22px] text-[#1E5598] font-bold my-3 sm:my-4 md:my-[15px] text-center">

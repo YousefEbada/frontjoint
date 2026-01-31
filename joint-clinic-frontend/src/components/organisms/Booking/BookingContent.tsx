@@ -228,7 +228,7 @@ const BookingContent = () => {
     return (
         <div className="flex flex-col md:flex-row gap-8 lg:gap-16 w-full h-full">
             {/* Pending booking info banner */}
-            {pendingBooking && (
+            {/* {pendingBooking && (
                 <div className="absolute top-0 left-0 right-0 bg-blue-50 border-b border-blue-200 p-3 flex justify-between items-center">
                     <Typography
                         text={`Booking with Dr. ${pendingBooking.doctorName} at ${pendingBooking.branch} branch`}
@@ -242,7 +242,7 @@ const BookingContent = () => {
                         Cancel
                     </button>
                 </div>
-            )}
+            )} */}
 
             <div className="flex flex-col gap-6 flex-1 items-center md:items-start mt-12">
                 <Typography text="Select the date" variant="heading2" gradient={true} className="text-center md:text-left" />

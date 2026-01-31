@@ -73,9 +73,9 @@ const BookingsClientContent = () => {
         <Typography text="Cancel Patient Booking" variant="heading1" />
         <CustomSelect
           items={["Scheduling conflict", "Health issue", "Other"]}
-          value={reason}
+          value={reason || "Select Reason"}
           onChange={setReason}
-          placeholder="Select Reason"
+          // placeholder="Select Reason"
         />
 
         <Typography
