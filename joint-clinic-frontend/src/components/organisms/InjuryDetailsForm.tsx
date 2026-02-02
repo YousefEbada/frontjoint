@@ -76,24 +76,27 @@ const InjuryDetailsForm: React.FC<InjuryDetailsFormProps> = ({ jointName, onBack
                 </div>
 
                 {/* Form */}
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} className='flex flex-col items-center'>
                     {/* Form Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-7 gap-x-8 gap-y-6 place-items-center">
+                    <div className="grid grid-cols-1 lg:grid-cols-7 gap-x-8 gap-y-6 justify-center items-center">
 
                         {/* Start Date */}
-                        <div className="relative w-full md:col-span-3">
-                            <input
-                                type="date"
+                        <div className="relative w-full lg:col-span-3">
+                            <CustomDropdown
+                                variant="form"
                                 required
-                                value={formData.startDate || ''}
-                                onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
-                                placeholder="When did this injury start?"
-                                className="w-full h-[70px] md:h-[80px] px-8 rounded-full border border-[#0D294D]/30 bg-white/50 backdrop-blur-sm text-[#0D294D] placeholder:text-[#6d7a80] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition text-lg md:text-xl truncate pr-12 hover:bg-white/80 focus:bg-white"
+                                items={["Last Week", "Last Month", "Last Year"]}
+                                text="When did this injury start?"
+                                onSelect={(value) => {
+                                    const severity = parseInt(value.split(' ')[0]);
+                                    setFormData({ ...formData, painSeverity: severity });
+                                }}
+                                value={formData.painSeverity !== undefined ? severityOptions.find(opt => opt.startsWith(String(formData.painSeverity))) : undefined}
                             />
                         </div>
 
                         {/* Treatment Before */}
-                        <div className="relative w-full md:col-span-4">
+                        <div className="relative w-full lg:col-span-4">
                             <CustomDropdown
                                 variant="form"
                                 required
@@ -105,7 +108,7 @@ const InjuryDetailsForm: React.FC<InjuryDetailsFormProps> = ({ jointName, onBack
                         </div>
 
                         {/* Severity */}
-                        <div className="relative w-full md:col-span-2">
+                        <div className="relative w-full lg:col-span-3">
                             <CustomDropdown
                                 variant="form"
                                 required
@@ -120,7 +123,7 @@ const InjuryDetailsForm: React.FC<InjuryDetailsFormProps> = ({ jointName, onBack
                         </div>
 
                         {/* How happened */}
-                        <div className="relative w-full md:col-span-5">
+                        <div className="relative w-full lg:col-span-4">
                             <input
                                 type="text"
                                 required
@@ -132,7 +135,7 @@ const InjuryDetailsForm: React.FC<InjuryDetailsFormProps> = ({ jointName, onBack
                         </div>
 
                         {/* Constant/Occasional */}
-                        <div className="relative w-full md:col-span-3">
+                        <div className="relative w-full lg:col-span-3">
                             <CustomDropdown
                                 variant="form"
                                 required
@@ -144,7 +147,7 @@ const InjuryDetailsForm: React.FC<InjuryDetailsFormProps> = ({ jointName, onBack
                         </div>
 
                         {/* Daily Activities */}
-                        <div className="relative w-full md:col-span-4">
+                        <div className="relative w-full lg:col-span-4">
                             <CustomDropdown
                                 variant="form"
                                 required
@@ -156,7 +159,7 @@ const InjuryDetailsForm: React.FC<InjuryDetailsFormProps> = ({ jointName, onBack
                         </div>
 
                         {/* Anything else - Full Width */}
-                        <div className="relative w-full md:col-span-3">
+                        <div className="relative w-full lg:col-span-3">
                             <input
                                 type="text"
                                 required
@@ -168,7 +171,7 @@ const InjuryDetailsForm: React.FC<InjuryDetailsFormProps> = ({ jointName, onBack
                         </div>
 
                         {/* Upload Medical Reports - Optional */}
-                        <div className="relative w-full md:col-span-4 flex justify-center">
+                        <div className="relative w-full lg:col-span-4 flex justify-center">
                             <input
                                 id="medical-report-upload"
                                 type="file"

@@ -18,6 +18,7 @@ import Typography from '@/components/atoms/Typography';
 import { useAuthFlow } from '@/hooks/useAuthFlow';
 import { CreatePartialUserInput, CreateFullUserInput } from '@/types/auth';
 import { Country, State } from 'country-state-city';
+import { isValidEmail, isValidSaudiPhone, isValidSaudiID } from '@/lib/utils/validators';
 // dssd
 // sdsd
 // Mock Data for Joints
@@ -195,12 +196,102 @@ const Page = () => {
     handleVerifyOtp(otpCode);
   };
 
+  // Import validators (assuming auto-import or manual add at top, verify imports)
+  // Since I can't see the top imports in this chunk, I will rely on the user to have imports or I should add them.
+  // Wait, I should add imports at the top first? The tool `replace_file_content` works on contiguous blocks.
+  // I will add the validation logic here, and then I might need another call for imports if the environment doesn't auto-handle it.
+  // Actually, I can use `multi_replace` to add imports and change this function in one go, but I'll stick to one change per tool for safety or just assume I need to add imports.
+  // Let's assume I need to add imports. I'll do that in a separate step or `multi_replace`.
+  // For now let's just replace the function logic.
+
   const onFullSubmit = () => {
-    // Validate required phone field (needed for Nixpend integration)
-    if (!fullData.phone) {
-      alert("Phone number is required");
+    // 1. Check for Empty fields (Basic Required Check)
+    const {
+      email,
+      identifier,
+      nationality,
+      city,
+      phone,
+      address,
+      identifierType,
+      maritalStatus,
+      speakingLanguages
+    } = fullData;
+
+    if (
+      !email ||
+      !identifier ||
+      !nationality ||
+      !city ||
+      !phone ||
+      !address ||
+      !identifierType ||
+      !maritalStatus ||
+      !speakingLanguages ||
+      speakingLanguages.length === 0
+    ) {
+      alert("Invalid. Please complete all personal information.");
       return;
     }
+
+    // 2. Strict Validations using validators
+    // We need to import these functions. I will add them to the file imports in a separate 'multi_replace' or just assume I can add them later? 
+    // It's better to use variables helper here if imports aren't available yet, but I created the file.
+    // I will assume I will add imports in the next step or use dynamic import? No, standard import is better.
+    // Let's implement logic assuming `isValidEmail` etc are available.
+
+    if (!isValidEmail(email)) {
+      alert("Invalid Email Address");
+      return;
+    }
+
+    if (!isValidSaudiPhone(phone)) {
+      alert("Invalid Phone. Must start with 966 and be 12 digits (e.g. 9665XXXXXXXX).");
+      return;
+    }
+
+    if (!isValidSaudiID(identifier, identifierType)) {
+      if (identifierType === 'National ID') alert("Invalid National ID. Must be at least 9 digits.");
+      else if (identifierType === 'Iqama') alert("Invalid Iqama ID. Must be 10 digits and start with 2.");
+      else alert("Invalid ID format.");
+      return;
+    }
+
+    // 3. Guardian Validation (Only if any guardian field is filled)
+    const g = fullData.guardianInformation;
+    if (
+      g?.guardianName ||
+      g?.guardianPhone ||
+      g?.guardianIdentifier ||
+      g?.guardianEmail ||
+      g?.guardianBloodType ||
+      g?.patientCategory
+    ) {
+      // If ANY field is filled, enforce stricter checks or at least valid formats for provided ones?
+      // User said "Guardian Information is not required", but "if entered... invalid values should be blocked".
+      // "All the fields... missing validations... Same in the guardian’s data"
+
+      if (g.guardianEmail && !isValidEmail(g.guardianEmail)) {
+        alert("Invalid Guardian Email");
+        return;
+      }
+      if (g.guardianPhone && !isValidSaudiPhone(g.guardianPhone)) {
+        alert("Invalid Guardian Phone. Must start with 966.");
+        return;
+      }
+      // Guardian ID usually defaults to National ID check if not specified type? 
+      // The guardian form has "Guardian's NID or Iqama ID" but NO dropdown for type.
+      // Usually we check if it starts with 1 or 2 and validates length?
+      // Let's perform generic 10-digit check or infer type.
+      if (g.guardianIdentifier) {
+        // Simple check: Must be at least 9 digits
+        if (!/^\d{9,}$/.test(g.guardianIdentifier)) {
+          alert("Invalid Guardian ID. Must be at least 9 digits.");
+          return;
+        }
+      }
+    }
+
     handleCreateFull(fullData);
   }
 
