@@ -36,16 +36,16 @@ const JointMarker: React.FC<JointMarkerProps> = ({ x, y, label, side, isSelected
                         animate={{ opacity: 1, width: 'auto' }}
                         exit={{ opacity: 0, width: 0 }}
                         className={`absolute top-1/2 -translate-y-1/2 flex items-center pointer-events-none
-                        ${side === 'left' ? 'flex-row-reverse right-6' : 'flex-row left-6'}`}
+                        ${side === 'left' ? 'flex-row-reverse right-3 md:right-6' : 'flex-row left-3 md:left-6'}`}
                     >
                         {/* Connecting Line */}
-                        <div className="h-[2px] w-12 bg-[#3668a0]" />
+                        <div className="h-[2px] w-6 md:w-12 bg-[#3668a0]" />
 
                         {/* Label Text */}
-                        <div className={`whitespace-nowrap ${side === 'left' ? 'mr-3' : 'ml-3'}`}>
+                        <div className={`whitespace-nowrap ${side === 'left' ? 'mr-2 md:mr-3' : 'ml-2 md:ml-3'}`}>
                             <Typography
                                 variant="heading2"
-                                className="text-[#1E5598] font-bold text-[20px] md:text-[24px]"
+                                className="text-[#1E5598] font-bold text-[14px] md:text-[24px]"
                                 text={label}
                             />
                         </div>

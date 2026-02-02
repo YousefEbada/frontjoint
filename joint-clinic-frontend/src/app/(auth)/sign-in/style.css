@@ -16,3 +16,38 @@
   transform: translateY(-50%) rotate(45deg);
   pointer-events: none;
 }
+
+/* Page 4 Layout */
+.page4 {
+  display: flex !important;
+  flex-direction: row !important;
+}
+
+@media (max-width: 1300px) {
+  .page4 {
+    flex-direction: column !important;
+    padding: 50px 0 !important;
+  }
+
+  .page4-text {
+    order: 2 !important;
+    align-items: center !important;
+    text-align: center !important;
+  }
+
+  .page4-body {
+    order: 1 !important;
+  }
+
+  .page4-pagination {
+    display: none !important;
+  }
+
+  .page4-figure {
+    height: 50vh !important;
+  }
+
+  .page4-planet {
+    display: none !important;
+  }
+}

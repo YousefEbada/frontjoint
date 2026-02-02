@@ -407,30 +407,30 @@ const Page = () => {
         {!showHello && (
           step === 4 ? (
             // STEP 4: Full Screen Layout
-            <div className="fixed top-0 left-0 w-screen h-screen z-[100] grid grid-cols-1 md:grid-cols-2 items-center justify-center overflow-hidden bg-[#d5ece3] p-4 md:p-10">
+            <div className="fixed top-0 left-0 w-screen h-screen z-[100] grid grid-cols-1 md:grid-cols-2 items-center justify-center overflow-y-auto bg-[#d5ece3] p-4 md:p-0">
               {/* Independent Logo & Pagination for Step 4 */}
               <Logo fill="#112a4d" className="w-[80px] md:w-[150px] h-[80px] md:h-[150px] absolute top-[10px] right-[20px] md:right-[40px] z-[101]" />
-              <div className="absolute top-[10%] left-1/2 -translate-x-1/2 z-[101] hidden md:block">
+              <div className="page4-pagination absolute top-[10%] left-1/2 -translate-x-1/2 z-[101] hidden md:block">
                 <PaginationDots total={4} activeIndex={3} className="mb-0" />
               </div>
 
-              <div className="w-full h-full flex items-center justify-center relative z-10 md:col-span-2">
+              <div className="w-full h-full flex items-center justify-between relative z-10 md:col-span-2">
                 <motion.div
                   key="p4"
                   initial="hidden"
                   animate="visible"
                   exit="exit"
-                  className="page4 w-full h-full flex flex-col md:flex-row items-center justify-center relative overflow-hidden gap-8"
+                  className="page4 w-full min-h-full flex items-center justify-between lg:px-[15%] relative gap-8"
                 >
                   {/* Left Section - Text & Globe */}
                   <motion.div
                     initial={{ opacity: 0, x: -50 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 1.5, duration: 1.2 }}
-                    className="flex flex-col items-center md:items-start gap-4 max-w-[500px] z-30 text-center md:text-left order-2 md:order-1"
+                    className="page4-text flex flex-col items-center md:items-start gap-4 max-w-[500px] z-30 text-center md:text-left order-2 md:order-1"
                   >
                     {/* Globe Icon */}
-                    <div className="w-16 h-16 mb-4 hidden md:block">
+                    <div className="page4-planet w-16 h-16 mb-4 hidden md:block">
                       <img src={require('@/assets/figures/red-striped-ball.svg').default.src} alt="Globe" className="w-full h-full animate-spin-slow" />
                     </div>
 
@@ -464,17 +464,18 @@ const Page = () => {
                         if (selectedJoint) {
                           setStep(5);
                         } else {
-                          alert("Please select a joint first!");
+                          // Allow skipping: Create patient with empty injury details
+                          handleCreatePatient({});
                         }
                       }}
-                      className={`mt-6 px-8 py-3 rounded-full font-semibold transition-colors ${selectedJoint ? 'bg-[#ea392f] text-white hover:bg-[#d63228]' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
+                      className={`mt-6 px-8 py-3 cursor-pointer rounded-full font-semibold transition-colors bg-[#ea392f] text-white hover:bg-[#d63228]`}
                     >
                       Confirm
                     </button>
                   </motion.div>
 
                   {/* Body Figure & Controls Section */}
-                  <div className="flex flex-col items-center justify-center relative z-20 order-1 md:order-2">
+                  <div className="page4-body flex flex-col items-center justify-center relative z-20 order-1 md:order-2">
                     {/* Body Figure Animation */}
                     <motion.div
                       initial={{ x: "-25vw", opacity: 0 }}
@@ -486,7 +487,7 @@ const Page = () => {
                         opacity: { duration: 1, ease: "easeOut" },
                         x: { delay: 1.2, duration: 1.2, ease: "easeInOut" }
                       }}
-                      className="h-[50vh] md:h-[70vh] w-auto relative mb-4"
+                      className="page4-figure h-[50vh] md:h-[70vh] w-auto relative mb-4"
                     >
                       <div className="relative h-full w-auto aspect-346/500">
                         <img
