@@ -6,6 +6,7 @@ import BookNowButton from "./BookNowButton";
 import { tv } from "tailwind-variants";
 import { color } from "@/lib/constants/colors";
 import { useState, useTransition, startTransition, useEffect } from "react";
+import "./navbar.css";
 
 const NavBarClasses = tv({
   base: "fixed top-6 left-1/2 -translate-x-1/2 flex items-center justify-between px-4 sm:px-8 py-3 sm:py-4 w-[calc(100vw-48px)] rounded-2xl sm:rounded-[53px] transition-all duration-300 z-50",
@@ -74,7 +75,7 @@ export default function NavBar() {
         })}
         style={{ width: "93vw" }}
       >
-        <div className="hidden lg:flex flex-row gap-10 text-lg items-center">
+        <div className="navbar-desktop-links hidden lg:flex flex-row gap-10 text-lg items-center">
           <Link href="/#who-we-are">Who We Are</Link>
           <Link href="/#how-it-works">How it Works</Link>
           <Link href="/#reviews">Reviews</Link>
@@ -97,18 +98,18 @@ export default function NavBar() {
               )}
         </div>
 
-        <div className="flex items-center gap-4 lg:hidden">
+        <div className="navbar-mobile-logo flex items-center gap-4 lg:hidden">
           <Link href="/">
             <Logo fill={isScrolled ? color.accent : "#fff"} style={{ width: 48 }} />
           </Link>
         </div>
 
         <div className="flex items-center gap-10">
-          <div className="hidden lg:block">
+          <div className="navbar-desktop-rest hidden lg:block">
             <BookNowButton />
           </div>
 
-          <div className="hidden lg:block">
+          <div className="navbar-desktop-rest hidden lg:block">
             <Link href="/">
               <Logo fill={isScrolled ? color.accent : "#fff"} style={{ width: 110 }} />
             </Link>
@@ -116,7 +117,7 @@ export default function NavBar() {
 
           <button
             aria-label="menu"
-            className="lg:hidden p-2 rounded-md bg-white/10 hover:bg-white/20"
+            className="navbar-burger-btn lg:hidden p-2 rounded-md bg-white/10 hover:bg-white/20"
             onClick={toggleMenu}
           >
             {open ? (
@@ -133,7 +134,7 @@ export default function NavBar() {
       </nav>
 
       <div
-        className={`lg:hidden fixed inset-0 z-60 transition-all duration-300 ${open ? "pointer-events-auto" : "pointer-events-none"
+        className={`navbar-mobile-drawer lg:hidden fixed inset-0 z-60 transition-all duration-300 ${open ? "pointer-events-auto" : "pointer-events-none"
           }`}
       >
         <div

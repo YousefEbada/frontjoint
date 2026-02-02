@@ -1,0 +1,28 @@
+/* Responsive NavBar Rules */
+
+/* At 1500px, emulate mobile behavior */
+@media (max-width: 1500px) {
+
+    /* Hide Desktop Elements */
+    .navbar-desktop-links {
+        display: none !important;
+    }
+
+    .navbar-desktop-rest {
+        display: none !important;
+    }
+
+    /* Show Mobile Elements */
+    .navbar-mobile-logo {
+        display: flex !important;
+    }
+
+    .navbar-burger-btn {
+        display: block !important;
+    }
+
+    /* Show Drawer (Visibility handled by state, but needs display:block to exist) */
+    .navbar-mobile-drawer {
+        display: block !important;
+    }
+}
