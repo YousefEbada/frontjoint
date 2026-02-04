@@ -96,8 +96,24 @@ function BookingCancelContent() {
                         }}
                         className="bg-gradient-to-b pl-0 from-[#0D294D] to-[#1E5598] bg-clip-text text-transparent text-2xl sm:text-3xl md:text-[45px] text-center px-2"
                     />
+                    {/* 
+Prevented
+ادخال خاطئ
+السعر غير مناسب
+IVR Cancellation
+Governmental
+Maintenance
+Courses
+Dissatisfied
+Weather
+Change Opinion
+Unplanned Leave
+Permission / Sick Leave
+Planned Leave
+Insurance Rejection 
+*/}
                     <CustomSelect
-                        items={["Scheduling conflict", "Health issue", "Other"]}
+                        items={["Prevented", "Incorrect entry", "Price not suitable", "IVR Cancellation", "Governmental", "Maintenance", "Courses", "Dissatisfied", "Weather", "Change Opinion", "Unplanned Leave", "Permission / Sick Leave", "Planned Leave", "Insurance Rejection"]}
                         value={reason || "Select Reason"}
                         onChange={setReason}
                         className="w-full sm:w-[90%] md:w-[400px] lg:w-[500px]"

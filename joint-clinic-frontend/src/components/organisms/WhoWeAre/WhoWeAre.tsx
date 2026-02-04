@@ -210,12 +210,12 @@ function WhoWeAre() {
       );
     }
 
-    master.to(leftLine, { opacity: 0, duration: 0.5 });
+    master.to(leftLine, { opacity: 0, duration: 0.5 }, "<");
     master.to(rightLine, { opacity: 0, duration: 0.5 }, "<");
-    master.from([leftDot, rightDot], {
+    master.to([leftDot, rightDot], {
       opacity: 0,
       ease: "power2.out",
-    });
+    }, "<");
 
     master.from(chooseUs, { autoAlpha: 0, y: 50, duration: 0.5 });
 

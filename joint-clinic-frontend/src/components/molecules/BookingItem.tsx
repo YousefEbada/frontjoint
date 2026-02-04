@@ -59,7 +59,7 @@ const BookingItem: React.FC<BookingItemProps> = ({
                         text="Cancel"
                         variant="outline"
                         onClick={onCancel}
-                        className="w-[100px]"
+                        className="w-[100px] cursor-pointer"
                     />
                 </Link>
                 <Link href={`${type === "patient" ? `/patient/bookingchange?id=${id}` : `/staffboard/bookingchange?id=${id}`}`}>
@@ -67,7 +67,7 @@ const BookingItem: React.FC<BookingItemProps> = ({
                         text={`${type === "patient" ? "Reschedule" : "Change"}`}
                         variant="solid"
                         onClick={onReschedule}
-                        className="w-[120px]"
+                        className="w-[120px] cursor-pointer"
                     />
                 </Link>
             </div>

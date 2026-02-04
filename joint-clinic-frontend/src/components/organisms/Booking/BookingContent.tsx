@@ -148,6 +148,7 @@ const BookingContent = () => {
                         });
                         console.log("Doctor assigned to patient successfully");
                         localStorage.setItem("doctorNixpendId", pendingBooking.doctorNixpendId);
+                        localStorage.setItem("doctorName", pendingBooking.doctorName);
                     } catch (err) {
                         console.error("Failed to assign doctor to patient:", err);
                         // Optional: show a warning or perform rollback, but proceeding for now as booking is created
