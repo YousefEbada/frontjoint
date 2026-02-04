@@ -208,6 +208,7 @@ export const useAuthFlow = () => {
             const user = await findUser(contact);
             if (user?.fullName) {
               const firstName = user.fullName.split(" ")[0];
+              localStorage.setItem("patientEmail", user.email || "");
               localStorage.setItem("patientName", firstName);
             }
 
