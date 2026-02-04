@@ -382,6 +382,33 @@ const Page = () => {
     exit: { opacity: 0, y: -40, transition: { duration: .4 } }
   };
 
+  const isPersonalInformationComplete = React.useMemo(() => {
+    const {
+      email,
+      identifier,
+      nationality,
+      city,
+      phone,
+      address,
+      identifierType,
+      maritalStatus,
+      speakingLanguages
+    } = fullData;
+
+    return !!(
+      email &&
+      identifier &&
+      nationality &&
+      city &&
+      phone &&
+      address &&
+      identifierType &&
+      maritalStatus &&
+      speakingLanguages &&
+      speakingLanguages.length > 0
+    );
+  }, [fullData]);
+
   return (
     <main
       className="w-full min-h-screen relative bg-cover bg-center flex items-center justify-start overflow-y-auto"
@@ -954,10 +981,10 @@ const Page = () => {
                           else if (step === 3) onFullSubmit();
                           else if (step === 4) setStep(5);
                         }}
-                        disabled={isLoading}
-                        className="w-[220px] h-[60px] cursor-pointer py-3 bg-[#ea392f] text-white rounded-full
+                        disabled={isLoading || (step === 3 && !isPersonalInformationComplete)}
+                        className={`w-[220px] h-[60px] cursor-pointer py-3 bg-[#ea392f] text-white rounded-full
                              font-semibold mt-4 hover:bg-transparent hover:text-[#ea392f]
-                             hover:border-[#ea392f] border-[4px] border-[#ea392f] transition-all duration-300 disabled:opacity-50">
+                             hover:border-[#ea392f] border-[4px] border-[#ea392f] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed`}>
                         {isLoading ? 'Loading...' : (step === 4 ? "Submit" : "Continue")}
                       </button>
                     )}
