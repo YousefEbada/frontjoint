@@ -281,6 +281,7 @@ const Book = ({ redirectPath }: BookProps) => {
                 value={selectedInjury || "Injury"}
                 onChange={(val) => setSelectedInjury(val)}
                 placeholder="Select an injury type"
+                dropdownMaxHeight="200px"
                 width="100%"
                 height="70px"
                 className="md:!w-[600px]"
@@ -295,6 +296,7 @@ const Book = ({ redirectPath }: BookProps) => {
                   items={filteredDoctors.map((d) => d.practitionerName)}
                   value={selectedDoctor?.practitionerName || "Doctor"}
                   onChange={handleDoctorSelect}
+                  dropdownMaxHeight="200px"
                   placeholder="Select a doctor"
                   width="100%"
                   height="70px"
