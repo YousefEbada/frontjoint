@@ -136,6 +136,13 @@ const Page = () => {
     medicalReports: [] as string[]
   });
 
+  // Max date for birthdate (5 years ago)
+  const maxDateString = React.useMemo(() => {
+    const d = new Date();
+    d.setFullYear(d.getFullYear() - 5);
+    return d.toISOString().split('T')[0];
+  }, []);
+
   // Country-City dynamic data
   const countries = React.useMemo(() => Country.getAllCountries(), []);
   const countryNames = React.useMemo(() => countries.map(c => c.name), [countries]);
@@ -640,6 +647,7 @@ const Page = () => {
 
                           <input
                             type="date"
+                            max={maxDateString}
                             value={partialData.birthdate}
                             onChange={(e) => setPartialData({ ...partialData, birthdate: e.target.value })}
                             className="md:w-[380px] bg-transparent w-full md:text-[24px] text-[18px] text-center h-[80px] px-5 rounded-full border border-[#0D294D]
