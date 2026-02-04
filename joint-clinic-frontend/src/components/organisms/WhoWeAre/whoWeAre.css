@@ -7,14 +7,16 @@
 
 /* Indicator */
 .indicator {
-  position: relative;
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%);
   width: 400px;
   height: 120px;
-  margin: 30px auto;
   display: flex;
   justify-content: center;
-  transform: translateY(-50px);
   align-items: center;
+  z-index: 10;
 }
 
 @media (max-width: 768px) {
@@ -22,11 +24,13 @@
     width: 320px;
     transform: translateY(-30px);
   }
+
   .indicator .circle {
     width: 35px;
     height: 35px;
     opacity: 0;
   }
+
   .circleMorph {
     width: 35px;
     height: 35px;

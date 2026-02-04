@@ -1,3 +1,4 @@
+"use client";
 import React from 'react'
 import Typography from '@/components/atoms/Typography'
 import DateTime from '@/components/molecules/DateTime'
@@ -16,7 +17,7 @@ const DashBoardHeader = ({ therapyName, nav, dateTime, children }: DashBoardHead
     <header className='w-full grid grid-cols-2 md:flex md:flex-row md:items-center place-self-start gap-y-4 md:gap-y-0 border-b border-gray-200 pb-4 md:pb-4 lg:pl-[60px] md:mb-0'>
 
       {/* Left Part: BackTo + Separator */}
-      <div className='col-start-1 row-start-1 flex items-center justify-self-start'>
+      <div className='col-start-1 row-start-1  flex items-center justify-self-start'>
         <BackTo href="/" text="Website" />
         {(nav || children) && (
           <span className="hidden md:block text-3xl font-bold text-gray-300 mx-4 md:mx-10">|</span>
@@ -32,18 +33,29 @@ const DashBoardHeader = ({ therapyName, nav, dateTime, children }: DashBoardHead
       </nav> : <></>}
 
       {/* Right Part: Therapy/DateTime */}
-      <div className='col-start-2 row-start-1 flex flex-col items-end md:items-start justify-self-end md:ml-auto'>
-        {therapyName && <Typography
-          text={therapyName}
-          variant="bodyBold"
-          style={{
-            backgroundClip: 'text',
-            WebkitBackgroundClip: 'text',
-            color: '#1e5598',
-            display: 'inline-block'
+      <div className='col-start-2 row-start-1 flex items-end justify-self-end md:ml-auto gap-6'>
+        <a
+          onClick={() => {
+            localStorage.clear();
+            window.location.href = 'http://localhost:3000';
           }}
-        />}
-        {dateTime && <DateTime />}
+          className="text-[#1E5598] font-bold pb-[5px] cursor-pointer font-medium hover:underline transition-all text-[22px] md:text-base"
+        >
+          Logout
+        </a>
+        <div className='flex flex-col items-end md:items-start'>
+          {therapyName && <Typography
+            text={therapyName}
+            variant="bodyBold"
+            style={{
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              color: '#1e5598',
+              display: 'inline-block'
+            }}
+          />}
+          {dateTime && <DateTime />}
+        </div>
       </div>
     </header>
   )

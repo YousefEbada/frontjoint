@@ -18,8 +18,8 @@ export default function FeatureCard({
     <div
       className={`
         feature-card
-        md:h-[400px] h-48 
-        md:w-[300px] w-[150px] 
+        md:h-[370px] h-48 
+        md:w-full w-[150px] md:px-6
         rounded-xl p-3 md:p-6 
         cursor-default
         transition-all duration-300

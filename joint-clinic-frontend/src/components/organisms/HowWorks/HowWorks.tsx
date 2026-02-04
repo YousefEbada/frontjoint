@@ -184,17 +184,17 @@ export default function HowWorks() {
         >
           <Image
             src="/circle.png"
-            width={260}
-            height={260}
+            width={100}
+            height={100}
             alt="Circle"
-            className="w-full h-full object-contain"
+            className="w-[93%] h-[93%] object-contain"
           />
         </div>
 
         {/* TEXT CONTENT */}
         <div
           ref={contentRef}
-          className="mt-8 max-w-3xl text-center px-6 md:px-10 opacity-0"
+          className="mt-4 text-center px-6 md:px-10 opacity-0 flex flex-col items-center justify-center"
           aria-live="polite"
         >
           <h2
@@ -202,10 +202,10 @@ export default function HowWorks() {
             text-[#0a1c32]
             font-bold
             leading-tight
-            text-[32px]
+            text-[32px] max-w-3xl text-center
             sm:text-[42px]
-            md:text-[60px]
-            lg:text-[72px]
+            md:text-[50px]
+            lg:text-[60px]
           "
           >
             {pages[current].title}
@@ -218,7 +218,7 @@ export default function HowWorks() {
             text-[16px]
             sm:text-[18px]
             md:text-[20px]
-            leading-relaxed
+            
           "
           >
             {pages[current].desc}
@@ -226,7 +226,7 @@ export default function HowWorks() {
         </div>
 
         {/* PAGINATION */}
-        <div ref={paginationRef} className="mt-10 md:mt-12 opacity-0">
+        <div ref={paginationRef} className="mt-2 md:mt-4 opacity-0">
           <Pagination total={pages.length} current={current} onChange={goTo} />
         </div>
       </section>
