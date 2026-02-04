@@ -136,6 +136,13 @@ const Page = () => {
     medicalReports: [] as string[]
   });
 
+  // Max date for birthdate (5 years ago)
+  const maxDateString = React.useMemo(() => {
+    const d = new Date();
+    d.setFullYear(d.getFullYear() - 5);
+    return d.toISOString().split('T')[0];
+  }, []);
+
   // Country-City dynamic data
   const countries = React.useMemo(() => Country.getAllCountries(), []);
   const countryNames = React.useMemo(() => countries.map(c => c.name), [countries]);
@@ -374,6 +381,33 @@ const Page = () => {
     visible: { opacity: 1, y: 0, transition: { duration: .6, ease: "easeOut" } },
     exit: { opacity: 0, y: -40, transition: { duration: .4 } }
   };
+
+  const isPersonalInformationComplete = React.useMemo(() => {
+    const {
+      email,
+      identifier,
+      nationality,
+      city,
+      phone,
+      address,
+      identifierType,
+      maritalStatus,
+      speakingLanguages
+    } = fullData;
+
+    return !!(
+      email &&
+      identifier &&
+      nationality &&
+      city &&
+      phone &&
+      address &&
+      identifierType &&
+      maritalStatus &&
+      speakingLanguages &&
+      speakingLanguages.length > 0
+    );
+  }, [fullData]);
 
   return (
     <main
@@ -640,6 +674,7 @@ const Page = () => {
 
                           <input
                             type="date"
+                            max={maxDateString}
                             value={partialData.birthdate}
                             onChange={(e) => setPartialData({ ...partialData, birthdate: e.target.value })}
                             className="md:w-[380px] bg-transparent w-full md:text-[24px] text-[18px] text-center h-[80px] px-5 rounded-full border border-[#0D294D]
@@ -738,7 +773,7 @@ const Page = () => {
                           {/* ---- FIRST ROW: 3 inputs ---- */}
                           <input
                             type="email"
-                            placeholder="Email Address"
+                            placeholder="Email Address *"
                             value={fullData.email}
                             onChange={(e) => setFullData({ ...fullData, email: e.target.value })}
                             className="md:w-[39%] w-[90vw] h-[80px] px-5 md:text-[24px] text-[18px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition"
@@ -746,7 +781,7 @@ const Page = () => {
 
                           <input
                             type="text"
-                            placeholder="NID or Iqama ID"
+                            placeholder="NID or Iqama ID *"
                             value={fullData.identifier}
                             onChange={(e) => setFullData({ ...fullData, identifier: e.target.value })}
                             className="md:w-[25%] w-[90vw] h-[80px] px-5 md:text-[24px] text-[18px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition"
@@ -796,7 +831,7 @@ const Page = () => {
 
                           <input
                             type="text"
-                            placeholder="Address"
+                            placeholder="Address *"
                             value={fullData.address}
                             onChange={(e) => setFullData({ ...fullData, address: e.target.value })}
                             className="md:w-[32%] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition"
@@ -816,9 +851,9 @@ const Page = () => {
                                 "Passport"
                               ]}
                               width="w-full"
-                              text="Identifier type"
-                              value={fullData.identifierType}
-                              maxHeight="280px"
+                              text="Identifier type *"
+                              // value={fullData.identifierType}
+                              maxHeight="150px"
                               onSelect={(val) => setFullData({ ...fullData, identifierType: val })}
                             />
                           </div>
@@ -832,9 +867,9 @@ const Page = () => {
                             <CustomDropdown
                               items={["Single", "Married", "Divorced", "Widowed"]}
                               width="w-full"
-                              text="Marital Status"
-                              value={fullData.maritalStatus}
-                              maxHeight="280px"
+                              text="Marital Status *"
+                              // value={fullData.maritalStatus}
+                              maxHeight="150px"
                               onSelect={(val) => setFullData({ ...fullData, maritalStatus: val })}
                             />
                           </div>
@@ -848,9 +883,10 @@ const Page = () => {
                             <CustomDropdown
                               items={["English", "Arabic", "Other"]}
                               width="w-full"
-                              text="Speaking Language"
-                              value={fullData.speakingLanguages?.[0] || 'Arabic'}
-                              maxHeight="280px"
+                              text="Speaking Language *"
+                              // value={fullData.speakingLanguages?.[1]}
+                              // placeholder="Speaking Language"
+                              maxHeight="150px"
                               onSelect={(val) => setFullData({ ...fullData, speakingLanguages: [val] })}
                             />
                           </div>
@@ -945,10 +981,10 @@ const Page = () => {
                           else if (step === 3) onFullSubmit();
                           else if (step === 4) setStep(5);
                         }}
-                        disabled={isLoading}
-                        className="w-[220px] h-[60px] cursor-pointer py-3 bg-[#ea392f] text-white rounded-full
+                        disabled={isLoading || (step === 3 && !isPersonalInformationComplete)}
+                        className={`w-[220px] h-[60px] cursor-pointer py-3 bg-[#ea392f] text-white rounded-full
                              font-semibold mt-4 hover:bg-transparent hover:text-[#ea392f]
-                             hover:border-[#ea392f] border-[4px] border-[#ea392f] transition-all duration-300 disabled:opacity-50">
+                             hover:border-[#ea392f] border-[4px] border-[#ea392f] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed`}>
                         {isLoading ? 'Loading...' : (step === 4 ? "Submit" : "Continue")}
                       </button>
                     )}
