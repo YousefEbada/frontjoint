@@ -825,8 +825,8 @@ const Page = () => {
                               ]}
                               width="w-full"
                               text="Identifier type"
-                              value={fullData.identifierType}
-                              maxHeight="280px"
+                              // value={fullData.identifierType}
+                              maxHeight="150px"
                               onSelect={(val) => setFullData({ ...fullData, identifierType: val })}
                             />
                           </div>
@@ -841,8 +841,8 @@ const Page = () => {
                               items={["Single", "Married", "Divorced", "Widowed"]}
                               width="w-full"
                               text="Marital Status"
-                              value={fullData.maritalStatus}
-                              maxHeight="280px"
+                              // value={fullData.maritalStatus}
+                              maxHeight="150px"
                               onSelect={(val) => setFullData({ ...fullData, maritalStatus: val })}
                             />
                           </div>
@@ -857,8 +857,9 @@ const Page = () => {
                               items={["English", "Arabic", "Other"]}
                               width="w-full"
                               text="Speaking Language"
-                              value={fullData.speakingLanguages?.[0] || 'Arabic'}
-                              maxHeight="280px"
+                              // value={fullData.speakingLanguages?.[1]}
+                              // placeholder="Speaking Language"
+                              maxHeight="150px"
                               onSelect={(val) => setFullData({ ...fullData, speakingLanguages: [val] })}
                             />
                           </div>
