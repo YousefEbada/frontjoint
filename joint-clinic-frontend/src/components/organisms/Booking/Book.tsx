@@ -462,7 +462,7 @@ const Book = ({ redirectPath }: BookProps) => {
 
         {/* PAGINATION */}
         <div className="mt-4 mb-4">
-          <Pagination total={totalSteps} current={step} onChange={setStep} />
+          <Pagination total={totalSteps} current={step} onChange={() => { }} />
         </div>
       </div>
     </div>
