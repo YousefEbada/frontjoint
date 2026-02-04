@@ -746,7 +746,7 @@ const Page = () => {
                           {/* ---- FIRST ROW: 3 inputs ---- */}
                           <input
                             type="email"
-                            placeholder="Email Address"
+                            placeholder="Email Address *"
                             value={fullData.email}
                             onChange={(e) => setFullData({ ...fullData, email: e.target.value })}
                             className="md:w-[39%] w-[90vw] h-[80px] px-5 md:text-[24px] text-[18px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition"
@@ -754,7 +754,7 @@ const Page = () => {
 
                           <input
                             type="text"
-                            placeholder="NID or Iqama ID"
+                            placeholder="NID or Iqama ID *"
                             value={fullData.identifier}
                             onChange={(e) => setFullData({ ...fullData, identifier: e.target.value })}
                             className="md:w-[25%] w-[90vw] h-[80px] px-5 md:text-[24px] text-[18px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition"
@@ -804,7 +804,7 @@ const Page = () => {
 
                           <input
                             type="text"
-                            placeholder="Address"
+                            placeholder="Address *"
                             value={fullData.address}
                             onChange={(e) => setFullData({ ...fullData, address: e.target.value })}
                             className="md:w-[32%] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition"
@@ -824,7 +824,7 @@ const Page = () => {
                                 "Passport"
                               ]}
                               width="w-full"
-                              text="Identifier type"
+                              text="Identifier type *"
                               // value={fullData.identifierType}
                               maxHeight="150px"
                               onSelect={(val) => setFullData({ ...fullData, identifierType: val })}
@@ -840,7 +840,7 @@ const Page = () => {
                             <CustomDropdown
                               items={["Single", "Married", "Divorced", "Widowed"]}
                               width="w-full"
-                              text="Marital Status"
+                              text="Marital Status *"
                               // value={fullData.maritalStatus}
                               maxHeight="150px"
                               onSelect={(val) => setFullData({ ...fullData, maritalStatus: val })}
@@ -856,7 +856,7 @@ const Page = () => {
                             <CustomDropdown
                               items={["English", "Arabic", "Other"]}
                               width="w-full"
-                              text="Speaking Language"
+                              text="Speaking Language *"
                               // value={fullData.speakingLanguages?.[1]}
                               // placeholder="Speaking Language"
                               maxHeight="150px"
