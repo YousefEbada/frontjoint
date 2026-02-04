@@ -46,6 +46,7 @@ export interface CreateBookingPayload {
     department: string;
     company?: "Joint Clinic";
     patient_name: string;
+    payload?: any; // Optional field to include additional data for rescheduling
 }
 
 export interface RescheduleBookingPayload {

@@ -89,9 +89,23 @@ export const createBooking = async (
     bookingData: CreateBookingPayload
 ): Promise<BookingResponse> => {
     try {
+        let patientName = localStorage.getItem("patientName") || "Unknown Patient";
+        let patientEmail = localStorage.getItem("patientEmail") || "";
+        let doctorName = localStorage.getItem("doctorName") || "Unknown Doctor";
+        console.log("> createBooking patientName:", patientName
+            , "> patientEmail:", patientEmail
+            , "> doctorName:", doctorName
+        );
+        const payload = {
+            patientEmail,
+            doctorName,
+            patientName
+        }
+
         bookingData = {
             ...bookingData,
             appointment_time: `${bookingData.appointment_time}:00`,
+            payload
         }
         console.log("createBooking bookingData:", bookingData);
         const response = await api.post("/booking", bookingData);

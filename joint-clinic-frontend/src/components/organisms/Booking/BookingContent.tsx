@@ -40,6 +40,7 @@ const BookingContent = () => {
     // Pre-fill from pending booking
     useEffect(() => {
         if (pendingBooking) {
+            localStorage.setItem("doctorName", pendingBooking.doctorName);
             setSelectedDate(pendingBooking.selectedDate);
             setSelectedTime(pendingBooking.selectedTime);
         }
