@@ -54,10 +54,10 @@ const InjuryDetailsForm: React.FC<InjuryDetailsFormProps> = ({ jointName, onBack
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 200 }}
             transition={{ type: "spring", stiffness: 100, damping: 20 }}
-            className="mt-[40vh] w-full max-w-6xl h-fit z-50 p-4"
+            className="mt-[40vh] w-full max-w-7xl h-fit z-50 p-4"
         >
             {/* Glassy Container */}
-            <CorneredBoxes type="glass" className="w-full origin-bottom p-8 md:p-12 relative overflow-hidden">
+            <CorneredBoxes type="glass" className="w-[100%] origin-bottom p-8 md:p-12 relative overflow-hidden">
 
                 {/* Logo in Top Right */}
                 <div className="absolute top-8 right-8 md:top-10 md:right-10 opacity-80">
@@ -76,9 +76,9 @@ const InjuryDetailsForm: React.FC<InjuryDetailsFormProps> = ({ jointName, onBack
                 </div>
 
                 {/* Form */}
-                <form onSubmit={handleSubmit} className='flex flex-col items-center'>
+                <form onSubmit={handleSubmit} className='flex flex-col w-full items-center'>
                     {/* Form Grid */}
-                    <div className="grid grid-cols-1 lg:grid-cols-7 gap-x-8 gap-y-6 justify-center items-center">
+                    <div className="grid grid-cols-1 lg:grid-cols-7 w-full gap-x-8 gap-y-6 justify-center items-center">
 
                         {/* Start Date */}
                         <div className="relative w-full lg:col-span-3">

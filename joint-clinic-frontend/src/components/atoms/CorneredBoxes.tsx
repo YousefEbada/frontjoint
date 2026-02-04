@@ -38,7 +38,12 @@ const CorneredBoxes = ({ type, children, style, id, className, ...rest }: IProps
   );
 
   if (type === "glass") {
-    return <div className="overflow-hidden rounded-[35px] max-w-fit max-h-fit">{content}</div>;
+    const isFullWidth = className?.includes("w-[100%]") || className?.includes("w-full");
+    return (
+      <div className={`overflow-hidden rounded-[35px] ${isFullWidth ? "w-full" : "max-w-fit"} max-h-fit`}>
+        {content}
+      </div>
+    );
   }
 
   if (type === "nav") {

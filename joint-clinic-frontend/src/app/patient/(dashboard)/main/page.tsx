@@ -71,7 +71,7 @@ const Page = () => {
         <DashBoardHeader therapyName="Your Treatment" nav={false} dateTime={true} />
         <DashBoardContent>
           <div className="flex flex-col sm:flex-row gap-2 items-start sm:items-baseline">
-            <Typography text="Welcome," variant="heading1" gradient={true} />
+            <Typography text="Welcome Back," variant="heading1" gradient={true} />
             <Typography text={`${patientName}`} variant="heading1" style={{ color: color.primary }} />
           </div>
 
