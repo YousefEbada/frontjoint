@@ -13,9 +13,10 @@ interface DropdownProps {
   variant?: 'default' | 'form';
   required?: boolean;
   maxHeight?: string;
+  searchAllow?: boolean;
 }
 
-export default function CustomDropdown({ items, text, width, onSelect, value, variant = 'default', required = false, maxHeight, searchable = false }: DropdownProps & { searchable?: boolean }) {
+export default function CustomDropdown({ items, text, width, onSelect, value, variant = 'default', required = false, maxHeight, searchAllow = false }: DropdownProps) {
   const [open, setOpen] = useState(false);
   const [internalSelected, setInternalSelected] = useState<string>(text);
   const [searchTerm, setSearchTerm] = useState('');
@@ -52,7 +53,7 @@ export default function CustomDropdown({ items, text, width, onSelect, value, va
     setSearchTerm(''); // Clear search on select
   };
 
-  const filteredItems = searchable
+  const filteredItems = searchAllow
     ? items.filter(item => item.toLowerCase().includes(searchTerm.toLowerCase()))
     : items;
 
@@ -145,7 +146,7 @@ export default function CustomDropdown({ items, text, width, onSelect, value, va
           style={{ maxHeight: maxHeight || (variant === 'form' ? '300px' : '600px') }}
         >
           {/* Search Input */}
-          {searchable && (
+          {searchAllow && (
             <div className="px-4 pb-2 sticky top-0 bg-white z-10">
               <input
                 type="text"

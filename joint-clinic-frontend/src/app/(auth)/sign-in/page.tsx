@@ -799,7 +799,7 @@ const Page = () => {
                               text="Nationality"
                               value={fullData.nationality}
                               maxHeight="280px"
-                              searchable={true}
+                              searchAllow={true}
                               onSelect={(val) => setFullData({ ...fullData, nationality: val })}
                             />
                           </div>
@@ -817,7 +817,7 @@ const Page = () => {
                               text="City"
                               value={fullData.city}
                               maxHeight="280px"
-                              searchable={true}
+                              searchAllow={true}
                               onSelect={(val) => setFullData({ ...fullData, city: val })}
                             />
                           </div>

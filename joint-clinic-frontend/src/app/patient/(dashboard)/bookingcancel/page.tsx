@@ -72,7 +72,7 @@ function BookingCancelContent() {
         <>
             <DashBoardHeader therapyName="Shoulder Therapy">
                 <Typography
-                    text="Upcoming Bookings"
+                    text="Upcoming Booking"
                     variant="bodyRegular"
                     className="text-[#1e5598] font-medium"
                 />
@@ -113,7 +113,7 @@ Planned Leave
 Insurance Rejection 
 */}
                     <CustomSelect
-                        items={["Prevented", "Incorrect entry", "Price not suitable", "IVR Cancellation", "Governmental", "Maintenance", "Courses", "Dissatisfied", "Weather", "Change Opinion", "Unplanned Leave", "Permission / Sick Leave", "Planned Leave", "Insurance Rejection"]}
+                        items={["Prevented", "IVR Cancellation", "Dissatisfied", "Weather", "Change Opinion", "Insurance Rejection"]}
                         value={reason || "Select Reason"}
                         onChange={setReason}
                         className="w-full sm:w-[90%] md:w-[400px] lg:w-[500px]"
