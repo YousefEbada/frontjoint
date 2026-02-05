@@ -29,7 +29,7 @@ function BookingCancelContent() {
         if (!bookingId) return;
 
         cancelBooking(
-            { id: bookingId, data: { appointment_id: bookingDetails.booking.appointmentNixpendId, cancellation_source: "Patient", cancellation_date: dayjs().format("DD-MM-YYYY"), cancellation_reason: "reason", cancelled_by: "Phone" } },
+            { id: bookingId, data: { appointment_id: bookingDetails.booking.appointmentNixpendId, cancellation_source: "Patient", cancellation_date: dayjs().format("DD-MM-YYYY"), cancellation_reason: reason, cancelled_by: "Phone" } },
             {
                 onSuccess: () => {
                     // toast.success("Booking cancelled successfully");
@@ -113,7 +113,7 @@ Planned Leave
 Insurance Rejection 
 */}
                     <CustomSelect
-                        items={["Prevented", "IVR Cancellation", "Dissatisfied", "Weather", "Change Opinion", "Insurance Rejection"]}
+                        items={["Price Not Suitable", "IVR Cancellation", "Dissatisfied", "Weather", "Change Opinion", "Insurance Rejection"]}
                         value={reason || "Select Reason"}
                         onChange={setReason}
                         className="w-full sm:w-[90%] md:w-[400px] lg:w-[500px]"
