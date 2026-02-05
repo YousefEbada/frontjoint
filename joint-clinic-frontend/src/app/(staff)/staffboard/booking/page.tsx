@@ -43,7 +43,21 @@ function BookingPageContent() {
     patientName: b.patientName || "Unknown Patient",
     status: b.status.charAt(0).toUpperCase() + b.status.slice(1),
     date: dayjs(b.appointmentDate).format("MMM D"),
-    time: b.appointmentTime
+    time: b.appointmentTime,
+    rawDateTime: (() => {
+      const dateStr = b.appointmentDate;
+      const timeStr = b.appointmentTime;
+
+      if (!dateStr || !timeStr) return dayjs().add(1, 'year').toISOString();
+
+      // Normalize date to YYYY-MM-DD
+      const normalizedDate = dayjs(dateStr).format("YYYY-MM-DD");
+      // Construct full string
+      const fullDateTimeStr = `${normalizedDate} ${timeStr}`;
+      const d = dayjs(fullDateTimeStr);
+
+      return d.isValid() ? d.toISOString() : dayjs().add(1, 'year').toISOString();
+    })()
   })) || [];
 
   return (
