@@ -81,7 +81,7 @@ const RequestDoctorHelp = () => {
                             Loading chat...
                         </div>
                     ) : activeRoomId ? (
-                        <ChatInterface roomId={activeRoomId} userId={userId} userType="patient" title={`Dr. ${doctorName}`} />
+                        <ChatInterface roomId={activeRoomId} userId={userId} userType="patient" title={`${doctorName}`} />
                     ) : (
                         <div className="flex flex-col h-full items-center justify-center bg-white rounded-[30px] border border-gray-200 p-8 text-center shadow-sm">
                             <Typography text="No active chat found." variant="bodyBold" className="mb-4 text-gray-600" />
