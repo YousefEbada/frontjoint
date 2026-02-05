@@ -194,7 +194,7 @@ const BookingContent = () => {
         : "";
 
     // Handle confirm booking
-    const handleConfirmBooking = () => {
+    const handleConfirmBooking = async () => {
         if (!patientId) {
             // Should not happen in dashboard, but good check
             setBookingError("Missing patient information.");
@@ -248,24 +248,28 @@ const BookingContent = () => {
             patient_name: patientName,
         };
 
+        // 1. Update Patient's Doctor Assignment FIRST
+        try {
+            if (selectedDoctor.nixpendId) {
+                // Optimistically update local storage
+                localStorage.setItem("doctorNixpendId", selectedDoctor.nixpendId);
+                localStorage.setItem("doctorName", selectedDoctor.practitionerName);
+
+                // Await API update
+                await updatePatient(patientId, {
+                    doctorNixpendId: selectedDoctor.nixpendId
+                });
+            }
+        } catch (err) {
+            console.error("Failed to assign doctor to patient:", err);
+            // We continue with booking even if assignment fails, or you could return; here
+        }
+
         console.log("Booking Data:", bookingData);
 
         createBooking(bookingData, {
             onSuccess: async (response) => {
                 if (response.ok) {
-                    // Assign doctor to patient
-                    try {
-                        if (selectedDoctor.nixpendId) {
-                            await updatePatient(patientId, {
-                                doctorNixpendId: selectedDoctor.nixpendId
-                            });
-                            localStorage.setItem("doctorNixpendId", selectedDoctor.nixpendId);
-                            localStorage.setItem("doctorName", selectedDoctor.practitionerName);
-                        }
-                    } catch (err) {
-                        console.error("Failed to assign doctor to patient:", err);
-                    }
-
                     setBookingSuccess(true);
                     setBookingError("");
 

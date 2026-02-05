@@ -5,6 +5,7 @@ import BookingItem from "@/components/molecules/BookingItem";
 interface Booking {
     id: string;
     patientName?: string;
+    doctorName?: string;
     sessionNumber: number;
     type: "patient" | "session";
     status: "Confirmed" | "Pending" | "Cancelled";
@@ -21,7 +22,7 @@ const BookingList: React.FC<BookingListProps> = ({ bookings }) => {
     const [storedName, setStoredName] = React.useState("");
 
     React.useEffect(() => {
-        const name = localStorage.getItem("patientName");
+        const name = localStorage.getItem("doctorName");
         if (name) setStoredName(name);
     }, []);
 
@@ -33,7 +34,7 @@ const BookingList: React.FC<BookingListProps> = ({ bookings }) => {
                         key={booking.id}
                         id={booking.id}
                         sessionNumber={booking.sessionNumber}
-                        patientName={booking.patientName || storedName}
+                        doctorName={booking.doctorName || storedName}
                         type={booking.type}
                         status={booking.status}
                         date={booking.date}

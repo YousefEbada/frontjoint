@@ -9,6 +9,7 @@ interface BookingItemProps {
     id: string;
     sessionNumber: number;
     patientName?: string;
+    doctorName?: string;
     type: "patient" | "session";
     status: "Confirmed" | "Pending" | "Cancelled";
     date: string;
@@ -22,6 +23,7 @@ const BookingItem: React.FC<BookingItemProps> = ({
     id,
     sessionNumber,
     patientName,
+    doctorName,
     type,
     status,
     date,
@@ -53,7 +55,7 @@ const BookingItem: React.FC<BookingItemProps> = ({
             {/* Session Name */}
             <div className="py-3 pl-4 border-r border-b md:border-none border-[#9FD5E2]">
                 <Typography
-                    text={patientName ? patientName : `${type === "patient" ? "Patient" : "Session No"} ${sessionNumber}`}
+                    text={doctorName ? doctorName : `${type === "patient" ? "Patient" : "Session No"} ${sessionNumber}`}
                     variant="bodyBold"
                     className="text-[#1E5598]"
                 />
@@ -75,7 +77,13 @@ const BookingItem: React.FC<BookingItemProps> = ({
 
             {/* Actions */}
             <div className="hidden md:flex gap-3 justify-end min-w-[200px]">
-                {isPassed ? (
+                {status === "Cancelled" ? (
+                    <Typography
+                        text="Booking Canceled"
+                        variant="bodyBold"
+                        className="text-red-600 pr-4 self-center"
+                    />
+                ) : isPassed ? (
                     <Typography
                         text="Booking passed"
                         variant="bodyBold"
@@ -110,7 +118,13 @@ const BookingItem: React.FC<BookingItemProps> = ({
             </div>
             {/* Mobile View Actions/Text */}
             <div className="py-3 pl-4 md:hidden flex">
-                {isPassed ? (
+                {status === "Cancelled" ? (
+                    <Typography
+                        text="Booking Canceled"
+                        variant="bodyBold"
+                        className="text-red-600"
+                    />
+                ) : isPassed ? (
                     <Typography
                         text="Booking passed"
                         variant="bodyBold"
