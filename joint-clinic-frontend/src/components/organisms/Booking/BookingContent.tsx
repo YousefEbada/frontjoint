@@ -133,7 +133,10 @@ const BookingContent = () => {
                     ? slot.appointment_count >= slot.event_capacity
                     : false;
 
-                if (!isFull) {
+                // Check if slot is already taken (appointment_type_appointment should be null)
+                const isTaken = slot.appointment_type_appointment !== null;
+
+                if (!isFull && !isTaken) {
                     dates.add(dayjs(slot.start).format("YYYY-MM-DD"));
                 }
             }
@@ -154,7 +157,10 @@ const BookingContent = () => {
                     ? slot.appointment_count >= slot.event_capacity
                     : false;
 
-                return isSameDay && !isFull;
+                // Check if slot is already taken
+                const isTaken = slot.appointment_type_appointment !== null;
+
+                return isSameDay && !isFull && !isTaken;
             })
             // Map to formatted string for display
             .map((slot) => dayjs(slot.start).format("h:mm A"));
@@ -392,7 +398,7 @@ const BookingContent = () => {
                                     items={filteredDoctors.map((d) => d.practitionerName)}
                                     value={selectedDoctor?.practitionerName || "Doctor"}
                                     onChange={handleDoctorSelect}
-                                    dropdownMaxHeight="200px"
+                                    dropdownMaxHeight="100px"
                                     placeholder="Select a doctor"
                                     width="100%"
                                     height="60px"
@@ -470,8 +476,9 @@ const BookingContent = () => {
                                 {timeSlotsForDate.length > 0 ? (
                                     <CustomSelect
                                         items={timeSlotsForDate}
-                                        value={selectedTime || "Time"}
+                                        value={selectedTime || "Select Time"}
                                         onChange={setSelectedTime}
+                                        dropdownMaxHeight="200px"
                                         width="100%"
                                         height="60px"
                                         className="w-full"
