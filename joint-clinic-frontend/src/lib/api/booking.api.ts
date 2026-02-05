@@ -92,14 +92,17 @@ export const createBooking = async (
         let patientName = localStorage.getItem("patientName") || "Unknown Patient";
         let patientEmail = localStorage.getItem("patientEmail") || "";
         let doctorName = localStorage.getItem("doctorName") || "Unknown Doctor";
+        let patientId = localStorage.getItem("patientId") || "";
         console.log("> createBooking patientName:", patientName
             , "> patientEmail:", patientEmail
             , "> doctorName:", doctorName
+            , "> patientId:", patientId
         );
         const payload = {
             patientEmail,
             doctorName,
-            patientName
+            patientName,
+            patientId
         }
 
         bookingData = {
