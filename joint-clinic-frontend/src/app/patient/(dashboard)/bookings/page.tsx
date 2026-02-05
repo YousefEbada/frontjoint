@@ -43,7 +43,21 @@ const BookingsPage = () => {
             type: booking.bookingType === "session" ? "session" : "patient",
             status: booking.status ? booking.status.charAt(0).toUpperCase() + booking.status.slice(1) : "Pending",
             date: dayjs(booking.appointmentDate).format("MMM Do YYYY"),
-            time: dayjs(`2000-01-01 ${booking.appointmentTime}`).format("h:mm A")
+            time: dayjs(`2000-01-01 ${booking.appointmentTime}`).format("h:mm A"),
+            rawDateTime: (() => {
+                const dateStr = booking.appointmentDate;
+                const timeStr = booking.appointmentTime;
+
+                if (!dateStr || !timeStr) return dayjs().add(1, 'year').toISOString();
+
+                // Normalize date to YYYY-MM-DD
+                const normalizedDate = dayjs(dateStr).format("YYYY-MM-DD");
+                // Construct full string
+                const fullDateTimeStr = `${normalizedDate} ${timeStr}`;
+                const d = dayjs(fullDateTimeStr);
+
+                return d.isValid() ? d.toISOString() : dayjs().add(1, 'year').toISOString();
+            })()
         }));
     }, [bookingData]);
 
