@@ -10,6 +10,7 @@ interface Booking {
     status: "Confirmed" | "Pending" | "Cancelled";
     date: string;
     time: string;
+    rawDateTime: string;
 }
 
 interface BookingListProps {
@@ -37,6 +38,7 @@ const BookingList: React.FC<BookingListProps> = ({ bookings }) => {
                         status={booking.status}
                         date={booking.date}
                         time={booking.time}
+                        rawDateTime={booking.rawDateTime}
                         onCancel={() => console.log("Cancel", booking.id)}
                         onReschedule={() => console.log("Reschedule", booking.id)}
                     />

@@ -157,7 +157,7 @@ function BookingChangeContent() {
         <>
             <DashBoardHeader therapyName="Shoulder Therapy">
                 <Typography
-                    text="Upcoming Bookings"
+                    text="Upcoming Booking"
                     variant="bodyRegular"
                     className="text-[#1e5598] font-medium"
                 />

@@ -210,12 +210,12 @@ function WhoWeAre() {
       );
     }
 
-    master.to(leftLine, { opacity: 0, duration: 0.5 });
+    master.to(leftLine, { opacity: 0, duration: 0.5 }, "<");
     master.to(rightLine, { opacity: 0, duration: 0.5 }, "<");
-    master.from([leftDot, rightDot], {
+    master.to([leftDot, rightDot], {
       opacity: 0,
       ease: "power2.out",
-    });
+    }, "<");
 
     master.from(chooseUs, { autoAlpha: 0, y: 50, duration: 0.5 });
 
@@ -288,7 +288,7 @@ function WhoWeAre() {
         className="team_section absolute z-30 md:bottom-[120px] bottom-[120px] w-[90%] h-[50%] sm:h-auto mx-auto flex flex-col items-center justify-center"
         ref={membersRef}
       >
-        <h1 className="text-[40px] md:text-[100px] font-bold font-['IBM_Plex_Sans'] text-[#fff] text-center mb-0">
+        <h1 className="text-[40px] md:text-[80px] font-bold font-['IBM_Plex_Sans'] text-[#fff] text-center mb-0">
           Meet Our Team
         </h1>
 
@@ -334,7 +334,7 @@ function WhoWeAre() {
         ref={chooseUsRef}
       >
         <h2
-          className={`text-[40px] md:text-[64px] mb-[5px] md:mb-[30px] translate-y-[-100%] md:translate-y-[-200%] font-bold font-['IBM_Plex_Sans'] text-[#fff]`}
+          className={`text-[40px] md:text-[64px] mb-[5px] md:mb-[30px] translate-y-[-100%] md:translate-y-[-70%] font-bold font-['IBM_Plex_Sans'] text-[#fff]`}
         >
           Why Choose Us?
         </h2>
@@ -352,6 +352,7 @@ function WhoWeAre() {
                 title={card.title}
                 description={card.desc}
                 isActive={activeCardIndex >= index}
+                className="w-full"
               />
             ))}
           </div>

@@ -409,6 +409,18 @@ const Page = () => {
     );
   }, [fullData]);
 
+  // Reset identifier type when nationality changes significantly (Saudi <-> Non-Saudi)
+  React.useEffect(() => {
+    // If nationality is Saudi, and type is Iqama -> Reset
+    if (fullData.nationality === "Saudi Arabia" && fullData.identifierType === "Iqama") {
+      setFullData(prev => ({ ...prev, identifierType: "", identifier: "" }));
+    }
+    // If nationality is NOT Saudi, and type is National ID -> Reset
+    if (fullData.nationality && fullData.nationality !== "Saudi Arabia" && fullData.identifierType === "National ID") {
+      setFullData(prev => ({ ...prev, identifierType: "", identifier: "" }));
+    }
+  }, [fullData.nationality, fullData.identifierType]);
+
   return (
     <main
       className="w-full min-h-screen relative bg-cover bg-center flex items-center justify-start overflow-y-auto"
@@ -781,7 +793,7 @@ const Page = () => {
 
                           <input
                             type="text"
-                            placeholder="NID or Iqama ID *"
+                            placeholder={fullData.identifierType ? `${fullData.identifierType} *` : "Identifier ID *"}
                             value={fullData.identifier}
                             onChange={(e) => setFullData({ ...fullData, identifier: e.target.value })}
                             className="md:w-[25%] w-[90vw] h-[80px] px-5 md:text-[24px] text-[18px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition"
@@ -799,6 +811,7 @@ const Page = () => {
                               text="Nationality"
                               value={fullData.nationality}
                               maxHeight="280px"
+                              searchAllow={true}
                               onSelect={(val) => setFullData({ ...fullData, nationality: val })}
                             />
                           </div>
@@ -816,6 +829,7 @@ const Page = () => {
                               text="City"
                               value={fullData.city}
                               maxHeight="280px"
+                              searchAllow={true}
                               onSelect={(val) => setFullData({ ...fullData, city: val })}
                             />
                           </div>
@@ -845,11 +859,10 @@ const Page = () => {
                               className="absolute top-[50%] translate-y-[-50%] md:right-[20px] right-[30px]"
                             />
                             <CustomDropdown
-                              items={[
-                                "National ID",
-                                "Iqama",
-                                "Passport"
-                              ]}
+                              items={fullData.nationality === "Saudi Arabia"
+                                ? ["National ID", "Passport"]
+                                : ["National ID", "Iqama", "Passport"]
+                              }
                               width="w-full"
                               text="Identifier type *"
                               // value={fullData.identifierType}

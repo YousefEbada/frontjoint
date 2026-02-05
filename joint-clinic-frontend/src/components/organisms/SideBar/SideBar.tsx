@@ -25,6 +25,7 @@ const SideBar = ({ navItems }: SideBarProps) => {
 
     return (
         <aside
+            suppressHydrationWarning
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
             className={clsx(

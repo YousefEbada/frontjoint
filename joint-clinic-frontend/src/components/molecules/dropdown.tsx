@@ -13,11 +13,13 @@ interface DropdownProps {
   variant?: 'default' | 'form';
   required?: boolean;
   maxHeight?: string;
+  searchAllow?: boolean;
 }
 
-export default function CustomDropdown({ items, text, width, onSelect, value, variant = 'default', required = false, maxHeight }: DropdownProps) {
+export default function CustomDropdown({ items, text, width, onSelect, value, variant = 'default', required = false, maxHeight, searchAllow = false }: DropdownProps) {
   const [open, setOpen] = useState(false);
   const [internalSelected, setInternalSelected] = useState<string>(text);
+  const [searchTerm, setSearchTerm] = useState('');
 
   // Determine current value: controlled (value prop) or uncontrolled (internal state)
   const currentSelection = value !== undefined ? value : internalSelected;
@@ -31,6 +33,7 @@ export default function CustomDropdown({ items, text, width, onSelect, value, va
         !dropdownRef.current.contains(e.target as Node)
       ) {
         setOpen(false);
+        setSearchTerm(''); // Clear search on close
       }
     };
     document.addEventListener("mousedown", close);
@@ -47,7 +50,12 @@ export default function CustomDropdown({ items, text, width, onSelect, value, va
       onSelect(item);
     }
     setOpen(false);
+    setSearchTerm(''); // Clear search on select
   };
+
+  const filteredItems = searchAllow
+    ? items.filter(item => item.toLowerCase().includes(searchTerm.toLowerCase()))
+    : items;
 
   // Styles based on variant
   const buttonStyles = variant === 'form'
@@ -137,27 +145,48 @@ export default function CustomDropdown({ items, text, width, onSelect, value, va
           className={`${dropdownStyles} custom-scrollbar flex flex-col`}
           style={{ maxHeight: maxHeight || (variant === 'form' ? '300px' : '600px') }}
         >
+          {/* Search Input */}
+          {searchAllow && (
+            <div className="px-4 pb-2 sticky top-0 bg-white z-10">
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Search..."
+                className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:border-[#1E5598] text-[#0D294D] placeholder-gray-400"
+                onClick={(e) => e.stopPropagation()}
+                autoFocus
+              />
+            </div>
+          )}
+
           <ul className="flex flex-col gap-2 w-full">
-            {items.map((item, i) => (
-              <li
-                key={i}
-                onMouseDown={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  handleSelect(item);
-                }}
-                className={`
+            {filteredItems.length > 0 ? (
+              filteredItems.map((item, i) => (
+                <li
+                  key={i}
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleSelect(item);
+                  }}
+                  className={`
                   ${itemStyles} cursor-pointer transition select-none px-4 py-2 w-full text-center flex justify-center items-center
 
                   ${currentSelection === item
-                    ? "sel text-[#848d98] relative font-medium"
-                    : "text-[#6d7a80] hover:text-[#0D294D] hover:bg-gray-50"
-                  }
+                      ? "sel text-[#848d98] relative font-medium"
+                      : "text-[#6d7a80] hover:text-[#0D294D] hover:bg-gray-50"
+                    }
                 `}
-              >
-                {item}
+                >
+                  {item}
+                </li>
+              ))
+            ) : (
+              <li className={`${itemStyles} text-[#6d7a80] px-4 py-2 text-center`}>
+                No results found
               </li>
-            ))}
+            )}
           </ul>
         </div>
       )}

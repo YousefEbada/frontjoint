@@ -93,8 +93,13 @@ const Book = ({ redirectPath }: BookProps) => {
     const dates = new Set<string>();
     slotsResponse.slots.forEach((slot) => {
       if (slot.start) {
-        const date = dayjs(slot.start).format("YYYY-MM-DD");
-        dates.add(date);
+        // Check if slot is already taken
+        const isTaken = slot.appointment_type_appointment !== null;
+
+        if (!isTaken) {
+          const date = dayjs(slot.start).format("YYYY-MM-DD");
+          dates.add(date);
+        }
       }
     });
     return Array.from(dates);
@@ -105,7 +110,8 @@ const Book = ({ redirectPath }: BookProps) => {
     if (!slotsResponse?.ok || !slotsResponse.slots || !selectedDate) return [];
     return slotsResponse.slots.filter((slot) => {
       if (!slot.start) return false;
-      return dayjs(slot.start).format("YYYY-MM-DD") === selectedDate;
+      const isTaken = slot.appointment_type_appointment !== null;
+      return dayjs(slot.start).format("YYYY-MM-DD") === selectedDate && !isTaken;
     });
   }, [slotsResponse, selectedDate]);
 
