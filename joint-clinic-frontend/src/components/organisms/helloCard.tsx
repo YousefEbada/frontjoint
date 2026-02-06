@@ -4,6 +4,48 @@ import Logo from "@/components/atoms/icons/Logo";
 
 export default function HelloCard({ onGo, isLoading, error }: { onGo: (contact: string) => void; isLoading?: boolean; error?: string | null }) {
   const [inputValue, setInputValue] = useState("");
+  const [localError, setLocalError] = useState("");
+
+  const validate = (val: string) => {
+    if (!val) {
+      setLocalError("");
+      return false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const isEmail = emailRegex.test(val);
+
+    // Validate phone: numeric, min 9 digits
+    const cleanPhone = val.replace(/\D/g, '');
+    const isPhone = cleanPhone.length >= 9;
+
+    // Check if it looks like a phone (digits or +) but invalid length
+    const isPhoneFormat = /^[\+]?[0-9]/.test(val);
+
+    if (isEmail) {
+      setLocalError("");
+      return true;
+    } else if (isPhoneFormat) {
+      if (isPhone) {
+        setLocalError("");
+        return true;
+      } else {
+        setLocalError("Phone number must be at least 9 digits");
+        return false;
+      }
+    } else {
+      setLocalError("Please enter a valid email or phone number");
+      return false;
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setInputValue(val);
+    validate(val);
+  }
+
+  const isValid = !localError && inputValue.length > 0;
 
   return (
     <div className="w-full max-h-[80vh] flex md:justify-start md:ml-[4%] sm:justify-center sm:items-center px-4">
@@ -68,15 +110,15 @@ export default function HelloCard({ onGo, isLoading, error }: { onGo: (contact: 
           </p>
 
           {/* Error */}
-          {error && (
-            <p className="text-red-500 text-center mt-2">
-              enter contact
+          {(error || localError) && (
+            <p className="text-red-500 text-center mt-2 font-medium">
+              {localError || error}
             </p>
           )}
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              onGo(inputValue);
+              if (isValid) onGo(inputValue);
             }}
             className="w-full flex flex-col items-center"
           >
@@ -85,10 +127,10 @@ export default function HelloCard({ onGo, isLoading, error }: { onGo: (contact: 
               type="text"
               placeholder="Email Address Or Phone number"
               value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
+              onChange={handleChange}
               disabled={isLoading}
               required
-              className="
+              className={`
                 w-[90%] 
                 md:w-[67%] 
                 mt-2 
@@ -98,7 +140,7 @@ export default function HelloCard({ onGo, isLoading, error }: { onGo: (contact: 
                 text-gray-800 
                 text-[15px] 
                 md:text-[20px]
-                border-[#000] 
+                ${localError ? 'border-red-500' : 'border-[#000]'} 
                 text-center 
                 bg-gradient-to-b from-[#0D294D] to-[#1E5598]
                 bg-clip-text text-transparent 
@@ -107,13 +149,13 @@ export default function HelloCard({ onGo, isLoading, error }: { onGo: (contact: 
                 focus:ring-2 focus:ring-[#1E5598]/40 
                 transition-all duration-300
                 disabled:opacity-60 disabled:cursor-not-allowed
-              "
+              `}
             />
 
             {/* Button */}
             <button
               type="submit"
-              disabled={isLoading}
+              disabled={isLoading || !isValid}
               className={`
                 w-[180px] h-[50px] 
                 md:w-[220px] md:h-[60px] 
@@ -126,7 +168,7 @@ export default function HelloCard({ onGo, isLoading, error }: { onGo: (contact: 
                 mt-4 
                 hover:bg-[#d23229] 
                 transition-all duration-300
-                ${isLoading ? 'opacity-70 cursor-wait' : ''}
+                ${(isLoading || !isValid) ? 'opacity-50 cursor-not-allowed' : ''}
               `}
             >
               {isLoading ? "Loading..." : "Go"}

@@ -11,10 +11,10 @@ export const isValidEmail = (email: string): boolean => {
  * Must start with 966 and be 12 digits long in total (e.g. 9665XXXXXXXX).
  */
 export const isValidSaudiPhone = (phone: string): boolean => {
-    // Remove any non-digit characters just in case, though usually we expect clean input or we clean it
-    const cleanPhone = phone.replace(/\D/g, '');
-    // Check if starts with 966 and length is 12
-    return cleanPhone.startsWith('966') && cleanPhone.length === 12;
+    // Strict check: Must be digits only
+    if (!/^\d+$/.test(phone)) return false;
+    // Check if lengths is at least 9
+    return phone.length >= 9;
 };
 
 /**
@@ -24,23 +24,22 @@ export const isValidSaudiPhone = (phone: string): boolean => {
  * Iqama starts with '2'.
  */
 export const isValidSaudiID = (id: string, type: string): boolean => {
-    const cleanId = id.replace(/\D/g, '');
-
-    // User Update: Not mandatory to start with 1. Min 9 digits for National ID.
-    // However, basic sanity check for length < 9 generally returns false.
-    if (cleanId.length < 9) return false;
-
-    if (type === 'National ID') {
-        return cleanId.length >= 9;
-    }
-
-    if (type === 'Iqama') {
-        // Keep strictly 10 and starts with 2 unless requested otherwise.
-        return cleanId.length === 10 && cleanId.startsWith('2');
-    }
-
+    // Passport can allow alphanumeric, usually checking length is enough for basic validation
     if (type === 'Passport') {
-        return cleanId.length >= 6; // Basic check for passport
+        return id.length >= 6;
+    }
+
+    // For National ID and Iqama, strictly numbers only
+    if (!/^\d+$/.test(id)) return false;
+
+    // National ID: Starts with 1, Min length 10
+    if (type === 'National ID') {
+        return id.startsWith('1') && id.length >= 10;
+    }
+
+    // Iqama: Starts with 2, Min length 10
+    if (type === 'Iqama') {
+        return id.startsWith('2') && id.length >= 10;
     }
 
     return false;

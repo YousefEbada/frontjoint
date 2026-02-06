@@ -136,6 +136,56 @@ const Page = () => {
     medicalReports: [] as string[]
   });
 
+  const [fileName, setFileName] = React.useState<string | null>(null);
+  const [errors, setErrors] = React.useState<Record<string, string>>({});
+
+  const validateField = (field: string, value: any) => {
+    let newError = "";
+    if (field === "fullName") {
+      if (!value) newError = "Full name is required";
+      else if (value.trim().split(/\s+/).length < 2) newError = "Enter at least two names";
+    }
+    if (field === "birthdate") {
+      if (!value) newError = "Birthdate is required";
+    }
+    if (field === "otpCode") {
+      if (!value || value.length < 4) newError = "Enter valid code";
+    }
+    if (field === "email") {
+      if (!value) newError = "Email is required";
+      else if (!isValidEmail(value)) newError = "Invalid email address";
+    }
+    if (field === "phone") {
+      if (!value) newError = "Phone is required";
+      else if (!isValidSaudiPhone(value)) newError = "Min 9 digits, numbers only";
+    }
+    if (field === "identifier") {
+      if (!value) newError = "ID is required";
+      else if (!isValidSaudiID(value, fullData.identifierType || '')) newError = "Invalid ID";
+    }
+    if (field === "address") if (!value) newError = "Address is required";
+
+    // Guardian
+    if (field === "guardianEmail" && value && !isValidEmail(value)) newError = "Invalid Guardian Email";
+    if (field === "guardianPhone" && value && !isValidSaudiPhone(value)) newError = "Min 9 digits";
+    if (field === "guardianIdentifier" && value && String(value).length < 9) newError = "Invalid ID (min 9 digits)";
+
+    setErrors(prev => ({ ...prev, [field]: newError }));
+  };
+
+  const isStep1Valid = !errors.fullName && !errors.birthdate && partialData.fullName && partialData.birthdate;
+  const isStep2Valid = !errors.otpCode && otpCode.length >= 4;
+  const isStep3Valid = React.useMemo(() => {
+    const required = ["email", "phone", "identifier", "nationality", "city", "address", "identifierType", "maritalStatus"];
+    const hasEmpty = required.some(key => !fullData[key as keyof typeof fullData]);
+    const hasErrors = Object.keys(errors).some(key => errors[key] && required.includes(key));
+
+    // Check Guardian errors if present
+    const guardianErrors = ["guardianEmail", "guardianPhone", "guardianIdentifier"].some(key => errors[key]);
+
+    return !hasEmpty && !hasErrors && !guardianErrors && ((fullData.speakingLanguages?.length || 0) > 0);
+  }, [fullData, errors]);
+
   // Max date for birthdate (5 years ago)
   const maxDateString = React.useMemo(() => {
     const d = new Date();
@@ -258,7 +308,7 @@ const Page = () => {
     }
 
     if (!isValidSaudiID(identifier, identifierType)) {
-      if (identifierType === 'National ID') alert("Invalid National ID. Must be at least 9 digits.");
+      if (identifierType === 'National ID') alert("Invalid National ID. Must be at least 10 digits and start with 1.");
       else if (identifierType === 'Iqama') alert("Invalid Iqama ID. Must be 10 digits and start with 2.");
       else alert("Invalid ID format.");
       return;
@@ -291,9 +341,9 @@ const Page = () => {
       // Usually we check if it starts with 1 or 2 and validates length?
       // Let's perform generic 10-digit check or infer type.
       if (g.guardianIdentifier) {
-        // Simple check: Must be at least 9 digits
-        if (!/^\d{9,}$/.test(g.guardianIdentifier)) {
-          alert("Invalid Guardian ID. Must be at least 9 digits.");
+        // Guardian ID must be National ID or Iqama (min 10 digits)
+        if (!/^\d{10,}$/.test(g.guardianIdentifier)) {
+          alert("Invalid Guardian ID. Must be at least 10 digits.");
           return;
         }
       }
@@ -673,26 +723,38 @@ const Page = () => {
 
                         {error && <p className="text-red-500 mb-4">{error}</p>}
 
-                        <div className="inputs flex md:flex-row flex-col justify-center items-center md:gap-[30px] gap-[10px]">
-                          <input
-                            type="text"
-                            placeholder="Full Name"
-                            value={partialData.fullName}
-                            onChange={(e) => setPartialData({ ...partialData, fullName: e.target.value })}
-                            className="md:w-[450px] w-full h-[80px] md:text-[24px] text-[18px] px-5 rounded-full border border-[#0D294D] bg-transparent
+                        <div className="inputs flex md:flex-row flex-col justify-center items-center md:gap-[30px] gap-[25px]">
+                          <div className="relative w-full md:w-auto">
+                            <input
+                              type="text"
+                              placeholder="Full Name"
+                              value={partialData.fullName}
+                              onChange={(e) => {
+                                setPartialData({ ...partialData, fullName: e.target.value });
+                                validateField("fullName", e.target.value);
+                              }}
+                              className={`md:w-[450px] w-full h-[80px] md:text-[24px] text-[18px] px-5 rounded-full border ${errors.fullName ? 'border-red-500' : 'border-[#0D294D]'} bg-transparent
                                  text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2
-                                 focus:ring-[#1E5598]/30 transition"
-                          />
+                                 focus:ring-[#1E5598]/30 transition`}
+                            />
+                            {errors.fullName && <p className="text-red-500 text-sm absolute -bottom-6 w-full text-center">{errors.fullName}</p>}
+                          </div>
 
-                          <input
-                            type="date"
-                            max={maxDateString}
-                            value={partialData.birthdate}
-                            onChange={(e) => setPartialData({ ...partialData, birthdate: e.target.value })}
-                            className="md:w-[380px] bg-transparent w-full md:text-[24px] text-[18px] text-center h-[80px] px-5 rounded-full border border-[#0D294D]
-                                 bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] outline-none
-                                 focus:ring-2 focus:ring-[#1E5598]/30 transition"
-                          />
+                          <div className="relative w-full md:w-auto">
+                            <input
+                              type="date"
+                              max={maxDateString}
+                              value={partialData.birthdate}
+                              onChange={(e) => {
+                                setPartialData({ ...partialData, birthdate: e.target.value });
+                                validateField("birthdate", e.target.value);
+                              }}
+                              className={`md:w-[380px] bg-transparent w-full md:text-[24px] text-[18px] text-center h-[80px] px-5 rounded-full border ${errors.birthdate ? 'border-red-500' : 'border-[#0D294D]'}
+                                   bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] outline-none
+                                   focus:ring-2 focus:ring-[#1E5598]/30 transition`}
+                            />
+                            {errors.birthdate && <p className="text-red-500 text-sm absolute -bottom-6 w-full text-center">{errors.birthdate}</p>}
+                          </div>
 
                           <div className="relative">
                             <FontAwesomeIcon icon={faCaretDown} className="absolute top-1/2 -translate-y-1/2 right-[20px]" />
@@ -737,11 +799,15 @@ const Page = () => {
                           type="text"
                           placeholder="Verification Code"
                           value={otpCode}
-                          onChange={(e) => setOtpCode(e.target.value)}
+                          onChange={(e) => {
+                            setOtpCode(e.target.value);
+                            validateField("otpCode", e.target.value);
+                          }}
                           className="md:w-[460px] w-[80%] h-[80px] px-5 md:text-[24px] text-[18px] rounded-full border border-[#0D294D] bg-transparent
                                text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2
                                focus:ring-[#1E5598]/30 transition"
                         />
+                        {errors.otpCode && <p className="text-red-500 text-sm mt-2">{errors.otpCode}</p>}
 
                         <button
                           onClick={handleResendWithCooldown}
@@ -787,17 +853,25 @@ const Page = () => {
                             type="email"
                             placeholder="Email Address *"
                             value={fullData.email}
-                            onChange={(e) => setFullData({ ...fullData, email: e.target.value })}
-                            className="md:w-[39%] w-[90vw] h-[80px] px-5 md:text-[24px] text-[18px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition"
+                            onChange={(e) => {
+                              setFullData({ ...fullData, email: e.target.value });
+                              validateField("email", e.target.value);
+                            }}
+                            className={`md:w-[39%] w-[90vw] h-[80px] px-5 md:text-[24px] text-[18px] rounded-full border ${errors.email ? 'border-red-500' : 'border-[#0D294D]'} bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition`}
                           />
-
-                          <input
-                            type="text"
-                            placeholder={fullData.identifierType ? `${fullData.identifierType} *` : "Identifier ID *"}
-                            value={fullData.identifier}
-                            onChange={(e) => setFullData({ ...fullData, identifier: e.target.value })}
-                            className="md:w-[25%] w-[90vw] h-[80px] px-5 md:text-[24px] text-[18px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition"
-                          />
+                          <div className="relative md:w-[25%] w-[90vw]">
+                            <input
+                              type="text"
+                              placeholder={fullData.identifierType ? `${fullData.identifierType} *` : "Identifier ID *"}
+                              value={fullData.identifier}
+                              onChange={(e) => {
+                                setFullData({ ...fullData, identifier: e.target.value });
+                                validateField("identifier", e.target.value);
+                              }}
+                              className={`w-full h-[80px] px-5 md:text-[24px] text-[18px] rounded-full border ${errors.identifier ? 'border-red-500' : 'border-[#0D294D]'} bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition`}
+                            />
+                            {errors.identifier && <p className="text-red-500 text-xs absolute -bottom-5 w-full text-center">{errors.identifier}</p>}
+                          </div>
 
                           <div className="relative md:w-[17%] w-[90vw]">
                             <FontAwesomeIcon
@@ -834,22 +908,37 @@ const Page = () => {
                             />
                           </div>
 
-                          <input
-                            type="tel"
-                            required
-                            placeholder="Phone *"
-                            value={fullData.phone}
-                            onChange={(e) => setFullData({ ...fullData, phone: e.target.value })}
-                            className="md:w-[28%] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition"
-                          />
+                          <div className="relative md:w-[28%] w-[90vw]">
+                            <input
+                              type="tel"
+                              required
+                              placeholder="Phone *"
+                              value={fullData.phone}
+                              onChange={(e) => {
+                                const val = e.target.value;
+                                if (/^\d*$/.test(val)) {
+                                  setFullData({ ...fullData, phone: val });
+                                  validateField("phone", val);
+                                }
+                              }}
+                              className={`w-full h-[80px] px-5 text-[24px] rounded-full border ${errors.phone ? 'border-red-500' : 'border-[#0D294D]'} bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition`}
+                            />
+                            {errors.phone && <p className="text-red-500 text-sm absolute -bottom-6 w-full text-center">{errors.phone}</p>}
+                          </div>
 
-                          <input
-                            type="text"
-                            placeholder="Address *"
-                            value={fullData.address}
-                            onChange={(e) => setFullData({ ...fullData, address: e.target.value })}
-                            className="md:w-[32%] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition"
-                          />
+                          <div className="relative md:w-[32%] w-[90vw]">
+                            <input
+                              type="text"
+                              placeholder="Address *"
+                              value={fullData.address}
+                              onChange={(e) => {
+                                setFullData({ ...fullData, address: e.target.value });
+                                validateField("address", e.target.value);
+                              }}
+                              className={`w-full h-[80px] px-5 text-[24px] rounded-full border ${errors.address ? 'border-red-500' : 'border-[#0D294D]'} bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition`}
+                            />
+                            {errors.address && <p className="text-red-500 text-sm absolute -bottom-6 w-full text-center">{errors.address}</p>}
+                          </div>
 
                           {/* ---- THIRD ROW: 3 dropdowns ---- */}
                           <div className="relative md:w-[36.5%] w-[90vw]">
@@ -861,7 +950,7 @@ const Page = () => {
                             <CustomDropdown
                               items={fullData.nationality === "Saudi Arabia"
                                 ? ["National ID", "Passport"]
-                                : ["National ID", "Iqama", "Passport"]
+                                : ["Iqama", "Passport"]
                               }
                               width="w-full"
                               text="Identifier type *"
@@ -913,22 +1002,49 @@ const Page = () => {
                             can’t make decisions due to medical conditions.
                           </p>
                           <div className='flex flex-row gap-[30px] flex-wrap justify-center items-center'>
-                            <input type="text" placeholder="Guardian’s Full Name"
-                              value={fullData.guardianInformation?.guardianName || ''}
-                              onChange={(e) => setFullData({ ...fullData, guardianInformation: { ...fullData.guardianInformation, guardianName: e.target.value } })}
-                              className="md:w-[48%] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition" />
-                            <input type="text" placeholder="Guardian’s Phone Number"
-                              value={fullData.guardianInformation?.guardianPhone || ''}
-                              onChange={(e) => setFullData({ ...fullData, guardianInformation: { ...fullData.guardianInformation, guardianPhone: e.target.value } })}
-                              className="md:w-[35%] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition" />
-                            <input type="text" placeholder="Guardian’s NID or Iqama ID"
-                              value={fullData.guardianInformation?.guardianIdentifier || ''}
-                              onChange={(e) => setFullData({ ...fullData, guardianInformation: { ...fullData.guardianInformation, guardianIdentifier: e.target.value } })}
-                              className="md:w-[37%] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition" />
-                            <input type="email" placeholder="Guardian’s Email Address"
-                              value={fullData.guardianInformation?.guardianEmail || ''}
-                              onChange={(e) => setFullData({ ...fullData, guardianInformation: { ...fullData.guardianInformation, guardianEmail: e.target.value } })}
-                              className="md:w-[46.2%] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition" />
+                            <div className="relative md:w-[48%] w-[90vw]">
+                              <input type="text" placeholder="Guardian’s Full Name"
+                                value={fullData.guardianInformation?.guardianName || ''}
+                                onChange={(e) => setFullData({ ...fullData, guardianInformation: { ...fullData.guardianInformation, guardianName: e.target.value } })}
+                                className="w-full h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition" />
+                            </div>
+
+                            <div className="relative md:w-[35%] w-[90vw]">
+                              <input type="text" placeholder="Guardian’s Phone Number"
+                                value={fullData.guardianInformation?.guardianPhone || ''}
+                                onChange={(e) => {
+                                  const val = e.target.value;
+                                  if (/^\d*$/.test(val)) {
+                                    setFullData({ ...fullData, guardianInformation: { ...fullData.guardianInformation, guardianPhone: val } });
+                                    validateField("guardianPhone", val);
+                                  }
+                                }}
+                                className={`w-full h-[80px] px-5 text-[24px] rounded-full border ${errors.guardianPhone ? 'border-red-500' : 'border-[#0D294D]'} bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition`} />
+                              {errors.guardianPhone && <p className="text-red-500 text-sm absolute -bottom-6 w-full text-center">{errors.guardianPhone}</p>}
+                            </div>
+
+                            <div className="relative md:w-[37%] w-[90vw]">
+                              <input type="text" placeholder="Guardian’s NID or Iqama ID"
+                                value={fullData.guardianInformation?.guardianIdentifier || ''}
+                                onChange={(e) => {
+                                  setFullData({ ...fullData, guardianInformation: { ...fullData.guardianInformation, guardianIdentifier: e.target.value } });
+                                  validateField("guardianIdentifier", e.target.value);
+                                }}
+                                className={`w-full h-[80px] px-5 text-[24px] rounded-full border ${errors.guardianIdentifier ? 'border-red-500' : 'border-[#0D294D]'} bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition`} />
+                              {errors.guardianIdentifier && <p className="text-red-500 text-sm absolute -bottom-6 w-full text-center">{errors.guardianIdentifier}</p>}
+                            </div>
+
+                            <div className="relative md:w-[46.2%] w-[90vw]">
+                              <input type="email" placeholder="Guardian’s Email Address"
+                                value={fullData.guardianInformation?.guardianEmail || ''}
+                                onChange={(e) => {
+                                  setFullData({ ...fullData, guardianInformation: { ...fullData.guardianInformation, guardianEmail: e.target.value } });
+                                  validateField("guardianEmail", e.target.value);
+                                }}
+                                className={`w-full h-[80px] px-5 text-[24px] rounded-full border ${errors.guardianEmail ? 'border-red-500' : 'border-[#0D294D]'} bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition`} />
+                              {errors.guardianEmail && <p className="text-red-500 text-sm absolute -bottom-6 w-full text-center">{errors.guardianEmail}</p>}
+                            </div>
+
                             <input type="text" placeholder="Blood Group"
                               value={fullData.guardianInformation?.guardianBloodType || ''}
                               onChange={(e) => setFullData({ ...fullData, guardianInformation: { ...fullData.guardianInformation, guardianBloodType: e.target.value } })}
@@ -937,12 +1053,16 @@ const Page = () => {
                               value={fullData.guardianInformation?.patientCategory || ''}
                               onChange={(e) => setFullData({ ...fullData, guardianInformation: { ...fullData.guardianInformation, patientCategory: e.target.value } })}
                               className="md:w-[29%] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition" />
-                            <div className="relative md:w-[23.5%] w-[90vw] flex items-center justify-center">
+                            <div className="relative md:w-[23.5%] w-[90vw] flex flex-col items-center justify-center">
                               <input
                                 id="upload"
                                 type="file"
                                 className="hidden"
-                                onChange={(e) => console.log(e.target.files?.[0])}
+                                onChange={(e) => {
+                                  if (e.target.files && e.target.files[0]) {
+                                    setFileName(e.target.files[0].name);
+                                  }
+                                }}
                               />
 
                               <label
@@ -951,6 +1071,9 @@ const Page = () => {
                               >
                                 Upload File
                               </label>
+                              {fileName && (
+                                <p className="text-black text-sm mt-2">{fileName}</p>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -989,12 +1112,12 @@ const Page = () => {
                     {step < 5 && (
                       <button
                         onClick={() => {
-                          if (step === 1) onPartialSubmit();
-                          else if (step === 2) onOtpSubmit();
-                          else if (step === 3) onFullSubmit();
+                          if (step === 1) isStep1Valid && onPartialSubmit();
+                          else if (step === 2) isStep2Valid && onOtpSubmit();
+                          else if (step === 3) isStep3Valid && onFullSubmit();
                           else if (step === 4) setStep(5);
                         }}
-                        disabled={isLoading || (step === 3 && !isPersonalInformationComplete)}
+                        disabled={isLoading || (step === 1 && !isStep1Valid) || (step === 2 && !isStep2Valid) || (step === 3 && !isStep3Valid)}
                         className={`w-[220px] h-[60px] cursor-pointer py-3 bg-[#ea392f] text-white rounded-full
                              font-semibold mt-4 hover:bg-transparent hover:text-[#ea392f]
                              hover:border-[#ea392f] border-[4px] border-[#ea392f] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed`}>
