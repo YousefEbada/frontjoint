@@ -1,50 +1,32 @@
 "use client";
 import React from "react";
 import BookingItem from "@/components/molecules/BookingItem";
-
-interface Booking {
-    id: string;
-    patientName?: string;
-    doctorName?: string;
-    sessionNumber: number;
-    type: "patient" | "session";
-    status: "Confirmed" | "Pending" | "Cancelled";
-    date: string;
-    time: string;
-    rawDateTime: string;
-}
+import { Booking } from "@/types/booking";
 
 interface BookingListProps {
     bookings: Booking[];
 }
 
 const BookingList: React.FC<BookingListProps> = ({ bookings }) => {
-    const [storedName, setStoredName] = React.useState("");
-
-    React.useEffect(() => {
-        const name = localStorage.getItem("doctorName");
-        if (name) setStoredName(name);
-    }, []);
-
     return (
         <section className="flex flex-col gap-y-2 md:gap-y-8 w-full px-[30px] overflow-y-auto custom-scrollbar">
             {bookings.map((booking) => (
-                <>
+                <React.Fragment key={booking._id}>
                     <BookingItem
-                        key={booking.id}
-                        id={booking.id}
-                        sessionNumber={booking.sessionNumber}
-                        doctorName={booking.doctorName || storedName}
-                        type={booking.type}
-                        status={booking.status}
-                        date={booking.date}
-                        time={booking.time}
-                        rawDateTime={booking.rawDateTime}
-                        onCancel={() => console.log("Cancel", booking.id)}
-                        onReschedule={() => console.log("Reschedule", booking.id)}
+                        id={booking._id}
+                        sessionNumber={0} // Not available in shared Booking type
+                        doctorName={booking.doctorName}
+                        patientName={booking.patientName}
+                        type="session"
+                        status={booking.status as "Confirmed" | "Pending" | "Cancelled"}
+                        date={typeof booking.appointmentDate === 'string' ? booking.appointmentDate : new Date(booking.appointmentDate).toISOString().split('T')[0]}
+                        time={booking.appointmentTime}
+                        rawDateTime={booking.appointmentDate.toString()}
+                        onCancel={() => console.log("Cancel", booking._id)}
+                        onReschedule={() => console.log("Reschedule", booking._id)}
                     />
                     <div className="md:h-[1px] md:w-full md:bg-black"></div>
-                </>
+                </React.Fragment>
             ))}
         </section>
     );

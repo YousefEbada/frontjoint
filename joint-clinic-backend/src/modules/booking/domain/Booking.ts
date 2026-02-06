@@ -7,6 +7,8 @@ export interface Booking {
   _id: string;
   patientNixpendId: string;
   doctorNixpendId: string;
+  doctorName?: string;
+  patientName?: string;
   branchId?: string;
   sessionId?: string | Schema.Types.ObjectId | null;
   eventName: string;

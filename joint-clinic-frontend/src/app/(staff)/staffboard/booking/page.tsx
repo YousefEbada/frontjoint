@@ -10,7 +10,7 @@ import DashBoardContent from "@/components/atoms/DashBoardContent";
 
 import Calendar from "@/components/molecules/Calendar";
 import { useSearchParams } from "next/navigation";
-import { useState, useEffect, Suspense, useMemo } from "react";
+import { useState, Suspense, useMemo } from "react";
 import dayjs from "dayjs";
 import { useStaffBookings } from "@/hooks/useBooking";
 
@@ -19,14 +19,16 @@ function BookingPageContent() {
   const searchParams = useSearchParams();
   const dateParam = searchParams?.get("date");
 
+  const [prevDateParam, setPrevDateParam] = useState(dateParam);
   const [selectedDateFilter, setSelectedDateFilter] = useState<string>(dateParam || "Today");
 
-  // Update selectedDateFilter if URL param changes
-  useEffect(() => {
+  // Adjust state during render if URL param changes (replaces the useEffect)
+  if (dateParam !== prevDateParam) {
+    setPrevDateParam(dateParam);
     if (dateParam) {
       setSelectedDateFilter(dateParam);
     }
-  }, [dateParam]);
+  }
 
   const period: 'today' | 'week' | 'month' = useMemo(() => {
     if (selectedDateFilter === "This Month") return 'month';
@@ -36,28 +38,10 @@ function BookingPageContent() {
 
   const { data: bookingData, isLoading } = useStaffBookings(period);
 
-  const bookings = bookingData?.map((b: any, index: number) => ({
-    id: b._id,
-    sessionNumber: index + 1, // Mock or derive if available
-    type: "patient" as const, // b.bookingType?
+  const bookings = bookingData?.map((b) => ({
+    ...b,
     patientName: b.patientName || "Unknown Patient",
-    status: b.status.charAt(0).toUpperCase() + b.status.slice(1),
-    date: dayjs(b.appointmentDate).format("MMM D"),
-    time: b.appointmentTime,
-    rawDateTime: (() => {
-      const dateStr = b.appointmentDate;
-      const timeStr = b.appointmentTime;
-
-      if (!dateStr || !timeStr) return dayjs().add(1, 'year').toISOString();
-
-      // Normalize date to YYYY-MM-DD
-      const normalizedDate = dayjs(dateStr).format("YYYY-MM-DD");
-      // Construct full string
-      const fullDateTimeStr = `${normalizedDate} ${timeStr}`;
-      const d = dayjs(fullDateTimeStr);
-
-      return d.isValid() ? d.toISOString() : dayjs().add(1, 'year').toISOString();
-    })()
+    status: b.status ? (b.status.charAt(0).toUpperCase() + b.status.slice(1)) : b.status,
   })) || [];
 
   return (

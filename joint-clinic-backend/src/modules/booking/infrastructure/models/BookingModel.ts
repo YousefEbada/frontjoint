@@ -7,6 +7,8 @@ const schema = new Schema({
   // sessionId: { type: Schema.Types.ObjectId, ref: "Session", required: false },
   patientNixpendId: { type: String, required: true },
   doctorNixpendId: { type: String, required: true },
+  doctorName: { type: String, required: true },
+  patientName: { type: String, required: true },
   branchId: { type: String, required: false },
   sessionId: { type: String, required: false },
   eventName: { type: String, required: true },

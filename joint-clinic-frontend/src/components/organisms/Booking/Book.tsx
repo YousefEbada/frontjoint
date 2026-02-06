@@ -174,7 +174,7 @@ const Book = ({ redirectPath }: BookProps) => {
       selectedTime: dayjs(selectedSlot.start).format("HH:mm"),
       eventName: selectedSlot.event_name || "",
       duration: selectedSlot.slot_duration || 30,
-      createdAt: new Date().toISOString(),
+      createdAt: new Date().toISOString(),      
     }, redirectUrl);
   };
 

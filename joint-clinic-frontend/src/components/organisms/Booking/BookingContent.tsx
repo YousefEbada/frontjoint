@@ -246,6 +246,7 @@ const BookingContent = () => {
             department: "Physiotherapy",
             company: "Joint Clinic",
             patient_name: patientName,
+            doctorName: selectedDoctor.practitionerName,
         };
 
         // 1. Update Patient's Doctor Assignment FIRST

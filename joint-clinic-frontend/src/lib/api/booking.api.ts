@@ -16,6 +16,7 @@ export interface PendingBookingData {
     injury: string;
     doctorNixpendId: string;
     doctorName: string;
+    // patientName: string;   
     selectedDate: string;
     selectedTime: string;
     eventName: string;
@@ -91,7 +92,7 @@ export const createBooking = async (
     try {
         let patientName = localStorage.getItem("patientName") || "Unknown Patient";
         let patientEmail = localStorage.getItem("patientEmail") || "";
-        let doctorName = localStorage.getItem("doctorName") || "Unknown Doctor";
+        let doctorName = bookingData.doctorName || localStorage.getItem("doctorName") || "Unknown Doctor";
         let patientId = localStorage.getItem("patientId") || "";
         console.log("> createBooking patientName:", patientName
             , "> patientEmail:", patientEmail

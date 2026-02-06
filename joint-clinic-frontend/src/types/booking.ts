@@ -46,6 +46,7 @@ export interface CreateBookingPayload {
     department: string;
     company?: "Joint Clinic";
     patient_name: string;
+    doctorName?: string;
     payload?: any; // Optional field to include additional data for rescheduling
 }
 
@@ -85,6 +86,7 @@ export interface Booking {
     department: string;
     company: string;
     patientName?: string; // Added as it is used in overview/page.tsx
+    doctorName?: string;
 }
 
 export interface BookingResponse {

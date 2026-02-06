@@ -4,6 +4,8 @@ import { BookType } from '../../../integration/domain/Nixpend.js';
 import { NixpendPort } from '../../../integration/ports/NixpendPorts.js';
 import { SessionRepoPort } from '../../../session/application/ports/SessionRepoPort.js';
 import { PatientRepoPort } from '../../../patient/application/ports/PatientRepoPort.js';
+import { serviceBusAdapter } from 'infra/queue/servicebus.adapter.js';
+import { NodemailerMailAdapter } from 'infra/mail/nodemailer.mail.adapter.js';
 
 type ValidateResult = {
   violation: string;
@@ -23,6 +25,7 @@ export class CreateBooking {
 
   async exec(
     data: BookType,
+    payload: { patientEmail: string; doctorName: string; patientName: string },
     sessionId?: string
   ): Promise<CreateBookingResult> {
     console.log('CreateBooking.exec called with data:', data, 'and sessionId:', sessionId);
@@ -118,6 +121,30 @@ export class CreateBooking {
       await tx.commit();
 
       // push notification to rabbitmq here if needed
+      // try with and without await
+      await serviceBusAdapter.send('booking-created', {
+        customerEmail: payload.patientEmail,
+        appointmentDetails: {
+          doctorName: payload.doctorName,
+          patientName: payload.patientName,
+          appointmentDate: createdBooking.appointmentDate,
+          appointmentTime: createdBooking.appointmentTime,
+          duration: createdBooking.appointmentDuration,
+          bookingType: createdBooking.bookingType,
+          department: createdBooking.department,
+        }
+      });
+
+      // await NodemailerMailAdapter.send(
+      //   payload.patientEmail,
+      //   'appointment-confirmation',
+      //   {
+      //     doctorName: payload.doctorName,
+      //     patientName: payload.patientName,
+      //     appointmentDate: createdBooking.appointmentDate,
+      //     appointmentTime: createdBooking.appointmentTime,
+      //   }
+      // );
 
       return { ok: true, booking: createdBooking };
 
