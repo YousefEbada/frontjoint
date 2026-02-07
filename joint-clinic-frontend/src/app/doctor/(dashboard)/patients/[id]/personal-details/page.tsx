@@ -7,16 +7,27 @@ import Link from "next/link";
 import DashBoardContent from "@/components/atoms/DashBoardContent";
 import { usePatient } from "@/hooks/usePatient";
 
-const PersonalDetailsPage = ({ params }: { params: { id: string } }) => {
-    const { data: patientData, isLoading } = usePatient(params.id);
+const PersonalDetailsPage = ({ params }: any) => {
+    const {id} = React.use(params) as any
+    const { data: patientData, isLoading } = usePatient(id);
+
+    const formatDob = (value?: string) => {
+        if (!value) return "N/A";
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) return "N/A";
+        const day = String(date.getDate()).padStart(2, "0");
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const year = date.getFullYear();
+        return `${day}-${month}-${year}`;
+    };
 
     const patient = {
-        name: patientData?.fullName || "Patient Name",
-        nationalId: patientData?.personalDetails?.nationalId || "N/A",
+        name: (patientData?.userId as any)?.fullName || "Patient Name",
+        identifier: (patientData?.userId as any)?.identifier || "N/A",
         status: patientData?.status === 'active' ? "Active" : "Inactive",
         statusColor: patientData?.status === 'active' ? "text-[#1C9A55]" : "text-[#8A8A8A]",
-        gender: patientData?.personalDetails?.gender || "N/A",
-        dob: patientData?.personalDetails?.dob || "N/A",
+        gender: (patientData?.userId as any)?.gender || "N/A",
+        dob: formatDob((patientData?.userId as any)?.birthdate),
         personalDetails: {
             email: patientData?.personalDetails?.email || "N/A",
             nationality: patientData?.personalDetails?.nationality || "N/A",
@@ -43,7 +54,7 @@ const PersonalDetailsPage = ({ params }: { params: { id: string } }) => {
                         <div className="flex flex-col gap-1 w-fit">
                             <Typography text={patient.name} variant="heading2" className="text-[#1E5598] font-bold text-3xl" />
                             <Typography text="National Id / Iqama" variant="bodyBold" className="text-[#1E5598]" />
-                            <Typography text={patient.nationalId} variant="bodyRegular" className="text-[#1C9A55] font-bold" />
+                            <Typography text={patient.identifier} variant="bodyRegular" className="text-[#1C9A55] font-bold" />
                         </div>
 
                         <div className="flex flex-col gap-1 w-full md:w-fit items-end pt-2">
@@ -100,7 +111,7 @@ const PersonalDetailsPage = ({ params }: { params: { id: string } }) => {
 
                             {/* Back Button */}
                             <div className="flex justify-center md:justify-end w-full mt-auto">
-                                <Link href={`/doctor/patients/${params.id}`}>
+                                <Link href={`/doctor/patients/${id}`}>
                                     <button className="border border-[#1E5598] text-[#1E5598] rounded-full px-8 py-2 font-bold hover:bg-[#1E5598] hover:text-white transition-colors md:self-end">
                                         Back
                                     </button>

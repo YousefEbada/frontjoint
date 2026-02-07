@@ -7,6 +7,7 @@ interface Appointment {
     name: string;
     status: string;
     date: string;
+    patientId: string;
     statusColor?: string;
 }
 
@@ -31,6 +32,7 @@ const AppointmentList = ({ appointments }: AppointmentListProps) => {
                             status={apt.status}
                             date={apt.date}
                             statusColor={apt.statusColor}
+                            patientId={apt.patientId}
                         />
                     </div>
                 ))}
