@@ -19,6 +19,7 @@ import { useAuthFlow } from '@/hooks/useAuthFlow';
 import { CreatePartialUserInput, CreateFullUserInput } from '@/types/auth';
 import { Country, State } from 'country-state-city';
 import { isValidEmail, isValidSaudiPhone, isValidSaudiID } from '@/lib/utils/validators';
+import Link from 'next/link';
 // dssd
 // sdsd
 // Mock Data for Joints
@@ -62,6 +63,7 @@ const Page = () => {
     step,
     setStep,
     showHello,
+    setShowHello,
     handleFindUser,
     handleCreatePartial,
     handleVerifyOtp,
@@ -1088,17 +1090,7 @@ const Page = () => {
 
                     <button
                       onClick={() => {
-                        // Back logic handled by hook? Or custom?
-                        // Actually hook just exposes setStep, so we can do it here.
-                        if (showHello) return;
-                        if (step === 1) {
-                          // Go back to Hello
-                          // But we used `setShowHello` from hook. 
-                          // We should probably just reload or reset.
-                          window.location.reload();
-                        } else {
-                          setStep(step - 1);
-                        }
+                        setShowHello(true);
                       }}
                       className="w-[220px] h-[60px] cursor-pointer py-3 bg-transparent border-[4px]
                               border-white text-white rounded-full font-semibold mt-4 hover:bg-white
