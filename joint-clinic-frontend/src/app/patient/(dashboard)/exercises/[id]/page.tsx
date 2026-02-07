@@ -1,8 +1,9 @@
 "use client";
+import React, { useState, useEffect } from "react";
 import DashBoardHeader from "@/components/molecules/DashBoardHeader";
 import Typography from "@/components/atoms/Typography";
 import { color } from "@/lib/constants/colors";
-import { useExerciseById, useExerciseVideo } from "@/hooks/useExercises";
+import { useExerciseById, useExerciseVideo, useAssignedExercise } from "@/hooks/useExercises";
 import { useParams, useRouter } from "next/navigation";
 import CorneredBoxes from "@/components/atoms/CorneredBoxes";
 import BackTo from "@/components/molecules/BackTo";
@@ -12,8 +13,18 @@ const VideoPage = () => {
     const id = params?.id as string;
     const router = useRouter();
 
+    const [patientId, setPatientId] = useState<string>("");
+
+    useEffect(() => {
+        const storedId = localStorage.getItem("patientId");
+        if (storedId) {
+            setPatientId(storedId);
+        }
+    }, []);
+
     const { data: exercise, isLoading: isLoadingExercise, error: exerciseError } = useExerciseById(id);
     const { data: videoUrl, isLoading: isLoadingVideo } = useExerciseVideo(id);
+    const { data: assignment, isLoading: isLoadingAssigned } = useAssignedExercise(patientId, id);
 
     const handleBack = () => {
         router.back();
@@ -64,21 +75,15 @@ const VideoPage = () => {
 
                         {/* Exercise Info */}
                         <div className="w-[90%] flex flex-col gap-4 mt-8">
-                            <h2 className="text-[#0D294D] font-bold text-2xl md:text-3xl">{exercise.title}</h2>
-
-                            {exercise.description && (
-                                <p className="text-[#6d7a80] text-lg">{exercise.description}</p>
-                            )}
-
                             <div className="flex flex-wrap gap-4 mt-4">
-                                {exercise.difficultyLevel && (
+                                {/* {exercise.difficultyLevel && (
                                     <div className="flex items-center gap-2">
                                         <p style={{ color: color.secondary }} className="text-[18px] font-bold">Difficulty:</p>
                                         <p style={{ color: color.success }} className="text-[18px] font-bold capitalize">{exercise.difficultyLevel}</p>
                                     </div>
-                                )}
+                                )} */}
 
-                                {exercise.musclesTargeted && exercise.musclesTargeted.length > 0 && (
+                                {/* {exercise.musclesTargeted && exercise.musclesTargeted.length > 0 && (
                                     <div className="flex items-center gap-2">
                                         <p style={{ color: color.secondary }} className="text-[18px] font-bold">Muscles:</p>
                                         <p style={{ color: color.success }} className="text-[18px] font-bold">{exercise.musclesTargeted.join(", ")}</p>
@@ -90,20 +95,35 @@ const VideoPage = () => {
                                         <p style={{ color: color.secondary }} className="text-[18px] font-bold">Equipment:</p>
                                         <p style={{ color: color.success }} className="text-[18px] font-bold">{exercise.equipmentNeeded.join(", ")}</p>
                                     </div>
-                                )}
+                                )} */}
+                                <div className="exerciseDetails gap-[30px] pb-[20px] w-full flex flex-row items-center justify-between">
+                                    <span className="text-[15px] md:text-[20px] font-bold cursor-pointer hover:opacity-80 transition-all duration-300" style={{ color: color.success }}>Mark Complete</span>
+                                    <div className="sets flex flex-row items-center gap-4">
+                                        <p style={{ color: color.secondary }} className="text-[15px] md:text-[20px] font-bold">Number of Sets: </p>
+                                        <span className="text-[15px] md:text-[20px] font-bold" style={{ color: color.success }}>
+                                            {isLoadingAssigned ? "..." : (assignment ? assignment.noOfSets : "-")}
+                                        </span>
+                                    </div>
+                                    <div className="reps flex flex-row items-center gap-4">
+                                        <p style={{ color: color.secondary }} className="text-[15px] md:text-[20px] font-bold">Number of Reps: </p>
+                                        <span className="text-[15px] md:text-[20px] font-bold" style={{ color: color.success }}>
+                                            {isLoadingAssigned ? "..." : (assignment ? assignment.noOfReps : "-")}
+                                        </span>
+                                    </div>
+                                    <h4
+                                        onClick={handleBack}
+                                        style={{ color: color.secondary }}
+                                        className="text-[15px] md:text-[20px] font-bold cursor-pointer transition hover:opacity-80"
+                                    >
+                                        Back to Exercises
+                                    </h4>
+                                </div>
                             </div>
                         </div>
 
                         {/* Action Buttons */}
-                        <div className="flex flex-col md:flex-row w-[90%] items-center justify-end gap-4 md:gap-0 mt-8 mb-8">
-                            <h4
-                                onClick={handleBack}
-                                style={{ color: color.secondary }}
-                                className="text-[20px] md:text-[25px] font-bold cursor-pointer transition hover:opacity-80"
-                            >
-                                Back to Exercises
-                            </h4>
-                        </div>
+                        {/* <div className="flex flex-col md:flex-row w-[90%] items-center justify-end gap-4 md:gap-0 mt-8 mb-8"> */}
+                        {/* </div> */}
                     </div>
                 </CorneredBoxes>
             </div>

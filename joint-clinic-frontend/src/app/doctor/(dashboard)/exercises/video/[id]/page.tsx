@@ -7,6 +7,7 @@ import Link from "next/link";
 import CustomSelect from "@/components/atoms/CustomSelect";
 import DashBoardContent from "@/components/atoms/DashBoardContent";
 import BackTo from "@/components/molecules/BackTo";
+import { color } from "@/lib/constants/colors";
 // ... imports
 import { useExerciseById, useExerciseVideo, useAssignExercise } from "@/hooks/useExercises";
 import { usePatientsByDoctor } from "@/hooks/useDoctor";
@@ -18,6 +19,10 @@ const ExerciseVideoPage = () => {
     const id = params?.id as string;
     const [selectedPatientId, setSelectedPatientId] = useState<string>("");
     const [assignmentSuccess, setAssignmentSuccess] = useState(false);
+
+    const [reps, setReps] = useState<number>(10);
+    const [sets, setSets] = useState<number>(3);
+    const [sessions, setSessions] = useState<number>(1);
 
     // Get doctor ID from local storage
     const [doctorNixpendId, setDoctorNixpendId] = useState<string>("");
@@ -71,9 +76,9 @@ const ExerciseVideoPage = () => {
             patientId: selectedPatient._id,
             exerciseId: id,
             doctorNixpendId: doctorNixpendId,
-            numOfReps: 1,
-            numOfSets: 1,
-            numOfSessions: 1,
+            noOfSets: sets,
+            noOfReps: reps,
+            sessionNumber: sessions,
         }, {
             onSuccess: () => {
                 setAssignmentSuccess(true);
@@ -193,6 +198,41 @@ const ExerciseVideoPage = () => {
                                                 onChange={(value) => setSelectedPatientId(value)}
                                             />
                                         )}
+                                        <div className="flex flex-col gap-[10px]">
+                                            <div className="session flex flex-row justify-between px-[30px] items-center" >
+                                                <h3 className="font-bold text-[17px]" style={{ color: color.secondary }}>Session Number: </h3>
+                                                <input
+                                                    type="number"
+                                                    value={sessions}
+                                                    onChange={(e) => setSessions(Number(e.target.value))}
+                                                    className="font-medium text-[15px] w-20 text-right bg-transparent border-b border-gray-300 focus:border-[#1E5598] outline-none"
+                                                    style={{ color: color.success }}
+                                                    min="1"
+                                                />
+                                            </div>
+                                            <div className="session flex flex-row justify-between px-[30px] items-center">
+                                                <h3 className="font-bold text-[17px]" style={{ color: color.secondary }}>Number of Reps: </h3>
+                                                <input
+                                                    type="number"
+                                                    value={reps}
+                                                    onChange={(e) => setReps(Number(e.target.value))}
+                                                    className="font-medium text-[15px] w-20 text-right bg-transparent border-b border-gray-300 focus:border-[#1E5598] outline-none"
+                                                    style={{ color: color.success }}
+                                                    min="1"
+                                                />
+                                            </div>
+                                            <div className="session flex flex-row justify-between px-[30px] items-center" >
+                                                <h3 className="font-bold text-[17px]" style={{ color: color.secondary }}>Number of Sets: </h3>
+                                                <input
+                                                    type="number"
+                                                    value={sets}
+                                                    onChange={(e) => setSets(Number(e.target.value))}
+                                                    className="font-medium text-[15px] w-20 text-right bg-transparent border-b border-gray-300 focus:border-[#1E5598] outline-none"
+                                                    style={{ color: color.success }}
+                                                    min="1"
+                                                />
+                                            </div>
+                                        </div>
 
                                         {assignmentSuccess && (
                                             <p className="text-[#1C9A55] font-semibold text-center">

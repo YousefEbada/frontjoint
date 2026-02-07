@@ -7,7 +7,9 @@ import {
   deleteExercise,
   assignExercise,
   getAssignedExercises,
+  getAssignedExerciseByExerciseId,
   Exercise,
+  AssignedExercise,
   CreateExerciseRequest,
 } from "@/lib/api/exercises.api";
 
@@ -94,17 +96,17 @@ export const useAssignExercise = () => {
       patientId,
       exerciseId,
       doctorNixpendId,
-      numOfReps,
-      numOfSets,
-      numOfSessions,
+      noOfReps,
+      noOfSets,
+      sessionNumber,
     }: {
       patientId: string;
       exerciseId: string;
       doctorNixpendId: string;
-      numOfReps: number;
-      numOfSets: number;
-      numOfSessions: number;
-    }) => assignExercise(patientId, exerciseId, doctorNixpendId, numOfReps, numOfSets, numOfSessions),
+      noOfReps: number;
+      noOfSets: number;
+      sessionNumber: number;
+    }) => assignExercise(patientId, exerciseId, doctorNixpendId, noOfReps, noOfSets, sessionNumber),
     onSuccess: () => {
       // Invalidate relevant queries
       queryClient.invalidateQueries({ queryKey: ["exercises"] });
@@ -119,5 +121,14 @@ export const useAssignedExercises = (patientId: string) => {
     queryKey: ["assigned-exercises", patientId],
     queryFn: () => getAssignedExercises(patientId),
     enabled: !!patientId,
+  });
+};
+
+// Get specific assigned exercise
+export const useAssignedExercise = (patientId: string, exerciseId: string) => {
+  return useQuery({
+    queryKey: ["assigned-exercise", patientId, exerciseId],
+    queryFn: () => getAssignedExerciseByExerciseId(patientId, exerciseId),
+    enabled: !!patientId && !!exerciseId,
   });
 };
