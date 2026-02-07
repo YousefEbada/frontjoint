@@ -5,6 +5,7 @@ import DateTime from '@/components/molecules/DateTime'
 import BackTo from './BackTo'
 import DashBoardLink from '@/components/organisms/SideBar/DashBoardLink'
 import './DashBoardHeader.css'
+import Link from 'next/link';
 
 interface DashBoardHeaderProps {
   therapyName?: string,
@@ -35,15 +36,15 @@ const DashBoardHeader = ({ therapyName, nav, dateTime, children }: DashBoardHead
 
       {/* Right Part: Therapy/DateTime */}
       <div className='col-start-2 row-start-1 flex items-center justify-self-end md:ml-auto gap-6'>
-        <a
+        <Link
+        href="/"
           onClick={() => {
-            localStorage.clear();
-            window.location.href = 'http://localhost:3000';
+            localStorage.clear();            
           }}
           className="logout relative text-[#1E5598] font-bold cursor-pointer font-medium hover:underline transition-all text-[22px] md:text-base"
         >
           Logout
-        </a>
+        </Link>
         <div className='flex flex-col md:ml-[20px] items-end md:items-start'>
           {therapyName && <Typography
             text={therapyName}
