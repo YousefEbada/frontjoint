@@ -194,18 +194,18 @@ export const assignExercise = async (
   patientId: string,
   exerciseId: string,
   doctorNixpendId: string,
-  numOfReps: number,
-  numOfSets: number,
-  duration: number,
+  noOfReps: number,
+  noOfSets: number,
+  sessionNumber: number,
 ): Promise<void> => {
   try {
     const response = await api.post(`/exercise/assign`, {
       patientId,
       exerciseId,
       doctorNixpendId,
-      numOfReps,
-      numOfSets,
-      duration
+      noOfSets,
+      noOfReps,
+      sessionNumber
     });
     console.log("assignExercise response:", response.data);
   } catch (error) {
@@ -217,8 +217,23 @@ export const assignExercise = async (
   }
 };
 
+// Assigned Exercise type
+export interface AssignedExercise {
+  _id: string;
+  patientId: string;
+  exerciseId: Exercise | string; // Can be populated object or just ID
+  doctorNixpendId: string;
+  noOfReps: number;
+  noOfSets: number;
+  sessionNumber: number;
+  status: string; // e.g., "pending"
+  assignedAt: string | Date;
+  createdAt: string | Date;
+  updatedAt: string | Date;
+}
+
 // Get assigned exercises for a patient
-export const getAssignedExercises = async (patientId: string): Promise<any[]> => {
+export const getAssignedExercises = async (patientId: string): Promise<AssignedExercise[]> => {
   try {
     const response = await api.get(`/exercise/assigned/${patientId}`);
     console.log("getAssignedExercises response:", response.data);
@@ -232,6 +247,21 @@ export const getAssignedExercises = async (patientId: string): Promise<any[]> =>
       "Error fetching assigned exercises:",
       (error as any).response?.data || (error as any).message
     );
+    throw error;
+  }
+};
+// Get specific assigned exercise by exercise ID
+export const getAssignedExerciseByExerciseId = async (patientId: string, exerciseId: string): Promise<AssignedExercise | undefined> => {
+  try {
+    const assignments = await getAssignedExercises(patientId);
+    return assignments.find(assignment => {
+      const assignedExerciseId = typeof assignment.exerciseId === 'object'
+        ? (assignment.exerciseId as any)._id || (assignment.exerciseId as any).id
+        : assignment.exerciseId;
+      return String(assignedExerciseId) === String(exerciseId);
+    });
+  } catch (error) {
+    console.error("Error fetching specific assigned exercise:", error);
     throw error;
   }
 };
