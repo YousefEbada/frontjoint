@@ -40,21 +40,27 @@ const CalendarPage = () => {
 
   const { data: bookings, isLoading } = useDoctorBookings(doctorId, { period: period as any });
 
-  const allBookings = bookings?.map((b:any) => ({
-    id: b._id,
-    name: b.patientName || "Unknown Patient",
-    status: b.status.charAt(0).toUpperCase() + b.status.slice(1),
-    statusColor: b.status === 'confirmed' ? "text-[#1C9A55]" : "text-[#F5A623]",
-    // Formatting date like "Nov 2nd 2025 at 8:00 Pm"
-    date: new Date(b.appointmentDate).toLocaleString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric',
-      hour12: true
-    }) + (b.status === 'pending' ? ' (Pending)' : '') // Optional indication
-  })) || [];
+  const allBookings = bookings?.map((b:any) => {
+    // Combine appointmentDate and appointmentTime into a single datetime
+    const dateOnly = b.appointmentDate.split('T')[0]; // Extract date part (YYYY-MM-DD)
+    const dateTimeString = `${dateOnly}T${b.appointmentTime}`; // Combine with time
+    
+    return {
+      id: b._id,
+      name: b.patientName || "Unknown Patient",
+      status: b.status.charAt(0).toUpperCase() + b.status.slice(1),
+      statusColor: b.status === 'confirmed' ? "text-[#1C9A55]" : "text-[#F5A623]",
+      // Formatting date like "Feb 14th 2026 at 6:00 PM"
+      date: new Date(dateTimeString).toLocaleString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: true
+      }) + (b.status === 'pending' ? ' (Pending)' : '')
+    };
+  }) || [];
 
 
   const filteredBookings = allBookings.filter((b:any) =>
