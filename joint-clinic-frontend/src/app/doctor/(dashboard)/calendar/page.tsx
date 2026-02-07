@@ -50,6 +50,7 @@ const CalendarPage = () => {
       name: b.patientName || "Unknown Patient",
       status: b.status.charAt(0).toUpperCase() + b.status.slice(1),
       statusColor: b.status === 'confirmed' ? "text-[#1C9A55]" : "text-[#F5A623]",
+      patientId: b.patient._id ? b.patient._id : "unknown", // Assuming patient object has _id, otherwise fallback to "unknown"
       // Formatting date like "Feb 14th 2026 at 6:00 PM"
       date: new Date(dateTimeString).toLocaleString('en-US', {
         month: 'short',
@@ -143,6 +144,7 @@ const CalendarPage = () => {
                     status={apt.status}
                     date={apt.date}
                     statusColor={apt.statusColor}
+                    patientId={apt.patientId}
                   />
                 </div>
               ))

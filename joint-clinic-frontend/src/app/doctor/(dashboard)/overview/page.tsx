@@ -46,6 +46,7 @@ const OverviewPage = () => {
     id: b._id,
     name: b.patientName || "Unknown Patient",
     status: b.status.charAt(0).toUpperCase() + b.status.slice(1),
+    patientId: b.patient._id ? b.patient._id : "unknown", // Assuming patient object has _id, otherwise fallback to "unknown"
     date: new Date(b.appointmentDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     statusColor: b.status === 'confirmed' ? "text-[#1C9A55]" : "text-[#1E5598]"
   })) || [];

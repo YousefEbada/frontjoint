@@ -6,11 +6,12 @@ interface AppointmentItemProps {
     status: string;
     date: string;
     statusColor?: string;
+    patientId: string;
 }
 
 import Typography from "@/components/atoms/Typography";
 
-const AppointmentItem = ({ name, status, date, statusColor = "text-[#1E5598]" }: AppointmentItemProps) => {
+const AppointmentItem = ({ name, status, date, patientId,statusColor = "text-[#1E5598]" }: AppointmentItemProps) => {
     return (
         <div className="grid grid-cols-2 grid-rows-2 md:grid-rows-1 md:grid-cols-4 items-center rounded-[39px] md:rounded-none bg-[#eff6ff] md:bg-transparent md:border-b md:border-gray-200 last:border-none">
             {/* Name */}
@@ -38,7 +39,7 @@ const AppointmentItem = ({ name, status, date, statusColor = "text-[#1E5598]" }:
 
             {/* Details Link */}
             <div className="w-full h-full py-3 pl-4 md:p-0 flex items-center justify-start md:justify-end">
-                <Link href="#">
+                <Link href={`/doctor/patients/${patientId}`}>
                     <Typography text="Patient Details" variant="bodyBold" className="text-[#1C9A55] underline" />
                 </Link>
             </div>

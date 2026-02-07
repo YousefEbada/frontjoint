@@ -8,12 +8,15 @@ import ProgressBar from "@/components/atoms/ProgressBar";
 import { usePatient } from "@/hooks/usePatient";
 import { Rectangle } from "react-loadly";
 
-const PatientDetailsPage = ({ params }: { params: { id: string } }) => {
-    const { data: patientData, isLoading } = usePatient(params.id);
+const PatientDetailsPage = ({ params }: any) => {
+    const { id } = React.use(params) as any
+    const { data: patientData, isLoading } = usePatient(id);
+
+    console.log("PatientDetailsPage - patientData:", patientData);
 
     // Map API data to UI model or use defaults
     const patient = {
-        name: patientData?.fullName || patientData?.nixpendId || "Patient",
+        name: (patientData?.userId as any)?.fullName || patientData?.nixpendId || "Patient",
         status: patientData?.status === 'active' ? "Active" : "Inactive",
         injury: patientData?.condition || patientData?.injuryDetails?.affectedArea || "Unspecified Injury",
         // Stats - falling back to defaults if not in API
@@ -63,7 +66,7 @@ const PatientDetailsPage = ({ params }: { params: { id: string } }) => {
                         <div className="flex justify-between w-full items-start">
                             <div className="flex flex-col gap-1">
                                 <Typography text={patient.injury} variant="subheader" className="text-[#1E5598] font-bold" />
-                                <Link href={`/doctor/patients/${params.id}/personal-details`} className="underline text-[#0D294D] font-medium text-sm">View Personal Details</Link>
+                                <Link href={`/doctor/patients/${id}/personal-details`} className="underline text-[#0D294D] font-medium text-sm">View Personal Details</Link>
                             </div>
                             <div className="flex flex-col gap-2 items-end">
                                 <Link href="#" className="underline text-[#1E5598] font-bold text-base">View Reports</Link>
@@ -111,14 +114,14 @@ const PatientDetailsPage = ({ params }: { params: { id: string } }) => {
                     <div className="w-full h-px bg-gray-200"></div>
 
                     {/* Bottom Section */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 md:grid-rows-2 w-full h-[30%] md:h-[18%] text-sm md:text-base">
-                        <Typography text="Next Patient Appointment is on:" variant="bodyBold" className="text-[#1E5598] self-end md:self-auto" />
-                        <Typography text={patient.nextAppointment} variant="bodyBold" className="text-[#1C9A55] self-start md:self-auto md:row-start-2 md:col-start-1" />
-                        <Typography text="Patient 's Next Exercise:" variant="bodyBold" className="text-[#1E5598] self-end md:col-start-2 md:self-end" />
-                        <Typography text={patient.nextExercise} variant="bodyBold" className="text-[#1C9A55] self-start md:col-start-2 md:self-end" />
+                    <div className="grid grid-cols-1 md:grid-cols-2 md:grid-rows-2 mt-[20px] w-full h-[30%] md:h-[18%] text-sm md:text-base">
+                        <Typography text="Next Patient Appointment is on:" variant="bodyBold" className="text-[#1E5598]" />
+                        <Typography text="Patient 's Next Exercise:" variant="bodyBold" className="text-[#1E5598]" />
+                        <Typography text={patient.nextAppointment} variant="bodyBold" className="text-[#1C9A55] md:row-start-2 md:col-start-1" />
+                        <Typography text={patient.nextExercise} variant="bodyBold" className="text-[#1C9A55] md:row-start-2 md:col-start-2" />
                     </div>
                     <div className="w-full flex justify-center md:justify-end">
-                        <Link href="#" className="underline text-[#1E5598] font-bold self-center md:self-end">Cancel</Link>
+                        <Link href="./" className="underline text-[#1E5598] font-bold self-center md:self-end">Cancel</Link>
                     </div>
 
 
