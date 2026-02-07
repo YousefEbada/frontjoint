@@ -7,10 +7,24 @@ import DashBoardContent from "@/components/atoms/DashBoardContent";
 import ProgressBar from "@/components/atoms/ProgressBar";
 import { usePatient } from "@/hooks/usePatient";
 import { Rectangle } from "react-loadly";
+import { useAssignedExercises, useAssignedExercisesByDoctor, useExercises } from "@/hooks/useExercises";
 
 const PatientDetailsPage = ({ params }: any) => {
     const { id } = React.use(params) as any
+    const [doctorNixpendId, setDoctorNixpendId] = React.useState<string | null>(null);
     const { data: patientData, isLoading } = usePatient(id);
+    const {data: noOfExercises} = useAssignedExercises(id); 
+    const {data: noOfAssignedExercisesByDoctor} = useAssignedExercisesByDoctor(id, doctorNixpendId || "");
+
+    console.log("PatientDetailsPage - Assigned exercises for patient:", noOfExercises);
+    console.log("PatientDetailsPage - Assigned exercises for doctor:", noOfAssignedExercisesByDoctor);
+
+    React.useEffect(() => {
+        const storedId = localStorage.getItem("doctorNixpendId");
+        if (storedId) {
+            setDoctorNixpendId(storedId);
+        }
+    }, []);
 
     console.log("PatientDetailsPage - patientData:", patientData);
 
@@ -24,8 +38,8 @@ const PatientDetailsPage = ({ params }: any) => {
         sessionsCompleted: patientData?.statistics?.sessionsCompleted || 0,
         treatmentLength: patientData?.statistics?.treatmentLength || "N/A",
         exercisesCompleted: patientData?.statistics?.exercisesCompleted || 0,
-        numExercises: patientData?.statistics?.numExercises || 0,
-        exercisesAssigned: patientData?.statistics?.exercisesAssigned || 0,
+        numExercises:noOfExercises?.length || 0,
+        exercisesAssigned: noOfAssignedExercisesByDoctor?.length || 0,
         nextAppointment: patientData?.statistics?.nextAppointment || "No upcoming appointment",
         nextExercise: patientData?.statistics?.nextExercise || "None",
     };
@@ -69,8 +83,8 @@ const PatientDetailsPage = ({ params }: any) => {
                                 <Link href={`/doctor/patients/${id}/personal-details`} className="underline text-[#0D294D] font-medium text-sm">View Personal Details</Link>
                             </div>
                             <div className="flex flex-col gap-2 items-end">
-                                <Link href="#" className="underline text-[#1E5598] font-bold text-base">View Reports</Link>
-                                <Link href="#" className="hidden md:block underline text-[#1E5598] font-bold text-base">Assign New Exercise</Link>
+                                <Link href={`/doctor/reports`} className="underline text-[#1E5598] font-bold text-base">View Reports</Link>
+                                <Link href={`/doctor/exercises`} className="hidden md:block underline text-[#1E5598] font-bold text-base">Assign New Exercise</Link>
                             </div>
                         </div>
 

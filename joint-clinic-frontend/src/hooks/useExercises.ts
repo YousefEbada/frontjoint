@@ -7,6 +7,7 @@ import {
   deleteExercise,
   assignExercise,
   getAssignedExercises,
+  getAssignedExercisesByDoctor,
   getAssignedExerciseByExerciseId,
   Exercise,
   AssignedExercise,
@@ -123,6 +124,15 @@ export const useAssignedExercises = (patientId: string) => {
     enabled: !!patientId,
   });
 };
+
+// Get assigned exercises for a doctor
+export const useAssignedExercisesByDoctor = (patientId: string, doctorNixpendId: string) => {
+  return useQuery({
+    queryKey: ["assigned-exercises", patientId, doctorNixpendId],
+    queryFn: () => getAssignedExercisesByDoctor(patientId, doctorNixpendId),
+    enabled: !!patientId && !!doctorNixpendId,
+  });
+}
 
 // Get specific assigned exercise
 export const useAssignedExercise = (patientId: string, exerciseId: string) => {

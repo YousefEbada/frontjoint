@@ -235,7 +235,7 @@ export interface AssignedExercise {
 // Get assigned exercises for a patient
 export const getAssignedExercises = async (patientId: string): Promise<AssignedExercise[]> => {
   try {
-    const response = await api.get(`/exercise/assigned/${patientId}`);
+    const response = await api.get(`/exercise/assigned/patient/${patientId}`);
     console.log("getAssignedExercises response:", response.data);
 
     if (response.data.ok && response.data.data) {
@@ -245,6 +245,25 @@ export const getAssignedExercises = async (patientId: string): Promise<AssignedE
   } catch (error) {
     console.error(
       "Error fetching assigned exercises:",
+      (error as any).response?.data || (error as any).message
+    );
+    throw error;
+  }
+};
+
+// Get assigned exercises for a patient by doctor
+export const getAssignedExercisesByDoctor = async (patientId: string, doctorNixpendId: string): Promise<AssignedExercise[]> => {
+  try {
+    const response = await api.get(`/exercise/assigned/patient/${patientId}/doctor/${doctorNixpendId}`);
+    console.log("getAssignedExercisesByDoctor response:", response.data);
+
+    if (response.data.exercises) {
+      return response.data.exercises;
+    }
+    return [];
+  } catch (error) {
+    console.error(
+      "Error fetching assigned exercises by doctor:",
       (error as any).response?.data || (error as any).message
     );
     throw error;
