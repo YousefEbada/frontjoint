@@ -9,7 +9,8 @@ import { usePatient } from "@/hooks/usePatient";
 
 const PersonalDetailsPage = ({ params }: any) => {
     const {id} = React.use(params) as any
-    const { data: patientData, isLoading } = usePatient(id);
+    const { data: patientData, isLoading }: any = usePatient(id);
+    const [activePage, setActivePage] = React.useState(0);
 
     const formatDob = (value?: string) => {
         if (!value) return "N/A";
@@ -29,13 +30,21 @@ const PersonalDetailsPage = ({ params }: any) => {
         gender: (patientData?.userId as any)?.gender || "N/A",
         dob: formatDob((patientData?.userId as any)?.birthdate),
         personalDetails: {
-            email: patientData?.personalDetails?.email || "N/A",
-            nationality: patientData?.personalDetails?.nationality || "N/A",
-            maritalStatus: patientData?.personalDetails?.maritalStatus || "N/A",
-            identifierType: patientData?.personalDetails?.identifierType || "N/A",
-            address: patientData?.personalDetails?.address || "N/A",
-            city: patientData?.personalDetails?.city || "N/A",
-            speakingLanguage: patientData?.personalDetails?.speakingLanguage || "N/A",
+            email: patientData?.userId?.email || "N/A",
+            nationality: patientData?.userId?.nationality || "N/A",
+            maritalStatus: patientData?.userId?.maritalStatus || "N/A",
+            identifierType: patientData?.userId?.identifierType || "N/A",
+            address: patientData?.userId?.address || "N/A",
+            city: patientData?.userId?.city || "N/A",
+            speakingLanguages: patientData?.userId?.speakingLanguages?.join(", ") || "N/A",
+        },
+        guardianDetails: {
+            guardianName: patientData?.userId?.guardianInformation?.guardianName || "N/A",
+            guardianEmail: patientData?.userId?.guardianInformation?.guardianEmail || "N/A",
+            guardianPhone: patientData?.userId?.guardianInformation?.guardianPhone || "N/A",
+            guardianBloodType: patientData?.userId?.guardianInformation?.guardianBloodType || "N/A",
+            patientCategory: patientData?.userId?.guardianInformation?.patientCategory || "N/A",
+            guardianIdentifier: patientData?.userId?.guardianInformation?.guardianIdentifier || "N/A",
         }
     };
 
@@ -79,22 +88,45 @@ const PersonalDetailsPage = ({ params }: any) => {
 
                         {/* Left Card: Personal Details */}
                         <CorneredBoxes type="shadowBox" className="flex-1 bg-white p-8 rounded-[30px] h-full w-full shadow-sm! flex flex-col relative">
-                            <Typography text="Personal Details" variant="subheader" className="text-[#167C4F] font-bold mb-6" /> {/* Green title as per image */}
+                            <Typography 
+                                text={activePage === 0 ? "Personal Details" : "Guardian Details"} 
+                                variant="subheader" 
+                                className="text-[#167C4F] font-bold mb-6" 
+                            />
 
-                            <div className="flex flex-col gap-4 flex-1">
-                                <DetailRow label="Email Address" value={patient.personalDetails.email} />
-                                <DetailRow label="Nationality" value={patient.personalDetails.nationality} />
-                                <DetailRow label="Marital Status" value={patient.personalDetails.maritalStatus} />
-                                <DetailRow label="Identifier Type" value={patient.personalDetails.identifierType} />
-                                <DetailRow label="Address" value={patient.personalDetails.address} />
-                                <DetailRow label="City" value={patient.personalDetails.city} />
-                                <DetailRow label="Speaking Language" value={patient.personalDetails.speakingLanguage} />
-                            </div>
+                            {/* <div className="flex flex-col gap-4 flex-1"> */}
+                                {activePage === 0 ? (
+                                    <div className="flex flex-col gap-4 flex-1">
+                                        <DetailRow label="Email Address" value={patient.personalDetails.email} />
+                                        <DetailRow label="Nationality" value={patient.personalDetails.nationality} />
+                                        <DetailRow label="Marital Status" value={patient.personalDetails.maritalStatus} />
+                                        <DetailRow label="Identifier Type" value={patient.personalDetails.identifierType} />
+                                        <DetailRow label="Address" value={patient.personalDetails.address} />
+                                        <DetailRow label="City" value={patient.personalDetails.city} />
+                                        <DetailRow label="Speaking Languages" value={patient.personalDetails.speakingLanguages} />
+                                    </div>
+                                ) : (
+                                    <div className="flex flex-col gap-4 flex-1">
+                                        <DetailRow label="Full Name" value={patient.guardianDetails.guardianName} />
+                                        <DetailRow label="Phone Number" value={patient.guardianDetails.guardianPhone} />
+                                        <DetailRow label="Guardian's NID" value={patient.guardianDetails.guardianIdentifier} />
+                                        <DetailRow label="Email Address" value={patient.guardianDetails.guardianEmail} />
+                                        <DetailRow label="Blood Group" value={patient.guardianDetails.guardianBloodType} />
+                                        <DetailRow label="Patient Category" value={patient.guardianDetails.patientCategory} />
+                                    </div>
+                                )}
+                            {/* </div> */}
 
-                            {/* Paginator Dots (Visual only for now) */}
+                            {/* Paginator Dots */}
                             <div className="flex justify-center gap-2 mt-4 absolute bottom-6 w-full left-0">
-                                <div className="w-3 h-3 rounded-full bg-[#1E5598]"></div>
-                                <div className="w-3 h-3 rounded-full bg-gray-300"></div>
+                                <div 
+                                    onClick={() => setActivePage(0)}
+                                    className={`w-3 h-3 rounded-full cursor-pointer transition-colors ${activePage === 0 ? 'bg-[#1E5598]' : 'bg-gray-300'}`}
+                                ></div>
+                                <div 
+                                    onClick={() => setActivePage(1)}
+                                    className={`w-3 h-3 rounded-full cursor-pointer transition-colors ${activePage === 1 ? 'bg-[#1E5598]' : 'bg-gray-300'}`}
+                                ></div>
                             </div>
                         </CorneredBoxes>
 
@@ -112,7 +144,7 @@ const PersonalDetailsPage = ({ params }: any) => {
                             {/* Back Button */}
                             <div className="flex justify-center md:justify-end w-full mt-auto">
                                 <Link href={`/doctor/patients/${id}`}>
-                                    <button className="border border-[#1E5598] text-[#1E5598] rounded-full px-8 py-2 font-bold hover:bg-[#1E5598] hover:text-white transition-colors md:self-end">
+                                    <button className="border border-[#1E5598] cursor-pointer text-[#1E5598] rounded-full px-8 py-2 font-bold hover:bg-[#1E5598] hover:text-white transition-colors md:self-end">
                                         Back
                                     </button>
                                 </Link>
@@ -127,7 +159,7 @@ const PersonalDetailsPage = ({ params }: any) => {
 
 // Helper component for detail rows
 const DetailRow = ({ label, value }: { label: string, value: string }) => (
-    <div className="flex justify-between items-center w-full">
+    <div className="flex justify-between items-center w-full gap-8">
         <Typography text={label} variant="bodyBold" className="text-[#1E5598] font-bold" />
         <Typography text={value} variant="bodyRegular" className="text-[#1C9A55] font-bold text-right" />
     </div>
