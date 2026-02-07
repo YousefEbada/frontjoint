@@ -193,13 +193,19 @@ export const deleteExercise = async (id: string): Promise<void> => {
 export const assignExercise = async (
   patientId: string,
   exerciseId: string,
-  doctorNixpendId: string
+  doctorNixpendId: string,
+  numOfReps: number,
+  numOfSets: number,
+  duration: number,
 ): Promise<void> => {
   try {
     const response = await api.post(`/exercise/assign`, {
       patientId,
       exerciseId,
-      doctorNixpendId
+      doctorNixpendId,
+      numOfReps,
+      numOfSets,
+      duration
     });
     console.log("assignExercise response:", response.data);
   } catch (error) {

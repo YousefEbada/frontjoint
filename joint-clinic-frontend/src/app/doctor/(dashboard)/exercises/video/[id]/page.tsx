@@ -70,7 +70,10 @@ const ExerciseVideoPage = () => {
         assignExercise({
             patientId: selectedPatient._id,
             exerciseId: id,
-            doctorNixpendId: doctorNixpendId
+            doctorNixpendId: doctorNixpendId,
+            numOfReps: 1,
+            numOfSets: 1,
+            numOfSessions: 1,
         }, {
             onSuccess: () => {
                 setAssignmentSuccess(true);
@@ -94,7 +97,7 @@ const ExerciseVideoPage = () => {
             />
 
             <DashBoardContent>
-                <CorneredBoxes type="shadowBox" className="w-full h-full bg-[#fff] flex-1 p-6 md:p-8 custom-scrollbar flex flex-col gap-6 overflow-hidden rounded-[30px] overflow-y-auto items-stretch">
+                <CorneredBoxes type="shadowBox" className="w-full h-full flex-1 p-6 md:p-8 custom-scrollbar flex flex-col gap-6 overflow-hidden rounded-[30px] overflow-y-auto items-stretch">
                     {isLoadingExercise ? (
                         <div className="flex items-center justify-center h-full">
                             <p className="text-gray-400 text-lg">Loading exercise...</p>

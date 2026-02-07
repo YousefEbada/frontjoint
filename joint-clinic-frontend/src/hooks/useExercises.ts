@@ -94,11 +94,17 @@ export const useAssignExercise = () => {
       patientId,
       exerciseId,
       doctorNixpendId,
+      numOfReps,
+      numOfSets,
+      numOfSessions,
     }: {
       patientId: string;
       exerciseId: string;
       doctorNixpendId: string;
-    }) => assignExercise(patientId, exerciseId, doctorNixpendId),
+      numOfReps: number;
+      numOfSets: number;
+      numOfSessions: number;
+    }) => assignExercise(patientId, exerciseId, doctorNixpendId, numOfReps, numOfSets, numOfSessions),
     onSuccess: () => {
       // Invalidate relevant queries
       queryClient.invalidateQueries({ queryKey: ["exercises"] });

@@ -20,7 +20,7 @@ export default function ExercisesLayout({ children }: { children: React.ReactNod
 
     return (
         <div className="w-full h-full flex flex-col">
-            <DashBoardHeader therapyName={data.therapyName} nav={false}>
+            <DashBoardHeader therapyName={data.therapyName} nav={true}>
                 <div className="flex gap-4 md:gap-8 overflow-hidden w-full md:w-auto pb-0 hide-scrollbar items-center">
                     {tabs.map((tab) => {
                         const isActive = pathname === tab.href;

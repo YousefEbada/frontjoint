@@ -112,7 +112,8 @@ const BookingItem: React.FC<BookingItemProps> = ({
                         </Link>
                         <Link href={`${type === "patient" ? `/patient/bookingchange?id=${id}` : `/staffboard/bookingchange?id=${id}`}`}>
                             <ActionButton
-                                text={`${type === "patient" ? "Reschedule" : "Change"}`}
+                                // type patient check issue
+                                text={`${type === "patient" ? "Reschedule" : "Reschedule"}`}
                                 variant="solid"
                                 onClick={onReschedule}
                                 className="w-[120px] cursor-pointer"

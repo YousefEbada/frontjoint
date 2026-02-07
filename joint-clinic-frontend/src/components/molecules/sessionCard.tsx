@@ -74,7 +74,7 @@ const SessionCard: React.FC<SessionCardProps> = ({
                     className="text-[#1E5598] text-[16px] md:text-[22px] leading-tight"
                 />
                 <Typography
-                    text={minutes ? `${minutes} min` : `${status}`}
+                    text={minutes ? `${minutes}` : `${status}`}
                     variant="bodyBold"
                     className={`${statusColors[status]} text-[14px] md:text-[20px] whitespace-nowrap`}
                 />

@@ -43,10 +43,6 @@ const VideoPage = () => {
 
     return (
         <div className="w-full h-full flex flex-col">
-            <DashBoardHeader
-                therapyName={exercise?.title || "Exercise"}
-                nav={false}
-            />
 
             <div className="flex-1 w-full h-full p-4 md:p-8 overflow-hidden">
                 <CorneredBoxes type="shadowBox" className="w-full h-full bg-[#fff] flex-1 p-6 md:p-8 custom-scrollbar flex flex-col gap-6 overflow-y-auto items-stretch rounded-[30px]">
