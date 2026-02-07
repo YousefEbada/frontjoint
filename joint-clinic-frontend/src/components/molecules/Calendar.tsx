@@ -76,8 +76,8 @@ const Calendar = ({ onSelect, width, availableDates, selectedDate: controlledDat
         </h3>
 
         <div className="flex gap-2">
-          <button onClick={handlePrevMonth}>{"<"}</button>
-          <button onClick={handleNextMonth}>{">"}</button>
+          <button className="cursor-pointer hover:scale-140 transition-all duration-100 w-6" onClick={handlePrevMonth}>{"<"}</button>
+          <button className="cursor-pointer hover:scale-140 transition-all duration-100 w-6" onClick={handleNextMonth}>{">"}</button>
         </div>
       </div>
 

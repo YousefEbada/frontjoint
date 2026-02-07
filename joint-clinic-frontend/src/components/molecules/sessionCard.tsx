@@ -46,8 +46,10 @@ const SessionCard: React.FC<SessionCardProps> = ({
         ${defaultSize}
         h-fit
         rounded-[24px]
-        shadow-[0_10px_25px_rgba(0,0,0,0.12)]
+        cursor-pointer
+        shadow-[0_12px_28px_rgba(13,41,77,0.18)]
         p-2
+        hover:shadow-[0_20px_60px_rgba(30,85,152,0.45)] transition-shadow duration-300
         flex flex-col
         w-full
         ${className}

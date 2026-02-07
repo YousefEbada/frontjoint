@@ -33,7 +33,11 @@ export default function HelloCard({ onGo, isLoading, error }: { onGo: (contact: 
         setLocalError("Phone number must be at least 9 digits");
         return false;
       }
-    } else {
+    } else if (val.trim().startsWith('HLC')) {
+      setLocalError("");
+      return true;
+    }
+    else {
       setLocalError("Please enter a valid email or phone number");
       return false;
     }

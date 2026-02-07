@@ -90,14 +90,14 @@ const SessionVideo = () => {
                             <button
                                 onClick={() => setShowDeleteConfirm(false)}
                                 disabled={isDeleting}
-                                className="px-8 py-3 rounded-full border-2 border-[#1E5598] text-[#1E5598] font-bold text-lg hover:bg-[#1E5598] hover:text-white transition disabled:opacity-50"
+                                className="px-8 py-3 rounded-full cursor-pointer border-2 border-[#1E5598] text-[#1E5598] font-bold text-lg hover:bg-[#1E5598] hover:text-white transition disabled:opacity-50"
                             >
                                 Cancel
                             </button>
                             <button
                                 onClick={handleDelete}
                                 disabled={isDeleting}
-                                className="px-8 py-3 rounded-full bg-red-500 text-white font-bold text-lg hover:bg-red-600 transition disabled:opacity-50"
+                                className="px-8 py-3 rounded-full cursor-pointer bg-red-500 text-white font-bold text-lg hover:bg-red-600 transition disabled:opacity-50"
                             >
                                 {isDeleting ? "Deleting..." : "Delete"}
                             </button>
@@ -166,7 +166,7 @@ const SessionVideo = () => {
                             <h4
                                 onClick={handleBack}
                                 style={{ color: color.secondary }}
-                                className="text-[20px] md:text-[25px] font-bold cursor-pointer transition hover:opacity-80"
+                                className="text-[20px] md:text-[25px] font-bold cursor-pointer underline transition hover:opacity-80"
                             >
                                 Back to Videos
                             </h4>

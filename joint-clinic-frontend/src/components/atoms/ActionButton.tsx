@@ -31,7 +31,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({
 
     return (
         <button
-            className={`${baseStyles} ${variants[variant]} ${className}`}
+            className={`${baseStyles} ${variants[variant]} ${className} cursor-pointer`}
             onClick={onClick}
             disabled={disabled}
         >

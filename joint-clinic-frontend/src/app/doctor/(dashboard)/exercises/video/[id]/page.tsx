@@ -199,7 +199,7 @@ const ExerciseVideoPage = () => {
 
                                         <div className="mt-8">
                                             <button
-                                                className="bg-[#1E5598] text-white font-bold py-3 px-12 rounded-full hover:bg-[#15467e] transition-colors shadow-lg text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                                                className="bg-[#1E5598] text-white font-bold py-3 px-12 rounded-full hover:bg-[#15467e] transition-colors cursor-pointer shadow-lg text-lg disabled:opacity-50 disabled:cursor-not-allowed"
                                                 onClick={handleAssign}
                                                 disabled={isAssigning || !selectedPatientId}
                                             >

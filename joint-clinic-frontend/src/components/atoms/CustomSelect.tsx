@@ -69,7 +69,7 @@ export default function CustomSelect({
         disabled={disabled}
         onClick={() => !disabled && setOpen(!open)}
         className={clsx(
-          "bg-[#fff] !text-[#1e5598]",
+          "bg-[#fff] cursor-pointer !text-[#1e5598]",
           isSmall ? "rounded-[30px] border border-gray-200" : "rounded-[30px] sm:rounded-[40px] md:rounded-[50px]",
           "text-[#1e5598]",
           "w-full",
