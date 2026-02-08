@@ -160,7 +160,10 @@ const BookingContent = () => {
                 // Check if slot is already taken
                 const isTaken = slot.appointment_type_appointment !== null;
 
-                return isSameDay && !isFull && !isTaken;
+                // Check if slot time has passed (to avoid showing past times for today)
+                const isPast = dayjs(slot.start).isBefore(dayjs());
+
+                return isSameDay && !isFull && !isTaken && !isPast;
             })
             // Map to formatted string for display
             .map((slot) => dayjs(slot.start).format("h:mm A"));

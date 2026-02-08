@@ -53,7 +53,11 @@ function BookingChangeContent() {
         if (!slotsResponse?.ok || !slotsResponse.slots || !selectedDate) return [];
         return slotsResponse.slots.filter((slot: any) => {
             if (!slot.start) return false;
-            return dayjs(slot.start).format("YYYY-MM-DD") === selectedDate;
+
+            const isSameDay = dayjs(slot.start).format("YYYY-MM-DD") === selectedDate;
+            const isFuture = dayjs(slot.start).isAfter(dayjs());
+
+            return isSameDay && isFuture;
         });
     }, [slotsResponse, selectedDate]);
 
@@ -224,7 +228,7 @@ function BookingChangeContent() {
                             width="90%"
                             height="100px"
                             value={selectedTime || "Select Time"}
-                            onChange={setSelectedTime}                            
+                            onChange={setSelectedTime}
                         />
 
                         <Typography
