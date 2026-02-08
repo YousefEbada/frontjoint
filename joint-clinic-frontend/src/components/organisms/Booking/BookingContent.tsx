@@ -381,7 +381,7 @@ const BookingContent = () => {
                                 text="Select Injury"
                                 variant="heading2"
                                 gradient={true}
-                                className="mb-4 text-[24px] md:text-[32px]"
+                                className="text-[24px] md:text-[32px]"
                             />
                             <CustomSelect
                                 items={MOCK_INJURIES}
@@ -399,14 +399,14 @@ const BookingContent = () => {
                                 text="Select Doctor"
                                 variant="heading2"
                                 gradient={true}
-                                className="mb-4 text-[24px] md:text-[32px]"
+                                className="text-[24px] md:text-[32px]"
                             />
                             {filteredDoctors.length > 0 ? (
                                 <CustomSelect
                                     items={filteredDoctors.map((d) => d.practitionerName)}
                                     value={selectedDoctor?.practitionerName || "Doctor"}
                                     onChange={handleDoctorSelect}
-                                    dropdownMaxHeight="100px"
+                                    dropdownMaxHeight="150px"
                                     placeholder="Select a doctor"
                                     width="100%"
                                     height="60px"
