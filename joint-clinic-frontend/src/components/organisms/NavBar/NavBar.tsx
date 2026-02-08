@@ -86,14 +86,14 @@ export default function NavBar() {
             <Link key="appointments" href="/patient/booking">Appointments</Link>,
             <Link key="exercises" href="/patient/exercises/assigned">Exercises</Link>,
             <Link key="support" href="/patient/support">Support</Link>,
-            <Link key="logout" href="/" onClick={() => localStorage.clear()}>Logout</Link>
+            <Link key="logout" href="/" onClick={() => { localStorage.clear(); window.location.href = "/"; }}>Logout</Link>
           ])
             : isDoctorLoggedIn ? ([
               <Link key="account" href="/doctor/overview">My Account</Link>,
               <Link key="calendar" href="/doctor/calendar">Appointments</Link>,
               <Link key="doc-exercises" href="/doctor/exercises">Exercises</Link>,
               <Link key="reports" href="/doctor/reports">Reports</Link>,
-              <Link key="logout" href="/" onClick={() => localStorage.clear()}>Logout</Link>
+              <Link key="logout" href="/" onClick={() => { localStorage.clear(); window.location.href = "/"; }}>Logout</Link>
             ])
               : (
                 <Link href="/sign-in">Login</Link>
@@ -166,7 +166,7 @@ export default function NavBar() {
               <Link href="/patient/main" onClick={toggleMenu} className="text-[#1E5598] font-medium">
                 Dashboard
               </Link>
-              <Link href="/" onClick={() => { localStorage.clear(); toggleMenu(); }} className="text-[#1E5598] font-medium">
+              <Link href="/" onClick={() => { localStorage.clear(); toggleMenu(); window.location.href = "/"; }} className="text-[#1E5598] font-medium">
                 Logout
               </Link>
             </>
@@ -184,7 +184,7 @@ export default function NavBar() {
               <Link href="/doctor/reports" onClick={toggleMenu} className="text-[#1E5598] font-medium">
                 Reports
               </Link>
-              <Link href="/" onClick={() => { localStorage.clear(); toggleMenu(); }} className="text-[#1E5598] font-medium">
+              <Link href="/" onClick={() => { localStorage.clear(); toggleMenu(); window.location.href = "/"; }} className="text-[#1E5598] font-medium">
                 Logout
               </Link>
             </>
