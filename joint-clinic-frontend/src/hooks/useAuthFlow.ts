@@ -141,6 +141,7 @@ export const useAuthFlow = () => {
     try {
       const user = await createPartialUser({ ...data, contact });
       setUserId(user._id);
+      localStorage.setItem("patientEmail", user.email || "");
 
       // Optimistic transition
       setStep(2);
@@ -186,6 +187,8 @@ export const useAuthFlow = () => {
       if (response.accessToken) {
         localStorage.setItem("accessToken", response.accessToken);
       }
+
+      
 
       // Check if user is already a patient (for login flow)
       if (isFullProfile && userId) {
