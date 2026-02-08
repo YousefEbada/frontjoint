@@ -463,13 +463,16 @@ const Page = () => {
 
   // Reset identifier type when nationality changes significantly (Saudi <-> Non-Saudi)
   React.useEffect(() => {
-    // If nationality is Saudi, and type is Iqama -> Reset
-    if (fullData.nationality === "Saudi Arabia" && fullData.identifierType === "Iqama") {
-      setFullData(prev => ({ ...prev, identifierType: "", identifier: "" }));
-    }
-    // If nationality is NOT Saudi, and type is National ID -> Reset
-    if (fullData.nationality && fullData.nationality !== "Saudi Arabia" && fullData.identifierType === "National ID") {
-      setFullData(prev => ({ ...prev, identifierType: "", identifier: "" }));
+    // If nationality is Saudi: Must be "National ID"
+    if (fullData.nationality === "Saudi Arabia") {
+      if (fullData.identifierType !== "National ID") {
+        setFullData(prev => ({ ...prev, identifierType: "National ID", identifier: "" }));
+      }
+    } else {
+      // If nationality is NOT Saudi: Must NOT be "National ID" (default to Iqama)
+      if (fullData.identifierType === "National ID" || !fullData.identifierType) {
+        setFullData(prev => ({ ...prev, identifierType: "Iqama", identifier: "" }));
+      }
     }
   }, [fullData.nationality, fullData.identifierType]);
 
@@ -951,12 +954,12 @@ const Page = () => {
                             />
                             <CustomDropdown
                               items={fullData.nationality === "Saudi Arabia"
-                                ? ["National ID", "Passport"]
+                                ? ["National ID"]
                                 : ["Iqama", "Passport"]
                               }
                               width="w-full"
                               text="Identifier type *"
-                              // value={fullData.identifierType}
+                              value={fullData.identifierType}
                               maxHeight="150px"
                               onSelect={(val) => setFullData({ ...fullData, identifierType: val })}
                             />
