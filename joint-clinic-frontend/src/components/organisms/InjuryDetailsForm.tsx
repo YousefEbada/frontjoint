@@ -44,7 +44,8 @@ const InjuryDetailsForm: React.FC<InjuryDetailsFormProps> = ({ jointName, onBack
 
     // Dropdown options
     const treatmentOptions = ['Yes', 'No'];
-    const severityOptions = ['1 - Minimal', '2', '3', '4', '5 - Moderate', '6', '7', '8', '9', '10 - Severe'];
+    const severityOptions = ['Minimal', 'Moderate', 'Severe'];
+    const startDateOptions = ['Last Week', 'Last Month', 'Last Year'];
     const painTypeOptions = ['Occasional', 'Constant'];
     const dailyActivitiesOptions = ['Yes', 'No'];
 
@@ -85,13 +86,22 @@ const InjuryDetailsForm: React.FC<InjuryDetailsFormProps> = ({ jointName, onBack
                             <CustomDropdown
                                 variant="form"
                                 required
-                                items={["Last Week", "Last Month", "Last Year"]}
+                                items={startDateOptions}
                                 text="When did this injury start?"
                                 onSelect={(value) => {
-                                    const severity = parseInt(value.split(' ')[0]);
-                                    setFormData({ ...formData, painSeverity: severity });
+                                    const now = new Date();
+                                    if (value === 'Last Week') now.setDate(now.getDate() - 7);
+                                    else if (value === 'Last Month') now.setMonth(now.getMonth() - 1);
+                                    else if (value === 'Last Year') now.setFullYear(now.getFullYear() - 1);
+                                    setFormData({ ...formData, startDate: now.toISOString() });
                                 }}
-                                value={formData.painSeverity !== undefined ? severityOptions.find(opt => opt.startsWith(String(formData.painSeverity))) : undefined}
+                                value={formData.startDate ? (() => {
+                                    const diff = Date.now() - new Date(formData.startDate).getTime();
+                                    const day = 24 * 60 * 60 * 1000;
+                                    if (diff < 8 * day) return 'Last Week';
+                                    if (diff < 32 * day) return 'Last Month';
+                                    return 'Last Year';
+                                })() : undefined}
                             />
                         </div>
 
@@ -115,10 +125,17 @@ const InjuryDetailsForm: React.FC<InjuryDetailsFormProps> = ({ jointName, onBack
                                 items={severityOptions}
                                 text="How severe is the pain?"
                                 onSelect={(value) => {
-                                    const severity = parseInt(value.split(' ')[0]);
+                                    let severity = 5;
+                                    if (value === 'Minimal') severity = 1;
+                                    else if (value === 'Moderate') severity = 5;
+                                    else if (value === 'Severe') severity = 10;
                                     setFormData({ ...formData, painSeverity: severity });
                                 }}
-                                value={formData.painSeverity !== undefined ? severityOptions.find(opt => opt.startsWith(String(formData.painSeverity))) : undefined}
+                                value={
+                                    formData.painSeverity === 1 ? 'Minimal' :
+                                        formData.painSeverity === 10 ? 'Severe' :
+                                            formData.painSeverity !== undefined ? 'Moderate' : undefined
+                                }
                             />
                         </div>
 
