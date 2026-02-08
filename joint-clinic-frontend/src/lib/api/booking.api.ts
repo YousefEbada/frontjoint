@@ -171,7 +171,7 @@ export const getBookingById = async (bookingId: string): Promise<any> => {
 
 export const getDoctorBookings = async (
     doctorId: string,
-    period: 'today' | 'week' | 'month'
+    period: 'today' | 'week' | 'month' | "all"
 ): Promise<Booking[]> => {
     try {
         const response = await api.get(`/booking/doctor/${doctorId}/bookings/${period}`);

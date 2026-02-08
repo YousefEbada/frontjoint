@@ -25,13 +25,14 @@ export const useDoctor = (doctorId: string) => {
 
 export const useDoctorBookings = (
   doctorId: string,
-  params?: { period?: "today" | "week" | "month" | "day"; date?: Date | string }
+  params?: { period?: "today" | "week" | "month" | "all"; date?: Date | string }
 ) => {
-  const periodMap: Record<string, 'today' | 'week' | 'month'> = {
+  const periodMap: Record<string, 'today' | 'week' | 'month' | 'all'> = {
     'day': 'today',
     'today': 'today',
     'week': 'week',
-    'month': 'month'
+    'month': 'month',
+    'all': 'all'
   };
   const apiPeriod = params?.period ? periodMap[params.period] || 'today' : 'today';
 
@@ -44,7 +45,7 @@ export const useDoctorBookings = (
 
 export const useDoctorSessions = (
   doctorId: string,
-  params?: { period?: "day" | "week" | "month"; date?: Date | string }
+  params?: { period?: "day" | "week" | "month" | "all"; date?: Date | string }
 ) => {
   return useQuery({
     queryKey: ["doctor-sessions", doctorId, params],

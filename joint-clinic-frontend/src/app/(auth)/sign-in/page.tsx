@@ -19,6 +19,7 @@ import { useAuthFlow } from '@/hooks/useAuthFlow';
 import { CreatePartialUserInput, CreateFullUserInput } from '@/types/auth';
 import { Country, State } from 'country-state-city';
 import { isValidEmail, isValidSaudiPhone, isValidSaudiID } from '@/lib/utils/validators';
+import Link from 'next/link';
 // dssd
 // sdsd
 // Mock Data for Joints
@@ -62,6 +63,7 @@ const Page = () => {
     step,
     setStep,
     showHello,
+    setShowHello,
     handleFindUser,
     handleCreatePartial,
     handleVerifyOtp,
@@ -461,13 +463,16 @@ const Page = () => {
 
   // Reset identifier type when nationality changes significantly (Saudi <-> Non-Saudi)
   React.useEffect(() => {
-    // If nationality is Saudi, and type is Iqama -> Reset
-    if (fullData.nationality === "Saudi Arabia" && fullData.identifierType === "Iqama") {
-      setFullData(prev => ({ ...prev, identifierType: "", identifier: "" }));
-    }
-    // If nationality is NOT Saudi, and type is National ID -> Reset
-    if (fullData.nationality && fullData.nationality !== "Saudi Arabia" && fullData.identifierType === "National ID") {
-      setFullData(prev => ({ ...prev, identifierType: "", identifier: "" }));
+    // If nationality is Saudi: Must be "National ID"
+    if (fullData.nationality === "Saudi Arabia") {
+      if (fullData.identifierType !== "National ID") {
+        setFullData(prev => ({ ...prev, identifierType: "National ID", identifier: "" }));
+      }
+    } else {
+      // If nationality is NOT Saudi: Must NOT be "National ID" (default to Iqama)
+      if (fullData.identifierType === "National ID" || !fullData.identifierType) {
+        setFullData(prev => ({ ...prev, identifierType: "Iqama", identifier: "" }));
+      }
     }
   }, [fullData.nationality, fullData.identifierType]);
 
@@ -949,12 +954,12 @@ const Page = () => {
                             />
                             <CustomDropdown
                               items={fullData.nationality === "Saudi Arabia"
-                                ? ["National ID", "Passport"]
+                                ? ["National ID"]
                                 : ["Iqama", "Passport"]
                               }
                               width="w-full"
                               text="Identifier type *"
-                              // value={fullData.identifierType}
+                              value={fullData.identifierType}
                               maxHeight="150px"
                               onSelect={(val) => setFullData({ ...fullData, identifierType: val })}
                             />
@@ -1088,17 +1093,7 @@ const Page = () => {
 
                     <button
                       onClick={() => {
-                        // Back logic handled by hook? Or custom?
-                        // Actually hook just exposes setStep, so we can do it here.
-                        if (showHello) return;
-                        if (step === 1) {
-                          // Go back to Hello
-                          // But we used `setShowHello` from hook. 
-                          // We should probably just reload or reset.
-                          window.location.reload();
-                        } else {
-                          setStep(step - 1);
-                        }
+                        setShowHello(true);
                       }}
                       className="w-[220px] h-[60px] cursor-pointer py-3 bg-transparent border-[4px]
                               border-white text-white rounded-full font-semibold mt-4 hover:bg-white

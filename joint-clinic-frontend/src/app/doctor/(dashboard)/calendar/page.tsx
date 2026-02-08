@@ -23,13 +23,14 @@ const CalendarPage = () => {
     }
   }, []);
 
-  const periodMap: Record<string, "today" | "week" | "month"> = {
+  const periodMap: Record<string, "today" | "week" | "month" | "all"> = {
     "Today": "today",
     "This Week": "week",
-    "This Month": "month"
+    "This Month": "month",
+    "All": "all"
   };
 
-  const period = activeTab === 'all' ? 'month' : (periodMap[filter] || 'today');
+  const period = activeTab === 'all' ? 'all' : (periodMap[filter] || 'today');
   // If 'all' tab, maybe fetch 'month' or create new 'all' API? 
   // User didn't ask for 'all' API, just 3 APIs. 
   // Re-using 'month' for 'all' or default to 'month' is reasonable fallback or I can fetch multiple.
@@ -115,7 +116,7 @@ const CalendarPage = () => {
                     text={f}
                     variant="primary"
                     active={filter === f}
-                    className="rounded-full! text-sm! border!"
+                    className="rounded-full! text-sm! border! md:w-[180px] sm:w-[100px]"
                   />
                 </div>))}
             </div>

@@ -55,7 +55,7 @@ export const getDoctorBookings = async (
 
 export const getDoctorSessions = async (
   doctorId: string,
-  params?: { period?: "day" | "week" | "month"; date?: Date | string }
+  params?: { period?: "day" | "week" | "month" | "all"; date?: Date | string }
 ): Promise<DoctorSession[]> => {
   try {
     const response = await api.get(`/doctor/${doctorId}/sessions`, {

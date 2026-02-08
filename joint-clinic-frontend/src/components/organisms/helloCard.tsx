@@ -110,7 +110,7 @@ export default function HelloCard({ onGo, isLoading, error }: { onGo: (contact: 
               px-3
             "
           >
-            Let’s create your account. Can you tell us your full name and date of birth?
+            Let’s get you started. Please enter your phone number or email.
           </p>
 
           {/* Error */}
