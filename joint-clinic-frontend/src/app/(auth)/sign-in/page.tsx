@@ -1,5 +1,6 @@
 "use client";
 import CorneredBoxes from '@/components/atoms/CorneredBoxes'
+import { FaTrash } from "react-icons/fa";
 
 import Logo from '@/components/atoms/icons/Logo'
 import "./style.css"
@@ -1058,7 +1059,7 @@ const Page = () => {
                               value={fullData.guardianInformation?.patientCategory || ''}
                               onChange={(e) => setFullData({ ...fullData, guardianInformation: { ...fullData.guardianInformation, patientCategory: e.target.value } })}
                               className="md:w-[29%] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#0D294D] placeholder:text-[#7b8a99] text-center outline-none focus:ring-2 focus:ring-[#1E5598]/30 transition" />
-                            <div className="relative md:w-[23.5%] w-[90vw] flex flex-col items-center justify-center">
+                            <div className="relative md:w-[23.5%] w-[90vw] bg-[#f5f] flex flex-col items-center justify-center">
                               <input
                                 id="upload"
                                 type="file"
@@ -1072,12 +1073,25 @@ const Page = () => {
 
                               <label
                                 htmlFor="upload"
-                                className="md:w-[100%] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#6d7a80] text-center flex items-center justify-center cursor-pointer outline-none border-dashed transition"
+                                className="md:w-[100%] bg-[#f5f] w-[90vw] h-[80px] px-5 text-[24px] rounded-full border border-[#0D294D] bg-transparent text-[#6d7a80] text-center flex items-center justify-center cursor-pointer outline-none border-dashed transition"
                               >
                                 Upload File
                               </label>
                               {fileName && (
-                                <p className="text-black text-sm mt-2">{fileName}</p>
+                                <div className="flex items-center cursor-pointer gap-2 mt-2 justify-center">
+                                  <p className="text-black text-sm">{fileName}</p>
+                                  <button
+                                    type="button"                                    
+                                    onClick={() => {
+                                      setFileName(null);
+                                      const fileInput = document.getElementById('upload') as HTMLInputElement;
+                                      if (fileInput) fileInput.value = '';
+                                    }}
+                                    className="text-red-500 hover:text-red-700 transition-colors"
+                                  >
+                                    <FaTrash size={14} className='cursor-pointer' />
+                                  </button>
+                                </div>
                               )}
                             </div>
                           </div>

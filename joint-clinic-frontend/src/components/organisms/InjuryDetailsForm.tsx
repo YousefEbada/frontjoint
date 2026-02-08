@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import Logo from '@/components/atoms/icons/Logo';
 import CorneredBoxes from '../atoms/CorneredBoxes';
 import CustomDropdown from '@/components/molecules/dropdown';
+import { FaTrash } from "react-icons/fa";
 
 interface InjuryDetails {
     affectedArea?: string;
@@ -188,7 +189,7 @@ const InjuryDetailsForm: React.FC<InjuryDetailsFormProps> = ({ jointName, onBack
                         </div>
 
                         {/* Upload Medical Reports - Optional */}
-                        <div className="relative w-full lg:col-span-4 flex justify-center">
+                        <div className="relative w-full lg:col-span-4 flex flex-col items-center justify-center">
                             <input
                                 id="medical-report-upload"
                                 type="file"
@@ -202,9 +203,34 @@ const InjuryDetailsForm: React.FC<InjuryDetailsFormProps> = ({ jointName, onBack
                                 className="w-full h-[70px] md:h-[80px] px-8 rounded-full border border-dashed border-[#0D294D]/50 bg-white/30 backdrop-blur-sm text-[#6d7a80] flex items-center justify-center cursor-pointer hover:bg-white/60 transition text-center group"
                             >
                                 <span className="text-lg md:text-xl group-hover:text-[#0D294D] transition-colors">
-                                    {files.length > 0 ? `${files.length} file(s) selected` : 'Upload Medical Reports or Scans (Optional)'}
+                                    Upload Medical Reports or Scans (Optional)
                                 </span>
                             </label>
+
+                            {/* Selected Files List */}
+                            {files.length > 0 && (
+                                <div className="absolute top-[85px] right-[-20%] z-10 flex flex-col mb-8 gap-2 mt-1 w-full items-center">
+                                    {files.map((file, index) => (
+                                        <div key={index} className="flex items-center gap-3 px-4 py-2 rounded-full border border-[#0D294D]/10 bg-white shadow-sm">
+                                            <span className="text-sm md:text-base text-[#0D294D] font-medium truncate max-w-[200px] md:max-w-[300px]">
+                                                {file.name}
+                                            </span>
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    setFiles(files.filter((_, i) => i !== index));
+                                                    const input = document.getElementById('medical-report-upload') as HTMLInputElement;
+                                                    if (input) input.value = '';
+                                                }}
+                                                className="p-1"
+                                                title="Remove file"
+                                            >
+                                                <FaTrash size={14} className='cursor-pointer text-red-500 hover:text-red-700 transition-colors'/>
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
 
                     </div>
