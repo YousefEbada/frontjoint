@@ -1,7 +1,7 @@
 /* Responsive NavBar Rules */
 
 /* At 1500px, emulate mobile behavior */
-@media (max-width: 1500px) {
+@media (max-width: 1600px) {
 
     /* Hide Desktop Elements */
     .navbar-desktop-links {
